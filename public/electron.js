@@ -1,4 +1,5 @@
 const path = require('path');
+const { ipcMain } = require('electron');
 
 const { app, BrowserWindow } = require('electron');
 const isDev = require('electron-is-dev');
@@ -10,7 +11,20 @@ function createWindow() {
     height: 600,
     webPreferences: {
       nodeIntegration: true,
+      preload: path.join(__dirname, 'preload.js')
     },
+  });
+  ipcMain.handle("open-file-dialog", function () => {
+    let dialogProperties;
+    if (os.platform() == "linux" || os.platform() == "win32") {
+      dialogProperties = ["openFile"];
+    } else {
+      dialogProperties = ["openFile", "openDirectory"];
+    }
+
+    dialog.showOpenDialog({
+      properties: dialogProperties,
+    });
   });
 
   // and load the index.html of the app.
