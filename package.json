@@ -10,20 +10,23 @@
     "@types/node": "^18.7.14",
     "@types/react": "^18.0.18",
     "@types/react-dom": "^18.0.6",
+    "cross-env": "^7.0.3",
+    "electron-context-menu": "^3.5.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
+    "ts-node": "^10.9.1",
     "typescript": "^4.8.2",
     "web-vitals": "^2.1.4"
   },
-  "main": "public/electron.js",
+  "main": "public/electron.ts",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "dev": "concurrently -k \"BROWSER=none npm start\" \"npm:electron\"",
-    "electron": "wait-on tcp:3000 && electron ."
+    "dev": "concurrently -k \"cross-env BROWSER=none npm start\" \"npm:electron\"",
+    "electron": "wait-on tcp:3000 && electron -r ts-node/register ."
   },
   "eslintConfig": {
     "extends": [

@@ -16,8 +16,8 @@ class App extends React.Component {
     });
   }
 
-  async queueOpenDialog(event) {
-    const response = await window.api.openFileDialog();
+  async queueOpenDialog(event, fileFilters: FileFilter[]) {
+    const response = await window.api.openFileDialog(fileFilters);
     this.setState({
       [event.target.dataset.input]: response
     });
@@ -30,7 +30,11 @@ class App extends React.Component {
           <div>
             <label htmlFor="iso-filename">ISO: </label>
             <input type="text" id="iso-filename" name="iso-filename" value={this.state["iso-filename"]} onChange={this.onInputChange} required={true}></input>
-            <button onClick={this.queueOpenDialog} id="iso-filename-btn" data-input="iso-filename" type="button">Browse&#8230;</button>
+            <button onClick={event => {
+              this.queueOpenDialog(event, [
+                {name: "ISO files", extensions: ["iso"]}
+              ]);
+            }} id="iso-filename-btn" data-input="iso-filename" type="button">Browse&#8230;</button>
           </div>
           <div>
             <label htmlFor="chadsoft-ghost-page">Chadsoft ghost page link: </label>
