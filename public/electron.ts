@@ -15,6 +15,8 @@
 //var console = global.console = new Console(process.stdout, process.stderr);
 //console.log("console");
 
+import { IpcMainInvokeEvent } from "electron";
+
 const path = require("path");
 const { dialog, ipcMain, app, BrowserWindow } = require("electron");
 
@@ -35,6 +37,15 @@ interface OpenDialogResponse {
   bookmarks?: string[];
 }
 
+interface SaveDialogResponse {
+  canceled: boolean;
+  filePath?: string;
+  bookmarks?: string[];
+}
+
+type OpenDialogProperties = ("openFile" | "openDirectory" | "multiSelections" | "showHiddenFiles" | "createDirectory" | "promptToCreate" | "noResolveAliases" | "treatPackageAsDirectory" | "dontAddToRecent")[];
+type SaveDialogProperties = ("showHiddenFiles" | "createDirectory" | "treatPackageAsDirectory" | "dontAddToRecent" | "showOverwriteConfirmation")[];
+
 async function createWindow() {
   // Create the browser window.
   const win = new BrowserWindow({
@@ -42,29 +53,36 @@ async function createWindow() {
     height: 600,
     webPreferences: {
       nodeIntegration: true,
-      preload: path.join(__dirname, 'preload.ts'),
+      preload: path.join(__dirname, 'preload.js'),
       devTools: true
     },
   });
-  ipcMain.handle("open-file-dialog", function (fileFilters: FileFilter[]) {
-    return "todo";
-    let dialogProperties = ["openFile"];
-    //if (os.platform() == "linux" || os.platform() == "win32") {
-    //  dialogProperties = ["openFile"];
-    //} else {
-    //  dialogProperties = ["openFile", "openDirectory"];
-    //}
-    //
-    dialog.showOpenDialog({
+  ipcMain.handle("open-file-dialog", async function (event: IpcMainInvokeEvent, fileFilters: FileFilter[]) {
+    console.log("open-file-dialog fileFilters:", fileFilters);
+    let dialogProperties: OpenDialogProperties = ["openFile"];
+    let response = await dialog.showOpenDialog({
       properties: dialogProperties,
       filters: fileFilters
-    }).then(function (response: OpenDialogResponse) {
-      if (!response.canceled) {
-        return response.filePaths[0];
-      } else {
-        return "";
-      }
     });
+    if (!response.canceled) {
+      console.log(response.filePaths[0]);
+      return response.filePaths[0];
+    } else {
+      return "";
+    }
+  });
+
+  ipcMain.handle("save-file-dialog", async function (event: IpcMainInvokeEvent, fileFilters: FileFilter[]) {
+    let dialogProperties: SaveDialogProperties = [];
+    let response = await dialog.showSaveDialog({
+      properties: dialogProperties,
+      filters: fileFilters
+    });
+    if (!response.canceled) {
+      return response.filePath;
+    } else {
+      return "";
+    }
   });
 
   // and load the index.html of the app.

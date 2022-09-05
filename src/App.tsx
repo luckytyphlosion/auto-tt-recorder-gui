@@ -1,4 +1,10 @@
 import React from "react";
+import "./App.css";
+
+interface FileFilter {
+  name: string;
+  extensions: string[];
+}
 
 class App extends React.Component {
   constructor() {
@@ -16,16 +22,29 @@ class App extends React.Component {
     });
   }
 
-  async queueOpenDialog(event, fileFilters: FileFilter[]) {
-    const response = await window.api.openFileDialog(fileFilters);
+  async queueOpenDialog(event, fileFilters: FileFilter[], targetInput: string) {
+    let response = await window.api.openFileDialog(fileFilters);
     this.setState({
-      [event.target.dataset.input]: response
+      [targetInput]: response
+    });
+  }
+
+  async queueSaveDialog(event, fileFilters: FileFilter[], targetInput: string) {
+    let response = await window.api.saveFileDialog(fileFilters);
+    this.setState({
+      [targetInput]: response
     });
   }
 
   render() {
     return (
       <div>
+        <div className="auto-tt-rec-notes">
+          <p>Some notes:</p>
+          <p>This only works with NTSC-U ISOs. You will get an error otherwise</p>
+          <p>No complex features, just the bare minimum to produce a recording</p>
+          <p>DM luckytyphlosion#1166 for any questions.</p>
+        </div>
         <form action="" method="get" className="form-example">
           <div>
             <label htmlFor="iso-filename">ISO: </label>
@@ -33,8 +52,8 @@ class App extends React.Component {
             <button onClick={event => {
               this.queueOpenDialog(event, [
                 {name: "ISO files", extensions: ["iso"]}
-              ]);
-            }} id="iso-filename-btn" data-input="iso-filename" type="button">Browse&#8230;</button>
+              ], "iso-filename");
+            }} id="iso-filename-btn" type="button">Browse&#8230;</button>
           </div>
           <div>
             <label htmlFor="chadsoft-ghost-page">Chadsoft ghost page link: </label>
@@ -42,8 +61,12 @@ class App extends React.Component {
           </div>
           <div>
             <label htmlFor="output-video-filename">Output filename: </label>
-            <input type="text" id="output-video-filename" name="output-video-filename" required={true}></input>
-            <button id="iso-filename-btn" type="button">Export as&#8230;</button>
+            <input type="text" id="output-video-filename" name="output-video-filename" value={this.state["output-video-filename"]} required={true}></input>
+            <button onClick={event => {
+              this.queueSaveDialog(event, [
+                {name: "mp4 files", extensions: ["mp4"]}
+              ], "output-video-filename");
+            }} id="iso-filename-btn" type="button">Export as&#8230;</button>
           </div>
           <div>
             <button type="submit">Record!</button>
