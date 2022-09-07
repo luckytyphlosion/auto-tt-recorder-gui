@@ -1,4 +1,30 @@
-.auto-tt-rec-notes {
+
+.title-header {
+	font-family: Arial, sans-serif;
 	font-size: 14pt;
 	font-weight: bold;
 }
+	
+.auto-tt-rec-notes {
+	font-family: Arial, sans-serif;
+	font-size: 11pt;
+}
+
+#iso-filename {
+	width: 30em;
+}
+
+#chadsoft-ghost-page {
+	width: 45em;
+}
+
+#output-video-filename {
+	width: 30em;
+}
+
+.status-textarea {
+	font-family: Arial, sans-serif;
+	font-size: 11pt;
+	width: 100%;
+}
+
