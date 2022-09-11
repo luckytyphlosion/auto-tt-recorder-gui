@@ -1,11 +1,49 @@
+
 import React from "react";
 import "./App.css";
-import { AutoTTRecResponse } from "./enums.ts";
+import { AutoTTRecResponse } from "./shared/enums";
+import { IpcRendererEvent } from "electron";
+
+//type HandleSendStdoutDeclaration = 
+declare global {
+  interface Window {
+    api: {
+      openFileDialog: (fileFilters: FileFilter[]) => Promise<string>;
+      saveFileDialog: (fileFilters: FileFilter[]) => Promise<string>;
+      spawnAutoTTRec: (templateFilename: string, autoTTRecArgs: {[key: string]: string | number | null}) => Promise<boolean>;
+      waitAutoTTRec: () => Promise<AutoTTRecResponse>;
+      handleSendStdout: (callable: (event: IpcRendererEvent, stdoutData: string) => void) => void;
+      handleSendStderr: (callable: (event: IpcRendererEvent, stderrData: string) => void) => void;
+      terminateAutoTTRec: () => Promise<void>;
+    }
+  }
+}
 
 interface FileFilter {
   name: string;
   extensions: string[];
 }
+
+interface AppState {
+  "iso-filename": string;
+  "chadsoft-ghost-page": string;
+  "track-name": string;
+  "output-video-filename": string;
+  "high-quality": boolean;
+  isAutoTTRecRunning: boolean;
+  programStatus: string;
+  programStatusDetails: string;
+}
+
+interface AppProps {
+
+}
+
+const APP_TEXT_INPUT_KEY_NAMES = ["iso-filename", "chadsoft-ghost-page", "track-name", "output-video-filename"] as const;
+type AppTextInputKeys = typeof APP_TEXT_INPUT_KEY_NAMES[number];
+
+const APP_CHECK_INPUT_KEY_NAMES = ["high-quality"] as const;
+type AppCheckInputKeys = typeof APP_CHECK_INPUT_KEY_NAMES[number];
 
 function appendAccountingForCarriage(base: string, line: string) {
   let output;
@@ -21,54 +59,80 @@ function appendAccountingForCarriage(base: string, line: string) {
   return output;
 }
 
-class App extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      isAutoTTRecRunning: false,
+class App extends React.Component<AppProps, AppState> {
+  constructor(props: AppProps) {
+    super(props);
+    let state = {
       "iso-filename": "",
       "chadsoft-ghost-page": "",
       "track-name": "",
-      "high-quality": true,
       "output-video-filename": "",
-      "program-status": "Ready",
-      "program-status-details": "",
+      "high-quality": true,
+      isAutoTTRecRunning: false,
+      programStatus: "Ready",
+      programStatusDetails: ""
     };
+    this.state = state;
     this.onInputChange = this.onInputChange.bind(this);
     this.queueOpenDialog = this.queueOpenDialog.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.onCheckChange = this.onCheckChange.bind(this);
   }
 
-  onInputChange(event) {
+  //dynamicSetState<K extends keyof AppState>(key: K, value: AppState[K]) {
+  //  this.setState({[key]: value} as Pick<AppState, K>);
+  //}
+
+  onInputChange(event: React.ChangeEvent<HTMLInputElement>) {
+    // FIXME need to figure out how to do this type safety better
     this.setState({
-      [event.target.id]: event.target.value
-    });
+      [event.target.id as keyof AppState]: event.target.value as AppState[keyof AppState]
+    } as Pick<AppState, keyof AppState>);
   }
 
-  onCheckChange(event) {
+  //onInputChange2<K extends keyof AppState>(key: K, value: AppState[K]) {
+  //  this.setState((prevState, props) => ({
+  //    ...prevState,
+  //    [key]: value
+  //  }));
+  //}
+
+  //dynamicSetState<K extends keyof AppState>(key: K, value: AppState[K]) {
+  //  this.setState({[key]: value} as Pick<State, K>);
+  //}
+
+  /*onInputChangeArgs(key: AppTextInputKeys, value: string) {
     this.setState({
-      [event.target.id]: !this.state[event.target.id]
+      [key]: value
     });
+  }*/
+
+  onCheckChange(event: React.ChangeEvent<HTMLInputElement>) {
+    // FIXME need to figure out how to do this type safety better
+    //let key: K extends keyof AppState;
+    this.setState((prevState, props) => ({
+      ...prevState,
+      [event.target.id as keyof AppState]: !prevState[event.target.id as keyof AppState]
+    }));
   }
 
-  async queueOpenDialog(event, fileFilters: FileFilter[], targetId: string) {
+  async queueOpenDialog(event: React.MouseEvent<HTMLButtonElement>, fileFilters: FileFilter[], targetId: keyof AppState) {
     let response = await window.api.openFileDialog(fileFilters);
     this.setState({
-      [targetId]: response
-    });
+      [targetId]: response as AppState[keyof AppState]
+    } as Pick<AppState, keyof AppState>);
   }
 
-  async queueSaveDialog(event, fileFilters: FileFilter[], targetId: string) {
+  async queueSaveDialog(event: React.MouseEvent<HTMLButtonElement>, fileFilters: FileFilter[], targetId: keyof AppState) {
     let response = await window.api.saveFileDialog(fileFilters);
     this.setState({
-      [targetId]: response
-    });
+      [targetId]: response as AppState[keyof AppState]
+    } as Pick<AppState, keyof AppState>);
   }
 
-  async handleSubmit(event) {
+  async handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (this.isAutoTTRecRunning) {
+    if (this.state.isAutoTTRecRunning) {
       console.log("Already submitting!");
       return false;
     }
@@ -78,7 +142,7 @@ class App extends React.Component {
     let chadsoftGhostPageLink = this.state["chadsoft-ghost-page"];
     if (!chadsoftGhostPageLinkRegex.test(chadsoftGhostPageLink)) {
       this.setState({
-        "program-status-details": "Not a valid chadsoft ghost page link."
+        programStatusDetails: "Not a valid chadsoft ghost page link."
       });
     } else {
       let autoTTRecArgs = {
@@ -91,51 +155,51 @@ class App extends React.Component {
       }
 
       const spawnSuccessful = await window.api.spawnAutoTTRec("public/barebones_personal_ghost_config.yml", autoTTRecArgs)
-        .catch((err) => {
+        .catch((err: Error) => {
           this.setState({
-            "program-status": "Error",
-            "program-status-details": err.message
+            programStatus: "Error",
+            programStatusDetails: err.message
           });
         });
 
       if (spawnSuccessful) {
         this.setState({
           isAutoTTRecRunning: true,
-          "program-status": "Running! Don't close dolphin!",
-          "program-status-details": ""
+          programStatus: "Running! Don't close dolphin!",
+          programStatusDetails: ""
         });
 
         let appVariable = this;
 
-        window.api.handleSendStdout(function (event, stdoutData) {
-          appVariable.setState({
-            "program-status-details": appendAccountingForCarriage(appVariable.state["program-status-details"], stdoutData)
-          });
+        window.api.handleSendStdout(function (event: IpcRendererEvent, stdoutData: string) {
+          appVariable.setState((prevState, props) => ({
+            programStatusDetails: appendAccountingForCarriage(prevState.programStatusDetails, stdoutData)
+          }));
         });
         window.api.handleSendStderr(function (event, stderrData) {
-          appVariable.setState({
-            "program-status-details": appendAccountingForCarriage(appVariable.state["program-status-details"], stderrData)
-          });
+          appVariable.setState((prevState, props) => ({
+            programStatusDetails: appendAccountingForCarriage(prevState.programStatusDetails, stderrData)
+          }));
         });
 
         const autoTTRecResponse = await window.api.waitAutoTTRec()
           .catch((err) => {
-            this.setState({
+            this.setState((prevState, props) => ({
               isAutoTTRecRunning: false,
-              "program-status": "Error",
-              "program-status-details": this.state["program-status-details"] + err.message
-            });
+              programStatus: "Error",
+              programStatusDetails: prevState.programStatusDetails + err.message
+            }));
           });
 
         if (autoTTRecResponse === AutoTTRecResponse.COMPLETED) {
           this.setState({
             isAutoTTRecRunning: false,
-            "program-status": "Done!"
+            programStatus: "Done!"
           });
         } else if (autoTTRecResponse === AutoTTRecResponse.ABORTED) {
           this.setState({
             isAutoTTRecRunning: false,
-            "program-status": "Aborted"
+            programStatus: "Aborted"
           });
         }
       }
@@ -143,7 +207,7 @@ class App extends React.Component {
     return false;
   }
 
-  async abortAutoTTRec(event) {
+  async abortAutoTTRec(event: React.MouseEvent<HTMLButtonElement>) {
     await window.api.terminateAutoTTRec();
   }
 
@@ -153,7 +217,7 @@ class App extends React.Component {
         <div className="auto-tt-rec-notes">
           <h1 className="title-header">Auto-TT-Recorder GUI</h1>
           <ul>
-            <li>This only works with NTSC-U ISOs. The program will not work otherwise.</li>
+            <li>This only works with NTSC-U ISOs. The program will not work otherwise. Other regions will be supported in the future.</li>
             <li><strong>IT MUST BE A FULL ISO. NKIT OR WBFS WON'T WORK. A FULL ISO IS REQUIRED FOR AUTO-DOWNLOADING CUSTOM TRACKS.</strong></li>
             <li>No complex features, just the bare minimum to produce a recording.</li>
             <li>Individual ISOs differ in loading times. If it looks like Dolphin isn't making any progress recording, abort and for now, get a better ISO (this will be fixed sometime in the future).</li>
@@ -165,6 +229,7 @@ class App extends React.Component {
             <label htmlFor="iso-filename">ISO: </label>
             <input type="text"
               id="iso-filename" name="iso-filename" value={this.state["iso-filename"]}
+              /*onChange={(event) => {(this.onInputChange2("iso-filename", false))}}*/
               onChange={this.onInputChange} required={true}
             ></input>
             <button onClick={event => {
@@ -209,10 +274,10 @@ class App extends React.Component {
             <button type="button" disabled={!this.state.isAutoTTRecRunning} onClick={this.abortAutoTTRec}>Abort</button>
           </div>
         </form>
-        <h2>Status: {this.state["program-status"]}</h2>
+        <h2>Status: {this.state.programStatus}</h2>
         <textarea
-          className="status-textarea" id="program-status-details" value={this.state["program-status-details"]}
-          rows="10" cols="50" readOnly={true}
+          className="status-textarea" id="program-status-details" value={this.state.programStatusDetails}
+          rows={10} cols={50} readOnly={true}
         ></textarea>
       </div>
     );

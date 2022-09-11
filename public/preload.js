@@ -1,5 +1,5 @@
 
-const { contextBridge, ipcRenderer } = window.require("electron");
+const { contextBridge, ipcRenderer } = require("electron");
 
 contextBridge.exposeInMainWorld("api", {
   openFileDialog: (fileFilters) => ipcRenderer.invoke("open-file-dialog", fileFilters),

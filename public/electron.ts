@@ -18,7 +18,7 @@
 import { IpcMainInvokeEvent } from "electron";
 import { ChildProcess } from "child_process";
 import { Readable, Transform, TransformCallback } from "stream";
-import { AutoTTRecResponse } from "../src/enums";
+import { AutoTTRecResponse } from "../src/shared/enums";
 
 const fs = require("fs");
 const YAML = require("yaml");
@@ -95,7 +95,8 @@ async function createWindow() {
     width: 800,
     height: 600,
     webPreferences: {
-      nodeIntegration: true,
+      nodeIntegration: false,
+      contextIsolation: true,
       preload: path.join(__dirname, 'preload.js'),
       devTools: true
     },

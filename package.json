@@ -67,11 +67,10 @@
   },
   "main": "public/electron.ts",
   "scripts": {
-    "start": "node scripts/start.js",
-    "build": "node scripts/build.js",
-    "test": "node scripts/test.js",
-    "dev": "concurrently -k \"cross-env BROWSER=none npm start\" \"npm:electron\"",
-    "electron": "wait-on tcp:3000 && electron -r ts-node/register ."
+    "start-electron": "cross-env NODE_ENV=development electron -r ts-node/register ./public/electron.ts",
+    "start-renderer": "cross-env NODE_ENV=development webpack serve --config webpack/renderer.webpack.ts --mode=development",
+    "dev": "concurrently -k \"cross-env BROWSER=none npm run start-renderer\" \"npm:electron\"",
+    "electron": "wait-on tcp:3000 && npm run start-electron"
   },
   "eslintConfig": {
     "extends": [
@@ -96,7 +95,9 @@
     "electron": "^20.1.0",
     "electron-is-dev": "^2.0.0",
     "electron-packager": "^16.0.0",
-    "wait-on": "^6.0.1"
+    "ts-loader": "^9.3.1",
+    "wait-on": "^6.0.1",
+    "webpack-cli": "^4.10.0"
   },
   "jest": {
     "roots": [
