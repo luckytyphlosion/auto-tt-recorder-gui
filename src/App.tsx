@@ -14,6 +14,8 @@ declare global {
       waitAutoTTRec: () => Promise<AutoTTRecResponse>;
       handleSendStdout: (callable: (event: IpcRendererEvent, stdoutData: string) => void) => void;
       handleSendStderr: (callable: (event: IpcRendererEvent, stderrData: string) => void) => void;
+      removeHandleSendStdout: (callable: (event: IpcRendererEvent, stdoutData: string) => void) => void;
+      removeHandleSendStderr: (callable: (event: IpcRendererEvent, stderrData: string) => void) => void;
       terminateAutoTTRec: () => Promise<void>;
     }
   }
@@ -154,7 +156,7 @@ class App extends React.Component<AppProps, AppState> {
         "output-width": this.state["high-quality"] ? 2560 : null
       }
 
-      const spawnSuccessful = await window.api.spawnAutoTTRec("public/barebones_personal_ghost_config.yml", autoTTRecArgs)
+      const spawnSuccessful = await window.api.spawnAutoTTRec("data/barebones_personal_ghost_config.yml", autoTTRecArgs)
         .catch((err: Error) => {
           this.setState({
             programStatus: "Error",
@@ -171,16 +173,20 @@ class App extends React.Component<AppProps, AppState> {
 
         let appVariable = this;
 
-        window.api.handleSendStdout(function (event: IpcRendererEvent, stdoutData: string) {
-          appVariable.setState((prevState, props) => ({
+        function handleSendStdoutListener(event: IpcRendererEvent, stdoutData: string) {
+            appVariable.setState((prevState, props) => ({
             programStatusDetails: appendAccountingForCarriage(prevState.programStatusDetails, stdoutData)
           }));
-        });
-        window.api.handleSendStderr(function (event, stderrData) {
-          appVariable.setState((prevState, props) => ({
+        }
+
+        function handleSendStderrListener(event: IpcRendererEvent, stderrData: string) {
+            appVariable.setState((prevState, props) => ({
             programStatusDetails: appendAccountingForCarriage(prevState.programStatusDetails, stderrData)
           }));
-        });
+        }
+
+        window.api.handleSendStdout(handleSendStdoutListener);
+        window.api.handleSendStderr(handleSendStderrListener);
 
         const autoTTRecResponse = await window.api.waitAutoTTRec()
           .catch((err) => {
@@ -202,6 +208,10 @@ class App extends React.Component<AppProps, AppState> {
             programStatus: "Aborted"
           });
         }
+
+        console.log("Removing std handlers!");
+        window.api.removeHandleSendStdout(handleSendStdoutListener);
+        window.api.removeHandleSendStderr(handleSendStderrListener);
       }
     }
     return false;
@@ -222,6 +232,7 @@ class App extends React.Component<AppProps, AppState> {
             <li>No complex features, just the bare minimum to produce a recording.</li>
             <li>Individual ISOs differ in loading times. If it looks like Dolphin isn't making any progress recording, abort and for now, get a better ISO (this will be fixed sometime in the future).</li>
             <li>DM luckytyphlosion#1166 for any questions.</li>
+            <li>Source Code (for GUI): https://github.com/luckytyphlosion/auto-tt-recorder-gui (this will be a link in the next version)</li>
           </ul>
         </div>
         <form onSubmit={this.handleSubmit}>

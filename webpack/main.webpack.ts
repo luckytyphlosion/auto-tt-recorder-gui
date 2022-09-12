@@ -9,14 +9,20 @@ const config: Configuration = {
     extensions: [".tsx", ".ts", ".js"],
   },
   devtool: "source-map",
-  entry: path.resolve(rootPath, "public", "electron.ts"),
+  entry: {
+    main: path.resolve(rootPath, "public", "electron.ts"),
+    preload: path.resolve(rootPath, "public", "preload.js")
+  },
   target: "electron-main",
   mode: isDevelopment ? "development" : "production",
   module: {
     rules: [
       {
         test: /\.(js|ts|tsx)$/,
-        exclude: /node_modules/,
+        exclude: [
+          /node_modules/,
+          /auto-tt-recorder-gui-v[^-]+-win32-x64/,
+        ],
         include: [
           path.resolve(rootPath, "./src/shared"),
           /public/

@@ -29,10 +29,13 @@ const path = require("path");
 const { dialog, ipcMain, app, BrowserWindow } = require("electron");
 
 const isDev = require("electron-is-dev");
+const isDev2 = process.env.NODE_ENV === 'development';
 
 const contextMenu = require("electron-context-menu");
 
-contextMenu({showInspectElement: true});
+if (isDev && isDev2) {
+  contextMenu({showInspectElement: true});
+}
 
 const AUTO_TT_RECORDER_VERSION = "v1.2.2";
 const AUTO_TT_RECORDER_FOLDER_NAME = `auto-tt-recorder_${AUTO_TT_RECORDER_VERSION}_for_gui`;
@@ -130,16 +133,16 @@ async function createWindow() {
   });
 
   ipcMain.handle("spawn-auto-tt-rec", async function (event: IpcMainInvokeEvent, templateFilename: string, autoTTRecArgs: object) {
-    const templateContents = await fs.promises.readFile(templateFilename, "utf8");
+    const templateContents = await fs.promises.readFile(path.resolve(__dirname, "..", templateFilename), "utf8");
     let autoTTRecTemplate = YAML.parse(templateContents);
     for (const [key, value] of Object.entries(autoTTRecArgs)) {
       autoTTRecTemplate[key] = value;
     }
     const generatedConfigContents = YAML.stringify(autoTTRecTemplate);
-    await fs.promises.writeFile(`${AUTO_TT_RECORDER_FOLDER_NAME}/config.yml`, generatedConfigContents, "utf8");
+    await fs.promises.writeFile(path.resolve(__dirname, "..", AUTO_TT_RECORDER_FOLDER_NAME, "config.yml"), generatedConfigContents, "utf8");
     console.log("spawn-auto-tt-rec process.cwd():", process.cwd());
-    autoTTRecProcess = child_process.spawn("bin/record_ghost/record_ghost.exe", ["-cfg", "config.yml"], {
-      cwd: `${AUTO_TT_RECORDER_FOLDER_NAME}`,
+    autoTTRecProcess = child_process.spawn(path.resolve(__dirname, "..", AUTO_TT_RECORDER_FOLDER_NAME, "bin/record_ghost/record_ghost.exe"), ["-cfg", "config.yml"], {
+      cwd: path.resolve(__dirname, "..", AUTO_TT_RECORDER_FOLDER_NAME),
       options: {
         detached: false
       }
@@ -275,10 +278,11 @@ async function createWindow() {
 
   // and load the index.html of the app.
   // win.loadFile("index.html");
+  console.log("isDev:", isDev);
   await win.loadURL(
-    isDev
+    isDev && isDev2
       ? 'http://localhost:3000'
-      : `file://${path.join(__dirname, '../build/index.html')}`
+      : `file://${path.join(__dirname, '../dist/renderer/index.html')}`
   );
 
   if (isDev) {

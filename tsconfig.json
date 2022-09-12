@@ -13,6 +13,9 @@
     "noImplicitThis": true,
     "strictNullChecks": true,
     "allowSyntheticDefaultImports": true,
-    "resolveJsonModule": true
-  }
+    "resolveJsonModule": true,
+  },
+  "exclude": [
+    "auto-tt-recorder-gui-v*-win32-x64"
+  ]
 }

@@ -24,7 +24,10 @@ const config: Configuration = {
     rules: [
       {
         test: /\.(js|ts|tsx)$/,
-        exclude: /node_modules/,
+        exclude: [
+          /node_modules/,
+          /auto-tt-recorder-gui-v[^-]+-win32-x64/,
+        ],
         include: path.resolve(rootPath, "src"),
         use: {
           loader: "ts-loader",
@@ -32,6 +35,10 @@ const config: Configuration = {
       },
       {
         test: /\.css$/i,
+        exclude: [
+          /node_modules/,
+          /auto-tt-recorder-gui-v[^-]+-win32-x64/,
+        ],
         use: ["style-loader", "css-loader"],
       }
     ],
