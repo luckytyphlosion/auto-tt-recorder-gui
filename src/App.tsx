@@ -236,8 +236,8 @@ class App extends React.Component<AppProps, AppState> {
             <li>Download VLC to fix audio problems with the video: https://www.videolan.org/</li>
             <li>If Dolphin gives error code -1073741515, install Visual C++ Redistributable Packages for Visual Studio 2013: https://www.microsoft.com/en-us/download/details.aspx?id=40784</li>
             <li>ISO loading times shouldn't matter anymore, but if Dolphin gets stuck in a menu, contact me below</li>
-            <li>Join the Discord for any questions: https://discord.gg/6FqfpnqP57 (this will be a link in the next version)</li>
-            <li>Source Code (for GUI): https://github.com/luckytyphlosion/auto-tt-recorder-gui (this will be a link in the next version)</li>
+            <li>Join the Discord for any questions: https://discord.gg/6FqfpnqP57</li>
+            <li>Source Code (for GUI): https://github.com/luckytyphlosion/auto-tt-recorder-gui</li>
           </ul>
         </div>
         <form onSubmit={this.handleSubmit}>
