@@ -226,18 +226,23 @@ class App extends React.Component<AppProps, AppState> {
       <div>
         <div className="auto-tt-rec-notes">
           <h1 className="title-header">Auto-TT-Recorder GUI</h1>
-          <ul>
-            <li>This only works with NTSC-U ISOs. The program will not work otherwise. Other regions will be supported in the future.</li>
-            <li><strong>IT MUST BE A FULL ISO. NKIT OR WBFS WON'T WORK. A FULL ISO IS REQUIRED FOR AUTO-DOWNLOADING CUSTOM TRACKS.</strong></li>
+          <ul className="auto-tt-rec-notes-first-half">
+            <li>All regions are supported, including NTSC-K.</li>
             <li>No complex features, just the bare minimum to produce a recording.</li>
-            <li>Individual ISOs differ in loading times. If it looks like Dolphin isn't making any progress recording, abort and for now, get a better ISO (this will be fixed sometime in the future).</li>
-            <li>DM luckytyphlosion#1166 for any questions.</li>
+            <li>Links below aren't hyperlinks yet because of time issues, this will be fixed in the next version</li>
+          </ul>
+          <h3 className="troubleshooting-header">Troubleshooting below:</h3>
+          <ul className="auto-tt-rec-troubleshooting">
+            <li>Download VLC to fix audio problems with the video: https://www.videolan.org/</li>
+            <li>If Dolphin gives error code -1073741515, install Visual C++ Redistributable Packages for Visual Studio 2013: https://www.microsoft.com/en-us/download/details.aspx?id=40784</li>
+            <li>ISO loading times shouldn't matter anymore, but if Dolphin gets stuck in a menu, contact me below</li>
+            <li>Join the Discord for any questions: https://discord.gg/6FqfpnqP57 (this will be a link in the next version)</li>
             <li>Source Code (for GUI): https://github.com/luckytyphlosion/auto-tt-recorder-gui (this will be a link in the next version)</li>
           </ul>
         </div>
         <form onSubmit={this.handleSubmit}>
           <div>
-            <label htmlFor="iso-filename">ISO: </label>
+            <label htmlFor="iso-filename">ISO or WBFS: </label>
             <input type="text"
               id="iso-filename" name="iso-filename" value={this.state["iso-filename"]}
               /*onChange={(event) => {(this.onInputChange2("iso-filename", false))}}*/
@@ -245,7 +250,7 @@ class App extends React.Component<AppProps, AppState> {
             ></input>
             <button onClick={event => {
               this.queueOpenDialog(event, [
-                {name: "ISO files", extensions: ["iso"]}
+                {name: "ISO/WBFS files", extensions: ["iso", "wbfs"]}
               ], "iso-filename");
             }} id="iso-filename-btn" type="button">Browse&#8230;</button>
           </div>

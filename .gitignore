@@ -26,3 +26,5 @@ auto-tt-recorder_*_for_gui/
 
 auto-tt-recorder-gui-v*-win32-x64/
 dist/
+*.zip
+*.7z

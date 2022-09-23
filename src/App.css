@@ -10,6 +10,19 @@
 	font-size: 11pt;
 }
 
+.auto-tt-rec-notes-first-half {
+	margin-block-end: 0em;
+}
+
+.troubleshooting-header {
+	margin-block-start: 0.25em;
+	margin-block-end: 0.25em;
+}	
+
+.auto-tt-rec-troubleshooting {
+	margin-block-start: 0em;
+}
+
 #iso-filename {
 	width: 30em;
 }
