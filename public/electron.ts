@@ -37,7 +37,7 @@ if (isDev && isDev2) {
   contextMenu({showInspectElement: true});
 }
 
-const AUTO_TT_RECORDER_VERSION = "v1.3.0";
+const AUTO_TT_RECORDER_VERSION = "v1.3.1";
 const AUTO_TT_RECORDER_FOLDER_NAME = `auto-tt-recorder_${AUTO_TT_RECORDER_VERSION}_for_gui`;
 
 var autoTTRecProcess: ChildProcess | null = null;
