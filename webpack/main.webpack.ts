@@ -10,22 +10,23 @@ const config: Configuration = {
   },
   devtool: "source-map",
   entry: {
-    main: path.resolve(rootPath, "public", "electron.ts"),
-    preload: path.resolve(rootPath, "public", "preload.js")
+    main: path.resolve(rootPath, "src/main/electron.ts"),
+    preload: path.resolve(rootPath, "src/main/preload.js")
   },
   target: "electron-main",
   mode: isDevelopment ? "development" : "production",
   module: {
     rules: [
       {
-        test: /\.(js|ts|tsx)$/,
+        test: /\.(js|jsx|ts|tsx)$/,
         exclude: [
           /node_modules/,
           /auto-tt-recorder-gui-v[^-]+-win32-x64/,
+          /auto-tt-recorder_v[^-]+_for_gui/,
+          path.resolve(rootPath, "./src/renderer")
         ],
         include: [
-          path.resolve(rootPath, "./src/shared"),
-          /public/
+          path.resolve(rootPath, "./src")
         ],
         use: {
           loader: "ts-loader",
@@ -37,7 +38,7 @@ const config: Configuration = {
     __dirname: false,
   },
   output: {
-    path: path.resolve(rootPath, "dist"),
+    path: path.resolve(rootPath, "dist/main"),
     filename: "[name].js",
   },
   optimization: {

@@ -13,22 +13,26 @@ interface Configuration extends WebpackConfiguration {
 
 const config: Configuration = {
   resolve: {
-    extensions: [".tsx", ".ts", ".js"],
+    extensions: [".tsx", ".ts", ".js", ".jsx"],
     mainFields: ["main", "module", "browser"],
   },
-  entry: path.resolve(rootPath, "src", "index.js"),
+  entry: path.resolve(rootPath, "src/renderer/index.jsx"),
   target: "web",
   devtool: "source-map",
   mode: isDevelopment ? "development" : "production",
   module: {
     rules: [
       {
-        test: /\.(js|ts|tsx)$/,
+        test: /\.(js|jsx|ts|tsx)$/,
         exclude: [
           /node_modules/,
           /auto-tt-recorder-gui-v[^-]+-win32-x64/,
+          /auto-tt-recorder_v[^-]+_for_gui/,
+          path.resolve(rootPath, "./src/main")
         ],
-        include: path.resolve(rootPath, "src"),
+        include: [
+          path.resolve(rootPath, "./src")
+        ],
         use: {
           loader: "ts-loader",
         },
@@ -63,7 +67,7 @@ const config: Configuration = {
     minimize: false,
   },
   plugins: [
-    new HtmlWebpackPlugin({ template: path.resolve(rootPath, "index.html") }),
+    new HtmlWebpackPlugin({ template: path.resolve(rootPath, "src/renderer/index.html") }),
   ],
 };
 

@@ -1,7 +1,7 @@
 
 import React from "react";
 import "./App.css";
-import { AutoTTRecResponse } from "./shared/enums";
+import { AutoTTRecResponse } from "../enums";
 import { IpcRendererEvent } from "electron";
 
 //type HandleSendStdoutDeclaration = 

@@ -18,7 +18,7 @@
 import { IpcMainInvokeEvent } from "electron";
 import { ChildProcess } from "child_process";
 import { Readable, Transform, TransformCallback } from "stream";
-import { AutoTTRecResponse } from "../src/shared/enums";
+import { AutoTTRecResponse } from "../enums";
 import { App } from "electron/main";
 
 const fs = require("fs");
@@ -29,7 +29,7 @@ const events = require("events");
 const path = require("path");
 const { dialog, ipcMain, app, BrowserWindow } = require("electron");
 
-const isDev = require("electron-is-dev") || (process.env.NODE_ENV === 'development');
+const isDev = process.env.NODE_ENV === 'development';
 
 const contextMenu = require("electron-context-menu");
 
@@ -145,16 +145,16 @@ async function createWindow() {
   });
 
   ipcMain.handle("spawn-auto-tt-rec", async function (event: IpcMainInvokeEvent, templateFilename: string, autoTTRecArgs: object) {
-    const templateContents = await fs.promises.readFile(path.resolve(__dirname, "..", templateFilename), "utf8");
+    const templateContents = await fs.promises.readFile(path.resolve(__dirname, "../..", templateFilename), "utf8");
     let autoTTRecTemplate = YAML.parse(templateContents);
     for (const [key, value] of Object.entries(autoTTRecArgs)) {
       autoTTRecTemplate[key] = value;
     }
     const generatedConfigContents = YAML.stringify(autoTTRecTemplate);
-    await fs.promises.writeFile(path.resolve(__dirname, "..", AUTO_TT_RECORDER_FOLDER_NAME, "config.yml"), generatedConfigContents, "utf8");
+    await fs.promises.writeFile(path.resolve(__dirname, "../..", AUTO_TT_RECORDER_FOLDER_NAME, "config.yml"), generatedConfigContents, "utf8");
     console.log("spawn-auto-tt-rec process.cwd():", process.cwd());
-    autoTTRecProcess = child_process.spawn(path.resolve(__dirname, "..", AUTO_TT_RECORDER_FOLDER_NAME, "bin/record_ghost/record_ghost.exe"), ["-cfg", "config.yml"], {
-      cwd: path.resolve(__dirname, "..", AUTO_TT_RECORDER_FOLDER_NAME),
+    autoTTRecProcess = child_process.spawn(path.resolve(__dirname, "../..", AUTO_TT_RECORDER_FOLDER_NAME, "bin/record_ghost/record_ghost.exe"), ["-cfg", "config.yml"], {
+      cwd: path.resolve(__dirname, "../..", AUTO_TT_RECORDER_FOLDER_NAME),
       options: {
         detached: false
       }
@@ -294,7 +294,7 @@ async function createWindow() {
   await win.loadURL(
     isDev
       ? 'http://localhost:3000'
-      : `file://${path.join(__dirname, '../dist/renderer/index.html')}`
+      : `file://${path.join(__dirname, '../renderer/index.html')}`
   );
 
   if (isDev) {

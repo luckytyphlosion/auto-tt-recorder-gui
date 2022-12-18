@@ -68,17 +68,25 @@
     "workbox-webpack-plugin": "^6.4.1",
     "yaml": "^2.1.1"
   },
-  "main": "dist/main.js",
+  "main": "dist/main/main.js",
   "scripts": {
     "build": "npm-run-all build-main build-renderer",
     "build-main": "cross-env NODE_ENV=production webpack --config webpack/main.webpack.ts --mode=production",
     "build-renderer": "cross-env NODE_ENV=production webpack --config webpack/renderer.webpack.ts --mode=production",
-    "start-main": "cross-env NODE_ENV=development electronmon -r ts-node/register ./public/electron.ts",
+    "start-main": "cross-env NODE_ENV=development electronmon -r ts-node/register ./src/main/electron.ts",
     "start-renderer": "cross-env NODE_ENV=development webpack serve --config webpack/renderer.webpack.ts --mode=development",
     "dev": "concurrently -k \"cross-env BROWSER=none npm run start-renderer\" \"npm:electron\"",
     "electron": "wait-on tcp:3000 && npm run start-main",
     "electron-prod": "cross-env NODE_ENV=production electron .",
     "pack": "electron-packager . \"auto-tt-recorder-gui-v0.2.1\" --ignore node_modules --ignore public --ignore src --ignore webpack --overwrite"
+  },
+  "electronmon": {
+    "patterns": [
+      "!auto-tt-recorder_*_for_gui/**/*",
+      "!auto-tt-recorder-gui-v*-win32-x64/**/*",
+      "!dist/**/*",
+      "!installers/**/*"
+    ]
   },
   "eslintConfig": {
     "extends": [
