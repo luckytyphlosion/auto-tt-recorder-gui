@@ -19,6 +19,7 @@ import { IpcMainInvokeEvent } from "electron";
 import { ChildProcess } from "child_process";
 import { Readable, Transform, TransformCallback } from "stream";
 import { AutoTTRecResponse } from "../src/shared/enums";
+import { App } from "electron/main";
 
 const fs = require("fs");
 const YAML = require("yaml");
@@ -28,12 +29,11 @@ const events = require("events");
 const path = require("path");
 const { dialog, ipcMain, app, BrowserWindow } = require("electron");
 
-const isDev = require("electron-is-dev");
-const isDev2 = process.env.NODE_ENV === 'development';
+const isDev = require("electron-is-dev") || (process.env.NODE_ENV === 'development');
 
 const contextMenu = require("electron-context-menu");
 
-if (isDev && isDev2) {
+if (isDev) {
   contextMenu({showInspectElement: true});
 }
 
@@ -93,7 +93,19 @@ async function readStream(streamObj : Readable) : Promise<ReadStreamResponse> {
 }
 
 async function createWindow() {
+  // load package.json if isDev
+  // see: https://github.com/electron/electron/issues/15652
+
+  if (isDev) {
+    
+  }
+
   // Create the browser window.
+  let configPath = app.getPath("userData");
+  console.log("configPath:", configPath, ", resourcesPath:", process.resourcesPath);
+
+  //fs.existsSync("
+
   const win = new BrowserWindow({
     width: 800,
     height: 600,
@@ -280,7 +292,7 @@ async function createWindow() {
   // win.loadFile("index.html");
   console.log("isDev:", isDev);
   await win.loadURL(
-    isDev && isDev2
+    isDev
       ? 'http://localhost:3000'
       : `file://${path.join(__dirname, '../dist/renderer/index.html')}`
   );
