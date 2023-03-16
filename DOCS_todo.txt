@@ -1,0 +1,1 @@
+- every time you release a new version, you have to update the versions in src/versions.ts as well as the version in package.json (TODO on that)

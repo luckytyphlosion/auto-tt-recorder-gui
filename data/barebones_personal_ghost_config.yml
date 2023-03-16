@@ -3,6 +3,10 @@
 #output-video-filename: <FILLME your video filename here>
 #chadsoft-ghost-page: <FILLME your link here>
 #track-name: <FILLME your track name>
+#dolphin-folder: Documents/Auto-TT-Recorder-GUI_data/dolphin
+#storage-folder: Documents/Auto-TT-Recorder-GUI_data/storage
+#temp-folder: Documents/Auto-TT-Recorder-GUI_data/temp
+#wiimm-folder: ???
 
 # Keep these as is
 ffmpeg-filename: bin/ffmpeg.exe
@@ -24,8 +28,10 @@ crf-value: 15
 youtube-settings: true
 keep-window: true
 
-chadsoft-read-cache: false
-chadsoft-write-cache: false
+chadsoft-read-cache: true
+chadsoft-write-cache: true
+chadsoft-cache-expiry: 24h
+
 encode-only: false
 input-display-dont-create: false
 dolphin-resolution: 480p

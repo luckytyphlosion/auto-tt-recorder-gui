@@ -6,6 +6,7 @@
   "private": true,
   "dependencies": {
     "@babel/core": "^7.16.0",
+    "@myrpc/documents-folder": "^1.0.1",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.3",
     "@svgr/webpack": "^5.5.0",
     "@testing-library/jest-dom": "^5.16.5",
@@ -15,6 +16,7 @@
     "@types/node": "^18.7.14",
     "@types/react": "^18.0.18",
     "@types/react-dom": "^18.0.6",
+    "async-mutex": "^0.4.0",
     "babel-jest": "^27.4.2",
     "babel-loader": "^8.2.3",
     "babel-plugin-named-asset-import": "^0.3.8",
@@ -78,7 +80,8 @@
     "dev": "concurrently -k \"cross-env BROWSER=none npm run start-renderer\" \"npm:electron\"",
     "electron": "wait-on tcp:3000 && npm run start-main",
     "electron-prod": "cross-env NODE_ENV=production electron .",
-    "pack": "electron-packager . \"auto-tt-recorder-gui-v0.2.1\" --ignore node_modules --ignore public --ignore src --ignore webpack --overwrite"
+    "pack": "electron-packager . \"auto-tt-recorder-gui-v0.2.1\" --ignore node_modules --ignore installers --ignore public --ignore src --ignore webpack --overwrite",
+    "installer": "electron-installer-windows --src auto-tt-recorder-gui-v0.2.1-win32-x64 --dest installers --options.exe auto-tt-recorder-gui-v0.2.1.exe"
   },
   "electronmon": {
     "patterns": [

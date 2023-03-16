@@ -18,8 +18,10 @@
 import { IpcMainInvokeEvent } from "electron";
 import { ChildProcess } from "child_process";
 import { Readable, Transform, TransformCallback } from "stream";
+
 import { AutoTTRecResponse } from "../enums";
-import { App } from "electron/main";
+import { Config } from "./confighandler";
+import * as versions from "../versions";
 
 const fs = require("fs");
 const YAML = require("yaml");
@@ -37,11 +39,9 @@ if (isDev) {
   contextMenu({showInspectElement: true});
 }
 
-const AUTO_TT_RECORDER_VERSION = "v1.3.1";
-const AUTO_TT_RECORDER_FOLDER_NAME = `auto-tt-recorder_${AUTO_TT_RECORDER_VERSION}_for_gui`;
-
 var autoTTRecProcess: ChildProcess | null = null;
 var terminatedAutoTTRecViaGui = false;
+var config: Config;
 
 interface FileFilter {
   name: string;
@@ -92,19 +92,23 @@ async function readStream(streamObj : Readable) : Promise<ReadStreamResponse> {
   return {hasData: true, output: output.split("").join("")};
 }
 
+/*
+put dolphin-folder in some appData folder
+put storage-folder in Documents/Auto-TT-Recorder-GUI_data/storage
+put temp-folder in Documents/Auto-TT-Recorder-GUI_data/temp
+put wiimm-folder in ???
+
+*/
+
+async function updateAutoTTRecDirectories(config: Config) {
+  // if update
+  console.log(path.resolve(config.userDataPath, "dolphin"));
+}
+
 async function createWindow() {
-  // load package.json if isDev
-  // see: https://github.com/electron/electron/issues/15652
+  config = new Config(app, "auto-tt-recorder-gui");
 
-  if (isDev) {
-    
-  }
-
-  // Create the browser window.
-  let configPath = app.getPath("userData");
-  console.log("configPath:", configPath, ", resourcesPath:", process.resourcesPath);
-
-  //fs.existsSync("
+  await updateAutoTTRecDirectories(config);
 
   const win = new BrowserWindow({
     width: 800,
@@ -151,10 +155,10 @@ async function createWindow() {
       autoTTRecTemplate[key] = value;
     }
     const generatedConfigContents = YAML.stringify(autoTTRecTemplate);
-    await fs.promises.writeFile(path.resolve(__dirname, "../..", AUTO_TT_RECORDER_FOLDER_NAME, "config.yml"), generatedConfigContents, "utf8");
+    await fs.promises.writeFile(path.resolve(__dirname, "../..", versions.AUTO_TT_RECORDER_FOLDER_NAME, "config.yml"), generatedConfigContents, "utf8");
     console.log("spawn-auto-tt-rec process.cwd():", process.cwd());
-    autoTTRecProcess = child_process.spawn(path.resolve(__dirname, "../..", AUTO_TT_RECORDER_FOLDER_NAME, "bin/record_ghost/record_ghost.exe"), ["-cfg", "config.yml"], {
-      cwd: path.resolve(__dirname, "../..", AUTO_TT_RECORDER_FOLDER_NAME),
+    autoTTRecProcess = child_process.spawn(path.resolve(__dirname, "../..", versions.AUTO_TT_RECORDER_FOLDER_NAME, "bin/record_ghost/record_ghost.exe"), ["-cfg", "config.yml"], {
+      cwd: path.resolve(__dirname, "../..", versions.AUTO_TT_RECORDER_FOLDER_NAME),
       options: {
         detached: false
       }
