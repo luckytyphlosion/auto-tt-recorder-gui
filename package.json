@@ -1,5 +1,6 @@
 {
   "name": "auto-tt-recorder-gui",
+  "productName": "Auto TT Recorder GUI",
   "description": "GUI wrapper for Auto-TT-Recorder",
   "author": "luckytyphlosion",
   "version": "0.1.0",
@@ -81,7 +82,8 @@
     "electron": "wait-on tcp:3000 && npm run start-main",
     "electron-prod": "cross-env NODE_ENV=production electron .",
     "pack": "electron-packager . \"auto-tt-recorder-gui-v0.2.1\" --ignore node_modules --ignore installers --ignore public --ignore src --ignore webpack --overwrite",
-    "installer": "electron-installer-windows --src auto-tt-recorder-gui-v0.2.1-win32-x64 --dest installers --options.exe auto-tt-recorder-gui-v0.2.1.exe"
+    "installer": "electron-installer-windows --src auto-tt-recorder-gui-v0.2.1-win32-x64 --dest installers --options.exe auto-tt-recorder-gui-v0.2.1.exe",
+    "installer2": "electron-builder --win --x64"
   },
   "electronmon": {
     "patterns": [
@@ -112,6 +114,7 @@
   "devDependencies": {
     "concurrently": "^7.3.0",
     "electron": "^20.1.0",
+    "electron-builder": "^23.6.0",
     "electron-installer-windows": "^3.0.0",
     "electron-is-dev": "^2.0.0",
     "electron-packager": "^16.0.0",
@@ -172,6 +175,30 @@
   "babel": {
     "presets": [
       "react-app"
+    ]
+  },
+  "build": {
+    "appId": "com.auto-tt-recorder-gui.app",
+    "artifactName": "${productName}-${version}-${os}-${arch}.${ext}",
+    "compression": "normal",
+    "win": {
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "directories": {
+      "output": "packages"
+    },
+    "files": [
+      "package.json",
+      "dist/**",
+      "!node_modules/**/*"
+    ],
+    "extraResources": [
+      "auto-tt-recorder_v1.3.4_for_gui/**",
+      "data/**"
     ]
   },
   "license": "GPL-2.0-or-later"
