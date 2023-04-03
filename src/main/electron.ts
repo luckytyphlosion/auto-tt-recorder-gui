@@ -15,6 +15,15 @@
 //var console = global.console = new Console(process.stdout, process.stderr);
 //console.log("console");
 
+import { dialog, ipcMain, app, BrowserWindow } from "electron";
+import { autoUpdater } from "electron-updater";
+import fsPromises from "fs/promises";
+
+//if (require("electron-squirrel-startup")) {
+//  app.quit();
+//  process.exit(0);
+//}
+
 import { IpcMainInvokeEvent } from "electron";
 import { ChildProcess } from "child_process";
 import { Readable, Transform, TransformCallback } from "stream";
@@ -22,18 +31,19 @@ import { Readable, Transform, TransformCallback } from "stream";
 import { AutoTTRecResponse } from "../enums";
 import { Config } from "./confighandler";
 import * as versions from "../versions";
+import * as autoTTRecBridge from "./auto-tt-rec-bridge";
 
-const fs = require("fs");
-const YAML = require("yaml");
-const child_process = require("child_process");
-const events = require("events");
+import fs from "fs";
+import fse from "fs-extra";
+import YAML from "yaml";
+import child_process from "child_process";
+import events from "events";
 
-const path = require("path");
-const { dialog, ipcMain, app, BrowserWindow } = require("electron");
+import path from "path";
+
+import contextMenu from "electron-context-menu";
 
 const isDev = process.env.NODE_ENV === 'development';
-
-const contextMenu = require("electron-context-menu");
 
 if (isDev) {
   contextMenu({showInspectElement: true});
@@ -93,20 +103,44 @@ async function readStream(streamObj : Readable) : Promise<ReadStreamResponse> {
 }
 
 /*
-put dolphin-folder in some appData folder
-put storage-folder in Documents/Auto-TT-Recorder-GUI_data/storage
-put temp-folder in Documents/Auto-TT-Recorder-GUI_data/temp
-put wiimm-folder in ???
+put dolphin-folder in <..>/Roaming/Auto-TT-Recorder GUI/auto-tt-recorder-gui-working/dolphin
+put storage-folder in <..>/Roaming/Auto-TT-Recorder GUI/auto-tt-recorder-gui-working/storage
+put temp-folder in <..>/Roaming/Auto-TT-Recorder GUI/auto-tt-recorder-gui-working/temp
+wiimm folder stays where it is
 
 */
 
 async function updateAutoTTRecDirectories(config: Config) {
-  // if update
-  console.log(path.resolve(config.userDataPath, "dolphin"));
+  // copy over dolphin directory elsewhere
+  // electron-builder auto-update will remove all install files
+  // but we want to keep dolphin configs
+
+  // only copy over dolphin directory
+  // if the dolphin version was updated or the directory doesn't exist
+  if (config.options.dolphinVersion !== versions.DOLPHIN_VERSION || !fs.existsSync(config.dolphinPath)) {
+    await fsPromises.mkdir(config.dolphinPath, {recursive: true});
+    const workingDolphinDir = await fsPromises.opendir(config.dolphinPath);
+
+    for await (const dirent of workingDolphinDir) {
+      if (!(dirent.isDirectory() && dirent.name === "User")) {
+        
+        let dolphinItemPath: string = path.resolve(config.dolphinPath, dirent.name);
+        console.log("dirent.name:", dirent.name);
+        console.log("dolphinItemPath", dolphinItemPath);
+        await fsPromises.rm(dolphinItemPath, {force: false, recursive: true});
+      }
+    }
+
+    let savedDolphinPath = path.resolve(__dirname, "../..", versions.AUTO_TT_RECORDER_FOLDER_NAME, "dolphin");
+    console.log("savedDolphinPath:", savedDolphinPath);
+
+    await fse.copy(savedDolphinPath, config.dolphinPath);
+    config.updateDolphinVersion();
+  }
 }
 
 async function createWindow() {
-  config = new Config(app, "auto-tt-recorder-gui");
+  config = new Config(app, "Auto-TT-Recorder GUI");
 
   await updateAutoTTRecDirectories(config);
 
@@ -149,46 +183,25 @@ async function createWindow() {
   });
 
   ipcMain.handle("spawn-auto-tt-rec", async function (event: IpcMainInvokeEvent, templateFilename: string, autoTTRecArgs: object) {
-    const templateContents = await fs.promises.readFile(path.resolve(__dirname, "../..", templateFilename), "utf8");
+    const templateContents = await fsPromises.readFile(path.resolve(__dirname, "../..", templateFilename), "utf8");
     let autoTTRecTemplate = YAML.parse(templateContents);
     for (const [key, value] of Object.entries(autoTTRecArgs)) {
       autoTTRecTemplate[key] = value;
     }
     const generatedConfigContents = YAML.stringify(autoTTRecTemplate);
-    await fs.promises.writeFile(path.resolve(__dirname, "../..", versions.AUTO_TT_RECORDER_FOLDER_NAME, "config.yml"), generatedConfigContents, "utf8");
+
+    await fsPromises.writeFile(path.resolve(__dirname, "../..", versions.AUTO_TT_RECORDER_FOLDER_NAME, "config.yml"), generatedConfigContents, "utf8");
     console.log("spawn-auto-tt-rec process.cwd():", process.cwd());
-    autoTTRecProcess = child_process.spawn(path.resolve(__dirname, "../..", versions.AUTO_TT_RECORDER_FOLDER_NAME, "bin/record_ghost/record_ghost.exe"), ["-cfg", "config.yml"], {
-      cwd: path.resolve(__dirname, "../..", versions.AUTO_TT_RECORDER_FOLDER_NAME),
-      options: {
+
+    // Run auto-tt-recorder here
+    autoTTRecProcess = child_process.spawn(
+      path.resolve(__dirname, "../..", versions.AUTO_TT_RECORDER_FOLDER_NAME, "bin/record_ghost/record_ghost.exe"),
+      ["-cfg", "config.yml"],
+      {
+        cwd: path.resolve(__dirname, "../..", versions.AUTO_TT_RECORDER_FOLDER_NAME),
         detached: false
       }
-    });
-
-    //let pyProcess: ChildProcess = child_process.exec("$OutputEncoding = [console]::InputEncoding = [console]::OutputEncoding = New-Object System.Text.UTF8Encoding; python public/python_buffer_test.py", {encoding: "utf8", shell: "powershell.exe"});
-    //let pyProcess: ChildProcess = child_process.spawn("python", ["public/python_buffer_test.py"]);
-    //pyProcess!.stdout!.setEncoding("utf8");
-    //pyProcess!.stderr!.setEncoding("utf8");
-
-    //pyProcess!.stdout!.on("data", (buf: string) => {
-    //  console.log(buf.toString());
-    //});
-    //
-    //pyProcess!.stderr!.on("data", (buf: string) => {
-    //  console.log(buf.toString());
-    //});
-
-    //let pyshell = new PythonShell('public/python_buffer_test.py', {encoding: "utf8", shell: "powershell.exe"});
-    //
-    //pyshell.on('message', function (message: string) {
-    //    console.log(message);
-    //});
-    //
-    //pyshell.end(function (err: Error, code: number, signal: string) {
-    //    if (err) throw err;
-    //    console.log('The exit code was: ' + code);
-    //    console.log('The exit signal was: ' + signal);
-    //    console.log('finished');
-    //});
+    );
 
     // https://nodejs.org/api/child_process.html#child_processspawncommand-args-options
     // always returns ChildProcess
@@ -212,21 +225,16 @@ async function createWindow() {
     }
 
     function onReceiveAutoTTRecStdout(buf: string) {
-      //const stdoutPretty = `=== stdout start ===\n${buf.toString()}=== stdout end===\n`;
       const stdoutPretty = buf.toString();
       console.log(stdoutPretty);
       win.webContents.send("send-stdout", stdoutPretty);
     }
 
     function onReceiveAutoTTRecStderr(buf: string) {
-      //const stderrPretty = `=== stderr start ===\n${buf.toString()}=== stderr end===\n`;
       const stderrPretty = buf.toString();
       console.log(stderrPretty);
       win.webContents.send("send-stderr", stderrPretty);
     }
-
-    //const stdoutSplitter = new NewlineTransformer();
-    //const stderrSplitter = new NewlineTransformer();
 
     autoTTRecProcess!.stdout!.on("data", onReceiveAutoTTRecStdout);
     autoTTRecProcess!.stderr!.on("data", onReceiveAutoTTRecStderr);
@@ -310,7 +318,10 @@ async function createWindow() {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+  autoUpdater.checkForUpdates();
+  createWindow();
+});
 
 //app.on("ready", () => {
 //  BrowserWindow.getFocusedWindow().webContents.openDevTools();

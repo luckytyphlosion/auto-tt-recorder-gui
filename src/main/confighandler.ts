@@ -1,19 +1,18 @@
-const fs = require("fs");
-const fsPromises = require("fs/promises");
-const path = require("path");
-const os = require("os");
+import path from "path";
+import fs from "fs";
+import fsPromises from "fs/promises";
 
 import { Mutex } from "async-mutex";
 import { App } from "electron/main";
 
-import documentsFolder from "./documents-folder";
+import * as versions from "../versions";
+
+//import documentsFolder from "./documents-folder";
 
 interface ConfigOptions {
-  dataFolder: string
-}
-
-interface KeyValue {
-  [key: string]: string;
+  autoTTRecorderVersion: string,
+  guiVersion: string,
+  dolphinVersion: string
 }
 
 export class Config {
@@ -21,16 +20,19 @@ export class Config {
   fileIOMutex: Mutex;
   userDataPath: string;
   configFilepath: string;
-  options: KeyValue;
+  options: ConfigOptions;
+  dolphinPath: string;
 
   constructor(app: App, name: string) {
     this.app = app;
     this.fileIOMutex = new Mutex();
     let appDataPath = this.app.getPath("appData");
-    this.userDataPath = path.resolve(appDataPath, name);
-    this.configFilepath = path.resolve(this.userDataPath, "config", "config.json");
-    this.options = {};
-    this.readConfig().then();
+    this.userDataPath = path.resolve(appDataPath, name, "auto-tt-recorder-gui-working");
+    console.log("this.userDataPath:", this.userDataPath);
+    this.configFilepath = path.resolve(this.userDataPath, "config.json");
+    this.options = this.readConfig();
+    this.dolphinPath = path.resolve(this.userDataPath, "dolphin");
+    console.log("this.workingDolphinPath:", this.dolphinPath);
   }
 
   private async makeConfigDirpath() {
@@ -39,20 +41,53 @@ export class Config {
   }
 
   private createDefaultOptions() {
-    
     return {
-      autoTTRecorderVersion: "v1.3.4",
-      guiVersion: "v0.2.2"
+      autoTTRecorderVersion: versions.AUTO_TT_RECORDER_VERSION,
+      guiVersion: versions.AUTO_TT_RECORDER_GUI_VERSION,
+      dolphinVersion: versions.DOLPHIN_VERSION,
     };
   }
 
-  private async readConfig() {
-    await this.makeConfigDirpath();
-    console.log(documentsFolder());
-    if (!fs.existsSync(this.configFilepath)) {
-      this.options = this.createDefaultOptions();
-      this.writeConfig().then();
+  private fillOptionsWithDefaults(partialOptions: Partial<ConfigOptions>) {
+    const defaultOptions = this.createDefaultOptions();
+    return {
+      ...defaultOptions,
+      ...partialOptions
+    };
+  }
+
+  private readConfig() {
+    let optionsAsStr: string;
+    let partialOptions: Partial<ConfigOptions>;
+
+    this.makeConfigDirpath().then();
+  
+    // read in config file
+    // and also account for no config file at all
+    try {
+      optionsAsStr = fs.readFileSync(this.configFilepath).toString();
+    } catch (e) {
+      if ((e as any).code === "ENOENT") {
+        optionsAsStr = "{}";
+      } else {
+        throw e;
+      }
     }
+
+    // convert to object
+    try {
+      if (optionsAsStr !== "{}") {
+        partialOptions = JSON.parse(optionsAsStr);
+      } else {
+        partialOptions = {};
+      }  
+    } catch {
+      partialOptions = {};
+    }
+
+    this.options = this.fillOptionsWithDefaults(partialOptions);
+    this.writeConfig().then();
+    return this.options;
   }
 
   async writeConfig() {
@@ -60,5 +95,10 @@ export class Config {
     await this.fileIOMutex.runExclusive(async () => {
       await fsPromises.writeFile(this.configFilepath, JSON.stringify(this.options, null, 4) + "\n");
     })
+  }
+
+  async updateDolphinVersion() {
+    this.options.dolphinVersion = versions.DOLPHIN_VERSION;
+    await this.writeConfig();
   }
 }
