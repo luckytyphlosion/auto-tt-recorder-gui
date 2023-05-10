@@ -24,20 +24,16 @@ import fsPromises from "fs/promises";
 //  process.exit(0);
 //}
 
-import { IpcMainInvokeEvent } from "electron";
-import { ChildProcess } from "child_process";
+import { IpcMainInvokeEvent, FileFilter } from "electron";
 import { Readable, Transform, TransformCallback } from "stream";
 
-import { AutoTTRecResponse } from "../enums";
 import { Config } from "./confighandler";
 import * as versions from "../versions";
 import * as autoTTRecBridge from "./auto-tt-rec-bridge";
+import * as gui2 from "./gui2";
 
 import fs from "fs";
 import fse from "fs-extra";
-import YAML from "yaml";
-import child_process from "child_process";
-import events from "events";
 
 import path from "path";
 
@@ -49,58 +45,8 @@ if (isDev) {
   contextMenu({showInspectElement: true});
 }
 
-var autoTTRecProcess: ChildProcess | null = null;
-var terminatedAutoTTRecViaGui = false;
-var config: Config;
-
-interface FileFilter {
-  name: string;
-  extensions: string[];
-}
-
-interface OpenDialogResponse {
-  canceled: boolean;
-  filePaths: string[];
-  bookmarks?: string[];
-}
-
-interface SaveDialogResponse {
-  canceled: boolean;
-  filePath?: string;
-  bookmarks?: string[];
-}
-
-interface ReadStreamResponse {
-  hasData: boolean;
-  output: string;
-}
-
-type OpenDialogProperties = ("openFile" | "openDirectory" | "multiSelections" | "showHiddenFiles" | "createDirectory" | "promptToCreate" | "noResolveAliases" | "treatPackageAsDirectory" | "dontAddToRecent")[];
-type SaveDialogProperties = ("showHiddenFiles" | "createDirectory" | "treatPackageAsDirectory" | "dontAddToRecent" | "showOverwriteConfirmation")[];
-
-async function readStream(streamObj : Readable) : Promise<ReadStreamResponse> {
-  if (!streamObj.readable) {
-    return {hasData: false, output: ""};
-  }
-
-  let output = "";
-  streamObj.resume();
-
-  function streamObjOnData(buf: string) {
-    output += buf.toString();
-  }
-  
-  streamObj.on("data", streamObjOnData);
-  
-  try {
-    await events.once(streamObj, "end");
-  } catch (err) {
-    throw (err as Error);
-  }
-
-  streamObj.removeListener("data", streamObjOnData);
-  return {hasData: true, output: output.split("").join("")};
-}
+let config: Config;
+export let mainWindow: BrowserWindow;
 
 /*
 put dolphin-folder in <..>/Roaming/Auto-TT-Recorder GUI/auto-tt-recorder-gui-working/dolphin
@@ -144,7 +90,10 @@ async function createWindow() {
 
   await updateAutoTTRecDirectories(config);
 
-  const win = new BrowserWindow({
+  let dolphinPathForwardSlashes = config.dolphinPath.replaceAll("\\", "/");
+  console.log("dolphinPathForwardSlashes:", dolphinPathForwardSlashes);
+
+  mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
@@ -154,163 +103,24 @@ async function createWindow() {
       devTools: true
     },
   });
-  ipcMain.handle("open-file-dialog", async function (event: IpcMainInvokeEvent, fileFilters: FileFilter[]) {
-    console.log("open-file-dialog fileFilters:", fileFilters);
-    let dialogProperties: OpenDialogProperties = ["openFile"];
-    let response = await dialog.showOpenDialog(win, {
-      properties: dialogProperties,
-      filters: fileFilters
-    });
-    if (!response.canceled) {
-      console.log(response.filePaths[0]);
-      return response.filePaths[0];
-    } else {
-      return "";
-    }
-  });
+  ipcMain.handle("open-file-dialog", gui2.openFileDialog);
+  ipcMain.handle("save-file-dialog", gui2.saveFileDialog);
 
-  ipcMain.handle("save-file-dialog", async function (event: IpcMainInvokeEvent, fileFilters: FileFilter[]) {
-    let dialogProperties: SaveDialogProperties = [];
-    let response = await dialog.showSaveDialog(win, {
-      properties: dialogProperties,
-      filters: fileFilters
-    });
-    if (!response.canceled) {
-      return response.filePath;
-    } else {
-      return "";
-    }
-  });
-
-  ipcMain.handle("spawn-auto-tt-rec", async function (event: IpcMainInvokeEvent, templateFilename: string, autoTTRecArgs: object) {
-    const templateContents = await fsPromises.readFile(path.resolve(__dirname, "../..", templateFilename), "utf8");
-    let autoTTRecTemplate = YAML.parse(templateContents);
-    for (const [key, value] of Object.entries(autoTTRecArgs)) {
-      autoTTRecTemplate[key] = value;
-    }
-    const generatedConfigContents = YAML.stringify(autoTTRecTemplate);
-
-    await fsPromises.writeFile(path.resolve(__dirname, "../..", versions.AUTO_TT_RECORDER_FOLDER_NAME, "config.yml"), generatedConfigContents, "utf8");
-    console.log("spawn-auto-tt-rec process.cwd():", process.cwd());
-
-    // Run auto-tt-recorder here
-    autoTTRecProcess = child_process.spawn(
-      path.resolve(__dirname, "../..", versions.AUTO_TT_RECORDER_FOLDER_NAME, "bin/record_ghost/record_ghost.exe"),
-      ["-cfg", "config.yml"],
-      {
-        cwd: path.resolve(__dirname, "../..", versions.AUTO_TT_RECORDER_FOLDER_NAME),
-        detached: false
-      }
-    );
-
-    // https://nodejs.org/api/child_process.html#child_processspawncommand-args-options
-    // always returns ChildProcess
-
-    return new Promise(function (resolve, reject) {
-      autoTTRecProcess!.on("spawn", function onSpawnAutoTTRec() {
-        autoTTRecProcess!.removeListener("spawn", onSpawnAutoTTRec);
-        terminatedAutoTTRecViaGui = false;
-        resolve(true);
-      });
-      autoTTRecProcess!.on("error", function onAutoTTRecSpawnError(err) {
-        autoTTRecProcess!.removeListener("error", onAutoTTRecSpawnError);
-        reject(err);
-      });
-    });
-  });
-
-  ipcMain.handle("wait-auto-tt-rec", async function (event: IpcMainInvokeEvent) {
-    if (autoTTRecProcess === null) {
-      throw new Error("Internal error: somehow waiting for auto-tt-recorder before spawning it.");
-    }
-
-    function onReceiveAutoTTRecStdout(buf: string) {
-      const stdoutPretty = buf.toString();
-      console.log(stdoutPretty);
-      win.webContents.send("send-stdout", stdoutPretty);
-    }
-
-    function onReceiveAutoTTRecStderr(buf: string) {
-      const stderrPretty = buf.toString();
-      console.log(stderrPretty);
-      win.webContents.send("send-stderr", stderrPretty);
-    }
-
-    autoTTRecProcess!.stdout!.on("data", onReceiveAutoTTRecStdout);
-    autoTTRecProcess!.stderr!.on("data", onReceiveAutoTTRecStderr);
-
-    return new Promise(function (resolve, reject) {
-      function removeAutoTTRecProcessListeners() {
-        autoTTRecProcess!.stdout!.removeListener("data", onReceiveAutoTTRecStdout);
-        autoTTRecProcess!.stderr!.removeListener("data", onReceiveAutoTTRecStderr);
-        autoTTRecProcess!.removeListener("exit", onAutoTTRecExit);
-        autoTTRecProcess!.removeListener("error", onAutoTTRecErrorAfterSpawn);
-      }
-
-      async function onAutoTTRecExit(code: number, signal: string) {
-        console.log("Process exited!");
-        removeAutoTTRecProcessListeners();
-        if (signal !== null) {
-          if (terminatedAutoTTRecViaGui) {
-            terminatedAutoTTRecViaGui = false;
-            resolve(AutoTTRecResponse.ABORTED);
-          }
-          autoTTRecProcess = null;
-          reject(new Error(`Auto-TT-Recorder was unexpectedly closed. (signal: ${signal})`));
-        } else if (code !== 0) {
-          console.log(`error code ${code}`);
-          let errorMsg: string;
-          try {
-            let finalStderr: ReadStreamResponse = await readStream(autoTTRecProcess!.stderr!);
-            if (!finalStderr.hasData) {
-              errorMsg = "See above.";
-            } else {
-              errorMsg = finalStderr.output;
-            }
-          } catch (err) {
-            console.log("Error in readStream");
-            errorMsg = (err as Error).message;
-          }
-          autoTTRecProcess = null;
-          reject(new Error(`An error occurred in Auto-TT-Recorder (code: ${code}): ${errorMsg}`));
-        } else {
-          console.log("resolved running auto-tt-rec");
-          autoTTRecProcess = null;
-          resolve(AutoTTRecResponse.COMPLETED);
-        }
-      }
-
-      async function onAutoTTRecErrorAfterSpawn(err: Error) {
-        removeAutoTTRecProcessListeners();
-        autoTTRecProcess = null;
-        reject(new Error(`An unknown error occurred: ${err.message}`));
-      }
-
-      autoTTRecProcess!.on("exit", onAutoTTRecExit);
-      autoTTRecProcess!.on("error", onAutoTTRecErrorAfterSpawn);
-    });
-  });
-
-  ipcMain.handle("terminate-auto-tt-rec", async function (event: IpcMainInvokeEvent) {
-    if (autoTTRecProcess === null) {
-      return;
-    }
-
-    autoTTRecProcess.kill("SIGTERM");
-    terminatedAutoTTRecViaGui = true;
-  });
+  ipcMain.handle("spawn-auto-tt-rec", autoTTRecBridge.spawnAutoTTRec);
+  ipcMain.handle("wait-auto-tt-rec", autoTTRecBridge.waitAutoTTRec);
+  ipcMain.handle("terminate-auto-tt-rec", autoTTRecBridge.terminateAutoTTRec);
 
   // and load the index.html of the app.
   // win.loadFile("index.html");
   console.log("isDev:", isDev);
-  await win.loadURL(
+  await mainWindow.loadURL(
     isDev
       ? 'http://localhost:3000'
       : `file://${path.join(__dirname, '../renderer/index.html')}`
   );
 
   if (isDev) {
-    win.webContents.openDevTools({ mode: 'detach' });
+    mainWindow.webContents.openDevTools({ mode: 'detach' });
     console.log("opened dev tools");
   }
 }
