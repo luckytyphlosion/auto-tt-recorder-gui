@@ -85,9 +85,7 @@
     "electron": "wait-on tcp:3000 && npm run start-main",
     "electron-prod": "cross-env NODE_ENV=production electron .",
     "pack": "node build_scripts/pack.js",
-    "installer": "electron-installer-windows --src auto-tt-recorder-gui-v0.2.1-win32-x64 --dest installers --options.exe auto-tt-recorder-gui-v0.2.1.exe",
     "installer2": "electron-builder --win --x64",
-    "installer3": "node build_scripts/build.js",
     "build-installer2": "npm-run-all build installer2"
   },
   "electronmon": {
@@ -123,10 +121,8 @@
     "concurrently": "^7.3.0",
     "electron": "^20.1.0",
     "electron-builder": "^23.6.0",
-    "electron-installer-windows": "^3.0.0",
     "electron-is-dev": "^2.0.0",
     "electron-packager": "^17.1.1",
-    "electron-winstaller": "^5.1.0",
     "http-server": "^14.1.1",
     "npm-run-all": "^4.1.5",
     "ts-loader": "^9.3.1",
@@ -196,9 +192,9 @@
     },
     "publish": [
       {
-        "provider": "generic",
-        "url": "http://127.0.0.1:8080/",
-        "useMultipleRangeRequest": false
+        "provider": "github",
+        "owner": "luckytyphlosion",
+        "repo": "auto-tt-recorder-gui"
       }
     ],
     "nsis": {
