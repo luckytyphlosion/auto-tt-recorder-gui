@@ -3,7 +3,7 @@
   "productName": "Auto-TT-Recorder GUI",
   "description": "GUI wrapper for Auto-TT-Recorder",
   "author": "luckytyphlosion",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "autoTTRecorderVersion": "1.3.4",
   "dolphinVersion": "1.0.0",
   "private": true,
