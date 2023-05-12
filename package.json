@@ -1,6 +1,6 @@
 {
   "name": "auto-tt-recorder-gui",
-  "productName": "Auto-TT-Recorder-GUI",
+  "productName": "Auto-TT-Recorder GUI",
   "description": "GUI wrapper for Auto-TT-Recorder",
   "author": "luckytyphlosion",
   "version": "0.2.3",
