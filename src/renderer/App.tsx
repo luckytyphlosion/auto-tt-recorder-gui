@@ -154,7 +154,7 @@ class App extends React.Component<AppProps, AppState> {
         "track-name": this.state["track-name"],
         "dolphin-resolution": this.state["high-quality"] ? "1440p" : "480p",
         "output-width": this.state["high-quality"] ? 2560 : null
-      }
+      };
 
       const spawnSuccessful = await window.api.spawnAutoTTRec("data/barebones_personal_ghost_config.yml", autoTTRecArgs)
         .catch((err: Error) => {
@@ -225,7 +225,7 @@ class App extends React.Component<AppProps, AppState> {
     return (
       <div>
         <div className="auto-tt-rec-notes">
-          <h1 className="title-header">Auto-TT-Recorder GUI (v0.2.2)</h1>
+          <h1 className="title-header">Auto-TT-Recorder GUI (v0.2.3)</h1>
           <ul className="auto-tt-rec-notes-first-half">
             <li>All regions are supported, including NTSC-K.</li>
             <li>No complex features, just the bare minimum to produce a recording.</li>

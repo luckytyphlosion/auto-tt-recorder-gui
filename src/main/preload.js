@@ -11,4 +11,5 @@ contextBridge.exposeInMainWorld("api", {
   removeHandleSendStdout: (callable) => ipcRenderer.removeAllListeners("send-stdout"),
   removeHandleSendStderr: (callable) => ipcRenderer.removeAllListeners("send-stderr"),
   terminateAutoTTRec: () => ipcRenderer.invoke("terminate-auto-tt-rec"),
+  getGlobalConfig: () => ipcRenderer.invoke("get-global-config")
 });

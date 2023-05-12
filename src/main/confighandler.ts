@@ -9,6 +9,8 @@ import * as versions from "../versions";
 
 //import documentsFolder from "./documents-folder";
 
+export let globalConfig: Config;
+
 interface ConfigOptions {
   autoTTRecorderVersion: string,
   guiVersion: string,
@@ -18,10 +20,15 @@ interface ConfigOptions {
 export class Config {
   app: App;
   fileIOMutex: Mutex;
-  userDataPath: string;
-  configFilepath: string;
   options: ConfigOptions;
+  configFilepath: string;
+
+  // paths
+  userDataPath: string;
   dolphinPath: string;
+  storagePath: string;
+  chadsoftCachePath: string;
+  tempPath: string;
 
   constructor(app: App, name: string) {
     this.app = app;
@@ -33,6 +40,9 @@ export class Config {
     this.options = this.readConfig();
     this.dolphinPath = path.resolve(this.userDataPath, "dolphin");
     console.log("this.workingDolphinPath:", this.dolphinPath);
+    this.storagePath = path.resolve(this.userDataPath, "storage");
+    this.chadsoftCachePath = path.resolve(this.userDataPath, "chadsoft_cache_folder");
+    this.tempPath = path.resolve(this.userDataPath, "temp");
   }
 
   private async makeConfigDirpath() {
@@ -101,4 +111,12 @@ export class Config {
     this.options.dolphinVersion = versions.DOLPHIN_VERSION;
     await this.writeConfig();
   }
+}
+
+export function loadGlobalConfig(app: App, name: string) {
+  globalConfig = new Config(app, name);
+}
+
+export function getGlobalConfig() {
+  return globalConfig;
 }

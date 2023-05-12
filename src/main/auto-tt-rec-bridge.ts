@@ -9,6 +9,7 @@ import events from "events";
 import * as versions from "../versions";
 import { mainWindow } from "./electron";
 import { AutoTTRecResponse } from "../enums";
+import { globalConfig } from "./confighandler";
 
 interface ReadStreamResponse {
   hasData: boolean;
@@ -42,12 +43,26 @@ async function readStream(streamObj : Readable) : Promise<ReadStreamResponse> {
   return {hasData: true, output: output.split("").join("")};
 }
 
+interface AutoTTRecConfig {
+  [key: string]: string | number | boolean
+}
+
+function writeFixedDynamicAutoTTRecArgs(autoTTRecTemplate: AutoTTRecConfig) {
+  autoTTRecTemplate["dolphin-folder"] = globalConfig.dolphinPath.replaceAll("\\", "/");
+  autoTTRecTemplate["storage-folder"] = globalConfig.storagePath.replaceAll("\\", "/");
+  autoTTRecTemplate["chadsoft-cache-folder"] = globalConfig.chadsoftCachePath.replaceAll("\\", "/");
+  autoTTRecTemplate["temp-folder"] = globalConfig.tempPath.replaceAll("\\", "/");
+}
+
 export async function spawnAutoTTRec(event: IpcMainInvokeEvent, templateFilename: string, autoTTRecArgs: object) {
   const templateContents = await fsPromises.readFile(path.resolve(__dirname, "../..", templateFilename), "utf8");
-  let autoTTRecTemplate = YAML.parse(templateContents);
+  let autoTTRecTemplate: AutoTTRecConfig = YAML.parse(templateContents);
   for (const [key, value] of Object.entries(autoTTRecArgs)) {
     autoTTRecTemplate[key] = value;
   }
+
+  writeFixedDynamicAutoTTRecArgs(autoTTRecTemplate);
+
   const generatedConfigContents = YAML.stringify(autoTTRecTemplate);
 
   await fsPromises.writeFile(path.resolve(__dirname, "../..", versions.AUTO_TT_RECORDER_FOLDER_NAME, "config.yml"), generatedConfigContents, "utf8");

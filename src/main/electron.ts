@@ -27,10 +27,11 @@ import fsPromises from "fs/promises";
 import { IpcMainInvokeEvent, FileFilter } from "electron";
 import { Readable, Transform, TransformCallback } from "stream";
 
-import { Config } from "./confighandler";
+import { Config, loadGlobalConfig, globalConfig } from "./confighandler";
 import * as versions from "../versions";
 import * as autoTTRecBridge from "./auto-tt-rec-bridge";
 import * as gui2 from "./gui2";
+import * as confighandler from "./confighandler";
 
 import fs from "fs";
 import fse from "fs-extra";
@@ -45,7 +46,6 @@ if (isDev) {
   contextMenu({showInspectElement: true});
 }
 
-let config: Config;
 export let mainWindow: BrowserWindow;
 
 /*
@@ -56,21 +56,21 @@ wiimm folder stays where it is
 
 */
 
-async function updateAutoTTRecDirectories(config: Config) {
+async function updateAutoTTRecDirectories() {
   // copy over dolphin directory elsewhere
   // electron-builder auto-update will remove all install files
   // but we want to keep dolphin configs
 
   // only copy over dolphin directory
   // if the dolphin version was updated or the directory doesn't exist
-  if (config.options.dolphinVersion !== versions.DOLPHIN_VERSION || !fs.existsSync(config.dolphinPath)) {
-    await fsPromises.mkdir(config.dolphinPath, {recursive: true});
-    const workingDolphinDir = await fsPromises.opendir(config.dolphinPath);
+  if (globalConfig.options.dolphinVersion !== versions.DOLPHIN_VERSION || !fs.existsSync(globalConfig.dolphinPath)) {
+    await fsPromises.mkdir(globalConfig.dolphinPath, {recursive: true});
+    const workingDolphinDir = await fsPromises.opendir(globalConfig.dolphinPath);
 
     for await (const dirent of workingDolphinDir) {
       if (!(dirent.isDirectory() && dirent.name === "User")) {
         
-        let dolphinItemPath: string = path.resolve(config.dolphinPath, dirent.name);
+        let dolphinItemPath: string = path.resolve(globalConfig.dolphinPath, dirent.name);
         console.log("dirent.name:", dirent.name);
         console.log("dolphinItemPath", dolphinItemPath);
         await fsPromises.rm(dolphinItemPath, {force: false, recursive: true});
@@ -80,17 +80,17 @@ async function updateAutoTTRecDirectories(config: Config) {
     let savedDolphinPath = path.resolve(__dirname, "../..", versions.AUTO_TT_RECORDER_FOLDER_NAME, "dolphin");
     console.log("savedDolphinPath:", savedDolphinPath);
 
-    await fse.copy(savedDolphinPath, config.dolphinPath);
-    config.updateDolphinVersion();
+    await fse.copy(savedDolphinPath, globalConfig.dolphinPath);
+    globalConfig.updateDolphinVersion();
   }
 }
 
 async function createWindow() {
-  config = new Config(app, "Auto-TT-Recorder GUI");
+  loadGlobalConfig(app, "Auto-TT-Recorder GUI");
 
-  await updateAutoTTRecDirectories(config);
+  await updateAutoTTRecDirectories();
 
-  let dolphinPathForwardSlashes = config.dolphinPath.replaceAll("\\", "/");
+  let dolphinPathForwardSlashes = globalConfig.dolphinPath.replaceAll("\\", "/");
   console.log("dolphinPathForwardSlashes:", dolphinPathForwardSlashes);
 
   mainWindow = new BrowserWindow({
@@ -110,6 +110,7 @@ async function createWindow() {
   ipcMain.handle("wait-auto-tt-rec", autoTTRecBridge.waitAutoTTRec);
   ipcMain.handle("terminate-auto-tt-rec", autoTTRecBridge.terminateAutoTTRec);
 
+  ipcMain.handle("get-global-config", confighandler.getGlobalConfig);
   // and load the index.html of the app.
   // win.loadFile("index.html");
   console.log("isDev:", isDev);
