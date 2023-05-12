@@ -81,8 +81,9 @@ async function updateAutoTTRecDirectories() {
     console.log("savedDolphinPath:", savedDolphinPath);
 
     await fse.copy(savedDolphinPath, globalConfig.dolphinPath);
-    globalConfig.updateDolphinVersion();
   }
+
+  globalConfig.updateVersions();  
 }
 
 async function createWindow() {

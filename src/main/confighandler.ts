@@ -107,10 +107,13 @@ export class Config {
     })
   }
 
-  async updateDolphinVersion() {
+  async updateVersions() {
+    this.options.autoTTRecorderVersion = versions.AUTO_TT_RECORDER_VERSION;
+    this.options.guiVersion = versions.AUTO_TT_RECORDER_GUI_VERSION;
     this.options.dolphinVersion = versions.DOLPHIN_VERSION;
     await this.writeConfig();
   }
+
 }
 
 export function loadGlobalConfig(app: App, name: string) {
