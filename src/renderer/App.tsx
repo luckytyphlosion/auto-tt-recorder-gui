@@ -225,7 +225,7 @@ class App extends React.Component<AppProps, AppState> {
     return (
       <div>
         <div className="auto-tt-rec-notes">
-          <h1 className="title-header">Auto-TT-Recorder GUI (v0.2.4)</h1>
+          <h1 className="title-header">Auto-TT-Recorder GUI (v0.2.5)</h1>
           <ul className="auto-tt-rec-notes-first-half">
             <li>All regions are supported, including NTSC-K.</li>
             <li>No complex features, just the bare minimum to produce a recording.</li>
