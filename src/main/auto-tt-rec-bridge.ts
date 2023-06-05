@@ -52,6 +52,7 @@ function writeFixedDynamicAutoTTRecArgs(autoTTRecTemplate: AutoTTRecConfig) {
   autoTTRecTemplate["storage-folder"] = globalConfig.storagePath.replaceAll("\\", "/");
   autoTTRecTemplate["chadsoft-cache-folder"] = globalConfig.chadsoftCachePath.replaceAll("\\", "/");
   autoTTRecTemplate["temp-folder"] = globalConfig.tempPath.replaceAll("\\", "/");
+  console.log("autoTTRecTemplate['dolphin-folder']:", autoTTRecTemplate["dolphin-folder"]);
 }
 
 export async function spawnAutoTTRec(event: IpcMainInvokeEvent, templateFilename: string, autoTTRecArgs: object) {
@@ -64,14 +65,15 @@ export async function spawnAutoTTRec(event: IpcMainInvokeEvent, templateFilename
   writeFixedDynamicAutoTTRecArgs(autoTTRecTemplate);
 
   const generatedConfigContents = YAML.stringify(autoTTRecTemplate);
+  let resultConfigFilepath = path.resolve(globalConfig.tempPath, "config.yml");
 
-  await fsPromises.writeFile(path.resolve(__dirname, "../..", versions.AUTO_TT_RECORDER_FOLDER_NAME, "config.yml"), generatedConfigContents, "utf8");
+  await fsPromises.writeFile(resultConfigFilepath, generatedConfigContents, "utf8");
   console.log("spawn-auto-tt-rec process.cwd():", process.cwd());
 
   // Run auto-tt-recorder here
   let autoTTRecProcessNonNull = child_process.spawn(
     path.resolve(__dirname, "../..", versions.AUTO_TT_RECORDER_FOLDER_NAME, "bin/record_ghost/record_ghost.exe"),
-    ["-cfg", "config.yml"],
+    ["-cfg", resultConfigFilepath],
     {
       cwd: path.resolve(__dirname, "../..", versions.AUTO_TT_RECORDER_FOLDER_NAME),
       detached: false

@@ -34,7 +34,6 @@ import * as gui2 from "./gui2";
 import * as confighandler from "./confighandler";
 
 import fs from "fs";
-import fse from "fs-extra";
 
 import path from "path";
 
@@ -55,6 +54,20 @@ put temp-folder in <..>/Roaming/Auto-TT-Recorder GUI/auto-tt-recorder-gui-workin
 wiimm folder stays where it is
 
 */
+
+async function copyDirectoryRecursively(fromDir: string, toDir: string) {
+  await fsPromises.mkdir(toDir, {recursive: true});
+  let dirContents: string[] = await fsPromises.readdir(fromDir);
+  await Promise.all(dirContents.map(async (file: string) => {
+    let fromFileFullPath: string = path.resolve(fromDir, file);
+    let toFileFullPath: string = path.resolve(toDir, file);
+    if ((await fsPromises.lstat(fromFileFullPath)).isFile()) {
+      await fsPromises.copyFile(fromFileFullPath, toFileFullPath);
+    } else {
+      await copyDirectoryRecursively(fromFileFullPath, toFileFullPath);
+    }
+  }));
+}
 
 async function updateAutoTTRecDirectories() {
   // copy over dolphin directory elsewhere
@@ -80,9 +93,10 @@ async function updateAutoTTRecDirectories() {
     let savedDolphinPath = path.resolve(__dirname, "../..", versions.AUTO_TT_RECORDER_FOLDER_NAME, "dolphin");
     console.log("savedDolphinPath:", savedDolphinPath);
 
-    await fse.copy(savedDolphinPath, globalConfig.dolphinPath);
+    await copyDirectoryRecursively(savedDolphinPath, globalConfig.dolphinPath);
   }
 
+  await fsPromises.mkdir(globalConfig.tempPath, {recursive: true});
   globalConfig.updateVersions();  
 }
 
