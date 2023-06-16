@@ -20,13 +20,13 @@ function OutputVideoFilenameInput(props: OutputVideoFilenameInputProps) {
       <label htmlFor="output-video-filename">Output filename: </label>
       <input
         className="filename-input" type="text"
-        id="output-video-filename" {...props.register("output-video-filename", {required: true})}
+        {...props.register("output-video-filename", {required: true})}
       ></input>
       <button onClick={event => {
         queueSaveDialog(event, [
           {name: "mp4 files", extensions: ["mp4"]}
         ]);
-      }} id="iso-filename-btn" type="button">Export as&#8230;</button>
+      }} type="button">Export as&#8230;</button>
     </div>
   );
 }

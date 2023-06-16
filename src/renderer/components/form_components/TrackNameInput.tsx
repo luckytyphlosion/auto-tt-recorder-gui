@@ -9,8 +9,7 @@ function TrackNameInput(props: TrackNameInputProps) {
   return (
     <div>
       <label htmlFor="track-name">Track name: </label>
-      <input type="text"
-        id="track-name" {...props.register("track-name", {required: true})}
+      <input type="text" {...props.register("track-name", {required: true})}
       ></input>
     </div>
   );

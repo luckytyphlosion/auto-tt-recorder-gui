@@ -10,7 +10,7 @@ function ChadsoftGhostPageInput(props: ChadsoftGhostPageInputProps) {
     <div>
       <label htmlFor="chadsoft-ghost-page">Chadsoft ghost page link: </label>
       <input type="text"
-        id="chadsoft-ghost-page" {...props.register("chadsoft-ghost-page", {required: true})}
+        {...props.register("chadsoft-ghost-page", {required: true})}
       ></input>
     </div>
   );

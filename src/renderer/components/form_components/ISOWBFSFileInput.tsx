@@ -25,13 +25,13 @@ function ISOWBFSFileInput(props: ISOWBFSFileInputProps) {
     <div>
       <label htmlFor="iso-filename">ISO or WBFS: </label>
       <input type="text"
-        id="iso-filename" {...props.register("iso-filename", {required: true})}
+        {...props.register("iso-filename", {required: true})}
       ></input>
       <button onClick={event => {
         queueOpenDialog(event, [
           {name: "ISO/WBFS files", extensions: ["iso", "wbfs"]}
         ]);
-      }} id="iso-filename-btn" type="button">Browse&#8230;</button>
+      }} type="button">Browse&#8230;</button>
       {renderCounter}
     </div>
   );
