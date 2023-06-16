@@ -1,5 +1,4 @@
 import React from "react";
-import AutoTTRecConfigForm from "./components/AutoTTRecConfigForm";
 import SimpleView from "./components/SimpleView";
 
 function Sandbox2() {

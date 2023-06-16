@@ -4,7 +4,6 @@ import useRenderCounter from "../../RenderCounter";
 import { UseFormRegister, UseFormSetValue, FieldValues } from "react-hook-form";
 
 interface ISOWBFSFileInputProps {
-  autoTTRecArgs: AutoTTRecArgs;
   register: UseFormRegister<FieldValues>;
   setValue: UseFormSetValue<FieldValues>;
 }
