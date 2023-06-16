@@ -76,7 +76,6 @@ class App extends React.Component<AppProps, AppState> {
     };
     this.state = state;
     this.onInputChange = this.onInputChange.bind(this);
-    this.queueOpenDialog = this.queueOpenDialog.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.onCheckChange = this.onCheckChange.bind(this);
   }
@@ -116,13 +115,6 @@ class App extends React.Component<AppProps, AppState> {
       ...prevState,
       [event.target.id as keyof AppState]: !prevState[event.target.id as keyof AppState]
     }));
-  }
-
-  async queueOpenDialog(event: React.MouseEvent<HTMLButtonElement>, fileFilters: FileFilter[], targetId: keyof AppState) {
-    let response = await window.api.openFileDialog(fileFilters);
-    this.setState({
-      [targetId]: response as AppState[keyof AppState]
-    } as Pick<AppState, keyof AppState>);
   }
 
   async queueSaveDialog(event: React.MouseEvent<HTMLButtonElement>, fileFilters: FileFilter[], targetId: keyof AppState) {

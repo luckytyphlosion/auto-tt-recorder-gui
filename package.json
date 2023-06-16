@@ -56,7 +56,7 @@
     "react-app-polyfill": "^3.0.0",
     "react-dev-utils": "^12.0.1",
     "react-dom": "^18.2.0",
-    "react-hook-form": "^7.43.9",
+    "react-hook-form": "^7.44.3",
     "react-refresh": "^0.11.0",
     "react-tabs": "^6.0.1",
     "resolve": "^1.20.0",
