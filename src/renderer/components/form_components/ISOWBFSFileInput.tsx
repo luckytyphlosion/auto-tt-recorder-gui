@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { AutoTTRecArgs } from "../../../auto-tt-rec-args";
 import useRenderCounter from "../../RenderCounter";
+import { UseFormRegister, UseFormSetValue, FieldValues } from "react-hook-form";
 
 interface ISOWBFSFileInputProps {
   autoTTRecArgs: AutoTTRecArgs;
+  register: UseFormRegister<FieldValues>;
+  setValue: UseFormSetValue<FieldValues>;
 }
 
 interface FileFilter {
@@ -12,28 +15,29 @@ interface FileFilter {
 }
 
 export function ISOWBFSFileInput(props: ISOWBFSFileInputProps) {
-  const [isoFilename, setIsoFilename] = useState("");
+  //const [isoFilename, setIsoFilename] = useState("");
   const renderCounter = useRenderCounter();
 
-  function onInputChange(event: React.ChangeEvent<HTMLInputElement>) {
-    props.autoTTRecArgs.setIsoFilename(event.target.value + "q");
-    setIsoFilename(event.target.value);
-  }
+  // function onInputChange(event: React.ChangeEvent<HTMLInputElement>) {
+  //   props.autoTTRecArgs.setIsoFilename(event.target.value + "q");
+  //   setIsoFilename(event.target.value);
+  // }
 
   async function queueOpenDialog(event: React.MouseEvent<HTMLButtonElement>, fileFilters: FileFilter[]) {
     let response = await window.api.openFileDialog(fileFilters);
-    props.autoTTRecArgs.setIsoFilename(response);
-    setIsoFilename(response);
-    console.log("props.autoTTRecArgs.getIsoFilename():", props.autoTTRecArgs.getIsoFilename());
+    props.setValue("isoFilename", response, {shouldTouch: true});
+    //props.autoTTRecArgs.setIsoFilename(response);
+    //setIsoFilename(response);
+    //console.log("props.autoTTRecArgs.getIsoFilename():", props.autoTTRecArgs.getIsoFilename());
   }
 
   return (
     <div>
       <label htmlFor="iso-filename">ISO or WBFS: </label>
       <input type="text"
-        id="iso-filename" name="iso-filename" value={props.autoTTRecArgs.getIsoFilename()}
+        id="iso-filename" {...props.register("isoFilename", {required: true})} /*value={props.autoTTRecArgs.getIsoFilename()}*/
         /*onChange={(event) => {(this.onInputChange2("iso-filename", false))}}*/
-        onChange={onInputChange} required={true}
+        /*onChange={onInputChange}*/
       ></input>
       <button onClick={event => {
         queueOpenDialog(event, [
