@@ -14,30 +14,19 @@ interface FileFilter {
   extensions: string[];
 }
 
-export function ISOWBFSFileInput(props: ISOWBFSFileInputProps) {
-  //const [isoFilename, setIsoFilename] = useState("");
+function ISOWBFSFileInput(props: ISOWBFSFileInputProps) {
   const renderCounter = useRenderCounter();
-
-  // function onInputChange(event: React.ChangeEvent<HTMLInputElement>) {
-  //   props.autoTTRecArgs.setIsoFilename(event.target.value + "q");
-  //   setIsoFilename(event.target.value);
-  // }
 
   async function queueOpenDialog(event: React.MouseEvent<HTMLButtonElement>, fileFilters: FileFilter[]) {
     let response = await window.api.openFileDialog(fileFilters);
-    props.setValue("isoFilename", response, {shouldTouch: true});
-    //props.autoTTRecArgs.setIsoFilename(response);
-    //setIsoFilename(response);
-    //console.log("props.autoTTRecArgs.getIsoFilename():", props.autoTTRecArgs.getIsoFilename());
+    props.setValue("iso-filename", response, {shouldTouch: true});
   }
 
   return (
     <div>
       <label htmlFor="iso-filename">ISO or WBFS: </label>
       <input type="text"
-        id="iso-filename" {...props.register("isoFilename", {required: true})} /*value={props.autoTTRecArgs.getIsoFilename()}*/
-        /*onChange={(event) => {(this.onInputChange2("iso-filename", false))}}*/
-        /*onChange={onInputChange}*/
+        id="iso-filename" {...props.register("iso-filename", {required: true})}
       ></input>
       <button onClick={event => {
         queueOpenDialog(event, [
