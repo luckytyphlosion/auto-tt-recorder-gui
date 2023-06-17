@@ -1,18 +1,14 @@
 import React from "react";
 import { FileFilter } from "electron";
 
-import { UseFormRegister, UseFormSetValue, FieldValues } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 
-interface OutputVideoFilenameInputProps {
-  register: UseFormRegister<FieldValues>;
-  setValue: UseFormSetValue<FieldValues>;
-}
-
-export function OutputVideoFilenameInput(props: OutputVideoFilenameInputProps) {
+export function OutputVideoFilenameInput() {
+  const {register, setValue} = useFormContext();
 
   async function queueSaveDialog(event: React.MouseEvent<HTMLButtonElement>, fileFilters: FileFilter[]) {
     let response = await window.api.saveFileDialog(fileFilters);
-    props.setValue("output-video-filename", response, {shouldTouch: true});
+    setValue("output-video-filename", response, {shouldTouch: true});
   }
 
   return (
@@ -20,7 +16,7 @@ export function OutputVideoFilenameInput(props: OutputVideoFilenameInputProps) {
       <label htmlFor="output-video-filename">Output filename: </label>
       <input
         className="filename-input" type="text"
-        {...props.register("output-video-filename", {required: true})}
+        {...register("output-video-filename", {required: true})}
       ></input>
       <button onClick={event => {
         queueSaveDialog(event, [

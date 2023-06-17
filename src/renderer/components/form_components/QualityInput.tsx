@@ -1,16 +1,13 @@
 
 import React from "react";
-import { UseFormRegister, FieldValues } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 
-interface QualityInputProps {
-  register: UseFormRegister<FieldValues>;
-}
-
-export function QualityInput(props: QualityInputProps) {
+export function QualityInput() {
+  const {register} = useFormContext();
   return (
     <div>
       <label htmlFor="high-quality">High quality (1440p vs 480p): </label>
-      <input type="checkbox" {...props.register("high-quality")}/>
+      <input type="checkbox" {...register("high-quality")}/>
     </div>
   );
 }

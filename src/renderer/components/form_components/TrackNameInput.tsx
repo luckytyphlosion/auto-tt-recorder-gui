@@ -1,15 +1,13 @@
 import React from "react";
-import { UseFormRegister, FieldValues } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 
-interface TrackNameInputProps {
-  register: UseFormRegister<FieldValues>;
-}
+export function TrackNameInput() {
+  const {register} = useFormContext();
 
-export function TrackNameInput(props: TrackNameInputProps) {
   return (
     <div>
       <label htmlFor="track-name">Track name: </label>
-      <input type="text" {...props.register("track-name", {required: true})}
+      <input type="text" {...register("track-name", {required: true})}
       ></input>
     </div>
   );

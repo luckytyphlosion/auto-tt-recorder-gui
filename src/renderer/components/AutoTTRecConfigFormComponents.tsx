@@ -4,6 +4,7 @@ import { AutoTTRecArgs } from "../../auto-tt-rec-args";
 import { UseFormRegister, UseFormSetValue, FieldValues } from "react-hook-form";
 
 import { ISOWBFSFileInput } from "./form_components/ISOWBFSFileInput";
+import { MainGhostFilenameInput } from "./form_components/MainGhostFilenameInput";
 import { ChadsoftGhostPageInput } from "./form_components/ChadsoftGhostPageInput";
 import { TrackNameInput } from "./form_components/TrackNameInput";
 import { QualityInput } from "./form_components/QualityInput";
@@ -11,7 +12,6 @@ import { OutputVideoFilenameInput } from "./form_components/OutputVideoFilenameI
 import AutoTTRecSubmitAbortButtons from "./AutoTTRecSubmitAbortButtons";
 
 import useRenderCounter from "../RenderCounter";
-import { useFormContext } from "react-hook-form";
 
 interface AutoTTRecConfigFormComponentsProps {
   register: UseFormRegister<FieldValues>;
@@ -20,15 +20,15 @@ interface AutoTTRecConfigFormComponentsProps {
 
 export function AutoTTRecConfigFormComponents() {  
   const renderCounter = useRenderCounter();
-  const {register, setValue} = useFormContext();
 
   return (
     <>
-      <ISOWBFSFileInput register={register} setValue={setValue}/>
-      <ChadsoftGhostPageInput register={register}/>
-      <TrackNameInput register={register}/>
-      <QualityInput register={register}/>
-      <OutputVideoFilenameInput register={register} setValue={setValue}/>
+      <ISOWBFSFileInput/>
+      <MainGhostFilenameInput/>
+      <ChadsoftGhostPageInput/>
+      <TrackNameInput/>
+      <QualityInput/>
+      <OutputVideoFilenameInput/>
       {renderCounter}
     </>
   );

@@ -19,13 +19,12 @@ interface AutoTTRecConfigFormComponents2Props {
 
 export function AutoTTRecConfigFormComponents2() {  
   const renderCounter = useRenderCounter();
-  const {register, setValue} = useFormContext();
 
   return (
     <>
-      <ISOWBFSFileInput register={register} setValue={setValue}/>
-      <ChadsoftGhostPageInput register={register}/>
-      <OutputVideoFilenameInput register={register} setValue={setValue}/>
+      <ISOWBFSFileInput/>
+      <ChadsoftGhostPageInput/>
+      <OutputVideoFilenameInput/>
       {renderCounter}
     </>
   );
