@@ -11,7 +11,7 @@ function SimpleView() {
 
   const [whichUI, setWhichUI] = useState(false);
   const renderCounter = useRenderCounter();
-  const form1 = (
+  /*const form1 = (
     <AutoTTRecConfigForm>
       <AutoTTRecConfigFormComponents/>
     </AutoTTRecConfigForm>
@@ -21,7 +21,7 @@ function SimpleView() {
     <AutoTTRecConfigForm>
       <AutoTTRecConfigFormComponents2/>
     </AutoTTRecConfigForm>
-  );
+  );*/
 
   function onCheckChange(event: React.ChangeEvent<HTMLInputElement>) {
     // FIXME need to figure out how to do this type safety better
@@ -40,9 +40,7 @@ function SimpleView() {
         <label htmlFor="sandbox-which-gui">Which GUI: </label>
         <input type="checkbox" id="sandbox-which-gui" checked={whichUI} onChange={onCheckChange}/>
       </div>
-      {
-        !whichUI ? form1 : form2
-      }
+      <AutoTTRecConfigForm/>
       {renderCounter}
     </div>
   );

@@ -5,7 +5,7 @@ interface ChadsoftGhostPageInputProps {
   register: UseFormRegister<FieldValues>;
 }
 
-function ChadsoftGhostPageInput(props: ChadsoftGhostPageInputProps) {
+export function ChadsoftGhostPageInput(props: ChadsoftGhostPageInputProps) {
   return (
     <div>
       <label htmlFor="chadsoft-ghost-page">Chadsoft ghost page link: </label>
@@ -15,5 +15,3 @@ function ChadsoftGhostPageInput(props: ChadsoftGhostPageInputProps) {
     </div>
   );
 }
-
-export default ChadsoftGhostPageInput;

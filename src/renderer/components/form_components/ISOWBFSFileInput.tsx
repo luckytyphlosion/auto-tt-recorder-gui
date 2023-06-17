@@ -13,7 +13,7 @@ interface FileFilter {
   extensions: string[];
 }
 
-function ISOWBFSFileInput(props: ISOWBFSFileInputProps) {
+export function ISOWBFSFileInput(props: ISOWBFSFileInputProps) {
   const renderCounter = useRenderCounter();
 
   async function queueOpenDialog(event: React.MouseEvent<HTMLButtonElement>, fileFilters: FileFilter[]) {
@@ -36,5 +36,3 @@ function ISOWBFSFileInput(props: ISOWBFSFileInputProps) {
     </div>
   );
 }
-
-export default ISOWBFSFileInput;

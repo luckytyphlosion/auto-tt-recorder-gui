@@ -8,7 +8,7 @@ interface OutputVideoFilenameInputProps {
   setValue: UseFormSetValue<FieldValues>;
 }
 
-function OutputVideoFilenameInput(props: OutputVideoFilenameInputProps) {
+export function OutputVideoFilenameInput(props: OutputVideoFilenameInputProps) {
 
   async function queueSaveDialog(event: React.MouseEvent<HTMLButtonElement>, fileFilters: FileFilter[]) {
     let response = await window.api.saveFileDialog(fileFilters);
@@ -30,7 +30,3 @@ function OutputVideoFilenameInput(props: OutputVideoFilenameInputProps) {
     </div>
   );
 }
-
-export default OutputVideoFilenameInput;
-
-

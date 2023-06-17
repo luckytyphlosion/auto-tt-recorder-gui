@@ -6,7 +6,7 @@ interface QualityInputProps {
   register: UseFormRegister<FieldValues>;
 }
 
-function QualityInput(props: QualityInputProps) {
+export function QualityInput(props: QualityInputProps) {
   return (
     <div>
       <label htmlFor="high-quality">High quality (1440p vs 480p): </label>
@@ -14,6 +14,3 @@ function QualityInput(props: QualityInputProps) {
     </div>
   );
 }
-
-export default QualityInput;
-

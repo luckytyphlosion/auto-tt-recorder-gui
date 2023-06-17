@@ -5,7 +5,7 @@ interface TrackNameInputProps {
   register: UseFormRegister<FieldValues>;
 }
 
-function TrackNameInput(props: TrackNameInputProps) {
+export function TrackNameInput(props: TrackNameInputProps) {
   return (
     <div>
       <label htmlFor="track-name">Track name: </label>
@@ -14,5 +14,3 @@ function TrackNameInput(props: TrackNameInputProps) {
     </div>
   );
 }
-
-export default TrackNameInput;

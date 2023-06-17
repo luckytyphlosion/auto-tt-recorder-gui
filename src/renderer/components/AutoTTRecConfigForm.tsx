@@ -3,12 +3,13 @@ import React, { useState, ReactNode } from "react";
 import { AutoTTRecArgs } from "../../auto-tt-rec-args";
 import { useForm, FormProvider, UseFormRegister, UseFormSetValue, FieldValues } from "react-hook-form";
 
-import ISOWBFSFileInput from "./form_components/ISOWBFSFileInput";
-import ChadsoftGhostPageInput from "./form_components/ChadsoftGhostPageInput";
-import TrackNameInput from "./form_components/TrackNameInput";
-import QualityInput from "./form_components/QualityInput";
-import OutputVideoFilenameInput from "./form_components/OutputVideoFilenameInput";
+import { ISOWBFSFileInput } from "./form_components/ISOWBFSFileInput";
+import { ChadsoftGhostPageInput } from "./form_components/ChadsoftGhostPageInput";
+import { TrackNameInput } from "./form_components/TrackNameInput";
+import { QualityInput } from "./form_components/QualityInput";
+import { OutputVideoFilenameInput } from "./form_components/OutputVideoFilenameInput";
 import AutoTTRecSubmitAbortButtons from "./AutoTTRecSubmitAbortButtons";
+import { AutoTTRecConfigFormComponents } from "./AutoTTRecConfigFormComponents";
 
 import useRenderCounter from "../RenderCounter";
 
@@ -21,7 +22,7 @@ type ChildrenProps = {
   children: ReactNode
 }
 
-export function AutoTTRecConfigForm(formComponents: ChildrenProps) {  
+export function AutoTTRecConfigForm() {  
   const renderCounter = useRenderCounter();
   const formMethods = useForm();
 
@@ -32,7 +33,7 @@ export function AutoTTRecConfigForm(formComponents: ChildrenProps) {
   return (
     <FormProvider {...formMethods}>
       <form onSubmit={formMethods.handleSubmit(onSubmit)}>
-        {formComponents.children}
+        <AutoTTRecConfigFormComponents/>
         {renderCounter}
         <AutoTTRecSubmitAbortButtons/>
       </form>
