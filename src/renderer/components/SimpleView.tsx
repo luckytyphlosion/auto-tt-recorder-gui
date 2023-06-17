@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { AutoTTRecConfigForm } from "./AutoTTRecConfigForm";
 import { AutoTTRecConfigFormComponents } from "./AutoTTRecConfigFormComponents";
 import { AutoTTRecConfigFormComponents2 } from "./AutoTTRecConfigFormComponents2";
 import GUIHeader from "./GUIHeader";
@@ -10,8 +11,17 @@ function SimpleView() {
 
   const [whichUI, setWhichUI] = useState(false);
   const renderCounter = useRenderCounter();
-  const form1 = <AutoTTRecConfigFormComponents/>;
-  const form2 = <AutoTTRecConfigFormComponents2/>;
+  const form1 = (
+    <AutoTTRecConfigForm>
+      <AutoTTRecConfigFormComponents/>
+    </AutoTTRecConfigForm>
+  );
+
+  const form2 = (
+    <AutoTTRecConfigForm>
+      <AutoTTRecConfigFormComponents2/>
+    </AutoTTRecConfigForm>
+  );
 
   function onCheckChange(event: React.ChangeEvent<HTMLInputElement>) {
     // FIXME need to figure out how to do this type safety better

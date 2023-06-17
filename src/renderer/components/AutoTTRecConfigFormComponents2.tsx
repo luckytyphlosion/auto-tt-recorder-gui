@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import { UseFormRegister, UseFormSetValue, FieldValues } from "react-hook-form";
-import { useForm } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 
 import ISOWBFSFileInput from "./form_components/ISOWBFSFileInput";
 import ChadsoftGhostPageInput from "./form_components/ChadsoftGhostPageInput";
@@ -19,19 +19,14 @@ interface AutoTTRecConfigFormComponents2Props {
 
 export function AutoTTRecConfigFormComponents2() {  
   const renderCounter = useRenderCounter();
-  const {register, handleSubmit, setValue} = useForm();
-
-  function onSubmit(d: any) {
-    console.log(d);
-  }
+  const {register, setValue} = useFormContext();
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <>
       <ISOWBFSFileInput register={register} setValue={setValue}/>
       <ChadsoftGhostPageInput register={register}/>
       <OutputVideoFilenameInput register={register} setValue={setValue}/>
       {renderCounter}
-      <AutoTTRecSubmitAbortButtons/>
-    </form>
+    </>
   );
 }
