@@ -6,9 +6,9 @@ export function MKChannelGhostDescriptionInput() {
 
   return (
     <div>
-      <label htmlFor="mk-channel-ghost-description">Chadsoft ghost page link: </label>
+      <label htmlFor="mk-channel-ghost-description">Ghost Description: </label>
       <input type="text"
-        {...register("chadsoft-ghost-page", {required: true})}
+        {...register("mk-channel-ghost-description", {required: true})}
       ></input>
     </div>
   );

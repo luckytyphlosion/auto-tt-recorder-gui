@@ -25,9 +25,11 @@ type ChildrenProps = {
 
 export function AutoTTRecConfigForm(props: {whichUI: boolean}) {  
   const renderCounter = useRenderCounter();
-  const formMethods = useForm();
-  const isoWbfsFileInput = <ISOWBFSFileInput/>;
-  const mainGhostFilenameInput = <MainGhostFilenameInput arg={1}/>;
+  const formMethods = useForm({
+    criteriaMode: "all"
+  });
+  //const isoWbfsFileInput = <ISOWBFSFileInput/>;
+  //const mainGhostFilenameInput = <MainGhostFilenameInput arg={1}/>;
 
   function onSubmit(d: any) {
     console.log(d);
@@ -36,10 +38,7 @@ export function AutoTTRecConfigForm(props: {whichUI: boolean}) {
   return (
     <FormProvider {...formMethods}>
       <form onSubmit={formMethods.handleSubmit(onSubmit)}>
-        {isoWbfsFileInput}
-        {props.whichUI ? mainGhostFilenameInput : ''
-        }
-        {renderCounter}
+        <AutoTTRecConfigFormComponents whichUI={props.whichUI}/>
         <AutoTTRecSubmitAbortButtons/>
       </form>
     </FormProvider>

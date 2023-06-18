@@ -16,6 +16,12 @@ import { OutputVideoFilenameInput } from "./form_components/OutputVideoFilenameI
 import { Set200ccInput } from "./form_components/Set200ccInput";
 import { Top10ChadsoftInput } from "./form_components/Top10ChadsoftInput";
 import { Top10TitleInput } from "./form_components/Top10TitleInput";
+import { Top10HighlightEnableInput } from "./form_components/Top10HighlightEnableInput";
+import { Top10HighlightInput } from "./form_components/Top10HighlightInput";
+import { BackgroundMusicInput } from "./form_components/BackgroundMusicInput";
+import { GameVolumeInput } from "./form_components/GameVolumeInput";
+import { Top10LocationInput } from "./form_components/Top10LocationInput";
+
 import AutoTTRecSubmitAbortButtons from "./AutoTTRecSubmitAbortButtons";
 
 import useRenderCounter from "../RenderCounter";
@@ -39,8 +45,13 @@ export function AutoTTRecConfigFormComponents(props: {whichUI: boolean}) {
       <Set200ccInput/>
       <MKChannelGhostDescriptionInput/>
       <TrackNameInput/>
+      <Top10HighlightEnableInput/>
+      <Top10HighlightInput/>
       <Top10ChadsoftInput/>
       <Top10TitleInput/>
+      <Top10LocationInput/>
+      <BackgroundMusicInput/>
+      <GameVolumeInput/>
       <QualityInput/>
       <OutputVideoFilenameInput/>
       {renderCounter}

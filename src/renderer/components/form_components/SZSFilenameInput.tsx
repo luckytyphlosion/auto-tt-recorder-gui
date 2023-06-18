@@ -7,7 +7,7 @@ export function SZSFilenameInput() {
 
   async function queueOpenDialog(event: React.MouseEvent<HTMLButtonElement>, fileFilters: FileFilter[]) {
     let response = await window.api.openFileDialog(fileFilters);
-    setValue("iso-filename", response, {shouldTouch: true});
+    setValue("szs-filename", response, {shouldTouch: true});
   }
 
   return (

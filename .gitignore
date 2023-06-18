@@ -32,3 +32,5 @@ dist/
 installers/
 packages/
 wwwroot/
+
+src/renderer/modal_sandbox/*

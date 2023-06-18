@@ -9,6 +9,7 @@
   "private": true,
   "dependencies": {
     "@babel/core": "^7.16.0",
+    "@hookform/error-message": "^2.0.1",
     "@myrpc/documents-folder": "^1.0.1",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.3",
     "@svgr/webpack": "^5.5.0",
