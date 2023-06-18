@@ -21,6 +21,8 @@ import { Top10HighlightInput } from "./form_components/Top10HighlightInput";
 import { BackgroundMusicInput } from "./form_components/BackgroundMusicInput";
 import { GameVolumeInput } from "./form_components/GameVolumeInput";
 import { Top10LocationInput } from "./form_components/Top10LocationInput";
+import { InputDisplayInput } from "./form_components/InputDisplayInput";
+import { SpeedometerInput } from "./form_components/SpeedometerInput";
 
 import AutoTTRecSubmitAbortButtons from "./AutoTTRecSubmitAbortButtons";
 
@@ -52,6 +54,8 @@ export function AutoTTRecConfigFormComponents(props: {whichUI: boolean}) {
       <Top10LocationInput/>
       <BackgroundMusicInput/>
       <GameVolumeInput/>
+      <InputDisplayInput/>
+      <SpeedometerInput/>
       <QualityInput/>
       <OutputVideoFilenameInput/>
       {renderCounter}
