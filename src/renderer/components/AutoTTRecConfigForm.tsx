@@ -10,6 +10,7 @@ import { QualityInput } from "./form_components/QualityInput";
 import { OutputVideoFilenameInput } from "./form_components/OutputVideoFilenameInput";
 import AutoTTRecSubmitAbortButtons from "./AutoTTRecSubmitAbortButtons";
 import { AutoTTRecConfigFormComponents } from "./AutoTTRecConfigFormComponents";
+import { MainGhostFilenameInput } from "./form_components/MainGhostFilenameInput";
 
 import useRenderCounter from "../RenderCounter";
 
@@ -22,18 +23,22 @@ type ChildrenProps = {
   children: ReactNode
 }
 
-export function AutoTTRecConfigForm() {  
+export function AutoTTRecConfigForm(props: {whichUI: boolean}) {  
   const renderCounter = useRenderCounter();
   const formMethods = useForm();
+  const isoWbfsFileInput = <ISOWBFSFileInput/>;
+  const mainGhostFilenameInput = <MainGhostFilenameInput arg={1}/>;
 
   function onSubmit(d: any) {
     console.log(d);
   }
-
+  // <AutoTTRecConfigFormComponents/>
   return (
     <FormProvider {...formMethods}>
       <form onSubmit={formMethods.handleSubmit(onSubmit)}>
-        <AutoTTRecConfigFormComponents/>
+        {isoWbfsFileInput}
+        {props.whichUI ? mainGhostFilenameInput : ''
+        }
         {renderCounter}
         <AutoTTRecSubmitAbortButtons/>
       </form>

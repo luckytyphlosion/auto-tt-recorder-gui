@@ -40,7 +40,7 @@ function SimpleView() {
         <label htmlFor="sandbox-which-gui">Which GUI: </label>
         <input type="checkbox" id="sandbox-which-gui" checked={whichUI} onChange={onCheckChange}/>
       </div>
-      <AutoTTRecConfigForm/>
+      <AutoTTRecConfigForm whichUI={whichUI}/>
       {renderCounter}
     </div>
   );

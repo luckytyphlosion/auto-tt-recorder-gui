@@ -1,27 +1,24 @@
 import React, { useState } from "react";
-import { AutoTTRecArgs } from "../../../auto-tt-rec-args";
-import useRenderCounter from "../../RenderCounter";
 import { useFormContext } from "react-hook-form";
 import { FileFilter } from "electron";
 
-export function MainGhostFilenameInput(props: {arg: number}) {
+export function SZSFilenameInput() {
   const {register, setValue} = useFormContext();
-  const [randomNum, setRandomNum] = useState(Math.random());
 
   async function queueOpenDialog(event: React.MouseEvent<HTMLButtonElement>, fileFilters: FileFilter[]) {
     let response = await window.api.openFileDialog(fileFilters);
-    setValue("main-ghost-filename", response, {shouldTouch: true});
+    setValue("iso-filename", response, {shouldTouch: true});
   }
 
   return (
     <div>
-      <label htmlFor="main-ghost-filename">RKG file to record {props.arg}, {randomNum}: </label>
+      <label htmlFor="szs-filename">SZS Filename: </label>
       <input type="text" readOnly
-        {...register("main-ghost-filename", {required: true})}
+        {...register("szs-filename")}
       ></input>
       <button onClick={event => {
         queueOpenDialog(event, [
-          {name: "RKG files", extensions: ["rkg"]}
+          {name: "SZS files", extensions: ["szs"]}
         ]);
       }} type="button">Browse&#8230;</button>
     </div>
