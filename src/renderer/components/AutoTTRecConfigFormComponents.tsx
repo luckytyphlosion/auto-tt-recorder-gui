@@ -23,6 +23,14 @@ import { GameVolumeInput } from "./form_components/GameVolumeInput";
 import { Top10LocationInput } from "./form_components/Top10LocationInput";
 import { InputDisplayInput } from "./form_components/InputDisplayInput";
 import { SpeedometerInput } from "./form_components/SpeedometerInput";
+import { HQTexturesInput } from "./form_components/HQTexturesInput";
+import { NoBackgroundBlurInput } from "./form_components/NoBackgroundBlurInput";
+import { NoBloomInput } from "./form_components/NoBloomInput";
+import { UseFFV1Input } from "./form_components/UseFFV1Input";
+import { EncodeOnlyInput } from "./form_components/EncodeOnlyInput";
+import { InputDisplayDontCreateInput } from "./form_components/InputDisplayDontCreateInput";
+import { KeepWindowInput } from "./form_components/KeepWindowInput";
+import { YoutubeSettingsInput } from "./form_components/YoutubeSettingsInput";
 
 import AutoTTRecSubmitAbortButtons from "./AutoTTRecSubmitAbortButtons";
 
@@ -56,6 +64,14 @@ export function AutoTTRecConfigFormComponents(props: {whichUI: boolean}) {
       <GameVolumeInput/>
       <InputDisplayInput/>
       <SpeedometerInput/>
+      <HQTexturesInput/>
+      <NoBackgroundBlurInput/>
+      <NoBloomInput/>
+      <UseFFV1Input/>
+      <EncodeOnlyInput/>
+      <InputDisplayDontCreateInput/>
+      <KeepWindowInput/>
+      <YoutubeSettingsInput/>
       <QualityInput/>
       <OutputVideoFilenameInput/>
       {renderCounter}
