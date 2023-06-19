@@ -31,6 +31,7 @@ import { EncodeOnlyInput } from "./form_components/EncodeOnlyInput";
 import { InputDisplayDontCreateInput } from "./form_components/InputDisplayDontCreateInput";
 import { KeepWindowInput } from "./form_components/KeepWindowInput";
 import { YoutubeSettingsInput } from "./form_components/YoutubeSettingsInput";
+import { DolphinResolutionInput } from "./form_components/DolphinResolutionInput";
 
 import AutoTTRecSubmitAbortButtons from "./AutoTTRecSubmitAbortButtons";
 
@@ -43,6 +44,25 @@ interface AutoTTRecConfigFormComponentsProps {
 
 export function AutoTTRecConfigFormComponents(props: {whichUI: boolean}) {  
   const renderCounter = useRenderCounter();
+
+  // remaining components
+  // switch between chadsoft and rkg for main ghost
+  // switch between chadsoft and rkg for comparison ghost
+  // handling top 10 vs no top 10
+  // top 10 censors
+  // top 10 gecko code filename
+  // music volume
+  // encode type
+  // crf-value
+  // h26x-preset
+  // video codec
+  // audio codec
+  // encode size
+  // audio bitrate
+  // pixel format
+  // output width
+  // dolphin volume
+  // cache settings
 
   return (
     <>
@@ -72,6 +92,7 @@ export function AutoTTRecConfigFormComponents(props: {whichUI: boolean}) {
       <InputDisplayDontCreateInput/>
       <KeepWindowInput/>
       <YoutubeSettingsInput/>
+      <DolphinResolutionInput/>
       <QualityInput/>
       <OutputVideoFilenameInput/>
       {renderCounter}

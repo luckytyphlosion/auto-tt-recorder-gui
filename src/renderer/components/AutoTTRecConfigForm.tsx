@@ -26,7 +26,8 @@ type ChildrenProps = {
 export function AutoTTRecConfigForm(props: {whichUI: boolean}) {  
   const renderCounter = useRenderCounter();
   const formMethods = useForm({
-    criteriaMode: "all"
+    criteriaMode: "all",
+    defaultValues: {"dolphin-resolution": "1440p"}
   });
   //const isoWbfsFileInput = <ISOWBFSFileInput/>;
   //const mainGhostFilenameInput = <MainGhostFilenameInput arg={1}/>;
