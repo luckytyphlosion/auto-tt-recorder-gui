@@ -27,7 +27,14 @@ export function AutoTTRecConfigForm(props: {whichUI: boolean}) {
   const renderCounter = useRenderCounter();
   const formMethods = useForm({
     criteriaMode: "all",
-    defaultValues: {"dolphin-resolution": "1440p"}
+    defaultValues: {
+      "dolphin-resolution": "1440p",
+      "timeline-category": "notop10",
+      "no-top-10-category": "mkchannel",
+      "main-ghost-source": "chadsoft",
+      "szs-source": "automatic",
+      "background-music": "bgm-music-filename"
+    }
   });
   //const isoWbfsFileInput = <ISOWBFSFileInput/>;
   //const mainGhostFilenameInput = <MainGhostFilenameInput arg={1}/>;
@@ -37,11 +44,14 @@ export function AutoTTRecConfigForm(props: {whichUI: boolean}) {
   }
   // <AutoTTRecConfigFormComponents/>
   return (
-    <FormProvider {...formMethods}>
-      <form onSubmit={formMethods.handleSubmit(onSubmit)}>
-        <AutoTTRecConfigFormComponents whichUI={props.whichUI}/>
-        <AutoTTRecSubmitAbortButtons/>
-      </form>
-    </FormProvider>
+    <div>
+      <FormProvider {...formMethods}>
+        <form onSubmit={formMethods.handleSubmit(onSubmit)}>
+          <AutoTTRecConfigFormComponents whichUI={props.whichUI}/>
+          <AutoTTRecSubmitAbortButtons/>
+        </form>
+      </FormProvider>
+      {renderCounter}
+    </div>
   );
 }

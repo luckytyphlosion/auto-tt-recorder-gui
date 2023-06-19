@@ -5,11 +5,15 @@ import useRenderCounter from "../../RenderCounter";
 
 export function BackgroundMusicInput() {
   const {register, getValues} = useFormContext();
-  const [musicFilenameInputEnable, setMusicFilenameInputEnable] = useState(true);
+  function isFormBackgroundMusicFromFilename() {
+    return getValues("background-music") === "bgm-music-filename";
+  }
+
+  const [musicFilenameInputEnable, setMusicFilenameInputEnable] = useState(isFormBackgroundMusicFromFilename());
   const renderCounter = useRenderCounter();
 
   function updateMusicFilenameInputEnable(event: React.MouseEvent<HTMLButtonElement>) {
-    setMusicFilenameInputEnable(getValues("background-music") === "bgm-music-filename");
+    setMusicFilenameInputEnable(isFormBackgroundMusicFromFilename());
   }
 
   return (

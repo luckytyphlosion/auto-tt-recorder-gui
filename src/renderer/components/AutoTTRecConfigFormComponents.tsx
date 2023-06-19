@@ -3,8 +3,10 @@ import React, { useState } from "react";
 import { AutoTTRecArgs } from "../../auto-tt-rec-args";
 import { UseFormRegister, UseFormSetValue, FieldValues } from "react-hook-form";
 
+import "../styles/AutoTTRecConfigFormComponents.css";
+
 import { ISOWBFSFileInput } from "./form_components/ISOWBFSFileInput";
-import { SetTimelineInput } from "./form_components/SetTimelineInput";
+import { NoTop10CategoryInput } from "./form_components/NoTop10CategoryInput";
 import { MainGhostFilenameInput } from "./form_components/MainGhostFilenameInput";
 import { ChadsoftGhostPageInput } from "./form_components/ChadsoftGhostPageInput";
 import { ChadsoftComparisonGhostPageInput } from "./form_components/ChadsoftComparisonGhostPageInput";
@@ -32,6 +34,7 @@ import { InputDisplayDontCreateInput } from "./form_components/InputDisplayDontC
 import { KeepWindowInput } from "./form_components/KeepWindowInput";
 import { YoutubeSettingsInput } from "./form_components/YoutubeSettingsInput";
 import { DolphinResolutionInput } from "./form_components/DolphinResolutionInput";
+import { TimelineCategoryInput } from "./form_components/TimelineCategoryInput";
 
 import AutoTTRecSubmitAbortButtons from "./AutoTTRecSubmitAbortButtons";
 
@@ -43,7 +46,7 @@ interface AutoTTRecConfigFormComponentsProps {
 }
 
 export function AutoTTRecConfigFormComponents(props: {whichUI: boolean}) {  
-  const renderCounter = useRenderCounter();
+  //const renderCounter = useRenderCounter();
 
   // remaining components
   // switch between chadsoft and rkg for main ghost
@@ -67,8 +70,8 @@ export function AutoTTRecConfigFormComponents(props: {whichUI: boolean}) {
   return (
     <>
       
-      <SetTimelineInput/>
-      <MainGhostFilenameInput arg={1}/>
+      <TimelineCategoryInput noTop10Child={<NoTop10CategoryInput/>} top10ChadsoftChild={<div></div>} top10GeckoChild={<div></div>}/>
+      {/*<MainGhostFilenameInput arg={1}/>
       <ChadsoftGhostPageInput/>
       <ChadsoftComparisonGhostPageInput/>
       <SZSFilenameInput/>
@@ -94,8 +97,8 @@ export function AutoTTRecConfigFormComponents(props: {whichUI: boolean}) {
       <YoutubeSettingsInput/>
       <DolphinResolutionInput/>
       <QualityInput/>
-      <OutputVideoFilenameInput/>
-      {renderCounter}
+      <OutputVideoFilenameInput/>*/}
+      {/*renderCounter*/}
     </>
   );
 }

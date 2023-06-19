@@ -6,7 +6,7 @@ import { Top10LocationCountryInput } from "./Top10LocationCountryInput";
 
 export function Top10LocationInput() {
   const {register, getValues} = useFormContext();
-  const [top10LocationRegion, setTop10LocationRegion] = useState("top-10-location-region-worldwide");
+  const [top10LocationRegion, setTop10LocationRegion] = useState(getValues("top-10-location-region"));
 
   function updateTop10LocationRegion(event: Event) {
     setTop10LocationRegion(getValues("top-10-location-region"));
