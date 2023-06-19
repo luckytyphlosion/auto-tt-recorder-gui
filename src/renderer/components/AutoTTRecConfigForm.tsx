@@ -33,7 +33,10 @@ export function AutoTTRecConfigForm(props: {whichUI: boolean}) {
       "no-top-10-category": "mkchannel",
       "main-ghost-source": "chadsoft",
       "szs-source": "automatic",
-      "background-music": "bgm-music-filename"
+      "background-music": "bgm-music-filename",
+      "encode-type": "crf",
+      "h26x-preset": "slow",
+      "video-codec": "libx264"
     }
   });
   //const isoWbfsFileInput = <ISOWBFSFileInput/>;

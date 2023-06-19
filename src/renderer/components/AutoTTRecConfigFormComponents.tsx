@@ -49,8 +49,6 @@ export function AutoTTRecConfigFormComponents(props: {whichUI: boolean}) {
   //const renderCounter = useRenderCounter();
 
   // remaining components
-  // switch between chadsoft and rkg for main ghost
-  // switch between chadsoft and rkg for comparison ghost
   // handling top 10 vs no top 10
   // top 10 censors
   // top 10 gecko code filename
