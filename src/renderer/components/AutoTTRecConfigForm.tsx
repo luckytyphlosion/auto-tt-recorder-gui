@@ -12,6 +12,8 @@ import AutoTTRecSubmitAbortButtons from "./AutoTTRecSubmitAbortButtons";
 import { AutoTTRecConfigFormComponents } from "./AutoTTRecConfigFormComponents";
 import { MainGhostFilenameInput } from "./form_components/MainGhostFilenameInput";
 
+import { EncodeType, AudioCodec, AudioBitrateUnit } from "../helper-types";
+
 import useRenderCounter from "../RenderCounter";
 
 interface AutoTTRecConfigFormComponentsProps {
@@ -23,9 +25,25 @@ type ChildrenProps = {
   children: ReactNode
 }
 
+interface AutoTTRecConfigFormFieldTypes {
+  "dolphin-resolution": string;
+  "timeline-category": string;
+  "no-top-10-category": string;
+  "main-ghost-source": string;
+  "szs-source": string;
+  "background-music": string;
+  "encode-type": EncodeType;
+  "h26x-preset": string;
+  "video-codec": string;
+  "audio-codec": AudioCodec;
+  "audio-bitrate-unit": AudioBitrateUnit;
+  "audio-bitrate": number;
+  "audio-bitrate-displayed": number;
+}
+
 export function AutoTTRecConfigForm(props: {whichUI: boolean}) {  
   const renderCounter = useRenderCounter();
-  const formMethods = useForm({
+  const formMethods = useForm<AutoTTRecConfigFormFieldTypes>({
     criteriaMode: "all",
     defaultValues: {
       "dolphin-resolution": "1440p",
@@ -36,7 +54,11 @@ export function AutoTTRecConfigForm(props: {whichUI: boolean}) {
       "background-music": "bgm-music-filename",
       "encode-type": "crf",
       "h26x-preset": "slow",
-      "video-codec": "libx264"
+      "video-codec": "libx264",
+      "audio-codec": "libopus",
+      "audio-bitrate-unit": "kbps",
+      "audio-bitrate": 128000,
+      "audio-bitrate-displayed": 128,
     }
   });
   //const isoWbfsFileInput = <ISOWBFSFileInput/>;

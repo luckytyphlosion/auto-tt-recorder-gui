@@ -4,7 +4,7 @@ import { MusicFilenameInput } from "./MusicFilenameInput";
 import { Top10LocationRegionalInput } from "./Top10LocationRegionalInput";
 import { CRFEncodeSettingsInput } from "./CRFEncodeSettingsInput";
 
-export function VideoCodecInput(props: {crfEncodeType: boolean}) {
+export function VideoCodecInput(props: {encodeType: string}) {
   const {register, getValues} = useFormContext();
   const [videoCodec, setVideoCodec] = useState(getValues("video-codec"));
 
@@ -18,7 +18,7 @@ export function VideoCodecInput(props: {crfEncodeType: boolean}) {
       <select {...register("video-codec", {
         required: true, onChange: updateVideoCodec})}>
         <option value="libx264">libx264</option>
-        {props.crfEncodeType ?
+        {props.encodeType === "crf" ?
           <option value="libx265">libx265</option> : <option value="libvpx-vp9">libvpx-vp9</option>}
       </select>
     </div>

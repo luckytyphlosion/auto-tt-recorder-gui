@@ -11,9 +11,9 @@ export function CRFEncodeSettingsInput() {
   return (
     <div>
       <CRFValueInput/>
-      <VideoCodecInput crfEncodeType={true}/>
+      <VideoCodecInput encodeType="crf"/>
       <H26xPresetInput/>
-      <AudioCodecAndBitrateInput/>
+      <AudioCodecAndBitrateInput encodeType="crf"/>
     </div>
   );
 }
