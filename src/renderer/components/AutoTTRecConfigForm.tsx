@@ -12,7 +12,7 @@ import AutoTTRecSubmitAbortButtons from "./AutoTTRecSubmitAbortButtons";
 import { AutoTTRecConfigFormComponents } from "./AutoTTRecConfigFormComponents";
 import { MainGhostFilenameInput } from "./form_components/MainGhostFilenameInput";
 
-import { EncodeType, AudioCodec, AudioBitrateUnit } from "../helper-types";
+import { EncodeType, AudioCodec, AudioBitrateUnit, EncodeSizeUnit } from "../helper-types";
 
 import useRenderCounter from "../RenderCounter";
 
@@ -39,6 +39,9 @@ interface AutoTTRecConfigFormFieldTypes {
   "audio-bitrate-unit": AudioBitrateUnit;
   "audio-bitrate": number;
   "audio-bitrate-displayed": number;
+  "encode-size": number;
+  "encode-size-displayed": number;
+  "encode-size-unit": EncodeSizeUnit;
 }
 
 export function AutoTTRecConfigForm(props: {whichUI: boolean}) {  
@@ -59,6 +62,9 @@ export function AutoTTRecConfigForm(props: {whichUI: boolean}) {
       "audio-bitrate-unit": "kbps",
       "audio-bitrate": 128000,
       "audio-bitrate-displayed": 128,
+      "encode-size": 52428800,
+      "encode-size-displayed": 50,
+      "encode-size-unit": "mib"
     }
   });
   //const isoWbfsFileInput = <ISOWBFSFileInput/>;

@@ -3,11 +3,11 @@ import React, { useRef } from 'react';
 const SHOW_RENDER_COUNTERS = true;
 const isDev = process.env.NODE_ENV === 'development';
 
-const useRenderCounter = () => {
+const useRenderCounter = (disabled?: boolean) => {
   const renderCount = useRef(0);
   renderCount.current = renderCount.current + 1;
 
-  if (isDev && SHOW_RENDER_COUNTERS) {
+  if (isDev && SHOW_RENDER_COUNTERS && !disabled) {
     return (
       <p
         style={{

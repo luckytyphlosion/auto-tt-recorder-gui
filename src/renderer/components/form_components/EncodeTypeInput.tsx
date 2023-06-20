@@ -1,15 +1,19 @@
 import React, { useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { MusicFilenameInput } from "./MusicFilenameInput";
-import { Top10LocationRegionalInput } from "./Top10LocationRegionalInput";
+import { SizeBasedEncodeSettingsInput } from "./SizeBasedEncodeSettingsInput";
 import { CRFEncodeSettingsInput } from "./CRFEncodeSettingsInput";
+import useRenderCounter from "../../RenderCounter";
 
 export function EncodeTypeInput() {
   const {register, getValues} = useFormContext();
   const [encodeType, setEncodeType] = useState(getValues("encode-type"));
+  const [encodeTypeChanged, setEncodeTypeChanged] = useState(false);
+  const renderCounter = useRenderCounter();
 
   function updateEncodeType(event: Event) {
     setEncodeType(getValues("encode-type"));
+    setEncodeTypeChanged(true);
   }
 
   return (
@@ -23,8 +27,11 @@ export function EncodeTypeInput() {
       <input type="radio" id="encode-type-size" value="size"
         {...register("encode-type", {onChange: updateEncodeType})}
       ></input>
+      {renderCounter}
       {
-        encodeType === "crf" ? <CRFEncodeSettingsInput/> : ""
+        encodeType === "crf" ? <CRFEncodeSettingsInput encodeTypeChanged={encodeTypeChanged}/> :
+        encodeType === "size" ? <SizeBasedEncodeSettingsInput encodeTypeChanged={encodeTypeChanged}/> :
+        ''
       }
     </div>
   );

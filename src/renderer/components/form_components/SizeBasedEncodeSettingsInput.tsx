@@ -4,16 +4,16 @@ import { VideoCodecInput } from "./VideoCodecInput";
 import { H26xPresetInput } from "./H26xPresetInput";
 import { CRFValueInput } from "./CRFValueInput";
 import { AudioCodecAndBitrateInput } from "./AudioCodecAndBitrateInput";
+import { EncodeSizeInput } from "./EncodeSizeInput";
 
-export function CRFEncodeSettingsInput(props: {encodeTypeChanged: boolean}) {
+export function SizeBasedEncodeSettingsInput(props: {encodeTypeChanged: boolean}) {
   const {register, getValues} = useFormContext();
 
   return (
     <div>
-      <CRFValueInput/>
-      <VideoCodecInput encodeType="crf"/>
-      <H26xPresetInput/>
-      <AudioCodecAndBitrateInput encodeType="crf" encodeTypeChanged={props.encodeTypeChanged}/>
+      <VideoCodecInput encodeType="size"/>
+      <EncodeSizeInput/>
+      <AudioCodecAndBitrateInput encodeType="size" encodeTypeChanged={props.encodeTypeChanged}/>
     </div>
   );
 }

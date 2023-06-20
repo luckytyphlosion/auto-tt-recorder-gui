@@ -3,13 +3,15 @@ import { useFormContext } from "react-hook-form";
 import { MusicFilenameInput } from "./MusicFilenameInput";
 import { Top10LocationRegionalInput } from "./Top10LocationRegionalInput";
 import { CRFEncodeSettingsInput } from "./CRFEncodeSettingsInput";
+import useRenderCounter from "../../RenderCounter";
 
 export function VideoCodecInput(props: {encodeType: string}) {
   const {register, getValues} = useFormContext();
-  const [videoCodec, setVideoCodec] = useState(getValues("video-codec"));
+  //const [videoCodec, setVideoCodec] = useState(getValues("video-codec"));
+  const renderCounter = useRenderCounter(true);
 
   function updateVideoCodec(event: Event) {
-    setVideoCodec(getValues("video-codec"));
+    //setVideoCodec(getValues("video-codec"));
   }
 
   return (
@@ -21,6 +23,7 @@ export function VideoCodecInput(props: {encodeType: string}) {
         {props.encodeType === "crf" ?
           <option value="libx265">libx265</option> : <option value="libvpx-vp9">libvpx-vp9</option>}
       </select>
+      {renderCounter}
     </div>
   );
 }

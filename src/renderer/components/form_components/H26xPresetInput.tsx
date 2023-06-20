@@ -1,8 +1,10 @@
 import React from "react";
 import { useFormContext } from "react-hook-form";
+import useRenderCounter from "../../RenderCounter";
 
 export function H26xPresetInput() {
   const {register} = useFormContext();
+  const renderCounter = useRenderCounter(true);
 
   return (
     <div>
@@ -20,6 +22,7 @@ export function H26xPresetInput() {
         <option value="veryslow">veryslow</option>
         <option value="placebo">placebo</option>
       </select>
+      {renderCounter}
     </div>
   );
 }

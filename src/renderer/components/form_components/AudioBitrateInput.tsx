@@ -6,12 +6,12 @@ import { EncodeType, AudioCodec, AudioBitrateUnit } from "../../helper-types";
 
 const defaultAudioBitrates = {
   crf: {
-    libopus: 128,
-    aac: 384
+    libopus: 128000,
+    aac: 384000
   },
   size: {
-    libopus: 64,
-    aac: 128
+    libopus: 64000,
+    aac: 128000
   }
 }
 
@@ -21,8 +21,8 @@ function getDefaultAudioBitrate(encodeType: EncodeType, audioCodec: AudioCodec):
 
 function getDefaultAudioBitrateDisplayed(encodeType: EncodeType, audioCodec: AudioCodec, bitrateUnit: AudioBitrateUnit): number {
   let bitrate = getDefaultAudioBitrate(encodeType, audioCodec);
-  if (bitrateUnit === "bps") {
-    bitrate *= 1000;
+  if (bitrateUnit === "kbps") {
+    bitrate /= 1000;
   }
   return bitrate;
 }
@@ -31,10 +31,9 @@ const MIN_AUDIO_BITRATE = 1;
 const MAX_AUDIO_BITRATE = 100000000; // 100000k
 const MAX_AUDIO_BITRATE_LENGTH = MAX_AUDIO_BITRATE.toString().length;
 
-export function AudioBitrateInput(props: {encodeType: EncodeType, audioCodec: AudioCodec, audioCodecChanged: boolean}) {
-  const {register, setValue, getValues, control} = useFormContext();
-  const renderCounter = useRenderCounter();
-  const [audioBitrateKbpsEnable, setAudioBitrateKbpsEnable] = useState(getValues("audio-bitrate-unit"));
+export function AudioBitrateInput(props: {encodeType: EncodeType, audioCodec: AudioCodec, resetToDefaultAudioBitrate: boolean}) {
+  const {register, setValue, getValues} = useFormContext();
+  const renderCounter = useRenderCounter(true);
 
   function updateAudioBitrateDisplayed(event: Event | null) {
     let audioBitrateDisplayed = getValues("audio-bitrate-displayed");
@@ -53,6 +52,8 @@ export function AudioBitrateInput(props: {encodeType: EncodeType, audioCodec: Au
   function updateAudioBitrateUnit(event: Event | null) {
     let audioBitrateUnit = getValues("audio-bitrate-unit");
     let audioBitrate = getValues("audio-bitrate");
+    console.log("updateAudioBitrateUnit audioBitrateUnit:", audioBitrateUnit);
+    console.log("updateAudioBitrateUnit audioBitrate:", audioBitrate);
     let useDefaultAudioBitrate = false;
     let audioBitrateDisplayed;
 
@@ -81,7 +82,7 @@ export function AudioBitrateInput(props: {encodeType: EncodeType, audioCodec: Au
 
   console.log("audioCodec:", props.audioCodec);
 
-  if (props.audioCodecChanged) {
+  if (props.resetToDefaultAudioBitrate) {
     let audioBitrate = getDefaultAudioBitrate(props.encodeType, props.audioCodec);
     let audioBitrateDisplayed = getDefaultAudioBitrateDisplayed(props.encodeType, props.audioCodec, getValues("audio-bitrate-unit")); 
     setValue("audio-bitrate", audioBitrate, {shouldTouch: true});
