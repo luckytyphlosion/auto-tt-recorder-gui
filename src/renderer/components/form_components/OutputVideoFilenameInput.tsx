@@ -4,7 +4,7 @@ import { FileFilter } from "electron";
 import { useFormContext } from "react-hook-form";
 
 export function OutputVideoFilenameInput() {
-  const {register, setValue} = useFormContext();
+  const {register, setValue, getValues} = useFormContext();
 
   async function queueSaveDialog(event: React.MouseEvent<HTMLButtonElement>, fileFilters: FileFilter[]) {
     let response = await window.api.saveFileDialog(fileFilters);
@@ -19,8 +19,9 @@ export function OutputVideoFilenameInput() {
         {...register("output-video-filename", {required: false})}
       ></input>
       <button onClick={event => {
+        let outputVideoFileFormat = getValues("output-video-file-format");
         queueSaveDialog(event, [
-          {name: "mp4 files", extensions: ["mp4"]}
+          {name: `${outputVideoFileFormat} files`, extensions: [outputVideoFileFormat]}
         ]);
       }} type="button">Export as&#8230;</button>
     </div>

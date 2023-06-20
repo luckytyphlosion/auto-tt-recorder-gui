@@ -157,8 +157,8 @@ export function AutoTTRecConfigForm(props: {whichUI: boolean}) {
   let formState = formMethods.formState;
 
   useEffect(() => {
-    if (formState.isSubmitted) {
-      console.log("formState: isSubmitted:", formState.isSubmitted, ", isSubmitSuccessful:", formState.isSubmitSuccessful);
+    if (formState.isSubmitted && !formState.isSubmitSuccessful) {
+      formMethods.reset(undefined, {keepValues: true, keepErrors: true});
     }
   }, [formState, errorData, formMethods.reset]);
 

@@ -4,6 +4,7 @@ import useRenderCounter from "../../RenderCounter";
 import { useFormContext } from "react-hook-form";
 import { FileFilter } from "electron";
 import { Set200ccInput } from "./Set200ccInput";
+import { SimpleErrorMessage } from "../SimpleErrorMessage";
 
 export function MainGhostFilenameInput() {
   const {register, setValue} = useFormContext();
@@ -17,13 +18,17 @@ export function MainGhostFilenameInput() {
     <div>
       <label htmlFor="main-ghost-filename">RKG file to record:</label>
       <input type="text" readOnly
-        {...register("main-ghost-filename", {required: true})}
+        {...register("main-ghost-filename", {required: {
+          value: true,
+          message: "This input is required."
+        }})}
       ></input>
       <button onClick={event => {
         queueOpenDialog(event, [
           {name: "RKG files", extensions: ["rkg"]}
         ]);
       }} type="button">Browse&#8230;</button>
+      <SimpleErrorMessage name="main-ghost-filename"/>
       <Set200ccInput/>
     </div>
   );

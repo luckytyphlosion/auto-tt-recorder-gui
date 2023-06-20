@@ -3,6 +3,8 @@ import { useFormContext } from "react-hook-form";
 import useRenderCounter from "../../RenderCounter";
 import "../../styles/percent-input.css";
 
+import { SimpleErrorMessage } from "../SimpleErrorMessage";
+
 export function MusicVolumeInput() {
   const {register, setValue, getValues} = useFormContext();
   const renderCounter = useRenderCounter(true);
@@ -23,9 +25,17 @@ export function MusicVolumeInput() {
         onChange: updateMusicVolumeNumberInputFromSlider})}/>
       <span className="percent-input">
         <input type="number" style={{width: "4em"}}
-          {...register("music-volume-numberinput", {required: false, min: 0, onChange: updateMusicVolumeSliderFromNumberInput})}
+          {...register("music-volume-numberinput", {required: {
+            value: true,
+            message: "This input is required."
+          }, valueAsNumber: true,
+          min: {
+            value: 0,
+            message: "Music volume cannot be less than zero."
+          }, onChange: updateMusicVolumeSliderFromNumberInput})}
         ></input>%
       </span>
+      <SimpleErrorMessage name="music-volume-numberinput"/>
       {renderCounter}
     </div>
   );

@@ -49,8 +49,6 @@ export function MarioKartChannelLayout() {
       <TrackNameInput/>
       <Top10LocationInput/>
       <BackgroundMusicInput/>
-      <GameVolumeInput/>
-      <MusicVolumeInput/>
       <InputDisplayInput/>
       <SpeedometerInput/>
       <HQTexturesInput/>

@@ -3,6 +3,7 @@ import { AutoTTRecArgs } from "../../../auto-tt-rec-args";
 import useRenderCounter from "../../RenderCounter";
 import { useFormContext } from "react-hook-form";
 import { FileFilter } from "electron";
+import { SimpleErrorMessage } from "../SimpleErrorMessage";
 
 export function MusicFilenameInput() {
   const {register, setValue} = useFormContext();
@@ -16,13 +17,17 @@ export function MusicFilenameInput() {
     <>
       <label htmlFor="music-filename"> </label>
       <input type="text" readOnly
-        {...register("music-filename", {required: false})}
+        {...register("music-filename", {required: {
+          value: true,
+          message: "This input is required."
+        }})}
       ></input>
       <button onClick={event => {
         queueOpenDialog(event, [
           {name: "Music files", extensions: ["*"]}
         ]);
       }} type="button">Browse&#8230;</button>
+      <SimpleErrorMessage name="music-filename"/>
     </>
   );
 }

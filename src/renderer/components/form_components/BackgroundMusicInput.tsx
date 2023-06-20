@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { MusicFilenameInput } from "./MusicFilenameInput";
+import { GameVolumeInput } from "./GameVolumeInput";
+import { MusicVolumeInput } from "./MusicVolumeInput";
+
 import useRenderCounter from "../../RenderCounter";
 
 export function BackgroundMusicInput() {
@@ -30,6 +33,13 @@ export function BackgroundMusicInput() {
          <MusicFilenameInput/> : ""
       }
       {renderCounter}
+      {
+        musicFilenameInputEnable ?
+        <>
+          <GameVolumeInput/>
+          <MusicVolumeInput/>
+        </> : ""
+      }
     </div>    
   );
 }

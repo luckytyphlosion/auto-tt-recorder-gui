@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { FileFilter } from "electron";
+import { SimpleErrorMessage } from "../SimpleErrorMessage";
 
 export function ComparisonGhostFilenameInput() {
   const {register, setValue} = useFormContext();
@@ -21,6 +22,7 @@ export function ComparisonGhostFilenameInput() {
           {name: "RKG files", extensions: ["rkg"]}
         ]);
       }} type="button">Browse&#8230;</button>
+      <SimpleErrorMessage name="comparison-ghost-filename"/>
     </div>
   );
 }

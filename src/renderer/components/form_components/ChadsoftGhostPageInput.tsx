@@ -1,6 +1,6 @@
 import React from "react";
 import { useFormContext, ValidateResult } from "react-hook-form";
-import { ErrorMessage } from "@hookform/error-message";
+import { SimpleErrorMessage } from "../SimpleErrorMessage";
 
 export function ChadsoftGhostPageInput() {
   const {register, formState} = useFormContext();
@@ -22,11 +22,7 @@ export function ChadsoftGhostPageInput() {
             }
           })}
         ></input>
-        <ErrorMessage
-          errors={formState.errors}
-          name="chadsoft-ghost-page"
-          render={({ message }) => <p style={{display: "inline"}}>{message}</p>}
-        />
+        <SimpleErrorMessage name="chadsoft-ghost-page"/>
 
         {/*<ErrorMessage
           errors={formState.errors}
