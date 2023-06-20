@@ -5,7 +5,7 @@ import useRenderCounter from "../../RenderCounter";
 export function SpeedometerDecimalPlacesInput(props: {twoDecimalPlaces: boolean}) {
   const {register, getValues, setValue} = useFormContext();
   //const [speedometerEnabled, setSpeedometerEnabled] = useState(true);
-  const renderCounter = useRenderCounter();
+  const renderCounter = useRenderCounter(true);
 
   if (!props.twoDecimalPlaces && getValues("speedometer-decimal-places") === "2") {
     setValue("speedometer-decimal-places", "1", {shouldTouch: true});

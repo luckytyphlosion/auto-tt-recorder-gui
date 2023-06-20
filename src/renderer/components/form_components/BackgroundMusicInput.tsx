@@ -10,7 +10,7 @@ export function BackgroundMusicInput() {
   }
 
   const [musicFilenameInputEnable, setMusicFilenameInputEnable] = useState(isFormBackgroundMusicFromFilename());
-  const renderCounter = useRenderCounter();
+  const renderCounter = useRenderCounter(true);
 
   function updateMusicFilenameInputEnable(event: React.MouseEvent<HTMLButtonElement>) {
     setMusicFilenameInputEnable(isFormBackgroundMusicFromFilename());

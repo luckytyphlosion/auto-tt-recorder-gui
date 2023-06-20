@@ -10,7 +10,7 @@ const SpeedometerMetricInput_Memo = memo(SpeedometerMetricInput);
 export function SpeedometerInput() {
   const {register, getValues} = useFormContext();
   const [speedometerStyle, setSpeedometerStyle] = useState("fancy");
-  const renderCounter = useRenderCounter();
+  const renderCounter = useRenderCounter(true);
 
   function updateSpeedometerStyle(event: Event) {
     let speedometerStyleFromForm = getValues("speedometer-style");

@@ -7,7 +7,7 @@ import { SZSFilenameInput } from "./SZSFilenameInput";
 export function SZSSourceInput() {
   const {register, getValues} = useFormContext();
   const [szsSource, setSZSSource] = useState(getValues("szs-source"));
-  const renderCounter = useRenderCounter();
+  const renderCounter = useRenderCounter(true);
 
   function updateSZSSource(event: Event) {
     setSZSSource(getValues("szs-source"));

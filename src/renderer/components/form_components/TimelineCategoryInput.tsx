@@ -9,7 +9,7 @@ export function TimelineCategoryInput(props: {
 }) {
   const {register, getValues} = useFormContext();
   const [timelineCategory, setTimelineCategory] = useState("notop10");
-  const renderCounter = useRenderCounter();
+  const renderCounter = useRenderCounter(true);
 
   function updateTimelineCategory(event: Event) {
     setTimelineCategory(getValues("timeline-category"));

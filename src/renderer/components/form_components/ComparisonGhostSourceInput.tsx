@@ -8,7 +8,7 @@ import { ComparisonGhostFilenameInput } from "./ComparisonGhostFilenameInput";
 export function ComparisonGhostSourceInput() {
   const {register, getValues} = useFormContext();
   const [comparisonGhostSource, setComparisonGhostSource] = useState(getValues("comparison-ghost-source"));
-  const renderCounter = useRenderCounter();
+  const renderCounter = useRenderCounter(true);
 
   function updateComparisonGhostSource(event: Event) {
     setComparisonGhostSource(getValues("comparison-ghost-source"));

@@ -7,7 +7,7 @@ import { MarioKartChannelLayout } from "../layout_components/MarioKartChannelLay
 export function NoTop10CategoryInput() {
   const {register, getValues} = useFormContext();
   const [noTop10Category, setNoTop10Category] = useState(getValues("no-top-10-category"));
-  const renderCounter = useRenderCounter();
+  const renderCounter = useRenderCounter(true);
 
   function updateNoTop10Category(event: Event) {
     setNoTop10Category(getValues("no-top-10-category"));

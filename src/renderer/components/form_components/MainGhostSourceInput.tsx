@@ -8,7 +8,7 @@ import { MainGhostFilenameInput } from "./MainGhostFilenameInput";
 export function MainGhostSourceInput() {
   const {register, getValues} = useFormContext();
   const [mainGhostSource, setMainGhostSource] = useState(getValues("main-ghost-source"));
-  const renderCounter = useRenderCounter();
+  const renderCounter = useRenderCounter(true);
 
   function updateMainGhostSource(event: Event) {
     setMainGhostSource(getValues("main-ghost-source"));
@@ -28,7 +28,7 @@ export function MainGhostSourceInput() {
       {renderCounter}
       {
         mainGhostSource === "chadsoft" ? <ChadsoftGhostPageInput/>
-        : mainGhostSource === "rkg" ? <MainGhostFilenameInput arg={3}/>
+        : mainGhostSource === "rkg" ? <MainGhostFilenameInput/>
         : ''
       }
     </div>

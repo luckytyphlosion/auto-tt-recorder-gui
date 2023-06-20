@@ -14,7 +14,7 @@ import { OutputVideoFilenameInput } from "../form_components/OutputVideoFilename
 import { Set200ccInput } from "../form_components/Set200ccInput";
 import { Top10ChadsoftInput } from "../form_components/Top10ChadsoftInput";
 import { Top10TitleInput } from "../form_components/Top10TitleInput";
-import { Top10HighlightEnableInput } from "../form_components/Top10HighlightEnableInput";
+import { PixelFormatInput } from "../form_components/PixelFormatInput";
 import { EncodeTypeInput } from "../form_components/EncodeTypeInput";
 import { BackgroundMusicInput } from "../form_components/BackgroundMusicInput";
 import { GameVolumeInput } from "../form_components/GameVolumeInput";
@@ -56,13 +56,13 @@ export function MarioKartChannelLayout() {
       <NoBackgroundBlurInput/>
       <NoBloomInput/>
       <EncodeTypeInput/>
+      <PixelFormatInput/>
+      <YoutubeSettingsInput/>
       <UseFFV1Input/>
       <EncodeOnlyInput/>
       <InputDisplayDontCreateInput/>
       <KeepWindowInput/>
-      <YoutubeSettingsInput/>
       <DolphinResolutionInput/>
-      <QualityInput/>
       <OutputVideoFilenameInput/>
 
     </div>

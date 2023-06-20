@@ -5,7 +5,7 @@ import useRenderCounter from "../../RenderCounter";
 
 export function SpeedometerMetricInput() {
   const {register} = useFormContext();
-  const renderCounter = useRenderCounter();
+  const renderCounter = useRenderCounter(true);
 
   return (
     <div>

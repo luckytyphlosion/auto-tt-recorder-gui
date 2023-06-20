@@ -53,15 +53,6 @@ export function AutoTTRecConfigFormComponents(props: {whichUI: boolean}) {
   // top 10 censors
   // top 10 gecko code filename
   // music volume
-  // encode type
-  // crf-value
-  // h26x-preset
-  // video codec
-  // audio codec
-  // encode size
-  // audio bitrate
-  // pixel format
-  // output width
   // dolphin volume
   // cache settings
 

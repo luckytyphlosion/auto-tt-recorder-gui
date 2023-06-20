@@ -4,7 +4,7 @@ import useRenderCounter from "../../RenderCounter";
 
 export function GameVolumeInput() {
   const {register, setValue, getValues} = useFormContext();
-  const renderCounter = useRenderCounter();
+  const renderCounter = useRenderCounter(true);
 
   function updateGameVolumeNumberInputFromSlider(event: Event) {
     setValue("game-volume-numberinput", getValues("game-volume-slider"), {shouldTouch: true});

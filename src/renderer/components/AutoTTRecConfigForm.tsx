@@ -42,6 +42,8 @@ interface AutoTTRecConfigFormFieldTypes {
   "encode-size": number;
   "encode-size-displayed": number;
   "encode-size-unit": EncodeSizeUnit;
+  "game-volume-slider": number;
+  "game-volume-numberinput": number;
 }
 
 export function AutoTTRecConfigForm(props: {whichUI: boolean}) {  
@@ -64,7 +66,9 @@ export function AutoTTRecConfigForm(props: {whichUI: boolean}) {
       "audio-bitrate-displayed": 128,
       "encode-size": 52428800,
       "encode-size-displayed": 50,
-      "encode-size-unit": "mib"
+      "encode-size-unit": "mib",
+      "game-volume-slider": 100,
+      "game-volume-numberinput": 100
     }
   });
   //const isoWbfsFileInput = <ISOWBFSFileInput/>;

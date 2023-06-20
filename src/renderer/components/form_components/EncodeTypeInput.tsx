@@ -9,7 +9,7 @@ export function EncodeTypeInput() {
   const {register, getValues} = useFormContext();
   const [encodeType, setEncodeType] = useState(getValues("encode-type"));
   const [encodeTypeChanged, setEncodeTypeChanged] = useState(false);
-  const renderCounter = useRenderCounter();
+  const renderCounter = useRenderCounter(true);
 
   function updateEncodeType(event: Event) {
     setEncodeType(getValues("encode-type"));
