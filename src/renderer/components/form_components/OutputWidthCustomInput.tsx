@@ -10,7 +10,7 @@ export function OutputWidthCustomInput() {
     <div>
       <label htmlFor="output-width-custom"></label>
       <input type="number" min={2}
-        {...register("output-width-custom")}
+        {...register("output-width-custom", {valueAsNumber: true})}
       ></input>
       {renderCounter}
     </div>

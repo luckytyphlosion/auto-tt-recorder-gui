@@ -7,7 +7,7 @@ export function TrackNameInput() {
   return (
     <div>
       <label htmlFor="track-name">Track name: </label>
-      <input type="text" {...register("track-name", {required: true})}
+      <input type="text" {...register("track-name", {required: false})}
       ></input>
     </div>
   );

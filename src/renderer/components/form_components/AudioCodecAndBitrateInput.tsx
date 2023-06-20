@@ -23,7 +23,7 @@ export function AudioCodecAndBitrateInput(props: {encodeType: EncodeType, encode
     <div>
       <label htmlFor="audio-codec">Audio codec: </label>
       <select {...register("audio-codec", {
-        required: true, onChange: updateAudioCodec})}>
+        required: false, onChange: updateAudioCodec})}>
         <option value="libopus">libopus</option>
         <option value="aac">aac</option>
       </select>

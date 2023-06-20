@@ -8,7 +8,7 @@ export function ChadsoftGhostPageInput() {
     <div>
       <label htmlFor="chadsoft-ghost-page">Chadsoft ghost page link: </label>
       <input type="text"
-        {...register("chadsoft-ghost-page", {required: true})}
+        {...register("chadsoft-ghost-page", {required: false})}
       ></input>
     </div>
   );

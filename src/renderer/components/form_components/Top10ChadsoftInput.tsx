@@ -8,7 +8,7 @@ export function Top10ChadsoftInput() {
     <div>
       <label htmlFor="top-10-chadsoft">Chadsoft leaderboard link: </label>
       <input type="text"
-        {...register("top-10-chadsoft", {required: true})}
+        {...register("top-10-chadsoft", {required: false})}
       ></input>
     </div>
   );

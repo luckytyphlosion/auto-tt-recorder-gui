@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useFormContext } from "react-hook-form";
 import useRenderCounter from "../../RenderCounter";
+import "../../styles/percent-input.css";
 
 export function GameVolumeInput() {
   const {register, setValue, getValues} = useFormContext();
@@ -20,9 +21,11 @@ export function GameVolumeInput() {
       <label htmlFor="game-volume-slider">Game volume: </label>
       <input type="range" min={0} max={125} step={1} {...register("game-volume-slider", {
         onChange: updateGameVolumeNumberInputFromSlider})}/>
-      <input type="number"
-        {...register("game-volume-numberinput", {required: true, min: 0, onChange: updateGameVolumeSliderFromNumberInput})}
-      ></input>
+      <span className="percent-input">
+        <input type="number" style={{width: "4em"}}
+          {...register("game-volume-numberinput", {required: false, min: 0, onChange: updateGameVolumeSliderFromNumberInput})}
+        ></input>%
+      </span>
       {renderCounter}
     </div>
   );

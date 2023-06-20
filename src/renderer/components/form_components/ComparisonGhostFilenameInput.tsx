@@ -14,7 +14,7 @@ export function ComparisonGhostFilenameInput() {
     <div>
       <label htmlFor="comparison-ghost-filename">RKG file to compare against: </label>
       <input type="text" readOnly
-        {...register("comparison-ghost-filename", {required: true})}
+        {...register("comparison-ghost-filename", {required: false})}
       ></input>
       <button onClick={event => {
         queueOpenDialog(event, [

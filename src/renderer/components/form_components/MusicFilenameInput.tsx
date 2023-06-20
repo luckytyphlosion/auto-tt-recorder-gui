@@ -16,7 +16,7 @@ export function MusicFilenameInput() {
     <>
       <label htmlFor="music-filename"> </label>
       <input type="text" readOnly
-        {...register("music-filename", {required: true})}
+        {...register("music-filename", {required: false})}
       ></input>
       <button onClick={event => {
         queueOpenDialog(event, [

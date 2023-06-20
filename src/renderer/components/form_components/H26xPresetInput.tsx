@@ -10,7 +10,7 @@ export function H26xPresetInput() {
     <div>
       <label htmlFor="h26x-preset">Encode speed (faster &#8594; larger filesize, slightly less quality): </label>
       <select {...register("h26x-preset", {
-        required: true})}>
+        required: false})}>
         <option value="ultrafast">ultrafast</option>
         <option value="superfast">superfast</option>
         <option value="veryfast">veryfast</option>

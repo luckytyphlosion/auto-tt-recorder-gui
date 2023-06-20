@@ -16,7 +16,7 @@ export function ISOWBFSFileInput() {
     <div>
       <label htmlFor="iso-filename">ISO or WBFS: </label>
       <input type="text" readOnly
-        {...register("iso-filename", {required: true})}
+        {...register("iso-filename", {required: false})}
       ></input>
       <button onClick={event => {
         queueOpenDialog(event, [

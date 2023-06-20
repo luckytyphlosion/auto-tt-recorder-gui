@@ -5,6 +5,7 @@ import { UseFormRegister, UseFormSetValue, FieldValues } from "react-hook-form";
 
 import "../styles/AutoTTRecConfigFormComponents.css";
 
+import { MarioKartChannelLayout } from "./layout_components/MarioKartChannelLayout";
 import { ISOWBFSFileInput } from "./form_components/ISOWBFSFileInput";
 import { NoTop10CategoryInput } from "./form_components/NoTop10CategoryInput";
 import { MainGhostFilenameInput } from "./form_components/MainGhostFilenameInput";
@@ -58,8 +59,9 @@ export function AutoTTRecConfigFormComponents(props: {whichUI: boolean}) {
 
   return (
     <>
-      
-      <TimelineCategoryInput noTop10Child={<NoTop10CategoryInput/>} top10ChadsoftChild={<div></div>} top10GeckoChild={<div></div>}/>
+      <ISOWBFSFileInput/>
+      <MarioKartChannelLayout/>
+      {/*<TimelineCategoryInput noTop10Child={<NoTop10CategoryInput/>} top10ChadsoftChild={<div></div>} top10GeckoChild={<div></div>}/>*/}
       {/*<MainGhostFilenameInput arg={1}/>
       <ChadsoftGhostPageInput/>
       <ChadsoftComparisonGhostPageInput/>

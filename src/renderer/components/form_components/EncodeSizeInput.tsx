@@ -95,7 +95,7 @@ export function EncodeSizeInput() {
           e.preventDefault();
         }
       }} min={MIN_ENCODE_SIZE} max={MAX_ENCODE_SIZE}
-        {...register("encode-size-displayed", {required: true, onChange: updateEncodeSizeDisplayed, valueAsNumber: true})}
+        {...register("encode-size-displayed", {required: false, onChange: updateEncodeSizeDisplayed, valueAsNumber: true})}
       ></input>
       <label htmlFor="encode-size-unit-mib">MiB</label>
       <input type="radio" id="encode-size-unit-mib" value="mib"

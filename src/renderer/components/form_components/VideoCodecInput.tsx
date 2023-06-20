@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { MusicFilenameInput } from "./MusicFilenameInput";
 import { Top10LocationRegionalInput } from "./Top10LocationRegionalInput";
-import { CRFEncodeSettingsInput } from "./CRFEncodeSettingsInput";
+import { CRFEncodeSettingsLayout } from "../layout_components/CRFEncodeSettingsLayout";
 import useRenderCounter from "../../RenderCounter";
 
 export function VideoCodecInput(props: {encodeType: string}) {
@@ -18,7 +18,7 @@ export function VideoCodecInput(props: {encodeType: string}) {
     <div>
       <label htmlFor="video-codec">Video codec: </label>
       <select {...register("video-codec", {
-        required: true, onChange: updateVideoCodec})}>
+        required: false, onChange: updateVideoCodec})}>
         <option value="libx264">libx264</option>
         {props.encodeType === "crf" ?
           <option value="libx265">libx265</option> : <option value="libvpx-vp9">libvpx-vp9</option>}

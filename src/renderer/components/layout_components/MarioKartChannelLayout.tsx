@@ -31,6 +31,7 @@ import { KeepWindowInput } from "../form_components/KeepWindowInput";
 import { YoutubeSettingsInput } from "../form_components/YoutubeSettingsInput";
 import { DolphinResolutionInput } from "../form_components/DolphinResolutionInput";
 import { TimelineCategoryInput } from "../form_components/TimelineCategoryInput";
+import { MusicVolumeInput } from "../form_components/MusicVolumeInput";
 
 import useRenderCounter from "../../RenderCounter";
 
@@ -44,12 +45,12 @@ export function MarioKartChannelLayout() {
       <MainGhostSourceInput/>
       <ComparisonGhostSourceInput/>
       <SZSSourceInput/>
-      <Set200ccInput/>
       <MKChannelGhostDescriptionInput/>
       <TrackNameInput/>
       <Top10LocationInput/>
       <BackgroundMusicInput/>
       <GameVolumeInput/>
+      <MusicVolumeInput/>
       <InputDisplayInput/>
       <SpeedometerInput/>
       <HQTexturesInput/>

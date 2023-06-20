@@ -16,7 +16,7 @@ export function ComparisonGhostSourceInput() {
 
   return (
     <div>
-      <label htmlFor="comparison-ghost-source">Comparison ghost source:</label>
+      <label htmlFor="comparison-ghost-source">Comparison ghost source: </label>
       <label htmlFor="comparison-ghost-source-chadsoft">Chadsoft link:</label>
       <input type="radio" id="comparison-ghost-source-chadsoft" value="chadsoft"
         {...register("comparison-ghost-source", {onChange: updateComparisonGhostSource})}

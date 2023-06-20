@@ -15,7 +15,7 @@ export function SZSSourceInput() {
 
   return (
     <div>
-      <label htmlFor="szs-source">Track SZS:</label>
+      <label htmlFor="szs-source">Track SZS: </label>
       <label htmlFor="szs-source-automatic">Download automatically OR vanilla track:</label>
       <input type="radio" id="szs-source-automatic" value="automatic"
         {...register("szs-source", {onChange: updateSZSSource})}

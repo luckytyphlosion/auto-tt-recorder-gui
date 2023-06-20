@@ -8,7 +8,7 @@ export function Top10TitleInput() {
     <div>
       <label htmlFor="top-10-title">Top 10 Title: </label>
       <input type="text"
-        {...register("top-10-title", {required: true})}
+        {...register("top-10-title", {required: false})}
       ></input>
     </div>
   );

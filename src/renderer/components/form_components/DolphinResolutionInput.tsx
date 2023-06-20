@@ -18,7 +18,7 @@ export function DolphinResolutionInput() {
     <div>
       <label htmlFor="dolphin-resolution">Dolphin resolution: </label>
       <select {...register("dolphin-resolution", {
-        required: true, onChange: updateDolphinResolution})}>
+        required: false, onChange: updateDolphinResolution})}>
         <option value="2160p">2160p (4K)</option>
         <option value="1440p">1440p (2K)</option>
         <option value="1080p">1080p</option>

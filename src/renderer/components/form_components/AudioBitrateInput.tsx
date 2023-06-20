@@ -91,14 +91,14 @@ export function AudioBitrateInput(props: {encodeType: EncodeType, audioCodec: Au
 
   return (
     <div>
-      <label htmlFor="audio-bitrate">Audio bitrate:</label>
+      <label htmlFor="audio-bitrate">Audio bitrate: </label>
       <input type="hidden" {...register("audio-bitrate")}/>
       <input type="number" onKeyPress={(e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key.match(/\D/g)) {
           e.preventDefault();
         }
       }} min={MIN_AUDIO_BITRATE} max={MAX_AUDIO_BITRATE}
-        {...register("audio-bitrate-displayed", {required: true, onChange: updateAudioBitrateDisplayed, valueAsNumber: true})}
+        {...register("audio-bitrate-displayed", {required: false, onChange: updateAudioBitrateDisplayed, valueAsNumber: true})}
       ></input>
       <label htmlFor="audio-bitrate-unit">kbps</label>
       <input type="radio" id="audio-bitrate-unit-kbps" value="kbps"

@@ -16,7 +16,7 @@ export function OutputVideoFilenameInput() {
       <label htmlFor="output-video-filename">Output filename: </label>
       <input
         className="filename-input" type="text"
-        {...register("output-video-filename", {required: true})}
+        {...register("output-video-filename", {required: false})}
       ></input>
       <button onClick={event => {
         queueSaveDialog(event, [

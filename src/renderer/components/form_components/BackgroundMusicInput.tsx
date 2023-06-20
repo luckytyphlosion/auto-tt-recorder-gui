@@ -6,7 +6,7 @@ import useRenderCounter from "../../RenderCounter";
 export function BackgroundMusicInput() {
   const {register, getValues} = useFormContext();
   function isFormBackgroundMusicFromFilename() {
-    return getValues("background-music") === "bgm-music-filename";
+    return getValues("background-music") === "music-filename";
   }
 
   const [musicFilenameInputEnable, setMusicFilenameInputEnable] = useState(isFormBackgroundMusicFromFilename());
@@ -20,10 +20,10 @@ export function BackgroundMusicInput() {
     <div>
       <label htmlFor="background-music">Background Music: </label>
       <select {...register("background-music", {
-        required: true, onChange: updateMusicFilenameInputEnable})}>
-        <option value="bgm-music-filename">Music filename</option>
-        <option value="bgm-game-bgm">Game BGM</option>
-        <option value="bgm-none">None</option>
+        required: false, onChange: updateMusicFilenameInputEnable})}>
+        <option value="music-filename">Music filename</option>
+        <option value="game-bgm">Game BGM</option>
+        <option value="none">None</option>
       </select>
       {
         musicFilenameInputEnable ? 

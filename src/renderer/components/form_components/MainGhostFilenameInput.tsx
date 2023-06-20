@@ -3,6 +3,7 @@ import { AutoTTRecArgs } from "../../../auto-tt-rec-args";
 import useRenderCounter from "../../RenderCounter";
 import { useFormContext } from "react-hook-form";
 import { FileFilter } from "electron";
+import { Set200ccInput } from "./Set200ccInput";
 
 export function MainGhostFilenameInput() {
   const {register, setValue} = useFormContext();
@@ -16,13 +17,14 @@ export function MainGhostFilenameInput() {
     <div>
       <label htmlFor="main-ghost-filename">RKG file to record:</label>
       <input type="text" readOnly
-        {...register("main-ghost-filename", {required: true})}
+        {...register("main-ghost-filename", {required: false})}
       ></input>
       <button onClick={event => {
         queueOpenDialog(event, [
           {name: "RKG files", extensions: ["rkg"]}
         ]);
       }} type="button">Browse&#8230;</button>
+      <Set200ccInput/>
     </div>
   );
 }

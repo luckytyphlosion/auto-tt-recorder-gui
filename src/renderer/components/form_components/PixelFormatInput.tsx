@@ -6,7 +6,7 @@ export function PixelFormatInput() {
 
   return (
     <div>
-      <label htmlFor="pixel-format">Pixel format:</label>
+      <label htmlFor="pixel-format">Pixel format: </label>
       <input type="text" {...register("pixel-format")}
       ></input>
     </div>

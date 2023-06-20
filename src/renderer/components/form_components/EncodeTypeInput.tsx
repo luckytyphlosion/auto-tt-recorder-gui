@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { MusicFilenameInput } from "./MusicFilenameInput";
-import { SizeBasedEncodeSettingsInput } from "./SizeBasedEncodeSettingsInput";
-import { CRFEncodeSettingsInput } from "./CRFEncodeSettingsInput";
+import { SizeBasedEncodeSettingsLayout } from "../layout_components/SizeBasedEncodeSettingsLayout";
+import { CRFEncodeSettingsLayout } from "../layout_components/CRFEncodeSettingsLayout";
 import useRenderCounter from "../../RenderCounter";
 
 export function EncodeTypeInput() {
@@ -29,8 +29,8 @@ export function EncodeTypeInput() {
       ></input>
       {renderCounter}
       {
-        encodeType === "crf" ? <CRFEncodeSettingsInput encodeTypeChanged={encodeTypeChanged}/> :
-        encodeType === "size" ? <SizeBasedEncodeSettingsInput encodeTypeChanged={encodeTypeChanged}/> :
+        encodeType === "crf" ? <CRFEncodeSettingsLayout encodeTypeChanged={encodeTypeChanged}/> :
+        encodeType === "size" ? <SizeBasedEncodeSettingsLayout encodeTypeChanged={encodeTypeChanged}/> :
         ''
       }
     </div>

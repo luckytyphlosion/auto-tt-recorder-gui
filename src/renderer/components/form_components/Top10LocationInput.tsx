@@ -16,14 +16,14 @@ export function Top10LocationInput() {
     <div>
       <label htmlFor="top-10-location-region">Region: </label>
       <select {...register("top-10-location-region", {
-        required: true, onChange: updateTop10LocationRegion})}>
-        <option value="top-10-location-region-worldwide">Worldwide</option>
-        <option value="top-10-location-region-regional">Regional</option>
-        <option value="top-10-location-region-country">Country</option>
+        required: false, onChange: updateTop10LocationRegion})}>
+        <option value="worldwide">Worldwide</option>
+        <option value="regional">Regional</option>
+        <option value="country">Country</option>
       </select>
       {
-        top10LocationRegion === "top-10-location-region-regional" ? <Top10LocationRegionalInput/>
-        : top10LocationRegion === "top-10-location-region-country" ? <Top10LocationCountryInput/>
+        top10LocationRegion === "regional" ? <Top10LocationRegionalInput/>
+        : top10LocationRegion === "country" ? <Top10LocationCountryInput/>
         : ""
       }
     </div>

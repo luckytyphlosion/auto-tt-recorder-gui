@@ -38,7 +38,7 @@ export function OutputWidthInput(props: {dolphinResolution: DolphinResolution, d
     <div>
       <label htmlFor="output-width-preset">Output video width: </label>
       <select {...register("output-width-preset", {
-        required: true, onChange: updateOutputWidthPreset})}>
+        required: false, onChange: updateOutputWidthPreset})}>
         <option value="none">Don't rescale</option>
         <option value="3840">3840 (2160p/4k)</option>
         <option value="2560">2560 (1440p/2k)</option>
