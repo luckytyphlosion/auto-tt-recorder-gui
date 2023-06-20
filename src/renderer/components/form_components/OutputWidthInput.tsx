@@ -15,22 +15,24 @@ const recommendedOutputWidths: {[k in DolphinResolution]: string} = {
   "480p": "none"
 }
 
-export function OutputWidthInput(props: {callbackReceiver: any}) {
+export function OutputWidthInput(props: {dolphinResolution: DolphinResolution, dolphinResolutionToggle: boolean}) {
   const {register, setValue, getValues} = useFormContext();
   const [outputWidthPreset, setOutputWidthPreset] = useState(getValues("output-width-preset"));
+  const [dolphinResolutionToggle, setDolphinResolutionToggle] = useState(props.dolphinResolutionToggle);
   const renderCounter = useRenderCounter();
 
   function updateOutputWidthPreset(event: Event) {
     setOutputWidthPreset(getValues("output-width-preset"));
   }
 
-  function updateOutputWidthPresetOutside(dolphinResolution: DolphinResolution) {
-    let newOutputWidthPreset = recommendedOutputWidths[dolphinResolution];
+  console.log("props.dolphinResolutionToggle:", props.dolphinResolutionToggle);
+
+  if (dolphinResolutionToggle != props.dolphinResolutionToggle) {
+    let newOutputWidthPreset = recommendedOutputWidths[props.dolphinResolution];
     setValue("output-width-preset", newOutputWidthPreset, {shouldTouch: true});
     setOutputWidthPreset(newOutputWidthPreset);
+    setDolphinResolutionToggle(props.dolphinResolutionToggle);
   }
-
-  props.callbackReceiver(updateOutputWidthPresetOutside);
 
   return (
     <div>
