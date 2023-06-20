@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { useFormContext } from "react-hook-form";
 import useRenderCounter from "../../RenderCounter";
 import { OutputWidthInput } from "./OutputWidthInput";
@@ -6,12 +6,12 @@ import { OutputWidthInput } from "./OutputWidthInput";
 export function DolphinResolutionInput() {
   const {register, getValues} = useFormContext();
   const renderCounter = useRenderCounter();
-  const dolphinResolution = useRef(getValues("dolphin-resolution"));
-  const dolphinResolutionToggle = useRef(false);
+  const [dolphinResolution, setDolphinResolution] = useState(getValues("dolphin-resolution"));
+  const [dolphinResolutionToggle, setDolphinResolutionToggle] = useState(false);
 
   function updateDolphinResolution(event: Event) {
-    dolphinResolution.current = getValues("dolphin-resolution");
-    dolphinResolutionToggle.current = !dolphinResolutionToggle.current;
+    setDolphinResolution(getValues("dolphin-resolution"));
+    setDolphinResolutionToggle(!dolphinResolutionToggle);
   }
 
   return (
@@ -26,7 +26,7 @@ export function DolphinResolutionInput() {
         <option value="480p">480p</option>
       </select>
       {renderCounter}
-      <OutputWidthInput dolphinResolution={dolphinResolution.current} dolphinResolutionToggle={dolphinResolutionToggle.current}/>
+      <OutputWidthInput dolphinResolution={dolphinResolution} dolphinResolutionToggle={dolphinResolutionToggle}/>
     </div>
   );
 }
