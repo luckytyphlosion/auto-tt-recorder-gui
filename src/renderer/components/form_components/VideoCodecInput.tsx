@@ -1,17 +1,25 @@
 import React, { useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { MusicFilenameInput } from "./MusicFilenameInput";
-import { Top10LocationRegionalInput } from "./Top10LocationRegionalInput";
+import { OutputVideoFileFormatInput } from "./OutputVideoFileFormatInput";
 import { CRFEncodeSettingsLayout } from "../layout_components/CRFEncodeSettingsLayout";
 import useRenderCounter from "../../RenderCounter";
+import { EncodeType } from "../../helper-types";
 
-export function VideoCodecInput(props: {encodeType: string}) {
-  const {register, getValues} = useFormContext();
-  //const [videoCodec, setVideoCodec] = useState(getValues("video-codec"));
-  const renderCounter = useRenderCounter(true);
+export function VideoCodecInput(props: {encodeType: EncodeType}) {
+  const {register, getValues, setValue} = useFormContext();
+  const [videoCodec, setVideoCodec] = useState(getValues("video-codec"));
+  const renderCounter = useRenderCounter(false);
 
   function updateVideoCodec(event: Event) {
-    //setVideoCodec(getValues("video-codec"));
+    setVideoCodec(getValues("video-codec"));
+  }
+
+  let videoCodecForm = getValues("video-codec");
+
+  if ((props.encodeType === "crf" && videoCodecForm === "libvpx-vp9")
+    || (props.encodeType === "size" && videoCodecForm === "libx265")) {
+    setValue("video-codec", "libx264", {shouldTouch: true});
   }
 
   return (
@@ -24,6 +32,7 @@ export function VideoCodecInput(props: {encodeType: string}) {
           <option value="libx265">libx265</option> : <option value="libvpx-vp9">libvpx-vp9</option>}
       </select>
       {renderCounter}
+      <OutputVideoFileFormatInput videoCodec={videoCodec}/>
     </div>
   );
 }

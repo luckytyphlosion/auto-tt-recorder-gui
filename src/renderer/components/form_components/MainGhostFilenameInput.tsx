@@ -17,7 +17,7 @@ export function MainGhostFilenameInput() {
     <div>
       <label htmlFor="main-ghost-filename">RKG file to record:</label>
       <input type="text" readOnly
-        {...register("main-ghost-filename", {required: false})}
+        {...register("main-ghost-filename", {required: true})}
       ></input>
       <button onClick={event => {
         queueOpenDialog(event, [

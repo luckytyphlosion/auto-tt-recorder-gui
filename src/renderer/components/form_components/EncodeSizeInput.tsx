@@ -40,7 +40,7 @@ const MAX_ENCODE_SIZE = 274877906944; // 256GiB, max that youtube allows
 
 export function EncodeSizeInput() {
   const {register, setValue, getValues, control} = useFormContext();
-  const renderCounter = useRenderCounter();
+  const renderCounter = useRenderCounter(true);
 
   function updateEncodeSizeDisplayed(event: Event | null) {
     let encodeSizeDisplayed = getValues("encode-size-displayed");

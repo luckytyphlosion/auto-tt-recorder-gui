@@ -10,8 +10,8 @@ export function CRFEncodeSettingsLayout(props: {encodeTypeChanged: boolean}) {
 
   return (
     <div>
-      <CRFValueInput/>
       <VideoCodecInput encodeType="crf"/>
+      <CRFValueInput/>
       <H26xPresetInput/>
       <AudioCodecAndBitrateInput encodeType="crf" encodeTypeChanged={props.encodeTypeChanged}/>
     </div>
