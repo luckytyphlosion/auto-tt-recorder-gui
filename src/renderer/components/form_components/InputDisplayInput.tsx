@@ -8,7 +8,7 @@ export function InputDisplayInput() {
     <div>
       <label htmlFor="input-display">Input Display: </label>
       <label htmlFor="input-display-gcn-classic">GCN/Classic: </label>
-      <input type="radio" id="input-display-gcn-classic" value="gcn-classic"
+      <input type="radio" id="input-display-gcn-classic" value="gcn"
         {...register("input-display")}
       ></input>
       <label htmlFor="input-display-none">None: </label>

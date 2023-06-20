@@ -5,9 +5,10 @@ import { ErrorMessage } from "@hookform/error-message";
 export function ChadsoftGhostPageInput() {
   const {register, formState} = useFormContext();
 
+  console.log("formState.isSubmitted:", formState.isSubmitted);
+
   return (
     <div>
-      <span>
         <label htmlFor="chadsoft-ghost-page">Chadsoft ghost page link: </label>
         <input type="text"
           {...register("chadsoft-ghost-page", {
@@ -21,6 +22,12 @@ export function ChadsoftGhostPageInput() {
             }
           })}
         ></input>
+        <ErrorMessage
+          errors={formState.errors}
+          name="chadsoft-ghost-page"
+          render={({ message }) => <p style={{display: "inline"}}>{message}</p>}
+        />
+
         {/*<ErrorMessage
           errors={formState.errors}
           name="chadsoft-ghost-page"
@@ -37,7 +44,6 @@ export function ChadsoftGhostPageInput() {
             }
           }}
         />*/}
-      </span>
     </div>
   );
 }

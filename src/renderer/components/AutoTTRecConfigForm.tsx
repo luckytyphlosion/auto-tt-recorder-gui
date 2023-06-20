@@ -1,4 +1,4 @@
-import React, { useState, ReactNode } from "react";
+import React, { useState, ReactNode, useEffect } from "react";
 
 import { AutoTTRecArgs } from "../../auto-tt-rec-args";
 import { useForm, FormProvider, UseFormRegister, UseFormSetValue, FieldValues } from "react-hook-form";
@@ -152,14 +152,32 @@ export function AutoTTRecConfigForm(props: {whichUI: boolean}) {
   //const isoWbfsFileInput = <ISOWBFSFileInput/>;
   //const mainGhostFilenameInput = <MainGhostFilenameInput arg={1}/>;
 
-  function onSubmit(d: any) {
+  const [errorData, setErrorData] = useState({});
+
+  let formState = formMethods.formState;
+
+  useEffect(() => {
+    if (formState.isSubmitted) {
+      console.log("formState: isSubmitted:", formState.isSubmitted, ", isSubmitSuccessful:", formState.isSubmitSuccessful);
+    }
+  }, [formState, errorData, formMethods.reset]);
+
+  function onSubmit(d: Object) {
     console.log(d);
   }
+
+  function onError(errors: Object) {
+    console.log("errors:", errors);
+    setErrorData(errors);
+    //console.log("formMethods.formState.isSubmitSuccessful:", formMethods.formState.isSubmitSuccessful);
+    //console.log("formMethods.formState.isSubmitted:", formMethods.formState.isSubmitted);
+  }
+
   // <AutoTTRecConfigFormComponents/>
   return (
     <div>
       <FormProvider {...formMethods}>
-        <form onSubmit={formMethods.handleSubmit(onSubmit)}>
+        <form onSubmit={formMethods.handleSubmit(onSubmit, onError)}>
           <AutoTTRecConfigFormComponents whichUI={props.whichUI}/>
           <AutoTTRecSubmitAbortButtons/>
         </form>
