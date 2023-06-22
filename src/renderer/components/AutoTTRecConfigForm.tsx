@@ -164,6 +164,8 @@ export function AutoTTRecConfigForm(props: {whichUI: boolean}) {
 
   function onSubmit(d: Object) {
     console.log(d);
+    console.log("formState.dirtyFields:", formState.dirtyFields);
+    console.log("formState.touchedFields:", formState.touchedFields);
   }
 
   function onError(errors: Object) {
