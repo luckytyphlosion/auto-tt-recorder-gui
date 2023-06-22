@@ -37,21 +37,11 @@ export function OutputVideoFileFormatInput(props: {videoCodec: string}) {
       <select {...register("output-video-file-format", {
         required: false})}>
         {
-          props.videoCodec === "libvpx-vp9" ? 
-          <>
-            <option value="mkv">mkv</option>
-            <option value="webm">webm</option>
-          </> : ""
-        }
-        {
-          (props.videoCodec === "libx264" || props.videoCodec === "libx265") ?
-          <>
-            <option value="mp4">mp4</option>
-            <option value="mkv">mkv</option>
-          </>
-           :
+          props.videoCodec === "libvpx-vp9" ? <option value="webm">webm</option> :
+          (props.videoCodec === "libx264" || props.videoCodec === "libx265") ? <option value="mp4">mp4</option> :
           ""
         }
+        <option value="mkv">mkv</option>
       </select>
       {renderCounter}
     </div>
