@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useFormContext } from "react-hook-form";
+import { useFormContext, useWatch } from "react-hook-form";
 import { MusicFilenameInput } from "./MusicFilenameInput";
 import { OutputVideoFileFormatInput } from "./OutputVideoFileFormatInput";
 import { CRFEncodeSettingsLayout } from "../layout_components/CRFEncodeSettingsLayout";
@@ -8,6 +8,9 @@ import { EncodeType } from "../../helper-types";
 
 export function VideoCodecInput(props: {encodeType: EncodeType}) {
   const {register, getValues, setValue} = useFormContext();
+  //const videoCodec = useWatch({name: "video-codec"});
+  //console.log("VideoCodecInput videoCodec:", videoCodec);
+
   const [videoCodec, setVideoCodec] = useState(getValues("video-codec"));
   const renderCounter = useRenderCounter(false);
 
