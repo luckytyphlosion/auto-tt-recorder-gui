@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { useFormContext, UseFormRegister, FieldValues, UseFormRegisterReturn, Controller } from "react-hook-form";
+import { useFormContext, UseFormRegister, FieldValues, UseFormRegisterReturn, Controller, ValidateResult } from "react-hook-form";
 import useRenderCounter from "../../RenderCounter";
 
 import { EncodeType, AudioCodec, AudioBitrateUnit } from "../../helper-types";
+
+import { SimpleErrorMessage } from "../SimpleErrorMessage";
 
 const defaultAudioBitrates = {
   crf: {
@@ -27,8 +29,11 @@ function getDefaultAudioBitrateDisplayed(encodeType: EncodeType, audioCodec: Aud
   return bitrate;
 }
 
-const MIN_AUDIO_BITRATE = 1;
+const MIN_AUDIO_BITRATE = 1000;
+const MIN_AUDIO_BITRATE_KBPS = Math.floor(MIN_AUDIO_BITRATE / 1000);
 const MAX_AUDIO_BITRATE = 100000000; // 100000k
+const MAX_AUDIO_BITRATE_KBPS = Math.floor(MAX_AUDIO_BITRATE / 1000);
+
 const MAX_AUDIO_BITRATE_LENGTH = MAX_AUDIO_BITRATE.toString().length;
 
 export function AudioBitrateInput(props: {encodeType: EncodeType, audioCodec: AudioCodec, resetToDefaultAudioBitrate: boolean}) {
@@ -37,10 +42,10 @@ export function AudioBitrateInput(props: {encodeType: EncodeType, audioCodec: Au
 
   function updateAudioBitrateDisplayed(event: Event | null) {
     let audioBitrateDisplayed = getValues("audio-bitrate-displayed");
-    let audioBitrateKbpsUnit = getValues("audio-bitrate-unit");
+    let audioBitrateUnit = getValues("audio-bitrate-unit");
     let audioBitrate;
 
-    if (audioBitrateKbpsUnit === "kbps") {
+    if (audioBitrateUnit === "kbps") {
       audioBitrate = audioBitrateDisplayed * 1000;
     } else {
       audioBitrate = audioBitrateDisplayed;
@@ -67,7 +72,10 @@ export function AudioBitrateInput(props: {encodeType: EncodeType, audioCodec: Au
         // 64kbps -> 64000
         audioBitrateDisplayed = Math.floor(audioBitrate);
       }
-      if (Number.isNaN(audioBitrateDisplayed) || audioBitrateDisplayed < MIN_AUDIO_BITRATE || audioBitrateDisplayed > MAX_AUDIO_BITRATE) {
+      if (Number.isNaN(audioBitrateDisplayed)) {
+        useDefaultAudioBitrate = true;
+      } else if (audioBitrateUnit === "kbps"
+        && (audioBitrateDisplayed < MIN_AUDIO_BITRATE_KBPS || audioBitrateDisplayed > MAX_AUDIO_BITRATE_KBPS)) {
         useDefaultAudioBitrate = true;
       }
     }
@@ -89,16 +97,36 @@ export function AudioBitrateInput(props: {encodeType: EncodeType, audioCodec: Au
     setValue("audio-bitrate-displayed", audioBitrateDisplayed, {shouldTouch: true});
   }
 
+  function validateAudioBitrate(value: number) : ValidateResult {
+    if (Number.isNaN(value)) {
+      return "This input is required.";
+    }
+    if (value >= MIN_AUDIO_BITRATE && value <= MAX_AUDIO_BITRATE) {
+      return true;
+    } else {
+      let audioBitrateUnit = getValues("audio-bitrate-unit");
+      if (audioBitrateUnit === "kbps") {
+        return `Audio bitrate must be between ${MIN_AUDIO_BITRATE_KBPS}kbps and ${MAX_AUDIO_BITRATE_KBPS}kbps.`
+      } else {
+        return `Audio bitrate must be between ${MIN_AUDIO_BITRATE}bps and ${MAX_AUDIO_BITRATE}bps.`;
+      }
+    }
+  }
+
   return (
     <div>
       <label htmlFor="audio-bitrate">Audio bitrate: </label>
-      <input type="hidden" {...register("audio-bitrate")}/>
+      <input type="hidden" {...register("audio-bitrate", {required: {
+          value: true,
+          message: "This input is required."
+        }, validate: validateAudioBitrate})}/>
       <input type="number" onKeyPress={(e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key.match(/\D/g)) {
           e.preventDefault();
         }
-      }} min={MIN_AUDIO_BITRATE} max={MAX_AUDIO_BITRATE}
-        {...register("audio-bitrate-displayed", {required: false, onChange: updateAudioBitrateDisplayed, valueAsNumber: true})}
+      }}
+        {...register("audio-bitrate-displayed", {
+        onChange: updateAudioBitrateDisplayed, valueAsNumber: true})}
       ></input>
       <label htmlFor="audio-bitrate-unit">kbps</label>
       <input type="radio" id="audio-bitrate-unit-kbps" value="kbps"
@@ -108,7 +136,7 @@ export function AudioBitrateInput(props: {encodeType: EncodeType, audioCodec: Au
       <input type="radio" id="audio-bitrate-unit-bps" value="bps"
         {...register("audio-bitrate-unit", {onChange: updateAudioBitrateUnit})}
       ></input>
-
+      <SimpleErrorMessage name="audio-bitrate"/>
       {renderCounter}
     </div>
   );
