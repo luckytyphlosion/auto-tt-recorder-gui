@@ -5,9 +5,12 @@ import useRenderCounter from "../../RenderCounter";
 import { ChadsoftGhostPageInput } from "./ChadsoftGhostPageInput";
 import { MainGhostFilenameInput } from "./MainGhostFilenameInput";
 
+import { AutoTTRecConfigFormFieldTypes } from "../AutoTTRecConfigForm";
+import { MainGhostSource } from "../../helper-types";
+
 export function MainGhostSourceInput() {
-  const {register, getValues} = useFormContext();
-  const [mainGhostSource, setMainGhostSource] = useState(getValues("main-ghost-source"));
+  const {register, getValues} = useFormContext<AutoTTRecConfigFormFieldTypes>();
+  const [mainGhostSource, setMainGhostSource] = useState<MainGhostSource>(getValues("main-ghost-source"));
   const renderCounter = useRenderCounter(true);
 
   function updateMainGhostSource(event: Event) {

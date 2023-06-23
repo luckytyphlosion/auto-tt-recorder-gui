@@ -1,6 +1,5 @@
 import React, { useState, ReactNode, useEffect } from "react";
 
-import { AutoTTRecArgs } from "../../auto-tt-rec-args";
 import { useForm, FormProvider, UseFormRegister, UseFormSetValue, FieldValues } from "react-hook-form";
 
 import { ISOWBFSFileInput } from "./form_components/ISOWBFSFileInput";
@@ -12,7 +11,7 @@ import AutoTTRecSubmitAbortButtons from "./AutoTTRecSubmitAbortButtons";
 import { AutoTTRecConfigFormComponents } from "./AutoTTRecConfigFormComponents";
 import { MainGhostFilenameInput } from "./form_components/MainGhostFilenameInput";
 
-import { EncodeType, AudioCodec, AudioBitrateUnit, EncodeSizeUnit } from "../helper-types";
+import { EncodeType, AudioCodec, AudioBitrateUnit, EncodeSizeUnit, MainGhostSource } from "../helper-types";
 
 import useRenderCounter from "../RenderCounter";
 
@@ -29,7 +28,7 @@ defaultValues: {
 
 }
 
-interface AutoTTRecConfigFormFieldTypes {
+export interface AutoTTRecConfigFormFieldTypes {
   "audio-bitrate": number,
   "audio-bitrate-displayed": number,
   "audio-bitrate-unit": AudioBitrateUnit,
@@ -55,7 +54,7 @@ interface AutoTTRecConfigFormFieldTypes {
   "iso-filename": string,
   "keep-window": boolean,
   "main-ghost-filename": string,
-  "main-ghost-source": string,
+  "main-ghost-source": MainGhostSource,
   "mk-channel-ghost-description": string,
   "music-filename": string,
   "music-volume-numberinput": number,
@@ -85,6 +84,34 @@ interface AutoTTRecConfigFormFieldTypes {
   "use-ffv1": boolean,
   "video-codec": string,
   "youtube-settings": boolean,
+}
+
+
+interface AutoTTRecArgs {
+  "iso-filename": string,
+  "main-ghost-filename"?: string,
+  "chadsoft-ghost-page"?: string,
+  "on-200cc"?: boolean
+
+}
+
+export function convertFormDataToAutoTTRecArgs(formData: AutoTTRecConfigFormFieldTypes) {
+  let autoTTRecArgs: AutoTTRecArgs = {
+    "iso-filename": formData["iso-filename"]
+  };
+
+  if (formData["main-ghost-source"] === "chadsoft") {
+    autoTTRecArgs["chadsoft-ghost-page"] = formData["chadsoft-ghost-page"];
+  } else if (formData["main-ghost-source"] === "rkg") {
+    autoTTRecArgs["main-ghost-filename"] = formData["main-ghost-filename"];
+    if (formData["set-200cc"] === "on-200cc") {
+      autoTTRecArgs["on-200cc"] = true;
+    }
+  }
+
+  //if (formData[""])
+
+  return autoTTRecArgs;
 }
 
 export function AutoTTRecConfigForm(props: {whichUI: boolean}) {  
@@ -162,10 +189,11 @@ export function AutoTTRecConfigForm(props: {whichUI: boolean}) {
     }
   }, [formState, errorData, formMethods.reset]);
 
-  function onSubmit(d: Object) {
-    console.log(d);
+  function onSubmit(formData: AutoTTRecConfigFormFieldTypes) {
+    console.log(formData);
     console.log("formState.dirtyFields:", formState.dirtyFields);
     console.log("formState.touchedFields:", formState.touchedFields);
+    let autoTTRecArgs = convertFormDataToAutoTTRecArgs(formData);
   }
 
   function onError(errors: Object) {
