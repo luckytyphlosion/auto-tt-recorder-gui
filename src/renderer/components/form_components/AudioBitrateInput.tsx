@@ -120,10 +120,11 @@ export function AudioBitrateInput(props: {encodeType: EncodeType, audioCodec: Au
           value: true,
           message: "This input is required."
         }, validate: validateAudioBitrate})}/>
-      <input type="number" onKeyPress={(e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key.match(/\D/g)) {
-          e.preventDefault();
-        }
+      <input type="number" onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+        //console.log("e.key:", e.key);
+        //if (e.key.match(/\D/g)) {
+        //  e.preventDefault();
+        //}
       }}
         {...register("audio-bitrate-displayed", {
         onChange: updateAudioBitrateDisplayed, valueAsNumber: true})}

@@ -61,6 +61,7 @@ export function AutoTTRecConfigFormComponents(props: {whichUI: boolean}) {
     <>
       <ISOWBFSFileInput/>
       <MarioKartChannelLayout/>
+      <OutputVideoFilenameInput/>
       {/*<TimelineCategoryInput noTop10Child={<NoTop10CategoryInput/>} top10ChadsoftChild={<div></div>} top10GeckoChild={<div></div>}/>*/}
       {/*<MainGhostFilenameInput arg={1}/>
       <ChadsoftGhostPageInput/>

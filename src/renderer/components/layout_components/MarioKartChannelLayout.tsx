@@ -62,7 +62,7 @@ export function MarioKartChannelLayout() {
       <InputDisplayDontCreateInput/>
       <KeepWindowInput/>
       <DolphinResolutionInput/>
-      <OutputVideoFilenameInput/>
+      
 
     </div>
   );

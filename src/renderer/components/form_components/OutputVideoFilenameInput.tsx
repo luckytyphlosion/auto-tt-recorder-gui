@@ -2,6 +2,7 @@ import React from "react";
 import { FileFilter } from "electron";
 
 import { useFormContext } from "react-hook-form";
+import { SimpleErrorMessage } from "../SimpleErrorMessage";
 
 export function OutputVideoFilenameInput() {
   const {register, setValue, getValues} = useFormContext();
@@ -16,7 +17,10 @@ export function OutputVideoFilenameInput() {
       <label htmlFor="output-video-filename">Output filename: </label>
       <input
         className="filename-input" type="text"
-        {...register("output-video-filename", {required: false})}
+        {...register("output-video-filename", {required: {
+          value: true,
+          message: "This input is required."
+        }})}
       ></input>
       <button onClick={event => {
         let outputVideoFileFormat = getValues("output-video-file-format");
@@ -24,6 +28,7 @@ export function OutputVideoFilenameInput() {
           {name: `${outputVideoFileFormat} files`, extensions: [outputVideoFileFormat]}
         ]);
       }} type="button">Export as&#8230;</button>
+      <SimpleErrorMessage name="output-video-filename"/>
     </div>
   );
 }
