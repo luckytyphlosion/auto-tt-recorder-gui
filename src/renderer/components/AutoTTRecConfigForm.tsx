@@ -11,7 +11,7 @@ import AutoTTRecSubmitAbortButtons from "./AutoTTRecSubmitAbortButtons";
 import { AutoTTRecConfigFormComponents } from "./AutoTTRecConfigFormComponents";
 import { MainGhostFilenameInput } from "./form_components/MainGhostFilenameInput";
 
-import { EncodeType, AudioCodec, AudioBitrateUnit, EncodeSizeUnit } from "../helper-types";
+import { AudioCodec, AudioBitrateUnit, EncodeSizeUnit } from "../helper-types";
 
 import { MainGhostSource } from "./form_components/MainGhostSourceInput";
 import { ComparisonGhostSource } from "./form_components/ComparisonGhostSourceInput";
@@ -27,6 +27,8 @@ import { InputDisplay } from "./form_components/InputDisplayInput";
 import { SpeedometerStyle } from "./form_components/SpeedometerInput";
 import { SpeedometerMetric } from "./form_components/SpeedometerMetricInput";
 import { SpeedometerDecimalPlaces } from "./form_components/SpeedometerDecimalPlacesInput";
+
+import { EncodeType } from "./form_components/EncodeTypeInput";
 
 import useRenderCounter from "../RenderCounter";
 
@@ -118,7 +120,8 @@ interface AutoTTRecArgs {
   "speedometer-decimal-places"?: SpeedometerDecimalPlaces,
   "hq-textures"?: boolean,
   "no-background-blur"?: boolean,
-  "no-bloom"?: boolean
+  "no-bloom"?: boolean,
+  "encode-type": EncodeType,
 }
 
 class AutoTTRecArgsBuilder {
@@ -128,7 +131,8 @@ class AutoTTRecArgsBuilder {
   constructor(formData: AutoTTRecConfigFormFieldTypes) {
     this._autoTTRecArgs = {
       "iso-filename": "",
-      "speedometer": "fancy"
+      "speedometer": "fancy",
+      "encode-type": "crf"
     };
     this.formData = formData;
   }

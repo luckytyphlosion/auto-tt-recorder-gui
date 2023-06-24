@@ -5,6 +5,8 @@ import { SizeBasedEncodeSettingsLayout } from "../layout_components/SizeBasedEnc
 import { CRFEncodeSettingsLayout } from "../layout_components/CRFEncodeSettingsLayout";
 import useRenderCounter from "../../RenderCounter";
 
+export type EncodeType = "crf" | "size";
+
 export function EncodeTypeInput() {
   const {register, getValues} = useFormContext();
   const [encodeType, setEncodeType] = useState(getValues("encode-type"));

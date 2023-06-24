@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import { useFormContext, UseFormRegister, FieldValues, UseFormRegisterReturn, Controller } from "react-hook-form";
 import useRenderCounter from "../../RenderCounter";
 
-import { EncodeType, AudioCodec, EncodeSizeUnit } from "../../helper-types";
+import { AudioCodec, EncodeSizeUnit } from "../../helper-types";
+
+import { EncodeType } from "./EncodeTypeInput";
+
 /*
 const defaultEncodeSizes = {
   crf: {

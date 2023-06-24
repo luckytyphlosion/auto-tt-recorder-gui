@@ -4,8 +4,9 @@ import { useFormContext } from "react-hook-form";
 import { MusicFilenameInput } from "./MusicFilenameInput";
 import { Top10LocationRegionalInput } from "./Top10LocationRegionalInput";
 import { AudioBitrateInput } from "./AudioBitrateInput";
-import { EncodeType } from "../../helper-types";
 import useRenderCounter from "../../RenderCounter";
+
+import { EncodeType } from "./EncodeTypeInput";
 
 export function AudioCodecAndBitrateInput(props: {encodeType: EncodeType, encodeTypeChanged: boolean}) {
   const {register, getValues} = useFormContext();

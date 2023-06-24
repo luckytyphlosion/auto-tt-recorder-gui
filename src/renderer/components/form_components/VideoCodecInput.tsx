@@ -4,7 +4,10 @@ import { MusicFilenameInput } from "./MusicFilenameInput";
 import { OutputVideoFileFormatInput } from "./OutputVideoFileFormatInput";
 import { CRFEncodeSettingsLayout } from "../layout_components/CRFEncodeSettingsLayout";
 import useRenderCounter from "../../RenderCounter";
-import { EncodeType } from "../../helper-types";
+
+import { EncodeType } from "./EncodeTypeInput";
+
+export type VideoCodec = "libx264" | "libx265" | "libvpx-vp9";
 
 export function VideoCodecInput(props: {encodeType: EncodeType}) {
   const {register, setValue} = useFormContext();

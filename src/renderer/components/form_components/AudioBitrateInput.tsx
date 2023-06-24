@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { useFormContext, UseFormRegister, FieldValues, UseFormRegisterReturn, Controller, ValidateResult } from "react-hook-form";
 import useRenderCounter from "../../RenderCounter";
 
-import { EncodeType, AudioCodec, AudioBitrateUnit } from "../../helper-types";
+import { AudioCodec, AudioBitrateUnit } from "../../helper-types";
 
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
+
+import { EncodeType } from "./EncodeTypeInput";
 
 const defaultAudioBitrates = {
   crf: {
