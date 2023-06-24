@@ -1,9 +1,9 @@
 import React from "react";
-import { useFormContext } from "react-hook-form";
+import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
 
 export function TrackNameInput() {
-  const {register} = useFormContext();
+  const {register} = useFormContextAutoTT();
 
   return (
     <div>

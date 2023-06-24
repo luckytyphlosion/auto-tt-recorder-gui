@@ -1,9 +1,9 @@
 import React from "react";
-import { useFormContext, ValidateResult } from "react-hook-form";
+import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
 
 export function ChadsoftGhostPageInput() {
-  const {register, formState} = useFormContext();
+  const {register, formState} = useFormContextAutoTT();
 
   console.log("formState.isSubmitted:", formState.isSubmitted);
 

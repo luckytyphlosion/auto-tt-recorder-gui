@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { AutoTTRecArgs } from "../../../auto-tt-rec-args";
 import useRenderCounter from "../../RenderCounter";
-import { useFormContext } from "react-hook-form";
+import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { FileFilter } from "electron";
 import { Set200ccInput } from "./Set200ccInput";
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
 
 export function MainGhostFilenameInput() {
-  const {register, setValue} = useFormContext();
+  const {register, setValue} = useFormContextAutoTT();
 
   async function queueOpenDialog(event: React.MouseEvent<HTMLButtonElement>, fileFilters: FileFilter[]) {
     let response = await window.api.openFileDialog(fileFilters);

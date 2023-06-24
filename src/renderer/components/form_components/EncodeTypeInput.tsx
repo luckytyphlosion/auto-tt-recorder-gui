@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useFormContext } from "react-hook-form";
+import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { MusicFilenameInput } from "./MusicFilenameInput";
 import { SizeBasedEncodeSettingsLayout } from "../layout_components/SizeBasedEncodeSettingsLayout";
 import { CRFEncodeSettingsLayout } from "../layout_components/CRFEncodeSettingsLayout";
@@ -8,7 +8,7 @@ import useRenderCounter from "../../RenderCounter";
 export type EncodeType = "crf" | "size";
 
 export function EncodeTypeInput() {
-  const {register, getValues} = useFormContext();
+  const {register, getValues} = useFormContextAutoTT();
   const [encodeType, setEncodeType] = useState(getValues("encode-type"));
   const [encodeTypeChanged, setEncodeTypeChanged] = useState(false);
   const renderCounter = useRenderCounter(true);

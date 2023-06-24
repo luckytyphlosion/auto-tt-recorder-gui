@@ -1,9 +1,9 @@
 import React from "react";
-import { useFormContext } from "react-hook-form";
+import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { ErrorMessage } from "@hookform/error-message";
 
 export function Top10HighlightInput() {
-  const {register, formState} = useFormContext();
+  const {register, formState} = useFormContextAutoTT();
 
   return (
     <div>

@@ -1,10 +1,10 @@
 
 
 import React from "react";
-import { useFormContext } from "react-hook-form";
+import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 
 export function YoutubeSettingsInput() {
-  const {register} = useFormContext();
+  const {register} = useFormContextAutoTT();
   return (
     <div>
       <label htmlFor="youtube-settings">Enable recommended encode settings for YouTube: </label>

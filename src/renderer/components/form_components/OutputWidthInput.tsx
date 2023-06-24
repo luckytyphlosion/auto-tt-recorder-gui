@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { useFormContext } from "react-hook-form";
+import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { MusicFilenameInput } from "./MusicFilenameInput";
 import { Top10LocationRegionalInput } from "./Top10LocationRegionalInput";
 import { OutputWidthCustomInput } from "./OutputWidthCustomInput";
 
-import { DolphinResolution } from "../../helper-types";
+import { DolphinResolution } from "./DolphinResolutionInput";
 import useRenderCounter from "../../RenderCounter";
 
 const recommendedOutputWidths: {[k in DolphinResolution]: string} = {
@@ -16,7 +16,7 @@ const recommendedOutputWidths: {[k in DolphinResolution]: string} = {
 }
 
 export function OutputWidthInput(props: {dolphinResolution: DolphinResolution, dolphinResolutionToggle: boolean}) {
-  const {register, setValue, getValues} = useFormContext();
+  const {register, setValue, getValues} = useFormContextAutoTT();
   const [outputWidthPreset, setOutputWidthPreset] = useState(getValues("output-width-preset"));
   const [dolphinResolutionToggle, setDolphinResolutionToggle] = useState(props.dolphinResolutionToggle);
   const renderCounter = useRenderCounter(true);

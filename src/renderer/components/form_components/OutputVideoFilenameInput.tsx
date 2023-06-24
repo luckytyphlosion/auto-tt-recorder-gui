@@ -1,11 +1,11 @@
 import React from "react";
 import { FileFilter } from "electron";
 
-import { useFormContext } from "react-hook-form";
+import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
 
 export function OutputVideoFilenameInput() {
-  const {register, setValue, getValues} = useFormContext();
+  const {register, setValue, getValues} = useFormContextAutoTT();
 
   async function queueSaveDialog(event: React.MouseEvent<HTMLButtonElement>, fileFilters: FileFilter[]) {
     let response = await window.api.saveFileDialog(fileFilters);

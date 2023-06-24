@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { useFormContext, UseFormRegister, FieldValues, UseFormRegisterReturn, Controller, ValidateResult } from "react-hook-form";
+import { UseFormRegister, FieldValues, UseFormRegisterReturn, Controller, ValidateResult } from "react-hook-form";
+import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import useRenderCounter from "../../RenderCounter";
 
 import { AudioCodec, AudioBitrateUnit } from "../../helper-types";
@@ -39,7 +40,7 @@ const MAX_AUDIO_BITRATE_KBPS = Math.floor(MAX_AUDIO_BITRATE / 1000);
 const MAX_AUDIO_BITRATE_LENGTH = MAX_AUDIO_BITRATE.toString().length;
 
 export function AudioBitrateInput(props: {encodeType: EncodeType, audioCodec: AudioCodec, resetToDefaultAudioBitrate: boolean}) {
-  const {register, setValue, getValues} = useFormContext();
+  const {register, setValue, getValues} = useFormContextAutoTT();
   const renderCounter = useRenderCounter(true);
 
   function updateAudioBitrateDisplayed(event: Event | null) {
@@ -62,7 +63,8 @@ export function AudioBitrateInput(props: {encodeType: EncodeType, audioCodec: Au
     console.log("updateAudioBitrateUnit audioBitrateUnit:", audioBitrateUnit);
     console.log("updateAudioBitrateUnit audioBitrate:", audioBitrate);
     let useDefaultAudioBitrate = false;
-    let audioBitrateDisplayed;
+    const unmodifiedAudioBitrateDisplayed = getDefaultAudioBitrateDisplayed(props.encodeType, props.audioCodec, audioBitrateUnit);
+    let audioBitrateDisplayed = unmodifiedAudioBitrateDisplayed;
 
     if (Number.isNaN(audioBitrate) || audioBitrate < MIN_AUDIO_BITRATE || audioBitrate > MAX_AUDIO_BITRATE) {
       useDefaultAudioBitrate = true;
@@ -83,7 +85,7 @@ export function AudioBitrateInput(props: {encodeType: EncodeType, audioCodec: Au
     }
 
     if (useDefaultAudioBitrate) {
-      audioBitrateDisplayed = getDefaultAudioBitrateDisplayed(props.encodeType, props.audioCodec, audioBitrateUnit);
+      audioBitrateDisplayed = unmodifiedAudioBitrateDisplayed;
     }
 
     setValue("audio-bitrate-displayed", audioBitrateDisplayed, {shouldTouch: true});

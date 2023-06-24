@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import { UseFormRegister, UseFormSetValue, FieldValues } from "react-hook-form";
-import { useFormContext } from "react-hook-form";
+import { useFormContextAutoTT } from "../use-form-context-auto-tt";
 
 import { ISOWBFSFileInput } from "./form_components/ISOWBFSFileInput";
 import { ChadsoftGhostPageInput } from "./form_components/ChadsoftGhostPageInput";

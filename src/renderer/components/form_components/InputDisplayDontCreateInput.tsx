@@ -1,9 +1,9 @@
 
 import React from "react";
-import { useFormContext } from "react-hook-form";
+import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 
 export function InputDisplayDontCreateInput() {
-  const {register} = useFormContext();
+  const {register} = useFormContextAutoTT();
   return (
     <div>
       <label htmlFor="input-display-dont-create">Assume input display file already exists (input-display-dont-create): </label>

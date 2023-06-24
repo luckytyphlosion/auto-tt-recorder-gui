@@ -1,17 +1,18 @@
 import React, { useState } from "react";
-import { useFormContext, useWatch } from "react-hook-form";
+import { useFormContextAutoTT, useWatchAutoTT } from "../../use-form-context-auto-tt";
 import { MusicFilenameInput } from "./MusicFilenameInput";
 import { OutputVideoFileFormatInput } from "./OutputVideoFileFormatInput";
 import { CRFEncodeSettingsLayout } from "../layout_components/CRFEncodeSettingsLayout";
 import useRenderCounter from "../../RenderCounter";
 
 import { EncodeType } from "./EncodeTypeInput";
+import { AutoTTRecConfigFormFieldTypes } from "../AutoTTRecConfigForm";
 
 export type VideoCodec = "libx264" | "libx265" | "libvpx-vp9";
 
 export function VideoCodecInput(props: {encodeType: EncodeType}) {
-  const {register, setValue} = useFormContext();
-  const videoCodec = useWatch({name: "video-codec"});
+  const {register, setValue} = useFormContextAutoTT();
+  const videoCodec = useWatchAutoTT({name: "video-codec"});
   const renderCounter = useRenderCounter(false);
 
   if ((props.encodeType === "crf" && videoCodec === "libvpx-vp9")

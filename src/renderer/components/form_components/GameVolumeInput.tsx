@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { useFormContext } from "react-hook-form";
+import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import useRenderCounter from "../../RenderCounter";
 import "../../styles/percent-input.css";
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
 
 export function GameVolumeInput() {
-  const {register, setValue, getValues} = useFormContext();
+  const {register, setValue, getValues} = useFormContextAutoTT();
   const renderCounter = useRenderCounter(true);
 
   function updateGameVolumeNumberInputFromSlider(event: Event) {

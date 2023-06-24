@@ -1,11 +1,11 @@
 import React from "react";
-import { useFormContext } from "react-hook-form";
+import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import useRenderCounter from "../../RenderCounter";
 
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
 
 export function OutputWidthCustomInput() {
-  const {register} = useFormContext();
+  const {register} = useFormContextAutoTT();
   const renderCounter = useRenderCounter();
 
   return (

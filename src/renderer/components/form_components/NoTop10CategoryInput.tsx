@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { useFormContext } from "react-hook-form";
+import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import useRenderCounter from "../../RenderCounter";
 
 import { MarioKartChannelLayout } from "../layout_components/MarioKartChannelLayout";
 
 export function NoTop10CategoryInput() {
-  const {register, getValues} = useFormContext();
+  const {register, getValues} = useFormContextAutoTT();
   const [noTop10Category, setNoTop10Category] = useState(getValues("no-top-10-category"));
   const renderCounter = useRenderCounter(true);
 

@@ -1,13 +1,13 @@
 
 import React from "react";
-import { useFormContext } from "react-hook-form";
+import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 
 export function QualityInput() {
-  const {register} = useFormContext();
+  const {register} = useFormContextAutoTT();
   return (
     <div>
       <label htmlFor="high-quality">High quality (1440p vs 480p): </label>
-      <input type="checkbox" {...register("high-quality")}/>
+      <input type="checkbox"/>
     </div>
   );
 }

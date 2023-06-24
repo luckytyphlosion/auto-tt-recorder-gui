@@ -1,5 +1,5 @@
 import React, { useState, ReactElement } from "react";
-import { useFormContext } from "react-hook-form";
+import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 
 import { ISOWBFSFileInput } from "../form_components/ISOWBFSFileInput";
 import { NoTop10CategoryInput } from "../form_components/NoTop10CategoryInput";
@@ -36,7 +36,7 @@ import { MusicVolumeInput } from "../form_components/MusicVolumeInput";
 import useRenderCounter from "../../RenderCounter";
 
 export function MarioKartChannelLayout() {
-  //const {register, getValues} = useFormContext();
+  //const {register, getValues} = useFormContextAutoTT();
   const [timelineCategory, setTimelineCategory] = useState("notop10");
   const renderCounter = useRenderCounter();
 

@@ -1,9 +1,9 @@
 
 import React from "react";
-import { useFormContext } from "react-hook-form";
+import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 
 export function UseFFV1Input() {
-  const {register} = useFormContext();
+  const {register} = useFormContextAutoTT();
   return (
     <div>
       <label htmlFor="use-ffv1">Use FFV1 (Lossless dumps): </label>

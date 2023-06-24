@@ -29,6 +29,10 @@ import { SpeedometerMetric } from "./form_components/SpeedometerMetricInput";
 import { SpeedometerDecimalPlaces } from "./form_components/SpeedometerDecimalPlacesInput";
 
 import { EncodeType } from "./form_components/EncodeTypeInput";
+import { OutputVideoFileFormat } from "./form_components/OutputVideoFileFormatInput";
+import { VideoCodec } from "./form_components/VideoCodecInput";
+
+import { DolphinResolution } from "./form_components/DolphinResolutionInput";
 
 import useRenderCounter from "../RenderCounter";
 
@@ -52,7 +56,7 @@ export interface AutoTTRecConfigFormFieldTypes {
   "comparison-ghost-filename": string,
   "comparison-ghost-source": ComparisonGhostSource,
   "crf-value": number,
-  "dolphin-resolution": string,
+  "dolphin-resolution": DolphinResolution,
   "encode-only": boolean,
   "encode-size": number,
   "encode-size-displayed": number,
@@ -78,6 +82,7 @@ export interface AutoTTRecConfigFormFieldTypes {
   "output-video-filename": string,
   "output-width-custom": number,
   "output-width-preset": string,
+  "output-video-file-format": OutputVideoFileFormat,
   "pixel-format": string,
   "set-200cc": string,
   "speedometer-decimal-places": SpeedometerDecimalPlaces,
@@ -95,10 +100,9 @@ export interface AutoTTRecConfigFormFieldTypes {
   "top-10-title": string,
   "track-name": string,
   "use-ffv1": boolean,
-  "video-codec": string,
+  "video-codec": VideoCodec,
   "youtube-settings": boolean,
 }
-
 
 interface AutoTTRecArgs {
   "iso-filename": string,
@@ -122,7 +126,7 @@ interface AutoTTRecArgs {
   "no-background-blur"?: boolean,
   "no-bloom"?: boolean,
   "encode-type": EncodeType,
-  "video-codec": string // VideoCodec
+  "video-codec": VideoCodec
 }
 
 class AutoTTRecArgsBuilder {

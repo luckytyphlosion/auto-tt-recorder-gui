@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useFormContext } from "react-hook-form";
+import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { MusicFilenameInput } from "./MusicFilenameInput";
 
 const regionalLocations = [
@@ -14,7 +14,7 @@ const regionalLocations = [
 export type Top10LocationRegional = typeof regionalLocations[number];
 
 export function Top10LocationRegionalInput() {
-  const {register} = useFormContext();
+  const {register} = useFormContextAutoTT();
 
   return (
     <>

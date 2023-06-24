@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { useFormContext } from "react-hook-form";
+import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import useRenderCounter from "../../RenderCounter";
 import { OutputWidthInput } from "./OutputWidthInput";
 
+export type DolphinResolution = "2160p" | "1440p" | "1080p" | "720p" | "480p";
+
 export function DolphinResolutionInput() {
-  const {register, getValues} = useFormContext();
+  const {register, getValues} = useFormContextAutoTT();
   const renderCounter = useRenderCounter(true);
   const [dolphinResolution, setDolphinResolution] = useState(getValues("dolphin-resolution"));
   const [dolphinResolutionToggle, setDolphinResolutionToggle] = useState(false);

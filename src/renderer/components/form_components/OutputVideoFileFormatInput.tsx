@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { useFormContext, useWatch } from "react-hook-form";
+import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { MusicFilenameInput } from "./MusicFilenameInput";
 import { Top10LocationRegionalInput } from "./Top10LocationRegionalInput";
 import { CRFEncodeSettingsLayout } from "../layout_components/CRFEncodeSettingsLayout";
+
+import { VideoCodec } from "./VideoCodecInput";
+
 import useRenderCounter from "../../RenderCounter";
 
-export function OutputVideoFileFormatInput(props: {videoCodec: string}) {
-  const {register, getValues, setValue} = useFormContext();
+export type OutputVideoFileFormat = "mp4" | "webm" | "mkv";
+
+export function OutputVideoFileFormatInput(props: {videoCodec: VideoCodec}) {
+  const {register, getValues, setValue} = useFormContextAutoTT();
   //const [videoCodec, setVideoCodec] = useState(getValues("video-codec"));
   const renderCounter = useRenderCounter();
   //const videoCodec = useWatch({name: "video-codec}"});

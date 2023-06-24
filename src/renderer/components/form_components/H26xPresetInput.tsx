@@ -1,9 +1,9 @@
 import React from "react";
-import { useFormContext } from "react-hook-form";
+import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import useRenderCounter from "../../RenderCounter";
 
 export function H26xPresetInput() {
-  const {register} = useFormContext();
+  const {register} = useFormContextAutoTT();
   const renderCounter = useRenderCounter(true);
 
   return (

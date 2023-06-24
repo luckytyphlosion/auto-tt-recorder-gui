@@ -1,9 +1,9 @@
 
 import React from "react";
-import { useFormContext } from "react-hook-form";
+import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 
 export function NoBackgroundBlurInput() {
-  const {register} = useFormContext();
+  const {register} = useFormContextAutoTT();
   return (
     <div>
       <label htmlFor="no-background-blur">No background blur: </label>

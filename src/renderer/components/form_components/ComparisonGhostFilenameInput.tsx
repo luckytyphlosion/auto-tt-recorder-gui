@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { useFormContext } from "react-hook-form";
+import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { FileFilter } from "electron";
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
 
 export function ComparisonGhostFilenameInput() {
-  const {register, setValue} = useFormContext();
+  const {register, setValue} = useFormContextAutoTT();
 
   async function queueOpenDialog(event: React.MouseEvent<HTMLButtonElement>, fileFilters: FileFilter[]) {
     let response = await window.api.openFileDialog(fileFilters);

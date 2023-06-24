@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { useFormContext, UseFormRegister, FieldValues, UseFormRegisterReturn, Controller } from "react-hook-form";
+import { UseFormRegister, FieldValues, UseFormRegisterReturn, Controller } from "react-hook-form";
+import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import useRenderCounter from "../../RenderCounter";
 
 import { AudioCodec, EncodeSizeUnit } from "../../helper-types";
@@ -35,6 +36,8 @@ function getDefaultEncodeSizeDisplayed(encodeSizeUnit: EncodeSizeUnit) {
     return 50;
   } else if (encodeSizeUnit === "bytes") {
     return 52428800;
+  } else {
+    return 50;
   }
 }
 
@@ -42,7 +45,7 @@ const MIN_ENCODE_SIZE = 1;
 const MAX_ENCODE_SIZE = 274877906944; // 256GiB, max that youtube allows
 
 export function EncodeSizeInput() {
-  const {register, setValue, getValues, control} = useFormContext();
+  const {register, setValue, getValues, control} = useFormContextAutoTT();
   const renderCounter = useRenderCounter(true);
 
   function updateEncodeSizeDisplayed(event: Event | null) {
@@ -65,14 +68,15 @@ export function EncodeSizeInput() {
     console.log("updateEncodeSizeUnit encodeSizeUnit:", encodeSizeUnit);
     console.log("updateEncodeSizeUnit encodeSize:", encodeSize);
     let useDefaultEncodeSize = false;
-    let encodeSizeDisplayed;
+    const unmodifiedEncodeSizeDisplayed = getDefaultEncodeSizeDisplayed(encodeSizeUnit);
+    let encodeSizeDisplayed = unmodifiedEncodeSizeDisplayed;
 
     if (Number.isNaN(encodeSize) || encodeSize < MIN_ENCODE_SIZE || encodeSize > MAX_ENCODE_SIZE) {
       useDefaultEncodeSize = true;
     } else {
       if (encodeSizeUnit === "mib") {
         // 50000000 -> 47.68MiB
-        encodeSizeDisplayed = (Math.floor(encodeSize) / 1048576).toFixed(2);
+        encodeSizeDisplayed = Number((Math.floor(encodeSize) / 1048576).toFixed(2));
       } else {
         encodeSizeDisplayed = Math.floor(encodeSize);
       }
@@ -82,7 +86,7 @@ export function EncodeSizeInput() {
     }
 
     if (useDefaultEncodeSize) {
-      encodeSizeDisplayed = getDefaultEncodeSizeDisplayed(encodeSizeUnit);
+      encodeSizeDisplayed = unmodifiedEncodeSizeDisplayed;
     }
 
     setValue("encode-size-displayed", encodeSizeDisplayed, {shouldTouch: true});

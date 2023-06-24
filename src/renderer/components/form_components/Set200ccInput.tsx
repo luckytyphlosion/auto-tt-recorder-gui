@@ -1,8 +1,8 @@
 import React from "react";
-import { useFormContext } from "react-hook-form";
+import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 
 export function Set200ccInput() {
-  const {register} = useFormContext();
+  const {register} = useFormContextAutoTT();
 
   return (
     <div>
