@@ -4,6 +4,7 @@ import App from './App.tsx';
 import Sandbox from "./Sandbox.tsx";
 import Sandbox2 from "./Sandbox2.tsx";
 import ModalApp from "./modal_sandbox/ModalApp";
+import "./window-api";
 
 console.log(document.getElementById('root'));
 const root = ReactDOM.createRoot(document.getElementById('root'));

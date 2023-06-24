@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { AutoTTRecConfigForm } from "./AutoTTRecConfigForm";
+import { AutoTTRecConfigFormStatusCombined } from "./AutoTTRecConfigFormStatusCombined";
 import { AutoTTRecConfigFormComponents } from "./AutoTTRecConfigFormComponents";
 import { AutoTTRecConfigFormComponents2 } from "./AutoTTRecConfigFormComponents2";
 import GUIHeader from "./GUIHeader";
@@ -36,7 +36,7 @@ function SimpleView() {
   return (
     <div>
       <GUIHeader/>
-      <AutoTTRecConfigForm whichUI={whichUI}/>
+      <AutoTTRecConfigFormStatusCombined/>
       {renderCounter}
     </div>
   );

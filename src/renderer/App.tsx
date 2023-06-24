@@ -5,21 +5,6 @@ import { AutoTTRecResponse } from "../enums";
 import { IpcRendererEvent } from "electron";
 
 //type HandleSendStdoutDeclaration = 
-declare global {
-  interface Window {
-    api: {
-      openFileDialog: (fileFilters: FileFilter[]) => Promise<string>;
-      saveFileDialog: (fileFilters: FileFilter[]) => Promise<string>;
-      spawnAutoTTRec: (templateFilename: string, autoTTRecArgs: {[key: string]: string | number | null}) => Promise<boolean>;
-      waitAutoTTRec: () => Promise<AutoTTRecResponse>;
-      handleSendStdout: (callable: (event: IpcRendererEvent, stdoutData: string) => void) => void;
-      handleSendStderr: (callable: (event: IpcRendererEvent, stderrData: string) => void) => void;
-      removeHandleSendStdout: (callable: (event: IpcRendererEvent, stdoutData: string) => void) => void;
-      removeHandleSendStderr: (callable: (event: IpcRendererEvent, stderrData: string) => void) => void;
-      terminateAutoTTRec: () => Promise<void>;
-    }
-  }
-}
 
 interface FileFilter {
   name: string;
@@ -148,7 +133,7 @@ class App extends React.Component<AppProps, AppState> {
         "output-width": this.state["high-quality"] ? 2560 : null
       };
 
-      const spawnSuccessful = await window.api.spawnAutoTTRec("data/barebones_personal_ghost_config.yml", autoTTRecArgs)
+      const spawnSuccessful = await window.api.spawnAutoTTRec("data/barebones_personal_ghost_config.yml", autoTTRecArgs as any)
         .catch((err: Error) => {
           this.setState({
             programStatus: "Error",

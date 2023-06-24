@@ -109,7 +109,7 @@ export interface AutoTTRecConfigFormFieldTypes {
   "youtube-settings": boolean,
 }
 
-interface AutoTTRecArgs {
+export interface AutoTTRecArgs {
   "iso-filename": string,
   "main-ghost-filename"?: string,
   "chadsoft-ghost-page"?: string,
@@ -288,7 +288,12 @@ export function convertFormDataToAutoTTRecArgs(formData: AutoTTRecConfigFormFiel
   return argsBuilder.autoTTRecArgs;
 }
 
-export function AutoTTRecConfigForm(props: {whichUI: boolean}) {  
+const DEBUG_PREFILLED_DEFAULTS = true;
+
+export function AutoTTRecConfigForm(props: {
+  whichUI: boolean, onSubmitCallback: (autoTTRecArgs: AutoTTRecArgs) => any,
+  onAbortCallback: (event: React.MouseEvent<HTMLButtonElement>) => void,
+  isAutoTTRecRunning: boolean}) {  
   const renderCounter = useRenderCounter();
   const formMethods = useForm<AutoTTRecConfigFormFieldTypes>({
     criteriaMode: "all",
@@ -297,13 +302,13 @@ export function AutoTTRecConfigForm(props: {whichUI: boolean}) {
       "audio-bitrate-displayed": 128,
       "audio-bitrate-unit": "kbps",
       "audio-codec": "libopus",
-      "background-music-source": "music-filename",
+      "background-music-source": DEBUG_PREFILLED_DEFAULTS ? "game-bgm" : "music-filename",
       "chadsoft-comparison-ghost-page": "",
-      "chadsoft-ghost-page": "",
+      "chadsoft-ghost-page": DEBUG_PREFILLED_DEFAULTS ? "https://chadsoft.co.uk/time-trials/rkgd/2D/C5/A3DBFA4A3596AA35BA579113B9AA386E2E86.html" : "",
       "comparison-ghost-filename": "",
       "comparison-ghost-source": "none",
       "crf-value": 15,
-      "dolphin-resolution": "1440p",
+      "dolphin-resolution": DEBUG_PREFILLED_DEFAULTS ? "480p" : "1440p",
       "encode-only": false,
       "encode-size": 52428800,
       "encode-size-displayed": 50,
@@ -311,11 +316,11 @@ export function AutoTTRecConfigForm(props: {whichUI: boolean}) {
       "encode-type": "crf",
       "game-volume-slider": 100,
       "game-volume-numberinput": 100,
-      "h26x-preset": "slow",
+      "h26x-preset": DEBUG_PREFILLED_DEFAULTS ? "ultrafast" : "slow",
       "hq-textures": true,
       "input-display": "gcn",
       "input-display-dont-create": false,
-      "iso-filename": "",
+      "iso-filename": DEBUG_PREFILLED_DEFAULTS ? "C:\\Users\\User\\Documents\\RMCE 01\\RMCE01.iso" : "",
       "keep-window": true,
       "main-ghost-filename": "",
       "main-ghost-source": "chadsoft",
@@ -326,9 +331,9 @@ export function AutoTTRecConfigForm(props: {whichUI: boolean}) {
       "no-background-blur": true,
       "no-bloom": false,
       "no-top-10-category": "mkchannel",
-      "output-video-filename": "",
+      "output-video-filename": DEBUG_PREFILLED_DEFAULTS ? "C:\\Users\\User\\Documents\\RMCE 01\\guitest1.mp4" : "",
       "output-width-custom": NaN,
-      "output-width-preset": "2560",
+      "output-width-preset": DEBUG_PREFILLED_DEFAULTS ? "none" : "2560",
       "pixel-format": "yuv420p",
       "set-200cc": "no-200cc",
       "speedometer-decimal-places-str": "1",
@@ -344,7 +349,7 @@ export function AutoTTRecConfigForm(props: {whichUI: boolean}) {
       "top-10-location-region": "worldwide",
       "top-10-location-regional-location": "Europe",
       "top-10-title": "",
-      "track-name": "",
+      "track-name": DEBUG_PREFILLED_DEFAULTS ? "Mario Circuit" : "",
       "use-ffv1": false,
       "video-codec": "libx264",
       "youtube-settings": true,
@@ -369,6 +374,7 @@ export function AutoTTRecConfigForm(props: {whichUI: boolean}) {
     console.log("formState.touchedFields:", formState.touchedFields);
     let autoTTRecArgs = convertFormDataToAutoTTRecArgs(formData);
     console.log("autoTTRecArgs:", autoTTRecArgs);
+    props.onSubmitCallback(autoTTRecArgs);
   }
 
   function onError(errors: Object) {
@@ -384,7 +390,7 @@ export function AutoTTRecConfigForm(props: {whichUI: boolean}) {
       <FormProvider {...formMethods}>
         <form onSubmit={formMethods.handleSubmit(onSubmit, onError)}>
           <AutoTTRecConfigFormComponents whichUI={props.whichUI}/>
-          <AutoTTRecSubmitAbortButtons/>
+          <AutoTTRecSubmitAbortButtons onAbortCallback={props.onAbortCallback} isAutoTTRecRunning={props.isAutoTTRecRunning}/>
         </form>
       </FormProvider>
       {renderCounter}
