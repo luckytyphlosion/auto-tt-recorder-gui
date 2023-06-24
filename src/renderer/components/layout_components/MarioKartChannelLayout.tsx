@@ -56,12 +56,11 @@ export function MarioKartChannelLayout() {
       <NoBloomInput/>
       <EncodeTypeInput/>
       <PixelFormatInput/>
-      <YoutubeSettingsInput/>
+      <DolphinResolutionInput/>
       <UseFFV1Input/>
       <EncodeOnlyInput/>
       <InputDisplayDontCreateInput/>
       <KeepWindowInput/>
-      <DolphinResolutionInput/>
       
 
     </div>

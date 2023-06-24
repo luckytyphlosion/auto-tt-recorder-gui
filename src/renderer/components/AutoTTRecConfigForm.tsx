@@ -36,6 +36,9 @@ import { DolphinResolution } from "./form_components/DolphinResolutionInput";
 import { AudioCodec } from "./form_components/AudioCodecAndBitrateInput";
 import { AudioBitrateUnit } from "./form_components/AudioBitrateInput";
 
+import { H26xPreset } from "./form_components/H26xPresetInput";
+import { OutputWidthPreset } from "./form_components/OutputWidthInput";
+
 import useRenderCounter from "../RenderCounter";
 
 interface AutoTTRecConfigFormComponentsProps {
@@ -66,7 +69,7 @@ export interface AutoTTRecConfigFormFieldTypes {
   "encode-type": EncodeType,
   "game-volume-slider": number,
   "game-volume-numberinput": number,
-  "h26x-preset": string,
+  "h26x-preset": H26xPreset,
   "hq-textures": boolean,
   "input-display": InputDisplay,
   "input-display-dont-create": boolean,
@@ -83,11 +86,11 @@ export interface AutoTTRecConfigFormFieldTypes {
   "no-top-10-category": string,
   "output-video-filename": string,
   "output-width-custom": number,
-  "output-width-preset": string,
+  "output-width-preset": OutputWidthPreset,
   "output-video-file-format": OutputVideoFileFormat,
   "pixel-format": string,
   "set-200cc": string,
-  "speedometer-decimal-places": SpeedometerDecimalPlaces,
+  "speedometer-decimal-places-str": SpeedometerDecimalPlaces,
   "speedometer-style": SpeedometerStyle,
   "speedometer-metric": SpeedometerMetric,
   "szs-filename": string,
@@ -123,12 +126,26 @@ interface AutoTTRecArgs {
   "input-display"?: InputDisplay,
   "speedometer"?: SpeedometerStyle,
   "speedometer-metric"?: SpeedometerMetric,
-  "speedometer-decimal-places"?: SpeedometerDecimalPlaces,
+  "speedometer-decimal-places"?: number,
   "hq-textures"?: boolean,
   "no-background-blur"?: boolean,
   "no-bloom"?: boolean,
   "encode-type": EncodeType,
-  "video-codec": VideoCodec
+  "video-codec"?: VideoCodec,
+  "crf-value"?: number,
+  "h26x-preset"?: H26xPreset,
+  "encode-size"?: number,
+  "audio-codec"?: AudioCodec,
+  "audio-bitrate"?: number,
+  "pixel-format"?: string,
+  "dolphin-resolution"?: DolphinResolution,
+  "output-width"?: number | null,
+  "youtube-settings"?: boolean,
+  "use-ffv1"?: boolean,
+  "encode-only"?: boolean,
+  "input-display-dont-create"?: boolean,
+  "keep-window"?: boolean,
+  "output-video-filename": string
 }
 
 class AutoTTRecArgsBuilder {
@@ -140,7 +157,7 @@ class AutoTTRecArgsBuilder {
       "iso-filename": "",
       "speedometer": "fancy",
       "encode-type": "crf",
-      "video-codec": "libx264"
+      "output-video-filename": ""
     };
     this.formData = formData;
   }
@@ -210,8 +227,8 @@ export function convertFormDataToAutoTTRecArgs(formData: AutoTTRecConfigFormFiel
 
   if (formData["background-music-source"] === "music-filename") {
     argsBuilder.add("music-filename");
-    argsBuilder.addManual("game-volume", formData["game-volume-numberinput"]);
-    argsBuilder.addManual("music-volume", formData["music-volume-numberinput"]);
+    argsBuilder.addManual("game-volume", formData["game-volume-numberinput"] / 100);
+    argsBuilder.addManual("music-volume", formData["music-volume-numberinput"] / 100);
   } else if (formData["background-music-source"] === "game-bgm") {
     argsBuilder.addManual("music-filename", "bgm");
   } else if (formData["background-music-source"] === "none") {
@@ -225,7 +242,7 @@ export function convertFormDataToAutoTTRecArgs(formData: AutoTTRecConfigFormFiel
   if (formData["speedometer-style"] !== "none") {
     argsBuilder.add("speedometer-metric");
     if (formData["speedometer-style"] === "fancy" || formData["speedometer-style"] === "regular") {
-      argsBuilder.add("speedometer-decimal-places");
+      argsBuilder.addManual("speedometer-decimal-places", Number.parseInt(formData["speedometer-decimal-places-str"]));
     }
   }
 
@@ -233,7 +250,40 @@ export function convertFormDataToAutoTTRecArgs(formData: AutoTTRecConfigFormFiel
   argsBuilder.add("no-background-blur");
   argsBuilder.add("no-bloom");
 
+  argsBuilder.add("encode-type");
   argsBuilder.add("video-codec");
+
+  if (formData["encode-type"] === "crf") {
+    argsBuilder.add("crf-value");
+    argsBuilder.add("h26x-preset");
+    argsBuilder.add("youtube-settings");
+  } else if (formData["encode-type"] === "size") {
+    argsBuilder.add("encode-size");
+  }
+
+  argsBuilder.add("audio-codec");
+  argsBuilder.add("audio-bitrate");
+  argsBuilder.add("pixel-format");
+  argsBuilder.add("dolphin-resolution");
+
+  let outputWidth: number | null;
+
+  if (formData["output-width-preset"] === "custom") {
+    outputWidth = formData["output-width-custom"];
+  } else if (formData["output-width-preset"] === "none") {
+    outputWidth = null;
+  } else {
+    outputWidth = Number.parseInt(formData["output-width-preset"]);
+  }
+
+  argsBuilder.addManual("output-width", outputWidth);
+
+  argsBuilder.add("use-ffv1");
+  argsBuilder.add("encode-only");
+  argsBuilder.add("input-display-dont-create");
+  argsBuilder.add("keep-window");
+
+  argsBuilder.add("output-video-filename");
 
   return argsBuilder.autoTTRecArgs;
 }
@@ -281,7 +331,7 @@ export function AutoTTRecConfigForm(props: {whichUI: boolean}) {
       "output-width-preset": "2560",
       "pixel-format": "yuv420p",
       "set-200cc": "no-200cc",
-      "speedometer-decimal-places": "1",
+      "speedometer-decimal-places-str": "1",
       "speedometer-style": "fancy",
       "speedometer-metric": "engine",
       "szs-filename": "",
@@ -318,6 +368,7 @@ export function AutoTTRecConfigForm(props: {whichUI: boolean}) {
     console.log("formState.dirtyFields:", formState.dirtyFields);
     console.log("formState.touchedFields:", formState.touchedFields);
     let autoTTRecArgs = convertFormDataToAutoTTRecArgs(formData);
+    console.log("autoTTRecArgs:", autoTTRecArgs);
   }
 
   function onError(errors: Object) {

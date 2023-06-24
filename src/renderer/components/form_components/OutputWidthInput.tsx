@@ -7,7 +7,9 @@ import { OutputWidthCustomInput } from "./OutputWidthCustomInput";
 import { DolphinResolution } from "./DolphinResolutionInput";
 import useRenderCounter from "../../RenderCounter";
 
-const recommendedOutputWidths: {[k in DolphinResolution]: string} = {
+export type OutputWidthPreset = "3840" | "2560" | "1920" | "1280" | "854" | "none" | "custom";
+
+const recommendedOutputWidths: {[k in DolphinResolution]: OutputWidthPreset} = {
   "2160p": "3840",
   "1440p": "2560",
   "1080p": "1920",

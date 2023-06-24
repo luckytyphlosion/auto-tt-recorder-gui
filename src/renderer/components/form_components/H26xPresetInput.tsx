@@ -2,6 +2,9 @@ import React from "react";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import useRenderCounter from "../../RenderCounter";
 
+export type H26xPreset = "ultrafast" | "superfast" | "veryfast" | "faster"
+  | "fast" | "medium" | "slow" | "slower" | "veryslow" | "placebo";
+
 export function H26xPresetInput() {
   const {register} = useFormContextAutoTT();
   const renderCounter = useRenderCounter(true);
