@@ -39,7 +39,7 @@ import { AudioBitrateUnit } from "./form_components/AudioBitrateInput";
 import { H26xPreset } from "./form_components/H26xPresetInput";
 import { OutputWidthPreset } from "./form_components/OutputWidthInput";
 
-import { FormProviderMemoized } from "./OptimizedFormProvider";
+import { OptimizedFormProvider } from "./OptimizedFormProvider";
 
 import useRenderCounter from "../RenderCounter";
 
@@ -446,17 +446,6 @@ export function AutoTTRecConfigForm(props: {
   function onCheckChange(event: React.ChangeEvent<HTMLInputElement>) {
     setStateTest((stateTest) => !stateTest);
   }
-  const formElements = () => {
-    return (<>
-      <form onSubmit={formMethods.handleSubmit(onSubmit, onError)}>
-        <fieldset disabled={isAutoTTRecRunning}>
-          <AutoTTRecConfigFormComponents_Memo/>
-        </fieldset>
-        <AutoTTRecSubmitAbortButtons/>
-      </form>
-    </>
-    );
-  }
 
   // <AutoTTRecConfigFormComponents/>
 
@@ -481,11 +470,30 @@ export function AutoTTRecConfigForm(props: {
 
   return (
     <div>
-      <FormProviderMemoized methods={formMethods as any}
-      Component={formElements}
-      props={''}>
-
-      </FormProviderMemoized>
+      <OptimizedFormProvider 
+      register={formMethods.register}
+      setFocus={formMethods.setFocus}
+      formState={formMethods.formState}
+      handleSubmit={formMethods.handleSubmit}
+      getValues={formMethods.getValues}
+      setValue={formMethods.setValue}
+      control={formMethods.control}
+      clearErrors={formMethods.clearErrors}
+      setError={formMethods.setError}
+      trigger={formMethods.trigger}
+      watch={formMethods.watch}
+      getFieldState={formMethods.getFieldState}
+      resetField={formMethods.resetField}
+      reset={formMethods.reset}
+      unregister={formMethods.unregister}
+      >
+      <form onSubmit={formMethods.handleSubmit(onSubmit, onError)}>
+        <fieldset disabled={isAutoTTRecRunning}>
+          <AutoTTRecConfigFormComponents_Memo/>
+        </fieldset>
+        <AutoTTRecSubmitAbortButtons/>
+      </form>
+      </OptimizedFormProvider>
       <input type="checkbox" id="state-test" checked={stateTest} onChange={onCheckChange}/>
       {renderCounter}
     </div>

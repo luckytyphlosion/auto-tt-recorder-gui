@@ -1,23 +1,56 @@
 import React, { memo } from "react";
 
-import { FormProvider as FormProviderFromReactHookForm, UseFormReturn } from 'react-hook-form';
+import { UseFormReturn, FieldValues } from 'react-hook-form';
 
-//import { AutoTTRecConfigFormFieldTypes } from "./AutoTTRecConfigForm";
+import { AutoTTRecConfigFormFieldTypes } from "./AutoTTRecConfigForm";
 
-type FormProviderMemoizedProps<T extends Record<string, any>> = {
-  methods: UseFormReturn<T>;
-  Component: React.ComponentType<T>;
-} & T;
-
-const FormProvider = <T extends Record<string, any>>({
-  methods,
-  Component,
-  ...props
-}: FormProviderMemoizedProps<T>) => (
-  <FormProviderFromReactHookForm {...methods}>
-    <Component {...(props as unknown as T)} />
-  </FormProviderFromReactHookForm>
+const CustomContext = React.createContext<undefined | UseFormReturn<any>>(
+  undefined
 );
 
+interface Props<T extends FieldValues> extends UseFormReturn<T> {
+  children: React.ReactNode;
+}
 
-export const FormProviderMemoized = memo(FormProvider) as typeof FormProvider;
+
+export function OptimizedFormProvider<T extends FieldValues>({
+    children,
+    register,
+    setFocus,
+    formState,
+    handleSubmit,
+    getValues,
+    setValue,
+    clearErrors,
+    control,
+    setError,
+    trigger,
+    watch,
+    resetField,
+    getFieldState,
+    reset,
+    unregister
+  }: Props<T>) {
+    return <CustomContext.Provider value={{
+      register: register,
+      setFocus: setFocus,
+      formState: formState,
+      handleSubmit: handleSubmit,
+      getValues: getValues,
+      setValue: setValue,
+      clearErrors: clearErrors,
+      control: control,
+      setError: setError,
+      trigger: trigger,
+      watch: watch,
+      resetField: resetField,
+      getFieldState: getFieldState,
+      reset: reset,
+      unregister: unregister
+    }}>{children}</CustomContext.Provider>
+}
+
+export function useFormContext<T extends FieldValues>() {
+  const res = React.useContext(CustomContext) as UseFormReturn<T>;
+  return res;
+}
