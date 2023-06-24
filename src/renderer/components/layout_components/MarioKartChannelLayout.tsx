@@ -40,7 +40,7 @@ import useRenderCounter from "../../RenderCounter";
 const PixelFormatInput_Memo = memo(PixelFormatInput);
 
 export function MarioKartChannelLayout() {
-  //const {register, getValues} = useFormContext<AutoTTRecConfigFormFieldTypes>();
+  const {register, getValues} = useFormContextAutoTT();
   const [timelineCategory, setTimelineCategory] = useState("notop10");
   const renderCounter = useRenderCounter(false, "MarioKartChannelLayout");
 
@@ -59,7 +59,7 @@ export function MarioKartChannelLayout() {
       <NoBackgroundBlurInput/>
       <NoBloomInput/>
       <EncodeTypeInput/>
-      <PixelFormatInput_Memo/>
+      <PixelFormatInput_Memo register={register}/>
       <DolphinResolutionInput/>
       <UseFFV1Input/>
       <EncodeOnlyInput/>
