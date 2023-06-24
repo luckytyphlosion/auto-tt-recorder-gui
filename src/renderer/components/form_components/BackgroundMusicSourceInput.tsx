@@ -14,7 +14,7 @@ export function BackgroundMusicSourceInput() {
   const {register, getValues} = useFormContextAutoTT();
 
   //const backgroundMusicSource = useWatch<AutoTTRecConfigFormFieldTypes>({name: "background-music-source"});
-  const backgroundMusicSource = useWatchAutoTT({name: "background-music-source"});
+  const musicFilenameInputEnable = useWatchAutoTT({name: "background-music-source"}) === "music-filename";
   const renderCounter = useRenderCounter();
 
   return (
@@ -27,12 +27,12 @@ export function BackgroundMusicSourceInput() {
         <option value="none">None</option>
       </select>
       {
-        backgroundMusicSource === "music-filename" ? 
+        musicFilenameInputEnable ? 
          <MusicFilenameInput/> : ""
       }
       {renderCounter}
       {
-        backgroundMusicSource === "music-filename" ?
+        musicFilenameInputEnable ?
         <>
           <GameVolumeInput/>
           <MusicVolumeInput/>
