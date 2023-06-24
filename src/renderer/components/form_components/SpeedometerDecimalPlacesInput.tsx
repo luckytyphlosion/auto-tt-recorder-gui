@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { useFormContext } from "react-hook-form";
+import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import useRenderCounter from "../../RenderCounter";
 
+export type SpeedometerDecimalPlaces = "0" | "1" | "2";
+
 export function SpeedometerDecimalPlacesInput(props: {twoDecimalPlaces: boolean}) {
-  const {register, getValues, setValue} = useFormContext();
+  const {register, getValues, setValue} = useFormContextAutoTT();
   //const [speedometerEnabled, setSpeedometerEnabled] = useState(true);
   const renderCounter = useRenderCounter(true);
 

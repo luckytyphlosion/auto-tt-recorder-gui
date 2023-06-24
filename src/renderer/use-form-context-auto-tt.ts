@@ -6,6 +6,6 @@ export function useFormContextAutoTT() {
   return useFormContext<AutoTTRecConfigFormFieldTypes>();
 }
 
-export function useWatchAutoTT(props: object) {
+export function useWatchAutoTT(props: {name: keyof AutoTTRecConfigFormFieldTypes}) {
   return useWatch<AutoTTRecConfigFormFieldTypes>(props);
 }

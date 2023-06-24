@@ -1,10 +1,12 @@
 
 import React, { useState } from "react";
-import { useFormContext } from "react-hook-form";
+import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import useRenderCounter from "../../RenderCounter";
 
+export type SpeedometerMetric = "engine" | "xz" | "xyz";
+
 export function SpeedometerMetricInput() {
-  const {register} = useFormContext();
+  const {register} = useFormContextAutoTT();
   const renderCounter = useRenderCounter(true);
 
   return (

@@ -1,8 +1,10 @@
 import React from "react";
-import { useFormContext } from "react-hook-form";
+import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
+
+export type InputDisplay = "gcn" | "none";
 
 export function InputDisplayInput() {
-  const {register} = useFormContext();
+  const {register} = useFormContextAutoTT();
 
   return (
     <div>

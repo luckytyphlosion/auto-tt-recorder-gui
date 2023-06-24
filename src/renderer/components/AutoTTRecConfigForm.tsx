@@ -23,6 +23,11 @@ import { Top10LocationRegional } from "./form_components/Top10LocationRegionalIn
 
 import { BackgroundMusicSource } from "./form_components/BackgroundMusicSourceInput";
 
+import { InputDisplay } from "./form_components/InputDisplayInput";
+import { SpeedometerStyle } from "./form_components/SpeedometerInput";
+import { SpeedometerMetric } from "./form_components/SpeedometerMetricInput";
+import { SpeedometerDecimalPlaces } from "./form_components/SpeedometerDecimalPlacesInput";
+
 import useRenderCounter from "../RenderCounter";
 
 interface AutoTTRecConfigFormComponentsProps {
@@ -55,7 +60,7 @@ export interface AutoTTRecConfigFormFieldTypes {
   "game-volume-numberinput": number,
   "h26x-preset": string,
   "hq-textures": boolean,
-  "input-display": string,
+  "input-display": InputDisplay,
   "input-display-dont-create": boolean,
   "iso-filename": string,
   "keep-window": boolean,
@@ -73,9 +78,9 @@ export interface AutoTTRecConfigFormFieldTypes {
   "output-width-preset": string,
   "pixel-format": string,
   "set-200cc": string,
-  "speedometer-decimal-places": string,
-  "speedometer-style": string,
-  "speedometer-metric": string,
+  "speedometer-decimal-places": SpeedometerDecimalPlaces,
+  "speedometer-style": SpeedometerStyle,
+  "speedometer-metric": SpeedometerMetric,
   "szs-filename": string,
   "szs-source": SZSSource,
   "timeline-category": string,
@@ -103,13 +108,18 @@ interface AutoTTRecArgs {
   "szs-filename"?: string,
   "mk-channel-ghost-description"?: string,
   "track-name"?: string,
-  "top-10-location"?: "ww" | "worldwide" | Top10LocationCountry | Top10LocationRegional
+  "top-10-location"?: "ww" | "worldwide" | Top10LocationCountry | Top10LocationRegional,
+  "music-filename"?: string,
+  "game-volume"?: number,
+  "music-volume"?: number,
+  "input-display"?: InputDisplay,
+  "speedometer"?: SpeedometerStyle,
+  "speedometer-metric"?: SpeedometerMetric,
+  "speedometer-decimal-places"?: SpeedometerDecimalPlaces,
+  "hq-textures"?: boolean,
+  "no-background-blur"?: boolean,
+  "no-bloom"?: boolean
 }
-
-type KeyFromVal<T, V> = {
-  [K in keyof T]: V extends T[K] ? K : never
-}[keyof T];
-
 
 class AutoTTRecArgsBuilder {
   private _autoTTRecArgs: AutoTTRecArgs;
@@ -118,13 +128,14 @@ class AutoTTRecArgsBuilder {
   constructor(formData: AutoTTRecConfigFormFieldTypes) {
     this._autoTTRecArgs = {
       "iso-filename": "",
+      "speedometer": "fancy"
     };
     this.formData = formData;
   }
 
   // add an argument with the same name and type from the submitted formData
   // to the resulting auto-tt-rec arguments
-  public add(key: keyof AutoTTRecConfigFormFieldTypes & keyof AutoTTRecArgs) {
+  public add<K extends keyof AutoTTRecConfigFormFieldTypes & keyof AutoTTRecArgs>(key: K) {
     this._autoTTRecArgs[key] = this.formData[key];
   }
 
@@ -184,6 +195,31 @@ export function convertFormDataToAutoTTRecArgs(formData: AutoTTRecConfigFormFiel
   } else if (formData["top-10-location-region"] === "country") {
     argsBuilder.addManual("top-10-location", formData["top-10-location-country-location"]);
   }
+
+  if (formData["background-music-source"] === "music-filename") {
+    argsBuilder.add("music-filename");
+    argsBuilder.addManual("game-volume", formData["game-volume-numberinput"]);
+    argsBuilder.addManual("music-volume", formData["music-volume-numberinput"]);
+  } else if (formData["background-music-source"] === "game-bgm") {
+    argsBuilder.addManual("music-filename", "bgm");
+  } else if (formData["background-music-source"] === "none") {
+    argsBuilder.addManual("music-filename", "none");
+  }
+
+  argsBuilder.add("input-display");
+
+  argsBuilder.addManual("speedometer", formData["speedometer-style"]);
+
+  if (formData["speedometer-style"] !== "none") {
+    argsBuilder.add("speedometer-metric");
+    if (formData["speedometer-style"] === "fancy" || formData["speedometer-style"] === "regular") {
+      argsBuilder.add("speedometer-decimal-places");
+    }
+  }
+
+  argsBuilder.add("hq-textures");
+  argsBuilder.add("no-background-blur");
+  argsBuilder.add("no-bloom");
 
   return argsBuilder.autoTTRecArgs;
 }
