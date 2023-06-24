@@ -133,7 +133,8 @@ class AutoTTRecArgsBuilder {
     this._autoTTRecArgs = {
       "iso-filename": "",
       "speedometer": "fancy",
-      "encode-type": "crf"
+      "encode-type": "crf",
+      "video-codec": "libx264"
     };
     this.formData = formData;
   }
