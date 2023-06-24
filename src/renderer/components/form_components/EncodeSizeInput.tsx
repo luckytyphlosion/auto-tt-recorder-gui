@@ -3,9 +3,11 @@ import { UseFormRegister, FieldValues, UseFormRegisterReturn, Controller } from 
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import useRenderCounter from "../../RenderCounter";
 
-import { AudioCodec, EncodeSizeUnit } from "../../helper-types";
+import { AudioCodec } from "./AudioCodecAndBitrateInput";
 
 import { EncodeType } from "./EncodeTypeInput";
+
+export type EncodeSizeUnit = "mib" | "bytes";
 
 /*
 const defaultEncodeSizes = {

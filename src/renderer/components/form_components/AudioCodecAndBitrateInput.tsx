@@ -8,6 +8,8 @@ import useRenderCounter from "../../RenderCounter";
 
 import { EncodeType } from "./EncodeTypeInput";
 
+export type AudioCodec = "libopus" | "aac";
+
 export function AudioCodecAndBitrateInput(props: {encodeType: EncodeType, encodeTypeChanged: boolean}) {
   const {register, getValues} = useFormContextAutoTT();
   const [audioCodec, setAudioCodec] = useState(getValues("audio-codec"));

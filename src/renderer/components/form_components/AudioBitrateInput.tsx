@@ -3,11 +3,13 @@ import { UseFormRegister, FieldValues, UseFormRegisterReturn, Controller, Valida
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import useRenderCounter from "../../RenderCounter";
 
-import { AudioCodec, AudioBitrateUnit } from "../../helper-types";
+import { AudioCodec } from "./AudioCodecAndBitrateInput";
 
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
 
 import { EncodeType } from "./EncodeTypeInput";
+
+export type AudioBitrateUnit = "kbps" | "bps";
 
 const defaultAudioBitrates = {
   crf: {

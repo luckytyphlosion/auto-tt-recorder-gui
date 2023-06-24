@@ -11,7 +11,7 @@ import AutoTTRecSubmitAbortButtons from "./AutoTTRecSubmitAbortButtons";
 import { AutoTTRecConfigFormComponents } from "./AutoTTRecConfigFormComponents";
 import { MainGhostFilenameInput } from "./form_components/MainGhostFilenameInput";
 
-import { AudioCodec, AudioBitrateUnit, EncodeSizeUnit } from "../helper-types";
+import { EncodeSizeUnit } from "./form_components/EncodeSizeInput";
 
 import { MainGhostSource } from "./form_components/MainGhostSourceInput";
 import { ComparisonGhostSource } from "./form_components/ComparisonGhostSourceInput";
@@ -33,6 +33,8 @@ import { OutputVideoFileFormat } from "./form_components/OutputVideoFileFormatIn
 import { VideoCodec } from "./form_components/VideoCodecInput";
 
 import { DolphinResolution } from "./form_components/DolphinResolutionInput";
+import { AudioCodec } from "./form_components/AudioCodecAndBitrateInput";
+import { AudioBitrateUnit } from "./form_components/AudioBitrateInput";
 
 import useRenderCounter from "../RenderCounter";
 
