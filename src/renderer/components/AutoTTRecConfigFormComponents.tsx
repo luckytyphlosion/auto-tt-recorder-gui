@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import { AutoTTRecArgs } from "../../auto-tt-rec-args";
-import { UseFormRegister, UseFormSetValue, FieldValues } from "react-hook-form";
+import { UseFormRegister, UseFormSetValue, FieldValues, UseFormReturn, FormProvider } from "react-hook-form";
 
 import "../styles/AutoTTRecConfigFormComponents.css";
 
@@ -39,6 +39,8 @@ import { TimelineCategoryInput } from "./form_components/TimelineCategoryInput";
 
 import AutoTTRecSubmitAbortButtons from "./AutoTTRecSubmitAbortButtons";
 
+import { AutoTTRecConfigFormFieldTypes } from "./AutoTTRecConfigForm";
+
 import useRenderCounter from "../RenderCounter";
 
 interface AutoTTRecConfigFormComponentsProps {
@@ -46,7 +48,7 @@ interface AutoTTRecConfigFormComponentsProps {
   setValue: UseFormSetValue<FieldValues>;
 }
 
-export function AutoTTRecConfigFormComponents(props: {whichUI: boolean}) {  
+export function AutoTTRecConfigFormComponents(props: {whichUI: boolean, formMethods: UseFormReturn<AutoTTRecConfigFormFieldTypes, any, undefined>}) {  
   //const renderCounter = useRenderCounter();
 
   // remaining components
@@ -58,7 +60,7 @@ export function AutoTTRecConfigFormComponents(props: {whichUI: boolean}) {
   // cache settings
 
   return (
-    <>
+    <FormProvider {...props.formMethods}>
       <ISOWBFSFileInput/>
       <MarioKartChannelLayout/>
       <OutputVideoFilenameInput/>
@@ -91,6 +93,6 @@ export function AutoTTRecConfigFormComponents(props: {whichUI: boolean}) {
       <QualityInput/>
       <OutputVideoFilenameInput/>*/}
       {/*renderCounter*/}
-    </>
+    </FormProvider>
   );
 }

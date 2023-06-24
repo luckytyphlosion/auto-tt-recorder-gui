@@ -1,4 +1,4 @@
-import React, { useState, ReactElement } from "react";
+import React, { useState, ReactElement, memo } from "react";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 
 import { ISOWBFSFileInput } from "../form_components/ISOWBFSFileInput";
@@ -35,6 +35,8 @@ import { MusicVolumeInput } from "../form_components/MusicVolumeInput";
 
 import useRenderCounter from "../../RenderCounter";
 
+const PixelFormatInput_Memo = memo(PixelFormatInput);
+
 export function MarioKartChannelLayout() {
   //const {register, getValues} = useFormContextAutoTT();
   const [timelineCategory, setTimelineCategory] = useState("notop10");
@@ -55,7 +57,7 @@ export function MarioKartChannelLayout() {
       <NoBackgroundBlurInput/>
       <NoBloomInput/>
       <EncodeTypeInput/>
-      <PixelFormatInput/>
+      <PixelFormatInput_Memo/>
       <DolphinResolutionInput/>
       <UseFFV1Input/>
       <EncodeOnlyInput/>

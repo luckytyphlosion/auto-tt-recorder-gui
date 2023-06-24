@@ -1,4 +1,4 @@
-import React, { useState, ReactNode, useEffect } from "react";
+import React, { useState, ReactNode, useEffect, memo } from "react";
 
 import { useForm, FormProvider, UseFormRegister, UseFormSetValue, FieldValues } from "react-hook-form";
 
@@ -290,6 +290,8 @@ export function convertFormDataToAutoTTRecArgs(formData: AutoTTRecConfigFormFiel
 
 const DEBUG_PREFILLED_DEFAULTS = true;
 
+const AutoTTRecConfigFormComponents_Memo = memo(AutoTTRecConfigFormComponents);
+
 export function AutoTTRecConfigForm(props: {
   whichUI: boolean, onSubmitCallback: (autoTTRecArgs: AutoTTRecArgs) => any,
   onAbortCallback: (event: React.MouseEvent<HTMLButtonElement>) => void,
@@ -387,12 +389,10 @@ export function AutoTTRecConfigForm(props: {
   // <AutoTTRecConfigFormComponents/>
   return (
     <div>
-      <FormProvider {...formMethods}>
         <form onSubmit={formMethods.handleSubmit(onSubmit, onError)}>
-          <AutoTTRecConfigFormComponents whichUI={props.whichUI}/>
+          <AutoTTRecConfigFormComponents_Memo formMethods={formMethods} whichUI={props.whichUI}/>
           <AutoTTRecSubmitAbortButtons onAbortCallback={props.onAbortCallback} isAutoTTRecRunning={props.isAutoTTRecRunning}/>
         </form>
-      </FormProvider>
       {renderCounter}
     </div>
   );
