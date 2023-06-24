@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { useFormContext } from "react-hook-form";
+import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { MusicFilenameInput } from "./MusicFilenameInput";
 import { Top10LocationRegionalInput } from "./Top10LocationRegionalInput";
 import { Top10LocationCountryInput } from "./Top10LocationCountryInput";
 
+export type Top10LocationRegion = "worldwide" | "regional" | "country";
+
 export function Top10LocationInput() {
-  const {register, getValues} = useFormContext();
+  const {register, getValues} = useFormContextAutoTT();
   const [top10LocationRegion, setTop10LocationRegion] = useState(getValues("top-10-location-region"));
 
   function updateTop10LocationRegion(event: Event) {

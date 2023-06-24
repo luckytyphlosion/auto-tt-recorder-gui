@@ -21,7 +21,7 @@ import { Top10ChadsoftInput } from "./form_components/Top10ChadsoftInput";
 import { Top10TitleInput } from "./form_components/Top10TitleInput";
 import { Top10HighlightEnableInput } from "./form_components/Top10HighlightEnableInput";
 import { Top10HighlightInput } from "./form_components/Top10HighlightInput";
-import { BackgroundMusicInput } from "./form_components/BackgroundMusicInput";
+import { BackgroundMusicSourceInput } from "./form_components/BackgroundMusicSourceInput";
 import { GameVolumeInput } from "./form_components/GameVolumeInput";
 import { Top10LocationInput } from "./form_components/Top10LocationInput";
 import { InputDisplayInput } from "./form_components/InputDisplayInput";
@@ -75,7 +75,7 @@ export function AutoTTRecConfigFormComponents(props: {whichUI: boolean}) {
       <Top10ChadsoftInput/>
       <Top10TitleInput/>
       <Top10LocationInput/>
-      <BackgroundMusicInput/>
+      <BackgroundMusicSourceInput/>
       <GameVolumeInput/>
       <InputDisplayInput/>
       <SpeedometerInput/>

@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { useFormContext } from "react-hook-form";
+import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import useRenderCounter from "../../RenderCounter";
 
 import { SZSFilenameInput } from "./SZSFilenameInput";
 
+export type SZSSource = "automatic" | "fromfile";
+
 export function SZSSourceInput() {
-  const {register, getValues} = useFormContext();
+  const {register, getValues} = useFormContextAutoTT();
   const [szsSource, setSZSSource] = useState(getValues("szs-source"));
   const renderCounter = useRenderCounter(true);
 

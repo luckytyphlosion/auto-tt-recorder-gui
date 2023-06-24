@@ -1,12 +1,14 @@
 import React, { useState } from "react";
-import { useFormContext } from "react-hook-form";
+import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import useRenderCounter from "../../RenderCounter";
 
 import { ChadsoftComparisonGhostPageInput } from "./ChadsoftComparisonGhostPageInput";
 import { ComparisonGhostFilenameInput } from "./ComparisonGhostFilenameInput";
 
+export type ComparisonGhostSource = "chadsoft" | "rkg" | "none";
+
 export function ComparisonGhostSourceInput() {
-  const {register, getValues} = useFormContext();
+  const {register, getValues} = useFormContextAutoTT();
   const [comparisonGhostSource, setComparisonGhostSource] = useState(getValues("comparison-ghost-source"));
   const renderCounter = useRenderCounter(true);
 

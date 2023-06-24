@@ -11,7 +11,17 @@ import AutoTTRecSubmitAbortButtons from "./AutoTTRecSubmitAbortButtons";
 import { AutoTTRecConfigFormComponents } from "./AutoTTRecConfigFormComponents";
 import { MainGhostFilenameInput } from "./form_components/MainGhostFilenameInput";
 
-import { EncodeType, AudioCodec, AudioBitrateUnit, EncodeSizeUnit, MainGhostSource } from "../helper-types";
+import { EncodeType, AudioCodec, AudioBitrateUnit, EncodeSizeUnit } from "../helper-types";
+
+import { MainGhostSource } from "./form_components/MainGhostSourceInput";
+import { ComparisonGhostSource } from "./form_components/ComparisonGhostSourceInput";
+import { SZSSource } from "./form_components/SZSSourceInput";
+import { Top10LocationRegion } from "./form_components/Top10LocationInput";
+
+import { Top10LocationCountry } from "./form_components/Top10LocationCountryInput";
+import { Top10LocationRegional } from "./form_components/Top10LocationRegionalInput";
+
+import { BackgroundMusicSource } from "./form_components/BackgroundMusicSourceInput";
 
 import useRenderCounter from "../RenderCounter";
 
@@ -24,20 +34,16 @@ type ChildrenProps = {
   children: ReactNode
 }
 
-defaultValues: {
-
-}
-
 export interface AutoTTRecConfigFormFieldTypes {
   "audio-bitrate": number,
   "audio-bitrate-displayed": number,
   "audio-bitrate-unit": AudioBitrateUnit,
   "audio-codec": AudioCodec,
-  "background-music": string,
+  "background-music-source": BackgroundMusicSource,
   "chadsoft-comparison-ghost-page": string,
   "chadsoft-ghost-page": string,
   "comparison-ghost-filename": string,
-  "comparison-ghost-source": string,
+  "comparison-ghost-source": ComparisonGhostSource,
   "crf-value": number,
   "dolphin-resolution": string,
   "encode-only": boolean,
@@ -71,14 +77,14 @@ export interface AutoTTRecConfigFormFieldTypes {
   "speedometer-style": string,
   "speedometer-metric": string,
   "szs-filename": string,
-  "szs-source": string,
+  "szs-source": SZSSource,
   "timeline-category": string,
   "top-10-chadsoft": string,
   "top-10-highlight-enable": boolean,
   "top-10-highlight": number,
-  "top-10-location-country-location": string,
-  "top-10-location-region": string,
-  "top-10-location-regional-location": string,
+  "top-10-location-country-location": Top10LocationCountry,
+  "top-10-location-region": Top10LocationRegion,
+  "top-10-location-regional-location": Top10LocationRegional,
   "top-10-title": string,
   "track-name": string,
   "use-ffv1": boolean,
@@ -92,26 +98,94 @@ interface AutoTTRecArgs {
   "main-ghost-filename"?: string,
   "chadsoft-ghost-page"?: string,
   "on-200cc"?: boolean
+  "chadsoft-comparison-ghost-page"?: string,
+  "comparison-ghost-filename"?: string,
+  "szs-filename"?: string,
+  "mk-channel-ghost-description"?: string,
+  "track-name"?: string,
+  "top-10-location"?: "ww" | "worldwide" | Top10LocationCountry | Top10LocationRegional
+}
 
+type KeyFromVal<T, V> = {
+  [K in keyof T]: V extends T[K] ? K : never
+}[keyof T];
+
+
+class AutoTTRecArgsBuilder {
+  private _autoTTRecArgs: AutoTTRecArgs;
+  private formData: AutoTTRecConfigFormFieldTypes;
+
+  constructor(formData: AutoTTRecConfigFormFieldTypes) {
+    this._autoTTRecArgs = {
+      "iso-filename": "",
+    };
+    this.formData = formData;
+  }
+
+  // add an argument with the same name and type from the submitted formData
+  // to the resulting auto-tt-rec arguments
+  public add(key: keyof AutoTTRecConfigFormFieldTypes & keyof AutoTTRecArgs) {
+    this._autoTTRecArgs[key] = this.formData[key];
+  }
+
+  // simple key value argument add, not taking data from formData
+  public addManual<K extends keyof AutoTTRecArgs>(key: K, value: AutoTTRecArgs[K]) {
+    this._autoTTRecArgs[key] = value;
+  }
+
+  // same value, different key name
+  /*public addDifferentKey<
+    T extends keyof AutoTTRecArgs,
+    U extends keyof AutoTTRecConfigFormFieldTypes,
+    V extends AutoTTRecArgs[T] & AutoTTRecConfigFormFieldTypes[U],    
+    K1 extends keyof Record<T, V>,
+    K2 extends keyof Record<U, V>
+  >(autoTTRecKey: K1, formKey: K2) {
+    this._autoTTRecArgs[autoTTRecKey] = this.formData[formKey];
+  }*/
+
+  public get autoTTRecArgs() {
+    return this._autoTTRecArgs;
+  }
 }
 
 export function convertFormDataToAutoTTRecArgs(formData: AutoTTRecConfigFormFieldTypes) {
-  let autoTTRecArgs: AutoTTRecArgs = {
-    "iso-filename": formData["iso-filename"]
-  };
+  let argsBuilder = new AutoTTRecArgsBuilder(formData);
+  argsBuilder.add("iso-filename");
 
   if (formData["main-ghost-source"] === "chadsoft") {
-    autoTTRecArgs["chadsoft-ghost-page"] = formData["chadsoft-ghost-page"];
+    argsBuilder.add("chadsoft-ghost-page");
   } else if (formData["main-ghost-source"] === "rkg") {
-    autoTTRecArgs["main-ghost-filename"] = formData["main-ghost-filename"];
+    argsBuilder.add("main-ghost-filename");
     if (formData["set-200cc"] === "on-200cc") {
-      autoTTRecArgs["on-200cc"] = true;
+      argsBuilder.addManual("on-200cc", true);
     }
   }
 
-  //if (formData[""])
+  if (formData["comparison-ghost-source"] === "chadsoft") {
+    argsBuilder.add("chadsoft-comparison-ghost-page");
+  } else if (formData["comparison-ghost-source"] === "rkg") {
+    argsBuilder.add("comparison-ghost-filename");
+  } else if (formData["comparison-ghost-source"] === "none") {
+    // pass
+  }
 
-  return autoTTRecArgs;
+  if (formData["szs-source"] === "fromfile") {
+    argsBuilder.add("szs-filename");
+  }
+
+  argsBuilder.add("mk-channel-ghost-description");
+  argsBuilder.add("track-name");
+
+  if (formData["top-10-location-region"] === "worldwide") {
+    argsBuilder.addManual("top-10-location", "ww");
+  } else if (formData["top-10-location-region"] === "regional") {
+    argsBuilder.addManual("top-10-location", formData["top-10-location-regional-location"]);
+  } else if (formData["top-10-location-region"] === "country") {
+    argsBuilder.addManual("top-10-location", formData["top-10-location-country-location"]);
+  }
+
+  return argsBuilder.autoTTRecArgs;
 }
 
 export function AutoTTRecConfigForm(props: {whichUI: boolean}) {  
@@ -123,7 +197,7 @@ export function AutoTTRecConfigForm(props: {whichUI: boolean}) {
       "audio-bitrate-displayed": 128,
       "audio-bitrate-unit": "kbps",
       "audio-codec": "libopus",
-      "background-music": "music-filename",
+      "background-music-source": "music-filename",
       "chadsoft-comparison-ghost-page": "",
       "chadsoft-ghost-page": "",
       "comparison-ghost-filename": "",

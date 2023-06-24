@@ -9,7 +9,9 @@ const regionalLocations = [
   "Latin America",
   "Asia",
   "Oceania"
-]
+] as const;
+
+export type Top10LocationRegional = typeof regionalLocations[number];
 
 export function Top10LocationRegionalInput() {
   const {register} = useFormContext();

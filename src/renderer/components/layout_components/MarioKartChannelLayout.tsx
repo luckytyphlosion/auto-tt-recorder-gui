@@ -16,7 +16,7 @@ import { Top10ChadsoftInput } from "../form_components/Top10ChadsoftInput";
 import { Top10TitleInput } from "../form_components/Top10TitleInput";
 import { PixelFormatInput } from "../form_components/PixelFormatInput";
 import { EncodeTypeInput } from "../form_components/EncodeTypeInput";
-import { BackgroundMusicInput } from "../form_components/BackgroundMusicInput";
+import { BackgroundMusicSourceInput } from "../form_components/BackgroundMusicSourceInput";
 import { GameVolumeInput } from "../form_components/GameVolumeInput";
 import { Top10LocationInput } from "../form_components/Top10LocationInput";
 import { InputDisplayInput } from "../form_components/InputDisplayInput";
@@ -48,7 +48,7 @@ export function MarioKartChannelLayout() {
       <MKChannelGhostDescriptionInput/>
       <TrackNameInput/>
       <Top10LocationInput/>
-      <BackgroundMusicInput/>
+      <BackgroundMusicSourceInput/>
       <InputDisplayInput/>
       <SpeedometerInput/>
       <HQTexturesInput/>

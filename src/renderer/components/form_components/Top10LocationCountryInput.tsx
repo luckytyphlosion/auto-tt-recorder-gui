@@ -258,7 +258,9 @@ const countryLocations = [
   "Yemen",
   "Zambia",
   "Zimbabwe"
-]
+] as const;
+
+export type Top10LocationCountry = typeof countryLocations[number];
 
 export function Top10LocationCountryInput() {
   const {register} = useFormContext();
