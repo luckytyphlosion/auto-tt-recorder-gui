@@ -8,6 +8,7 @@ import { SimpleErrorMessage } from "../SimpleErrorMessage";
 
 export function ISOWBFSFileInput() {
   const {register, setValue} = useFormContextAutoTT();
+  const renderCounter = useRenderCounter(false, "ISOWBFSFileInput");
 
   async function queueOpenDialog(event: React.MouseEvent<HTMLButtonElement>, fileFilters: FileFilter[]) {
     let response = await window.api.openFileDialog(fileFilters);
@@ -29,6 +30,7 @@ export function ISOWBFSFileInput() {
         ]);
       }} type="button">Browse&#8230;</button>
       <SimpleErrorMessage name="iso-filename"/>
+      {renderCounter}
     </div>
   );
 }

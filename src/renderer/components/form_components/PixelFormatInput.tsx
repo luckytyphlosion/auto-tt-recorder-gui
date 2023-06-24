@@ -2,8 +2,12 @@ import React from "react";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
 
+import useRenderCounter from "../../RenderCounter";
+
 export function PixelFormatInput() {
   const {register} = useFormContextAutoTT();
+
+  const renderCounter = useRenderCounter(false, "PixelFormatInput");
 
   return (
     <div>
@@ -14,6 +18,7 @@ export function PixelFormatInput() {
         }})}
       ></input>
       <SimpleErrorMessage name="pixel-format"/>
+      {renderCounter}
     </div>
   );
 }

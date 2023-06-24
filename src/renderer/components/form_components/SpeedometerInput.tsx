@@ -12,7 +12,7 @@ export type SpeedometerStyle = "fancy" | "regular" | "standard" | "none";
 export function SpeedometerInput() {
   const {register, getValues} = useFormContextAutoTT();
   const [speedometerStyle, setSpeedometerStyle] = useState("fancy");
-  const renderCounter = useRenderCounter(true);
+  const renderCounter = useRenderCounter(false, "SpeedometerInput");
 
   function updateSpeedometerStyle(event: Event) {
     let speedometerStyleFromForm = getValues("speedometer-style");

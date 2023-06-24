@@ -10,7 +10,7 @@ import useRenderCounter from "../RenderCounter";
 function SimpleView() {
 
   const [whichUI, setWhichUI] = useState(false);
-  const renderCounter = useRenderCounter();
+  const renderCounter = useRenderCounter(false, "SimpleView");
   /*const form1 = (
     <AutoTTRecConfigForm>
       <AutoTTRecConfigFormComponents/>

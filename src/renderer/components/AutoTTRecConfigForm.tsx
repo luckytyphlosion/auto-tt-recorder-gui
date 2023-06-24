@@ -1,6 +1,6 @@
-import React, { useState, ReactNode, useEffect } from "react";
+import React, { useState, ReactNode, useEffect, memo } from "react";
 
-import { useForm, FormProvider, UseFormRegister, UseFormSetValue, FieldValues } from "react-hook-form";
+import { useForm, FormProvider, UseFormRegister, UseFormSetValue, FieldValues, FormProviderProps, UseFormReturn } from "react-hook-form";
 
 import { ISOWBFSFileInput } from "./form_components/ISOWBFSFileInput";
 import { ChadsoftGhostPageInput } from "./form_components/ChadsoftGhostPageInput";
@@ -39,9 +39,54 @@ import { AudioBitrateUnit } from "./form_components/AudioBitrateInput";
 import { H26xPreset } from "./form_components/H26xPresetInput";
 import { OutputWidthPreset } from "./form_components/OutputWidthInput";
 
+import { FormProviderMemoized } from "./OptimizedFormProvider";
+
 import useRenderCounter from "../RenderCounter";
 
 import { useAutoTTRecManager } from "./AutoTTRecManagerContext";
+/*
+const OptimizedFormProvider = <TFieldValues extends FieldValues, TContext = any>({
+  register,
+  setFocus,
+  formState,
+  handleSubmit,
+  getValues,
+  setValue,
+  control,
+  clearErrors,
+  children,
+  setError,
+  trigger,
+  watch,
+  getFieldState,
+  resetField,
+  reset,
+  unregister,
+}: FormProviderProps<TFieldValues, TContext>) => (
+  <HookFormContext.Provider
+    value={
+      {
+        register,
+        setFocus,
+        formState,
+        handleSubmit,
+        getValues,
+        setValue,
+        clearErrors,
+        control,
+        setError,
+        trigger,
+        watch,
+        resetField,
+        getFieldState,
+        reset,
+        unregister,
+      } as unknown as UseFormReturn
+    }
+  >
+    {children}
+  </HookFormContext.Provider>
+);*/
 
 interface AutoTTRecConfigFormComponentsProps {
   register: UseFormRegister<FieldValues>;
@@ -296,6 +341,8 @@ const DEBUG_PREFILLED_DEFAULTS = true;
   onAbortCallback: (event: React.MouseEvent<HTMLButtonElement>) => void,
   isAutoTTRecRunning: boolean
 */
+const AutoTTRecConfigFormComponents_Memo = memo(AutoTTRecConfigFormComponents);
+
 export function AutoTTRecConfigForm(props: {
   whichUI: boolean}) {  
   const renderCounter = useRenderCounter(false, "AutoTTRecConfigForm");
@@ -359,26 +406,33 @@ export function AutoTTRecConfigForm(props: {
       "youtube-settings": true,
     }
   });
+  //console.log("formMethods:", formMethods);
   //const isoWbfsFileInput = <ISOWBFSFileInput/>;
   //const mainGhostFilenameInput = <MainGhostFilenameInput arg={1}/>;
 
-  const [errorData, setErrorData] = useState({});
-  let {isAutoTTRecRunning, runAutoTTRec} = useAutoTTRecManager();
-
   let formState = formMethods.formState;
 
+  const [errorData, setErrorData] = useState({});
+  const [stateTest, setStateTest] = useState(false);
+
+  let {isAutoTTRecRunning, runAutoTTRec} = useAutoTTRecManager();
+
   useEffect(() => {
-    if (formState.isSubmitted && !formState.isSubmitSuccessful) {
+    console.log("useEffect formState.isSubmitSuccessful:", formState.isSubmitSuccessful);
+    console.log("useEffect formState.isSubmitted:", formState.isSubmitted);
+    if (formState.isSubmitted) {
       formMethods.reset(undefined, {keepValues: true, keepErrors: true});
     }
   }, [formState, errorData, formMethods.reset]);
 
-  function onSubmit(formData: AutoTTRecConfigFormFieldTypes) {
+ function onSubmit(formData: AutoTTRecConfigFormFieldTypes) {
     console.log(formData);
     console.log("formState.dirtyFields:", formState.dirtyFields);
     console.log("formState.touchedFields:", formState.touchedFields);
     let autoTTRecArgs = convertFormDataToAutoTTRecArgs(formData);
     console.log("autoTTRecArgs:", autoTTRecArgs);
+    console.log("formState.isSubmitSuccessful:", formState.isSubmitSuccessful);
+    console.log("formState.isSubmitted:", formState.isSubmitted);
     runAutoTTRec(autoTTRecArgs);
   }
 
@@ -389,17 +443,50 @@ export function AutoTTRecConfigForm(props: {
     //console.log("formMethods.formState.isSubmitted:", formMethods.formState.isSubmitted);
   }
 
+  function onCheckChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setStateTest((stateTest) => !stateTest);
+  }
+  const formElements = () => {
+    return (<>
+      <form onSubmit={formMethods.handleSubmit(onSubmit, onError)}>
+        <fieldset disabled={isAutoTTRecRunning}>
+          <AutoTTRecConfigFormComponents_Memo/>
+        </fieldset>
+        <AutoTTRecSubmitAbortButtons/>
+      </form>
+    </>
+    );
+  }
+
   // <AutoTTRecConfigFormComponents/>
+
+//   <FormProvider<AutoTTRecConfigFormFieldTypes> register={register}
+//   setFocus={setFocus}
+//   formState={formState}
+//   handleSubmit={handleSubmit}
+//   getValues={getValues}
+//   setValue={setValue}
+//   control={control}
+//   clearErrors={clearErrors}
+//   setError={setError}
+//   trigger={trigger}
+//   watch={watch}
+//   getFieldState={getFieldState}
+//   resetField={resetField}
+//   reset={reset}
+//   unregister={unregister}
+// >
+
+// </FormProvider>
+
   return (
     <div>
-      <FormProvider {...formMethods}>
-        <form onSubmit={formMethods.handleSubmit(onSubmit, onError)}>
-          <fieldset disabled={isAutoTTRecRunning}>
-            <AutoTTRecConfigFormComponents/>
-          </fieldset>
-          <AutoTTRecSubmitAbortButtons/>
-        </form>
-      </FormProvider>
+      <FormProviderMemoized methods={formMethods as any}
+      Component={formElements}
+      props={''}>
+
+      </FormProviderMemoized>
+      <input type="checkbox" id="state-test" checked={stateTest} onChange={onCheckChange}/>
       {renderCounter}
     </div>
   );

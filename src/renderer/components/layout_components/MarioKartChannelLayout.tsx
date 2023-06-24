@@ -1,5 +1,7 @@
-import React, { useState, ReactElement } from "react";
+import React, { useState, ReactElement, memo } from "react";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
+import { useFormContext } from "react-hook-form";
+import { AutoTTRecConfigFormFieldTypes } from "../AutoTTRecConfigForm";
 
 import { ISOWBFSFileInput } from "../form_components/ISOWBFSFileInput";
 import { NoTop10CategoryInput } from "../form_components/NoTop10CategoryInput";
@@ -35,10 +37,12 @@ import { MusicVolumeInput } from "../form_components/MusicVolumeInput";
 
 import useRenderCounter from "../../RenderCounter";
 
+const PixelFormatInput_Memo = memo(PixelFormatInput);
+
 export function MarioKartChannelLayout() {
-  //const {register, getValues} = useFormContextAutoTT();
+  //const {register, getValues} = useFormContext<AutoTTRecConfigFormFieldTypes>();
   const [timelineCategory, setTimelineCategory] = useState("notop10");
-  const renderCounter = useRenderCounter();
+  const renderCounter = useRenderCounter(false, "MarioKartChannelLayout");
 
   return (
     <div>
@@ -55,13 +59,13 @@ export function MarioKartChannelLayout() {
       <NoBackgroundBlurInput/>
       <NoBloomInput/>
       <EncodeTypeInput/>
-      <PixelFormatInput/>
+      <PixelFormatInput_Memo/>
       <DolphinResolutionInput/>
       <UseFFV1Input/>
       <EncodeOnlyInput/>
       <InputDisplayDontCreateInput/>
       <KeepWindowInput/>
-      
+      {renderCounter}
 
     </div>
   );

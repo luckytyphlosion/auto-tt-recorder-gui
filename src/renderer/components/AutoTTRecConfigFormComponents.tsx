@@ -47,7 +47,7 @@ interface AutoTTRecConfigFormComponentsProps {
 }
 
 export function AutoTTRecConfigFormComponents() {  
-  //const renderCounter = useRenderCounter();
+  const renderCounter = useRenderCounter(false, "AutoTTRecConfigFormComponents");
 
   // remaining components
   // handling top 10 vs no top 10
@@ -90,7 +90,7 @@ export function AutoTTRecConfigFormComponents() {
       <DolphinResolutionInput/>
       <QualityInput/>
       <OutputVideoFilenameInput/>*/}
-      {/*renderCounter*/}
+      {renderCounter}
     </>
   );
 }

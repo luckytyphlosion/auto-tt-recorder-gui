@@ -6,6 +6,8 @@ import { IpcRendererEvent } from "electron";
 
 import { AutoTTRecResponse } from "../../enums";
 
+import useRenderCounter from "../RenderCounter";
+
 interface AutoTTRecState {
   programStatusHeader: string,
   programStatusDetails: string,
@@ -40,6 +42,8 @@ export function AutoTTRecManagerProvider(props: {children?: React.ReactNode}) {
   const [programStatusHeader, setProgramStatusHeader] = useState("Ready");
   const [programStatusDetails, setProgramStatusDetails] = useState("");
   const [isAutoTTRecRunning, setAutoTTRecRunning] = useState(false);
+
+  const renderCounter = useRenderCounter(false, "AutoTTRecManagerProvider");
 
   const handleSendStdoutListener = useCallback(function (event: IpcRendererEvent, stdoutData: string) {
     console.log("stdoutData:", stdoutData);
@@ -107,6 +111,7 @@ export function AutoTTRecManagerProvider(props: {children?: React.ReactNode}) {
     abortAutoTTRec: abortAutoTTRec
   }}>
     {props.children}
+    {renderCounter}
   </AutoTTRecManagerContext.Provider>
 }
 
