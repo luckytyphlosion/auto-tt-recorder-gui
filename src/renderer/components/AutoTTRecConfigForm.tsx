@@ -122,6 +122,7 @@ interface AutoTTRecArgs {
   "no-background-blur"?: boolean,
   "no-bloom"?: boolean,
   "encode-type": EncodeType,
+  "video-codec": string // VideoCodec
 }
 
 class AutoTTRecArgsBuilder {
@@ -224,6 +225,8 @@ export function convertFormDataToAutoTTRecArgs(formData: AutoTTRecConfigFormFiel
   argsBuilder.add("hq-textures");
   argsBuilder.add("no-background-blur");
   argsBuilder.add("no-bloom");
+
+  argsBuilder.add("video-codec");
 
   return argsBuilder.autoTTRecArgs;
 }
