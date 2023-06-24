@@ -39,7 +39,7 @@ import { AudioBitrateUnit } from "./form_components/AudioBitrateInput";
 import { H26xPreset } from "./form_components/H26xPresetInput";
 import { OutputWidthPreset } from "./form_components/OutputWidthInput";
 
-import { OptimizedFormProvider } from "./OptimizedFormProvider";
+import { OptimizedFormProvider, OptimizedFormProvider2 } from "./OptimizedFormProvider";
 
 import useRenderCounter from "../RenderCounter";
 
@@ -470,7 +470,7 @@ export function AutoTTRecConfigForm(props: {
 
   return (
     <div>
-      <OptimizedFormProvider 
+      <OptimizedFormProvider2 
       register={formMethods.register}
       setFocus={formMethods.setFocus}
       formState={formMethods.formState}
@@ -493,7 +493,7 @@ export function AutoTTRecConfigForm(props: {
         </fieldset>
         <AutoTTRecSubmitAbortButtons/>
       </form>
-      </OptimizedFormProvider>
+      </OptimizedFormProvider2>
       <input type="checkbox" id="state-test" checked={stateTest} onChange={onCheckChange}/>
       {renderCounter}
     </div>

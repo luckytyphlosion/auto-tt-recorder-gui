@@ -1,11 +1,11 @@
 import React, { memo } from "react";
 
-import { UseFormReturn, FieldValues } from 'react-hook-form';
+import { UseFormReturn, FieldValues, FormProviderProps } from 'react-hook-form';
 
 import { AutoTTRecConfigFormFieldTypes } from "./AutoTTRecConfigForm";
 
-const CustomContext = React.createContext<undefined | UseFormReturn<any>>(
-  undefined
+const CustomContext = React.createContext<null | UseFormReturn<any>>(
+  null
 );
 
 interface Props<T extends FieldValues> extends UseFormReturn<T> {
@@ -50,7 +50,51 @@ export function OptimizedFormProvider<T extends FieldValues>({
     }}>{children}</CustomContext.Provider>
 }
 
+export const OptimizedFormProvider2 = <TFieldValues extends FieldValues, TContext = any>({
+  register,
+  setFocus,
+  formState,
+  handleSubmit,
+  getValues,
+  setValue,
+  control,
+  clearErrors,
+  children,
+  setError,
+  trigger,
+  watch,
+  getFieldState,
+  resetField,
+  reset,
+  unregister,
+}: FormProviderProps<TFieldValues, TContext>) => (
+  <CustomContext.Provider
+    value={
+      {
+        register,
+        setFocus,
+        formState,
+        handleSubmit,
+        getValues,
+        setValue,
+        clearErrors,
+        control,
+        setError,
+        trigger,
+        watch,
+        resetField,
+        getFieldState,
+        reset,
+        unregister,
+      } as unknown as UseFormReturn
+    }
+  >
+    {children}
+  </CustomContext.Provider>
+);
+
 export function useFormContext<T extends FieldValues>() {
   const res = React.useContext(CustomContext) as UseFormReturn<T>;
   return res;
 }
+
