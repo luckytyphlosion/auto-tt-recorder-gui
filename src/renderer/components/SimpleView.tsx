@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { AutoTTRecConfigFormStatusCombined } from "./AutoTTRecConfigFormStatusCombined";
-import { AutoTTRecConfigFormComponents } from "./AutoTTRecConfigFormComponents";
+import { AutoTTRecConfigFormWrapper } from "./AutoTTRecConfigFormWrapper";
 import { AutoTTRecConfigFormComponents2 } from "./AutoTTRecConfigFormComponents2";
 import GUIHeader from "./GUIHeader";
 import { useForm } from "react-hook-form";
@@ -36,7 +36,7 @@ function SimpleView() {
   return (
     <div>
       <GUIHeader/>
-      <AutoTTRecConfigFormStatusCombined/>
+      <AutoTTRecConfigFormWrapper/>
       {renderCounter}
     </div>
   );

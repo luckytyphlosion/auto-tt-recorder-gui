@@ -1,11 +1,26 @@
-import React, { useState, useCallback } from "react";
+import React, { createContext, useContext, useState, useCallback } from "react";
+
 import { AutoTTRecConfigForm, AutoTTRecArgs } from "./AutoTTRecConfigForm";
 import { AutoTTRecStatus } from "./AutoTTRecStatus";
 import { IpcRendererEvent } from "electron";
 
 import { AutoTTRecResponse } from "../../enums";
 
-import useRenderCounter from "../RenderCounter";
+interface AutoTTRecState {
+  programStatusHeader: string,
+  programStatusDetails: string,
+  isAutoTTRecRunning: boolean,
+  runAutoTTRec: (autoTTRecArgs: AutoTTRecArgs) => Promise<void>,
+  abortAutoTTRec: (event: React.MouseEvent<HTMLButtonElement>) => Promise<void>
+}
+
+const AutoTTRecManagerContext = createContext<AutoTTRecState>({
+  programStatusHeader: "Ready",
+  programStatusDetails: "",
+  isAutoTTRecRunning: false,
+  runAutoTTRec: async (autoTTRecArgs: AutoTTRecArgs) => {},
+  abortAutoTTRec: async (event: React.MouseEvent<HTMLButtonElement>) => {}
+});
 
 function appendAccountingForCarriage(base: string, line: string) {
   let output;
@@ -21,13 +36,10 @@ function appendAccountingForCarriage(base: string, line: string) {
   return output;
 }
 
-export function AutoTTRecConfigFormStatusCombined() {
+export function AutoTTRecManagerProvider(props: {children?: React.ReactNode}) {
   const [programStatusHeader, setProgramStatusHeader] = useState("Ready");
   const [programStatusDetails, setProgramStatusDetails] = useState("");
   const [isAutoTTRecRunning, setAutoTTRecRunning] = useState(false);
-  console.log("AutoTTRecConfigFormStatusCombined programStatusDetails:", programStatusDetails);
-  const renderCounter = useRenderCounter(false, "AutoTTRecConfigFormStatusCombined");
-  const randomNum = Math.random();
 
   const handleSendStdoutListener = useCallback(function (event: IpcRendererEvent, stdoutData: string) {
     console.log("stdoutData:", stdoutData);
@@ -45,7 +57,7 @@ export function AutoTTRecConfigFormStatusCombined() {
     setProgramStatusDetails((programStatusDetails) => appendAccountingForCarriage(programStatusDetails, stderrData));
   }, []);
 
-  async function onSubmit(autoTTRecArgs: AutoTTRecArgs) {
+  const runAutoTTRec = useCallback(async function (autoTTRecArgs: AutoTTRecArgs) {
     const spawnSuccessful = await window.api.spawnAutoTTRec("data/barebones_personal_ghost_config.yml", autoTTRecArgs)
       .catch((err: Error) => {
         setProgramStatusHeader("Error");
@@ -66,7 +78,7 @@ export function AutoTTRecConfigFormStatusCombined() {
         .catch((err) => {
           setAutoTTRecRunning(false);
           setProgramStatusHeader("Error");
-          setProgramStatusDetails(programStatusDetails + err.message);
+          setProgramStatusDetails((programStatusDetails) => (programStatusDetails + err.message));
         });
 
       if (autoTTRecResponse === AutoTTRecResponse.COMPLETED) {
@@ -74,27 +86,30 @@ export function AutoTTRecConfigFormStatusCombined() {
         setProgramStatusHeader("Done!");
       } else if (autoTTRecResponse === AutoTTRecResponse.ABORTED) {
         setAutoTTRecRunning(false);
-        setProgramStatusDetails("Aborted");
+        setProgramStatusHeader("Aborted");
       }
 
       console.log("Removing std handlers!");
       window.api.removeHandleSendStdout(handleSendStdoutListener);
       window.api.removeHandleSendStderr(handleSendStderrListener);
     }
-  }
+  }, []);
 
-  async function abortAutoTTRec(event: React.MouseEvent<HTMLButtonElement>) {
+  const abortAutoTTRec = useCallback(async function (event: React.MouseEvent<HTMLButtonElement>) {
     await window.api.terminateAutoTTRec();
-  }
+  }, []);
 
-  return (
-    <div>
-      {/*<h2>Test header {randomNum}</h2>
-      <AutoTTRecConfigForm whichUI={true} onSubmitCallback={onSubmit}
-        onAbortCallback={abortAutoTTRec} isAutoTTRecRunning={isAutoTTRecRunning}/>
-      {renderCounter}
-      <AutoTTRecStatus programStatusHeader={programStatusHeader}
-        programStatusDetails={programStatusDetails}/>*/}
-    </div>
-  )
+  return <AutoTTRecManagerContext.Provider value={{
+    programStatusHeader: programStatusHeader,
+    programStatusDetails: programStatusDetails,
+    isAutoTTRecRunning: isAutoTTRecRunning,
+    runAutoTTRec: runAutoTTRec,
+    abortAutoTTRec: abortAutoTTRec
+  }}>
+    {props.children}
+  </AutoTTRecManagerContext.Provider>
+}
+
+export function useAutoTTRecManager() {
+  return useContext(AutoTTRecManagerContext);
 }

@@ -41,6 +41,8 @@ import { OutputWidthPreset } from "./form_components/OutputWidthInput";
 
 import useRenderCounter from "../RenderCounter";
 
+import { useAutoTTRecManager } from "./AutoTTRecManagerContext";
+
 interface AutoTTRecConfigFormComponentsProps {
   register: UseFormRegister<FieldValues>;
   setValue: UseFormSetValue<FieldValues>;
@@ -290,11 +292,13 @@ export function convertFormDataToAutoTTRecArgs(formData: AutoTTRecConfigFormFiel
 
 const DEBUG_PREFILLED_DEFAULTS = true;
 
-export function AutoTTRecConfigForm(props: {
-  whichUI: boolean, onSubmitCallback: (autoTTRecArgs: AutoTTRecArgs) => any,
+/*, onSubmitCallback: (autoTTRecArgs: AutoTTRecArgs) => any,
   onAbortCallback: (event: React.MouseEvent<HTMLButtonElement>) => void,
-  isAutoTTRecRunning: boolean}) {  
-  const renderCounter = useRenderCounter();
+  isAutoTTRecRunning: boolean
+*/
+export function AutoTTRecConfigForm(props: {
+  whichUI: boolean}) {  
+  const renderCounter = useRenderCounter(false, "AutoTTRecConfigForm");
   const formMethods = useForm<AutoTTRecConfigFormFieldTypes>({
     criteriaMode: "all",
     defaultValues: {
@@ -359,6 +363,7 @@ export function AutoTTRecConfigForm(props: {
   //const mainGhostFilenameInput = <MainGhostFilenameInput arg={1}/>;
 
   const [errorData, setErrorData] = useState({});
+  let {isAutoTTRecRunning, runAutoTTRec} = useAutoTTRecManager();
 
   let formState = formMethods.formState;
 
@@ -374,7 +379,7 @@ export function AutoTTRecConfigForm(props: {
     console.log("formState.touchedFields:", formState.touchedFields);
     let autoTTRecArgs = convertFormDataToAutoTTRecArgs(formData);
     console.log("autoTTRecArgs:", autoTTRecArgs);
-    props.onSubmitCallback(autoTTRecArgs);
+    runAutoTTRec(autoTTRecArgs);
   }
 
   function onError(errors: Object) {
@@ -389,8 +394,10 @@ export function AutoTTRecConfigForm(props: {
     <div>
       <FormProvider {...formMethods}>
         <form onSubmit={formMethods.handleSubmit(onSubmit, onError)}>
-          <AutoTTRecConfigFormComponents whichUI={props.whichUI}/>
-          <AutoTTRecSubmitAbortButtons onAbortCallback={props.onAbortCallback} isAutoTTRecRunning={props.isAutoTTRecRunning}/>
+          <fieldset disabled={isAutoTTRecRunning}>
+            <AutoTTRecConfigFormComponents/>
+          </fieldset>
+          <AutoTTRecSubmitAbortButtons/>
         </form>
       </FormProvider>
       {renderCounter}

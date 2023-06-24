@@ -46,7 +46,7 @@ interface AutoTTRecConfigFormComponentsProps {
   setValue: UseFormSetValue<FieldValues>;
 }
 
-export function AutoTTRecConfigFormComponents(props: {whichUI: boolean}) {  
+export function AutoTTRecConfigFormComponents() {  
   //const renderCounter = useRenderCounter();
 
   // remaining components

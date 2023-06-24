@@ -1,12 +1,15 @@
 import React from "react";
 import "../styles/AutoTTRecStatus.css";
 
-export function AutoTTRecStatus(props: {programStatusHeader: string, programStatusDetails: string}) {
+import { useAutoTTRecManager } from "./AutoTTRecManagerContext";
+
+export function AutoTTRecStatus() {
+  const {programStatusHeader, programStatusDetails} = useAutoTTRecManager();
   return (
     <div>
-      <h2>Status: {props.programStatusHeader}</h2>
+      <h2>Status: {programStatusHeader}</h2>
       <textarea
-        className="status-textarea" id="program-status-details" value={props.programStatusDetails}
+        className="status-textarea" id="program-status-details" value={programStatusDetails}
         rows={10} cols={50} readOnly={true}
       ></textarea>
     </div>

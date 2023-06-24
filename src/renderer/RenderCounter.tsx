@@ -3,7 +3,7 @@ import React, { useRef } from 'react';
 const SHOW_RENDER_COUNTERS = true;
 const isDev = process.env.NODE_ENV === 'development';
 
-const useRenderCounter = (disabled?: boolean) => {
+const useRenderCounter = (disabled?: boolean, name?: string) => {
   const renderCount = useRef(0);
   renderCount.current = renderCount.current + 1;
 
@@ -19,9 +19,11 @@ const useRenderCounter = (disabled?: boolean) => {
           height: 35,
           margin: 2,
           textAlign: 'center',
-          width: 35,
+          width: "fit-content",
+          minWidth: 35,
+          padding: 2
         }}
-      >{String(renderCount.current)}</p>
+      >{name !== undefined ? `${name}: ` : ""}{String(renderCount.current)}</p>
     );
   }
   return null;
