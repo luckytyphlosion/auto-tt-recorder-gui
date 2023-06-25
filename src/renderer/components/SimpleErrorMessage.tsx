@@ -6,6 +6,7 @@ import { AutoTTRecConfigFormFieldTypes } from "./AutoTTRecConfigForm";
 
 export function SimpleErrorMessage(props: {name: keyof AutoTTRecConfigFormFieldTypes}) {
   const {formState} = useFormContextAutoTT();
+  //console.log("SimpleErrorMessage name:", props.name);
 
   return (<ErrorMessage
     errors={formState.errors}

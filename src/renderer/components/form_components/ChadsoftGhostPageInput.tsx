@@ -2,10 +2,13 @@ import React from "react";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
 
+import useRenderCounter from "../../RenderCounter";
+
 export function ChadsoftGhostPageInput() {
   const {register, formState} = useFormContextAutoTT();
 
-  console.log("formState.isSubmitted:", formState.isSubmitted);
+  //console.log("formState.isSubmitted:", formState.isSubmitted);
+  const renderCounter = useRenderCounter(false, "ChadsoftGhostPageInput");
 
   return (
     <div>
@@ -23,7 +26,7 @@ export function ChadsoftGhostPageInput() {
           })}
         ></input>
         <SimpleErrorMessage name="chadsoft-ghost-page"/>
-
+        {renderCounter}
         {/*<ErrorMessage
           errors={formState.errors}
           name="chadsoft-ghost-page"

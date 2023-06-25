@@ -94,7 +94,7 @@ export function AudioBitrateInput(props: {encodeType: EncodeType, audioCodec: Au
     updateAudioBitrateDisplayed(event);
   }
 
-  console.log("audioCodec:", props.audioCodec);
+  //console.log("audioCodec:", props.audioCodec);
 
   useEffect(() => {
     if (props.resetToDefaultAudioBitrate) {

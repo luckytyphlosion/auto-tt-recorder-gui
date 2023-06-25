@@ -1,4 +1,4 @@
-import React, { useState, ReactNode, useEffect, memo, useMemo } from "react";
+import React, { useState, ReactNode, useEffect, memo, useMemo, useCallback } from "react";
 
 import { useForm, FormProvider, UseFormRegister, UseFormSetValue, FieldValues, FormProviderProps, UseFormReturn } from "react-hook-form";
 
@@ -307,7 +307,7 @@ export function AutoTTRecConfigForm(props: {
       "audio-codec": "libopus",
       "background-music-source": DEBUG_PREFILLED_DEFAULTS ? "game-bgm" : "music-filename",
       "chadsoft-comparison-ghost-page": "",
-      "chadsoft-ghost-page": DEBUG_PREFILLED_DEFAULTS ? "https://chadsoft.co.uk/time-trials/rkgd/2D/C5/A3DBFA4A3596AA35BA579113B9AA386E2E86.html" : "",
+      "chadsoft-ghost-page": DEBUG_PREFILLED_DEFAULTS ? "https://www.chadsoft.co.uk/time-trials/rkgd/D3/25/D29456963F8A9C5D7D9A8949118A19873EA6.html" : "",
       "comparison-ghost-filename": "",
       "comparison-ghost-source": "none",
       "crf-value": 15,
@@ -358,7 +358,7 @@ export function AutoTTRecConfigForm(props: {
       "youtube-settings": true,
     }
   });
-  //console.log("formMethods:", formMethods);
+  console.log("formMethods:", formMethods);
   //const isoWbfsFileInput = <ISOWBFSFileInput/>;
   //const mainGhostFilenameInput = <MainGhostFilenameInput arg={1}/>;
 
@@ -375,7 +375,7 @@ export function AutoTTRecConfigForm(props: {
     }
   }, [formState, errorData, formMethods.reset]);
 
- function onSubmit(formData: AutoTTRecConfigFormFieldTypes) {
+ async function onSubmit(formData: AutoTTRecConfigFormFieldTypes) {
     console.log(formData);
     console.log("formState.dirtyFields:", formState.dirtyFields);
     console.log("formState.touchedFields:", formState.touchedFields);
@@ -383,7 +383,7 @@ export function AutoTTRecConfigForm(props: {
     console.log("autoTTRecArgs:", autoTTRecArgs);
     console.log("formState.isSubmitSuccessful:", formState.isSubmitSuccessful);
     console.log("formState.isSubmitted:", formState.isSubmitted);
-    props.onSubmitCallback(autoTTRecArgs);
+    await props.onSubmitCallback(autoTTRecArgs);
   }
 
   function onError(errors: Object) {
@@ -401,7 +401,7 @@ export function AutoTTRecConfigForm(props: {
     <div>
       <form onSubmit={formMethods.handleSubmit(onSubmit, onError)}>
         <fieldset disabled={props.isAutoTTRecRunning}>
-          <AutoTTRecConfigFormComponents_Memo formMethods={formMethods}/>
+          <AutoTTRecConfigFormComponents_Memo formMethods={formMethods} forceUpdate={formState.isSubmitted}/>
         </fieldset>
         <AutoTTRecSubmitAbortButtons_Memo isAutoTTRecRunning={props.isAutoTTRecRunning} onAbortCallback={props.onAbortCallback}/>
       </form>

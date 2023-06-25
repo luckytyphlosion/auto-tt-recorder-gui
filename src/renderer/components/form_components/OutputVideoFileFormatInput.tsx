@@ -26,13 +26,13 @@ export function OutputVideoFileFormatInput(props: {videoCodec: VideoCodec}) {
   useEffect(() => {
     let outputVideoFileFormat = getValues("output-video-file-format");
     if ((props.videoCodec === "libx264" || props.videoCodec === "libx265") && outputVideoFileFormat === "webm") {
-      console.log("OutputVideoFileFormatInput set mp4");
+      //console.log("OutputVideoFileFormatInput set mp4");
       setValue("output-video-file-format", "mp4", {shouldTouch: true});
     } else if (props.videoCodec === "libvpx-vp9" && outputVideoFileFormat === "mp4") {
-      console.log("OutputVideoFileFormatInput set webm");
+      //console.log("OutputVideoFileFormatInput set webm");
       setValue("output-video-file-format", "webm", {shouldTouch: true});
     } else {
-      console.log("OutputVideoFileFormatInput outputVideoFileFormat:", outputVideoFileFormat)
+      //console.log("OutputVideoFileFormatInput outputVideoFileFormat:", outputVideoFileFormat)
     }
   }, [props.videoCodec]);
 

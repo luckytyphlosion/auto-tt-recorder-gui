@@ -43,9 +43,9 @@ import { AutoTTRecConfigFormFieldTypes } from "./AutoTTRecConfigForm";
 
 import useRenderCounter from "../RenderCounter";
 
-export function AutoTTRecConfigFormComponents(props: {formMethods: UseFormReturn<AutoTTRecConfigFormFieldTypes, any, undefined>}) {  
+export function AutoTTRecConfigFormComponents(props: {formMethods: UseFormReturn<AutoTTRecConfigFormFieldTypes, any, undefined>, forceUpdate: boolean}) {  
   const renderCounter = useRenderCounter(false, "AutoTTRecConfigFormComponents");
-
+  console.log("Rendering AutoTTRecConfigFormComponents");
   // remaining components
   // handling top 10 vs no top 10
   // top 10 censors
