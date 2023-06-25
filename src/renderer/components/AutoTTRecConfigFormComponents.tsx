@@ -43,7 +43,7 @@ import { AutoTTRecConfigFormFieldTypes } from "./AutoTTRecConfigForm";
 
 import useRenderCounter from "../RenderCounter";
 
-export function AutoTTRecConfigFormComponents() {  
+export function AutoTTRecConfigFormComponents(props: {formMethods: UseFormReturn<AutoTTRecConfigFormFieldTypes, any, undefined>}) {  
   const renderCounter = useRenderCounter(false, "AutoTTRecConfigFormComponents");
 
   // remaining components
@@ -56,7 +56,7 @@ export function AutoTTRecConfigFormComponents() {
 
   return (
     <>
-      
+      <FormProvider {...props.formMethods}>
         <ISOWBFSFileInput/>
         <MarioKartChannelLayout/>
         <OutputVideoFilenameInput/>
@@ -89,7 +89,7 @@ export function AutoTTRecConfigFormComponents() {
       <QualityInput/>
       <OutputVideoFilenameInput/>*/}
         {renderCounter}
-      
+      </FormProvider>
     </>
   );
 }

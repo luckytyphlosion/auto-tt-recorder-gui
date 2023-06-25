@@ -39,8 +39,6 @@ import { AudioBitrateUnit } from "./form_components/AudioBitrateInput";
 import { H26xPreset } from "./form_components/H26xPresetInput";
 import { OutputWidthPreset } from "./form_components/OutputWidthInput";
 
-import { IsolatedFormProvider } from "./IsolatedFormProvider";
-
 import useRenderCounter from "../RenderCounter";
 
 interface AutoTTRecConfigFormComponentsProps {
@@ -294,7 +292,6 @@ const DEBUG_PREFILLED_DEFAULTS = true;
 
 const AutoTTRecConfigFormComponents_Memo = memo(AutoTTRecConfigFormComponents);
 const AutoTTRecSubmitAbortButtons_Memo = memo(AutoTTRecSubmitAbortButtons);
-const IsolatedFormProvider_Memo = memo(IsolatedFormProvider);
 
 export function AutoTTRecConfigForm(props: {
   whichUI: boolean, onSubmitCallback: (autoTTRecArgs: AutoTTRecArgs) => any,
@@ -404,9 +401,7 @@ export function AutoTTRecConfigForm(props: {
     <div>
       <form onSubmit={formMethods.handleSubmit(onSubmit, onError)}>
         <fieldset disabled={props.isAutoTTRecRunning}>
-          <IsolatedFormProvider_Memo formMethods={formMethods}>
-            <AutoTTRecConfigFormComponents_Memo/>
-          </IsolatedFormProvider_Memo>
+          <AutoTTRecConfigFormComponents_Memo formMethods={formMethods}/>
         </fieldset>
         <AutoTTRecSubmitAbortButtons_Memo isAutoTTRecRunning={props.isAutoTTRecRunning} onAbortCallback={props.onAbortCallback}/>
       </form>
