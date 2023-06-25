@@ -148,17 +148,19 @@ export interface AutoTTRecArgs {
   "output-video-filename": string
 }
 
+const DEFAULT_AUTO_TT_REC_ARGS: AutoTTRecArgs = {
+  "iso-filename": "",
+  "speedometer": "fancy",
+  "encode-type": "crf",
+  "output-video-filename": ""
+};
+
 class AutoTTRecArgsBuilder {
   private _autoTTRecArgs: AutoTTRecArgs;
   private formData: AutoTTRecConfigFormFieldTypes;
 
   constructor(formData: AutoTTRecConfigFormFieldTypes) {
-    this._autoTTRecArgs = {
-      "iso-filename": "",
-      "speedometer": "fancy",
-      "encode-type": "crf",
-      "output-video-filename": ""
-    };
+    this._autoTTRecArgs = {...DEFAULT_AUTO_TT_REC_ARGS};
     this.formData = formData;
   }
 
@@ -358,24 +360,19 @@ export function AutoTTRecConfigForm(props: {
       "youtube-settings": true,
     }
   });
-  console.log("formMethods:", formMethods);
+  //console.log("formMethods:", formMethods);
   //const isoWbfsFileInput = <ISOWBFSFileInput/>;
   //const mainGhostFilenameInput = <MainGhostFilenameInput arg={1}/>;
 
   let formState = formMethods.formState;
 
-  const [errorData, setErrorData] = useState({});
   const [stateTest, setStateTest] = useState(false);
+  const [submittedToggle, setSubmittedToggle] = useState(false);
 
-  useEffect(() => {
-    console.log("useEffect formState.isSubmitSuccessful:", formState.isSubmitSuccessful);
-    console.log("useEffect formState.isSubmitted:", formState.isSubmitted);
-    if (formState.isSubmitted) {
-      formMethods.reset(undefined, {keepValues: true, keepErrors: true});
-    }
-  }, [formState, errorData, formMethods.reset]);
-
- async function onSubmit(formData: AutoTTRecConfigFormFieldTypes) {
+  async function onSubmit(formData: AutoTTRecConfigFormFieldTypes) {
+    setSubmittedToggle((submittedToggle) => !submittedToggle);
+    console.log("onSubmit");
+    formMethods.reset(undefined, {keepValues: true});
     console.log(formData);
     console.log("formState.dirtyFields:", formState.dirtyFields);
     console.log("formState.touchedFields:", formState.touchedFields);
@@ -388,9 +385,8 @@ export function AutoTTRecConfigForm(props: {
 
   function onError(errors: Object) {
     console.log("errors:", errors);
-    setErrorData(errors);
-    //console.log("formMethods.formState.isSubmitSuccessful:", formMethods.formState.isSubmitSuccessful);
-    //console.log("formMethods.formState.isSubmitted:", formMethods.formState.isSubmitted);
+    setSubmittedToggle((submittedToggle) => !submittedToggle);
+    formMethods.reset(undefined, {keepValues: true, keepErrors: true});
   }
 
   function onCheckChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -401,7 +397,7 @@ export function AutoTTRecConfigForm(props: {
     <div>
       <form onSubmit={formMethods.handleSubmit(onSubmit, onError)}>
         <fieldset disabled={props.isAutoTTRecRunning}>
-          <AutoTTRecConfigFormComponents_Memo formMethods={formMethods} forceUpdate={formState.isSubmitted}/>
+          <AutoTTRecConfigFormComponents_Memo formMethods={formMethods} forceUpdate={submittedToggle}/>
         </fieldset>
         <AutoTTRecSubmitAbortButtons_Memo isAutoTTRecRunning={props.isAutoTTRecRunning} onAbortCallback={props.onAbortCallback}/>
       </form>
