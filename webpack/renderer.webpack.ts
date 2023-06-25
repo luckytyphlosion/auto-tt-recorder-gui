@@ -61,8 +61,7 @@ const config: Configuration = {
   },
   output: {
     path: path.resolve(rootPath, "dist/renderer"),
-    filename: "js/[name].js",
-    sourceMapFilename: "js/[name].js.map"
+    filename: "js/[name].js"
   },
   optimization: {
     minimize: false,

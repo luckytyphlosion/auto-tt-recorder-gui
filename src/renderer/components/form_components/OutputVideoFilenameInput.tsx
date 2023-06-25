@@ -16,7 +16,7 @@ export function OutputVideoFilenameInput() {
     <div>
       <label htmlFor="output-video-filename">Output filename: </label>
       <input
-        className="filename-input" type="text"
+        className="filename-input" type="text" readOnly
         {...register("output-video-filename", {required: {
           value: true,
           message: "This input is required."
