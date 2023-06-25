@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { AutoTTRecArgs } from "../../../auto-tt-rec-args";
 import useRenderCounter from "../../RenderCounter";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { FileFilter } from "electron";
