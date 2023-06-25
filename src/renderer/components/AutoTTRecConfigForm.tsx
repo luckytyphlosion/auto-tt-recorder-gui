@@ -39,8 +39,6 @@ import { AudioBitrateUnit } from "./form_components/AudioBitrateInput";
 import { H26xPreset } from "./form_components/H26xPresetInput";
 import { OutputWidthPreset } from "./form_components/OutputWidthInput";
 
-import { OptimizedFormProvider, OptimizedFormProvider2 } from "./OptimizedFormProvider";
-
 import useRenderCounter from "../RenderCounter";
 
 import { useAutoTTRecManager } from "./AutoTTRecManagerContext";
@@ -342,9 +340,12 @@ const DEBUG_PREFILLED_DEFAULTS = true;
   isAutoTTRecRunning: boolean
 */
 const AutoTTRecConfigFormComponents_Memo = memo(AutoTTRecConfigFormComponents);
+const AutoTTRecSubmitAbortButtons_Memo = memo(AutoTTRecSubmitAbortButtons);
 
 export function AutoTTRecConfigForm(props: {
-  whichUI: boolean}) {  
+  whichUI: boolean, onSubmitCallback: (autoTTRecArgs: AutoTTRecArgs) => any,
+  onAbortCallback: (event: React.MouseEvent<HTMLButtonElement>) => void,
+  isAutoTTRecRunning: boolean}) {  
   const renderCounter = useRenderCounter(false, "AutoTTRecConfigForm");
   const formMethods = useForm<AutoTTRecConfigFormFieldTypes>({
     criteriaMode: "all",
@@ -415,8 +416,6 @@ export function AutoTTRecConfigForm(props: {
   const [errorData, setErrorData] = useState({});
   const [stateTest, setStateTest] = useState(false);
 
-  let {isAutoTTRecRunning, runAutoTTRec} = useAutoTTRecManager();
-
   useEffect(() => {
     console.log("useEffect formState.isSubmitSuccessful:", formState.isSubmitSuccessful);
     console.log("useEffect formState.isSubmitted:", formState.isSubmitted);
@@ -433,7 +432,7 @@ export function AutoTTRecConfigForm(props: {
     console.log("autoTTRecArgs:", autoTTRecArgs);
     console.log("formState.isSubmitSuccessful:", formState.isSubmitSuccessful);
     console.log("formState.isSubmitted:", formState.isSubmitted);
-    runAutoTTRec(autoTTRecArgs);
+    props.onSubmitCallback(autoTTRecArgs);
   }
 
   function onError(errors: Object) {
@@ -470,30 +469,12 @@ export function AutoTTRecConfigForm(props: {
 
   return (
     <div>
-      <OptimizedFormProvider2 
-      register={formMethods.register}
-      setFocus={formMethods.setFocus}
-      formState={formMethods.formState}
-      handleSubmit={formMethods.handleSubmit}
-      getValues={formMethods.getValues}
-      setValue={formMethods.setValue}
-      control={formMethods.control}
-      clearErrors={formMethods.clearErrors}
-      setError={formMethods.setError}
-      trigger={formMethods.trigger}
-      watch={formMethods.watch}
-      getFieldState={formMethods.getFieldState}
-      resetField={formMethods.resetField}
-      reset={formMethods.reset}
-      unregister={formMethods.unregister}
-      >
       <form onSubmit={formMethods.handleSubmit(onSubmit, onError)}>
-        <fieldset disabled={isAutoTTRecRunning}>
-          <AutoTTRecConfigFormComponents_Memo/>
+        <fieldset disabled={props.isAutoTTRecRunning}>
+          <AutoTTRecConfigFormComponents_Memo formMethods={formMethods}/>
         </fieldset>
-        <AutoTTRecSubmitAbortButtons/>
+        <AutoTTRecSubmitAbortButtons_Memo isAutoTTRecRunning={props.isAutoTTRecRunning} onAbortCallback={props.onAbortCallback}/>
       </form>
-      </OptimizedFormProvider2>
       <input type="checkbox" id="state-test" checked={stateTest} onChange={onCheckChange}/>
       {renderCounter}
     </div>

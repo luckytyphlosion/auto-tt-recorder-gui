@@ -11,7 +11,7 @@ export function EncodeTypeInput() {
   const {register, getValues} = useFormContextAutoTT();
   const [encodeType, setEncodeType] = useState(getValues("encode-type"));
   const [encodeTypeChanged, setEncodeTypeChanged] = useState(false);
-  const renderCounter = useRenderCounter(true);
+  const renderCounter = useRenderCounter(false, "EncodeTypeInput");
 
   function updateEncodeType(event: Event) {
     setEncodeType(getValues("encode-type"));

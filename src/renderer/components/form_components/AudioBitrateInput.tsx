@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { UseFormRegister, FieldValues, UseFormRegisterReturn, Controller, ValidateResult } from "react-hook-form";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import useRenderCounter from "../../RenderCounter";
@@ -96,12 +96,14 @@ export function AudioBitrateInput(props: {encodeType: EncodeType, audioCodec: Au
 
   console.log("audioCodec:", props.audioCodec);
 
-  if (props.resetToDefaultAudioBitrate) {
-    let audioBitrate = getDefaultAudioBitrate(props.encodeType, props.audioCodec);
-    let audioBitrateDisplayed = getDefaultAudioBitrateDisplayed(props.encodeType, props.audioCodec, getValues("audio-bitrate-unit")); 
-    setValue("audio-bitrate", audioBitrate, {shouldTouch: true});
-    setValue("audio-bitrate-displayed", audioBitrateDisplayed, {shouldTouch: true});
-  }
+  useEffect(() => {
+    if (props.resetToDefaultAudioBitrate) {
+      let audioBitrate = getDefaultAudioBitrate(props.encodeType, props.audioCodec);
+      let audioBitrateDisplayed = getDefaultAudioBitrateDisplayed(props.encodeType, props.audioCodec, getValues("audio-bitrate-unit")); 
+      setValue("audio-bitrate", audioBitrate, {shouldTouch: true});
+      setValue("audio-bitrate-displayed", audioBitrateDisplayed, {shouldTouch: true});
+    }  
+  }, [props.resetToDefaultAudioBitrate]);
 
   function validateAudioBitrate(value: number) : ValidateResult {
     if (Number.isNaN(value)) {

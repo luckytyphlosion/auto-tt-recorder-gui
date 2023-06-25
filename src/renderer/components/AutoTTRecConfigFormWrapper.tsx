@@ -1,4 +1,4 @@
-import React, {memo} from "react";
+/*import React, {memo} from "react";
 
 import { AutoTTRecManagerProvider } from "./AutoTTRecManagerContext";
 import { AutoTTRecConfigForm } from "./AutoTTRecConfigForm";
@@ -18,4 +18,4 @@ export function AutoTTRecConfigFormWrapper() {
       <AutoTTRecStatus/>
     </AutoTTRecManagerProvider_Memo>
   )
-}
+}*/

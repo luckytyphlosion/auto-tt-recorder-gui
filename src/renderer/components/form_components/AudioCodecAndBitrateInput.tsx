@@ -17,7 +17,6 @@ export function AudioCodecAndBitrateInput(props: {encodeType: EncodeType, encode
   const renderCounter = useRenderCounter(true);
 
   function updateAudioCodec(event: Event) {
-    let s = getValues("audio-codec");
     setAudioCodec(getValues("audio-codec"));
     setEncodeTypeOrAudioCodecChanged(true);
   }

@@ -3,15 +3,15 @@ import { useAutoTTRecManager } from "./AutoTTRecManagerContext";
 
 import useRenderCounter from "../RenderCounter";
 
-function AutoTTRecSubmitAbortButtons() {
-  const {isAutoTTRecRunning, abortAutoTTRec} = useAutoTTRecManager();
+function AutoTTRecSubmitAbortButtons(props: {
+  isAutoTTRecRunning: boolean, onAbortCallback: (event: React.MouseEvent<HTMLButtonElement>) => void}) {
   const renderCounter = useRenderCounter(false, "AutoTTRecSubmitAbortButtons");
 
   // disabled={this.state.isAutoTTRecRunning}
   return (
     <div>
-      <button type="submit" disabled={isAutoTTRecRunning}>Record!</button>
-      <button type="button" disabled={!isAutoTTRecRunning} onClick={abortAutoTTRec}>Abort</button>
+      <button type="submit" disabled={props.isAutoTTRecRunning}>Record!</button>
+      <button type="button" disabled={!props.isAutoTTRecRunning} onClick={props.onAbortCallback}>Abort</button>
       {renderCounter}
     </div>
   );

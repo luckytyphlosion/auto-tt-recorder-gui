@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import { AutoTTRecArgs } from "../../auto-tt-rec-args";
-import { UseFormRegister, UseFormSetValue, FieldValues } from "react-hook-form";
+import { FormProvider, UseFormReturn } from "react-hook-form";
 
 import "../styles/AutoTTRecConfigFormComponents.css";
 
@@ -39,14 +39,11 @@ import { TimelineCategoryInput } from "./form_components/TimelineCategoryInput";
 
 import AutoTTRecSubmitAbortButtons from "./AutoTTRecSubmitAbortButtons";
 
+import { AutoTTRecConfigFormFieldTypes } from "./AutoTTRecConfigForm";
+
 import useRenderCounter from "../RenderCounter";
 
-interface AutoTTRecConfigFormComponentsProps {
-  register: UseFormRegister<FieldValues>;
-  setValue: UseFormSetValue<FieldValues>;
-}
-
-export function AutoTTRecConfigFormComponents() {  
+export function AutoTTRecConfigFormComponents(props: {formMethods: UseFormReturn<AutoTTRecConfigFormFieldTypes, any, undefined>}) {  
   const renderCounter = useRenderCounter(false, "AutoTTRecConfigFormComponents");
 
   // remaining components
@@ -59,9 +56,10 @@ export function AutoTTRecConfigFormComponents() {
 
   return (
     <>
-      <ISOWBFSFileInput/>
-      <MarioKartChannelLayout/>
-      <OutputVideoFilenameInput/>
+      <FormProvider {...props.formMethods}>
+        <ISOWBFSFileInput/>
+        <MarioKartChannelLayout/>
+        <OutputVideoFilenameInput/>
       {/*<TimelineCategoryInput noTop10Child={<NoTop10CategoryInput/>} top10ChadsoftChild={<div></div>} top10GeckoChild={<div></div>}/>*/}
       {/*<MainGhostFilenameInput arg={1}/>
       <ChadsoftGhostPageInput/>
@@ -90,7 +88,8 @@ export function AutoTTRecConfigFormComponents() {
       <DolphinResolutionInput/>
       <QualityInput/>
       <OutputVideoFilenameInput/>*/}
-      {renderCounter}
+        {renderCounter}
+      </FormProvider>
     </>
   );
 }

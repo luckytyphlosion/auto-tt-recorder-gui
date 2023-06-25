@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, memo } from "react";
 import { AutoTTRecConfigForm, AutoTTRecArgs } from "./AutoTTRecConfigForm";
 import { AutoTTRecStatus } from "./AutoTTRecStatus";
 import { IpcRendererEvent } from "electron";
@@ -20,6 +20,8 @@ function appendAccountingForCarriage(base: string, line: string) {
 
   return output;
 }
+
+const AutoTTRecConfigForm_Memo = memo(AutoTTRecConfigForm);
 
 export function AutoTTRecConfigFormStatusCombined() {
   const [programStatusHeader, setProgramStatusHeader] = useState("Ready");
@@ -45,7 +47,7 @@ export function AutoTTRecConfigFormStatusCombined() {
     setProgramStatusDetails((programStatusDetails) => appendAccountingForCarriage(programStatusDetails, stderrData));
   }, []);
 
-  async function onSubmit(autoTTRecArgs: AutoTTRecArgs) {
+  const runAutoTTRec = useCallback(async function (autoTTRecArgs: AutoTTRecArgs) {
     const spawnSuccessful = await window.api.spawnAutoTTRec("data/barebones_personal_ghost_config.yml", autoTTRecArgs)
       .catch((err: Error) => {
         setProgramStatusHeader("Error");
@@ -66,7 +68,7 @@ export function AutoTTRecConfigFormStatusCombined() {
         .catch((err) => {
           setAutoTTRecRunning(false);
           setProgramStatusHeader("Error");
-          setProgramStatusDetails(programStatusDetails + err.message);
+          setProgramStatusDetails((programStatusDetails) => (programStatusDetails + err.message));
         });
 
       if (autoTTRecResponse === AutoTTRecResponse.COMPLETED) {
@@ -74,27 +76,27 @@ export function AutoTTRecConfigFormStatusCombined() {
         setProgramStatusHeader("Done!");
       } else if (autoTTRecResponse === AutoTTRecResponse.ABORTED) {
         setAutoTTRecRunning(false);
-        setProgramStatusDetails("Aborted");
+        setProgramStatusHeader("Aborted");
       }
 
       console.log("Removing std handlers!");
       window.api.removeHandleSendStdout(handleSendStdoutListener);
       window.api.removeHandleSendStderr(handleSendStderrListener);
     }
-  }
+  }, []);
 
-  async function abortAutoTTRec(event: React.MouseEvent<HTMLButtonElement>) {
+  const abortAutoTTRec = useCallback(async function (event: React.MouseEvent<HTMLButtonElement>) {
     await window.api.terminateAutoTTRec();
-  }
+  }, []);
 
   return (
     <div>
-      {/*<h2>Test header {randomNum}</h2>
-      <AutoTTRecConfigForm whichUI={true} onSubmitCallback={onSubmit}
+      <h2>Test header {randomNum}</h2>
+      <AutoTTRecConfigForm_Memo whichUI={true} onSubmitCallback={runAutoTTRec}
         onAbortCallback={abortAutoTTRec} isAutoTTRecRunning={isAutoTTRecRunning}/>
       {renderCounter}
       <AutoTTRecStatus programStatusHeader={programStatusHeader}
-        programStatusDetails={programStatusDetails}/>*/}
+        programStatusDetails={programStatusDetails}/>
     </div>
   )
 }
