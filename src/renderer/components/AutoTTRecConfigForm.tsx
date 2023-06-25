@@ -39,52 +39,9 @@ import { AudioBitrateUnit } from "./form_components/AudioBitrateInput";
 import { H26xPreset } from "./form_components/H26xPresetInput";
 import { OutputWidthPreset } from "./form_components/OutputWidthInput";
 
-import useRenderCounter from "../RenderCounter";
+import { IsolatedFormProvider } from "./IsolatedFormProvider";
 
-import { useAutoTTRecManager } from "./AutoTTRecManagerContext";
-/*
-const OptimizedFormProvider = <TFieldValues extends FieldValues, TContext = any>({
-  register,
-  setFocus,
-  formState,
-  handleSubmit,
-  getValues,
-  setValue,
-  control,
-  clearErrors,
-  children,
-  setError,
-  trigger,
-  watch,
-  getFieldState,
-  resetField,
-  reset,
-  unregister,
-}: FormProviderProps<TFieldValues, TContext>) => (
-  <HookFormContext.Provider
-    value={
-      {
-        register,
-        setFocus,
-        formState,
-        handleSubmit,
-        getValues,
-        setValue,
-        clearErrors,
-        control,
-        setError,
-        trigger,
-        watch,
-        resetField,
-        getFieldState,
-        reset,
-        unregister,
-      } as unknown as UseFormReturn
-    }
-  >
-    {children}
-  </HookFormContext.Provider>
-);*/
+import useRenderCounter from "../RenderCounter";
 
 interface AutoTTRecConfigFormComponentsProps {
   register: UseFormRegister<FieldValues>;
@@ -335,12 +292,9 @@ export function convertFormDataToAutoTTRecArgs(formData: AutoTTRecConfigFormFiel
 
 const DEBUG_PREFILLED_DEFAULTS = true;
 
-/*, onSubmitCallback: (autoTTRecArgs: AutoTTRecArgs) => any,
-  onAbortCallback: (event: React.MouseEvent<HTMLButtonElement>) => void,
-  isAutoTTRecRunning: boolean
-*/
 const AutoTTRecConfigFormComponents_Memo = memo(AutoTTRecConfigFormComponents);
 const AutoTTRecSubmitAbortButtons_Memo = memo(AutoTTRecSubmitAbortButtons);
+const IsolatedFormProvider_Memo = memo(IsolatedFormProvider);
 
 export function AutoTTRecConfigForm(props: {
   whichUI: boolean, onSubmitCallback: (autoTTRecArgs: AutoTTRecArgs) => any,
@@ -446,32 +400,13 @@ export function AutoTTRecConfigForm(props: {
     setStateTest((stateTest) => !stateTest);
   }
 
-  // <AutoTTRecConfigFormComponents/>
-
-//   <FormProvider<AutoTTRecConfigFormFieldTypes> register={register}
-//   setFocus={setFocus}
-//   formState={formState}
-//   handleSubmit={handleSubmit}
-//   getValues={getValues}
-//   setValue={setValue}
-//   control={control}
-//   clearErrors={clearErrors}
-//   setError={setError}
-//   trigger={trigger}
-//   watch={watch}
-//   getFieldState={getFieldState}
-//   resetField={resetField}
-//   reset={reset}
-//   unregister={unregister}
-// >
-
-// </FormProvider>
-
   return (
     <div>
       <form onSubmit={formMethods.handleSubmit(onSubmit, onError)}>
         <fieldset disabled={props.isAutoTTRecRunning}>
-          <AutoTTRecConfigFormComponents_Memo formMethods={formMethods}/>
+          <IsolatedFormProvider_Memo formMethods={formMethods}>
+            <AutoTTRecConfigFormComponents_Memo/>
+          </IsolatedFormProvider_Memo>
         </fieldset>
         <AutoTTRecSubmitAbortButtons_Memo isAutoTTRecRunning={props.isAutoTTRecRunning} onAbortCallback={props.onAbortCallback}/>
       </form>

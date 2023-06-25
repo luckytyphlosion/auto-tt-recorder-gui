@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "../styles/AutoTTRecStatus.css";
 
-import { useAutoTTRecManager } from "./AutoTTRecManagerContext";
 import useRenderCounter from "../RenderCounter";
 
 export function AutoTTRecStatus(props: {programStatusHeader: string, programStatusDetails: string}) {
