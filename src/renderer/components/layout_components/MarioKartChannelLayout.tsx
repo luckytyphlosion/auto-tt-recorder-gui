@@ -55,12 +55,13 @@ export function MarioKartChannelLayout() {
       <BackgroundMusicSourceInput/>
       <InputDisplayInput/>
       <SpeedometerInput/>
-      <HQTexturesInput/>
-      <NoBackgroundBlurInput/>
-      <NoBloomInput/>
       <EncodeTypeInput/>
       <PixelFormatInput_Memo register={register}/>
       <DolphinResolutionInput/>
+
+      <HQTexturesInput/>
+      <NoBackgroundBlurInput/>
+      <NoBloomInput/>
       <UseFFV1Input/>
       <EncodeOnlyInput/>
       <InputDisplayDontCreateInput/>

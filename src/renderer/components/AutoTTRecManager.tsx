@@ -23,13 +23,12 @@ function appendAccountingForCarriage(base: string, line: string) {
 
 const AutoTTRecConfigForm_Memo = memo(AutoTTRecConfigForm);
 
-export function AutoTTRecConfigFormStatusCombined() {
+export function AutoTTRecManager() {
   const [programStatusHeader, setProgramStatusHeader] = useState("Ready");
   const [programStatusDetails, setProgramStatusDetails] = useState("");
   const [isAutoTTRecRunning, setAutoTTRecRunning] = useState(false);
-  console.log("AutoTTRecConfigFormStatusCombined programStatusDetails:", programStatusDetails);
-  const renderCounter = useRenderCounter(false, "AutoTTRecConfigFormStatusCombined");
-  const randomNum = Math.random();
+  console.log("AutoTTRecManager programStatusDetails:", programStatusDetails);
+  const renderCounter = useRenderCounter(false, "AutoTTRecManager");
 
   const handleSendStdoutListener = useCallback(function (event: IpcRendererEvent, stdoutData: string) {
     console.log("stdoutData:", stdoutData);
@@ -58,8 +57,6 @@ export function AutoTTRecConfigFormStatusCombined() {
       setAutoTTRecRunning(true);
       setProgramStatusHeader("Running! Don't close dolphin!");
       setProgramStatusDetails("");
-
-      //let appVariable = this;
 
       window.api.handleSendStdout(handleSendStdoutListener);
       window.api.handleSendStderr(handleSendStderrListener);
@@ -91,7 +88,7 @@ export function AutoTTRecConfigFormStatusCombined() {
 
   return (
     <div>
-      <h2>Test header {randomNum}</h2>
+      <h2>Test header</h2>
       <AutoTTRecConfigForm_Memo whichUI={true} onSubmitCallback={runAutoTTRec}
         onAbortCallback={abortAutoTTRec} isAutoTTRecRunning={isAutoTTRecRunning}/>
       {renderCounter}

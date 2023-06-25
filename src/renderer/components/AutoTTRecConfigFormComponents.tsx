@@ -50,9 +50,7 @@ export function AutoTTRecConfigFormComponents(props: {formMethods: UseFormReturn
   // handling top 10 vs no top 10
   // top 10 censors
   // top 10 gecko code filename
-  // music volume
   // dolphin volume
-  // cache settings
 
   return (
     <>

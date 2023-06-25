@@ -1,12 +1,12 @@
 import React from "react";
 
-function GUIHeader() {
+export function GUIHeader() {
   return (
     <div className="auto-tt-rec-notes">
       <h1 className="title-header">Auto-TT-Recorder GUI (v0.2.7)</h1>
       <ul className="auto-tt-rec-notes-first-half">
         <li>All regions are supported, including NTSC-K.</li>
-        <li>No complex features, just the bare minimum to produce a recording.</li>
+        <li>Supports all relevant features for mkchannel ghost recordings.</li>
         <li>Links below aren't hyperlinks yet because of time issues, this will be fixed in the next version</li>
       </ul>
       <h3 className="troubleshooting-header">Troubleshooting below:</h3>
@@ -21,4 +21,3 @@ function GUIHeader() {
   );
 }
 
-export default GUIHeader;
