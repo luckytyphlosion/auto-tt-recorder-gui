@@ -5,8 +5,9 @@ import useRenderCounter from "../../RenderCounter";
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
 
 export function OutputWidthCustomInput() {
-  const {register} = useFormContextAutoTT();
+  const {register, getValues} = useFormContextAutoTT();
   const renderCounter = useRenderCounter();
+  console.log("output-width-custom:", getValues("output-width-custom"));
 
   return (
     <div>

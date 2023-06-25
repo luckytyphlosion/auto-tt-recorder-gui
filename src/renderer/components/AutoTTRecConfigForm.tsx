@@ -290,7 +290,7 @@ export function convertFormDataToAutoTTRecArgs(formData: AutoTTRecConfigFormFiel
   return argsBuilder.autoTTRecArgs;
 }
 
-const DEBUG_PREFILLED_DEFAULTS = true;
+const DEBUG_PREFILLED_DEFAULTS = false;
 
 const AutoTTRecConfigFormComponents_Memo = memo(AutoTTRecConfigFormComponents);
 const AutoTTRecSubmitAbortButtons_Memo = memo(AutoTTRecSubmitAbortButtons);
@@ -401,7 +401,7 @@ export function AutoTTRecConfigForm(props: {
         </fieldset>
         <AutoTTRecSubmitAbortButtons_Memo isAutoTTRecRunning={props.isAutoTTRecRunning} onAbortCallback={props.onAbortCallback}/>
       </form>
-      <input type="checkbox" id="state-test" checked={stateTest} onChange={onCheckChange}/>
+      {/*<input type="checkbox" id="state-test" checked={stateTest} onChange={onCheckChange}/>*/}
       {renderCounter}
     </div>
   );

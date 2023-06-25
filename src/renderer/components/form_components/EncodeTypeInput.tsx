@@ -20,6 +20,7 @@ export function EncodeTypeInput() {
 
   return (
     <div>
+      <h3>Encoding settings (ignore if not sure)</h3>
       <label htmlFor="encode-type">Encode type: </label>
       <label htmlFor="encode-type-crf">CRF (For YouTube or offline): </label>
       <input type="radio" id="encode-type-crf" value="crf"

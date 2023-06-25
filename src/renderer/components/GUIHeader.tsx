@@ -3,10 +3,11 @@ import React from "react";
 export function GUIHeader() {
   return (
     <div className="auto-tt-rec-notes">
-      <h1 className="title-header">Auto-TT-Recorder GUI (v0.2.7)</h1>
+      <h1 className="title-header">Auto-TT-Recorder GUI (v1.0.0)</h1>
       <ul className="auto-tt-rec-notes-first-half">
         <li>All regions are supported, including NTSC-K.</li>
         <li>Supports all relevant features for mkchannel ghost recordings.</li>
+        <li>I will fix the visual layout later.</li>
         <li>Links below aren't hyperlinks yet because of time issues, this will be fixed in the next version</li>
       </ul>
       <h3 className="troubleshooting-header">Troubleshooting below:</h3>

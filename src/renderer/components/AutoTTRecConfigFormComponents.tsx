@@ -53,7 +53,7 @@ export function AutoTTRecConfigFormComponents(props: {formMethods: UseFormReturn
   // dolphin volume
 
   return (
-    <>
+    <div className="auto-tt-rec-config-form">
       <FormProvider {...props.formMethods}>
         <ISOWBFSFileInput/>
         <MarioKartChannelLayout/>
@@ -88,6 +88,6 @@ export function AutoTTRecConfigFormComponents(props: {formMethods: UseFormReturn
       <OutputVideoFilenameInput/>*/}
         {renderCounter}
       </FormProvider>
-    </>
+    </div>
   );
 }

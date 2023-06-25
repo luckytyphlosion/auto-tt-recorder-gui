@@ -88,7 +88,6 @@ export function AutoTTRecManager() {
 
   return (
     <div>
-      <h2>Test header</h2>
       <AutoTTRecConfigForm_Memo whichUI={true} onSubmitCallback={runAutoTTRec}
         onAbortCallback={abortAutoTTRec} isAutoTTRecRunning={isAutoTTRecRunning}/>
       {renderCounter}

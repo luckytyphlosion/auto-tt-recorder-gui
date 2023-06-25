@@ -21,7 +21,7 @@ export function OutputWidthInput(props: {dolphinResolution: DolphinResolution, d
   const {register, setValue, getValues} = useFormContextAutoTT();
   const [outputWidthPreset, setOutputWidthPreset] = useState(getValues("output-width-preset"));
   const [dolphinResolutionToggle, setDolphinResolutionToggle] = useState(props.dolphinResolutionToggle);
-  const renderCounter = useRenderCounter(true);
+  const renderCounter = useRenderCounter(false, "OutputWidthInput");
 
   function updateOutputWidthPreset(event: Event) {
     setOutputWidthPreset(getValues("output-width-preset"));
