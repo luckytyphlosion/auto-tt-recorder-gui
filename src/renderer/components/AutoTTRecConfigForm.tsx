@@ -39,6 +39,8 @@ import { AudioBitrateUnit } from "./form_components/AudioBitrateInput";
 import { H26xPreset } from "./form_components/H26xPresetInput";
 import { OutputWidthPreset } from "./form_components/OutputWidthInput";
 
+import { TimelineCategory } from "./form_components/TimelineCategoryInput";
+
 import useRenderCounter from "../RenderCounter";
 
 interface AutoTTRecConfigFormComponentsProps {
@@ -95,7 +97,7 @@ export interface AutoTTRecConfigFormFieldTypes {
   "speedometer-metric": SpeedometerMetric,
   "szs-filename": string,
   "szs-source": SZSSource,
-  "timeline-category": string,
+  "timeline-category": TimelineCategory,
   "top-10-chadsoft": string,
   "top-10-highlight-enable": boolean,
   "top-10-highlight": number,
@@ -109,8 +111,11 @@ export interface AutoTTRecConfigFormFieldTypes {
   "youtube-settings": boolean,
 }
 
+export type Timeline = "noencode" | "ghostonly" | "ghostselect" | "mkchannel" | "top10";
+
 export interface AutoTTRecArgs {
   "iso-filename": string,
+  "timeline"?: Timeline,
   "main-ghost-filename"?: string,
   "chadsoft-ghost-page"?: string,
   "on-200cc"?: boolean
@@ -145,7 +150,10 @@ export interface AutoTTRecArgs {
   "encode-only"?: boolean,
   "input-display-dont-create"?: boolean,
   "keep-window"?: boolean,
-  "output-video-filename": string
+  "output-video-filename": string,
+  "top-10-chadsoft"?: string,
+  "top-10-title"?: string,
+  "top-10-highlight"?: number
 }
 
 const DEFAULT_AUTO_TT_REC_ARGS: AutoTTRecArgs = {
@@ -191,16 +199,34 @@ class AutoTTRecArgsBuilder {
   }
 }
 
-export function convertFormDataToAutoTTRecArgs(formData: AutoTTRecConfigFormFieldTypes) {
-  let argsBuilder = new AutoTTRecArgsBuilder(formData);
-  argsBuilder.add("iso-filename");
-
+function addMainGhostSourceToAutoTTRecArgs(formData: AutoTTRecConfigFormFieldTypes, argsBuilder: AutoTTRecArgsBuilder) {
   if (formData["main-ghost-source"] === "chadsoft") {
     argsBuilder.add("chadsoft-ghost-page");
   } else if (formData["main-ghost-source"] === "rkg") {
     argsBuilder.add("main-ghost-filename");
     if (formData["set-200cc"] === "on-200cc") {
       argsBuilder.addManual("on-200cc", true);
+    }
+  }
+}
+
+
+function convertFormDataToAutoTTRecArgs(formData: AutoTTRecConfigFormFieldTypes) {
+  let argsBuilder = new AutoTTRecArgsBuilder(formData);
+  argsBuilder.add("iso-filename");
+
+  if (formData["timeline-category"] === "notop10") {
+    argsBuilder.addManual("timeline", "mkchannel");
+    addMainGhostSourceToAutoTTRecArgs(formData, argsBuilder);
+  } else {
+    argsBuilder.addManual("timeline", "top10");
+    argsBuilder.add("top-10-chadsoft");
+    argsBuilder.add("top-10-title");
+    if (formData["top-10-highlight-enable"]) {
+      argsBuilder.add("top-10-highlight");
+    } else {
+      argsBuilder.addManual("top-10-highlight", -1);
+      addMainGhostSourceToAutoTTRecArgs(formData, argsBuilder);
     }
   }
 
@@ -346,7 +372,7 @@ export function AutoTTRecConfigForm(props: {
       "speedometer-metric": "engine",
       "szs-filename": "",
       "szs-source": "automatic",
-      "timeline-category": "notop10",
+      "timeline-category": "top10chadsoft",
       "top-10-chadsoft": "",
       "top-10-highlight-enable": true,
       "top-10-highlight": 1,

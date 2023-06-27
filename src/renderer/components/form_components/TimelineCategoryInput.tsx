@@ -4,12 +4,14 @@ import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { NoTop10CategoryInput } from "./NoTop10CategoryInput";
 import useRenderCounter from "../../RenderCounter";
 
+export type TimelineCategory = "notop10" | "top10chadsoft" | "top10gecko";
+
 export function TimelineCategoryInput(props: {
   noTop10Child: ReactElement, top10ChadsoftChild: ReactElement, top10GeckoChild: ReactElement
 }) {
   const {register, getValues} = useFormContextAutoTT();
-  const [timelineCategory, setTimelineCategory] = useState("notop10");
-  const renderCounter = useRenderCounter(true);
+  const [timelineCategory, setTimelineCategory] = useState(getValues("timeline-category"));
+  const renderCounter = useRenderCounter(false, "TimelineCategoryInput");
 
   function updateTimelineCategory(event: Event) {
     setTimelineCategory(getValues("timeline-category"));

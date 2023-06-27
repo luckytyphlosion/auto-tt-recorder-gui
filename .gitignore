@@ -23,6 +23,7 @@ yarn-debug.log*
 yarn-error.log*
 
 auto-tt-recorder_*_for_gui/
+auto-tt-recorder_*_for_gui_clean/
 
 auto-tt-recorder-gui-v*-win32-x64/
 dist/

@@ -12,8 +12,6 @@
 ffmpeg-filename: bin/ffmpeg.exe
 ffprobe-filename: bin/ffprobe.exe
 
-timeline: mkchannel
-
 chadsoft-read-cache: true
 chadsoft-write-cache: true
 chadsoft-cache-expiry: 24h

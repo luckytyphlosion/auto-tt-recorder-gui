@@ -5,6 +5,10 @@ import { FormProvider, UseFormReturn } from "react-hook-form";
 import "../styles/AutoTTRecConfigFormComponents.css";
 
 import { MarioKartChannelLayout } from "./layout_components/MarioKartChannelLayout";
+import { TimelineCategoryInput } from "./form_components/TimelineCategoryInput";
+import { NoTop10CategoryInput } from "./form_components/NoTop10CategoryInput";
+import { Top10ChadsoftLayout } from "./layout_components/Top10ChadsoftLayout";
+
 import { ISOWBFSFileInput } from "./form_components/ISOWBFSFileInput";
 import { OutputVideoFilenameInput } from "./form_components/OutputVideoFilenameInput";
 
@@ -25,7 +29,7 @@ export function AutoTTRecConfigFormComponents(props: {formMethods: UseFormReturn
     <div className="auto-tt-rec-config-form">
       <FormProvider {...props.formMethods}>
         <ISOWBFSFileInput/>
-        <MarioKartChannelLayout/>
+        <TimelineCategoryInput noTop10Child={<NoTop10CategoryInput/>} top10ChadsoftChild={<Top10ChadsoftLayout/>} top10GeckoChild={<div></div>}/>
         <OutputVideoFilenameInput/>
       {/*<TimelineCategoryInput noTop10Child={<NoTop10CategoryInput/>} top10ChadsoftChild={<div></div>} top10GeckoChild={<div></div>}/>*/}
       {/*<MainGhostFilenameInput arg={1}/>
