@@ -39,6 +39,8 @@ import { AudioBitrateUnit } from "./form_components/AudioBitrateInput";
 import { H26xPreset } from "./form_components/H26xPresetInput";
 import { OutputWidthPreset } from "./form_components/OutputWidthInput";
 
+import { Top10GeckoCodeLocationRegion } from "./form_components/Top10GeckoCodeLocationInput";
+
 import { TimelineCategory } from "./form_components/TimelineCategoryInput";
 
 import useRenderCounter from "../RenderCounter";
@@ -71,6 +73,8 @@ export interface AutoTTRecConfigFormFieldTypes {
   "encode-type": EncodeType,
   "game-volume-slider": number,
   "game-volume-numberinput": number,
+  "top-10-gecko-code-contents": string,
+  "top-10-gecko-code-filename": string,
   "h26x-preset": H26xPreset,
   "hq-textures": boolean,
   "input-display": InputDisplay,
@@ -99,6 +103,7 @@ export interface AutoTTRecConfigFormFieldTypes {
   "szs-source": SZSSource,
   "timeline-category": TimelineCategory,
   "top-10-chadsoft": string,
+  "top-10-gecko-code-location-region": Top10GeckoCodeLocationRegion,
   "top-10-highlight-enable": boolean,
   "top-10-highlight": number,
   "top-10-location-country-location": Top10LocationCountry,
@@ -347,6 +352,8 @@ export function AutoTTRecConfigForm(props: {
       "encode-type": "crf",
       "game-volume-slider": 100,
       "game-volume-numberinput": 100,
+      "top-10-gecko-code-contents": "",
+      "top-10-gecko-code-filename": "",
       "h26x-preset": DEBUG_PREFILLED_DEFAULTS ? "ultrafast" : "slow",
       "hq-textures": true,
       "input-display": "gcn",
@@ -374,6 +381,7 @@ export function AutoTTRecConfigForm(props: {
       "szs-source": "automatic",
       "timeline-category": "top10chadsoft",
       "top-10-chadsoft": "",
+      "top-10-gecko-code-location-region": "worldwide",
       "top-10-highlight-enable": true,
       "top-10-highlight": 1,
       "top-10-location-country-location": "Abkhazia",
@@ -411,6 +419,8 @@ export function AutoTTRecConfigForm(props: {
 
   function onError(errors: Object) {
     console.log("errors:", errors);
+    console.log("formState.dirtyFields:", formState.dirtyFields);
+    console.log("formState.touchedFields:", formState.touchedFields);
     setSubmittedToggle((submittedToggle) => !submittedToggle);
     formMethods.reset(undefined, {keepValues: true, keepErrors: true});
   }

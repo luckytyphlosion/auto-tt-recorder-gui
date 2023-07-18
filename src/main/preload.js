@@ -4,6 +4,8 @@ const { contextBridge, ipcRenderer } = require("electron");
 contextBridge.exposeInMainWorld("api", {
   openFileDialog: (fileFilters) => ipcRenderer.invoke("open-file-dialog", fileFilters),
   saveFileDialog: (fileFilters) => ipcRenderer.invoke("save-file-dialog", fileFilters),
+  openFileDialogAndRead: (fileFilters) => ipcRenderer.invoke("open-file-dialog-and-read", fileFilters),
+  saveFileDialogAndWriteText: (fileFilters) => ipcRenderer.invoke("save-file-dialog-and-write-text", fileFilters, output),
   spawnAutoTTRec: (templateFilename, autoTTRecArgs) => ipcRenderer.invoke("spawn-auto-tt-rec", templateFilename, autoTTRecArgs),
   waitAutoTTRec: () => ipcRenderer.invoke("wait-auto-tt-rec"),
   handleSendStdout: (callable) => ipcRenderer.on("send-stdout", callable),

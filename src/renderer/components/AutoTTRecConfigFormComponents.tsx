@@ -8,6 +8,7 @@ import { MarioKartChannelLayout } from "./layout_components/MarioKartChannelLayo
 import { TimelineCategoryInput } from "./form_components/TimelineCategoryInput";
 import { NoTop10CategoryInput } from "./form_components/NoTop10CategoryInput";
 import { Top10ChadsoftLayout } from "./layout_components/Top10ChadsoftLayout";
+import { Top10GeckoCodeLayout } from "./layout_components/Top10GeckoCodeLayout";
 
 import { ISOWBFSFileInput } from "./form_components/ISOWBFSFileInput";
 import { OutputVideoFilenameInput } from "./form_components/OutputVideoFilenameInput";
@@ -29,7 +30,7 @@ export function AutoTTRecConfigFormComponents(props: {formMethods: UseFormReturn
     <div className="auto-tt-rec-config-form">
       <FormProvider {...props.formMethods}>
         <ISOWBFSFileInput/>
-        <TimelineCategoryInput noTop10Child={<NoTop10CategoryInput/>} top10ChadsoftChild={<Top10ChadsoftLayout/>} top10GeckoChild={<div></div>}/>
+        <TimelineCategoryInput noTop10Child={<NoTop10CategoryInput/>} top10ChadsoftChild={<Top10ChadsoftLayout/>} top10GeckoChild={<Top10GeckoCodeLayout/>}/>
         <OutputVideoFilenameInput/>
       {/*<TimelineCategoryInput noTop10Child={<NoTop10CategoryInput/>} top10ChadsoftChild={<div></div>} top10GeckoChild={<div></div>}/>*/}
       {/*<MainGhostFilenameInput arg={1}/>
