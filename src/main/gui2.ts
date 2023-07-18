@@ -50,11 +50,16 @@ export async function saveFileDialog(event: IpcMainInvokeEvent, fileFilters: Fil
   }
 }
 
-export async function saveFileDialogAndWriteText(event: IpcMainInvokeEvent, fileFilters: FileFilter[], output: string) {
+export async function saveFileDialogAndWriteText(event: IpcMainInvokeEvent, fileFilters: FileFilter[], output: string, defaultPath: string | undefined) {
   let dialogProperties: SaveDialogOptions["properties"] = [];
+  if (defaultPath === "") {
+    defaultPath = undefined;
+  }
+  console.log("saveFileDialogAndWriteText output:", output);
   let response = await dialog.showSaveDialog(mainWindow, {
     properties: dialogProperties,
-    filters: fileFilters
+    filters: fileFilters,
+    defaultPath: defaultPath
   });
   if (!response.canceled && response.filePath !== undefined) {
     await fsPromises.writeFile(response.filePath, output, "utf8");
@@ -62,4 +67,8 @@ export async function saveFileDialogAndWriteText(event: IpcMainInvokeEvent, file
   } else {
     return "";
   }
+}
+
+export async function overwriteTextFile(event: IpcMainInvokeEvent, outputFilename: string, output: string) {
+  await fsPromises.writeFile(outputFilename, output, "utf8");
 }
