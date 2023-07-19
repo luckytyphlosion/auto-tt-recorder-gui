@@ -158,7 +158,8 @@ export interface AutoTTRecArgs {
   "output-video-filename": string,
   "top-10-chadsoft"?: string,
   "top-10-title"?: string,
-  "top-10-highlight"?: number
+  "top-10-highlight"?: number,
+  "top-10-gecko-code-filename"?: string,
 }
 
 const DEFAULT_AUTO_TT_REC_ARGS: AutoTTRecArgs = {
@@ -225,13 +226,18 @@ function convertFormDataToAutoTTRecArgs(formData: AutoTTRecConfigFormFieldTypes)
     addMainGhostSourceToAutoTTRecArgs(formData, argsBuilder);
   } else {
     argsBuilder.addManual("timeline", "top10");
-    argsBuilder.add("top-10-chadsoft");
-    argsBuilder.add("top-10-title");
-    if (formData["top-10-highlight-enable"]) {
-      argsBuilder.add("top-10-highlight");
-    } else {
-      argsBuilder.addManual("top-10-highlight", -1);
+    if (formData["timeline-category"] === "top10chadsoft") {
+      argsBuilder.add("top-10-chadsoft");
+      argsBuilder.add("top-10-title");
+      if (formData["top-10-highlight-enable"]) {
+        argsBuilder.add("top-10-highlight");
+      } else {
+        argsBuilder.addManual("top-10-highlight", -1);
+        addMainGhostSourceToAutoTTRecArgs(formData, argsBuilder);
+      }
+    } else if (formData["timeline-category"] === "top10gecko") {
       addMainGhostSourceToAutoTTRecArgs(formData, argsBuilder);
+      argsBuilder.add("top-10-gecko-code-filename");
     }
   }
 
@@ -326,8 +332,12 @@ const DEBUG_PREFILLED_DEFAULTS = false;
 const AutoTTRecConfigFormComponents_Memo = memo(AutoTTRecConfigFormComponents);
 const AutoTTRecSubmitAbortButtons_Memo = memo(AutoTTRecSubmitAbortButtons);
 
+function delay(time: number) {
+  return new Promise(resolve => setTimeout(resolve, time));
+}
+
 export function AutoTTRecConfigForm(props: {
-  whichUI: boolean, onSubmitCallback: (autoTTRecArgs: AutoTTRecArgs) => any,
+  whichUI: boolean, onSubmitCallback: (autoTTRecArgs: AutoTTRecArgs, setSubmittedToggle: React.Dispatch<React.SetStateAction<boolean>>) => any,
   onAbortCallback: (event: React.MouseEvent<HTMLButtonElement>) => void,
   isAutoTTRecRunning: boolean}) {  
   const renderCounter = useRenderCounter(false, "AutoTTRecConfigForm");
@@ -379,7 +389,7 @@ export function AutoTTRecConfigForm(props: {
       "speedometer-metric": "engine",
       "szs-filename": "",
       "szs-source": "automatic",
-      "timeline-category": "top10chadsoft",
+      "timeline-category": "notop10",
       "top-10-chadsoft": "",
       "top-10-gecko-code-location-region": "worldwide",
       "top-10-highlight-enable": true,
@@ -404,7 +414,7 @@ export function AutoTTRecConfigForm(props: {
   const [submittedToggle, setSubmittedToggle] = useState(false);
 
   async function onSubmit(formData: AutoTTRecConfigFormFieldTypes) {
-    setSubmittedToggle((submittedToggle) => !submittedToggle);
+    //setSubmittedToggle((submittedToggle) => !submittedToggle);
     console.log("onSubmit");
     formMethods.reset(undefined, {keepValues: true});
     console.log(formData);
@@ -414,7 +424,7 @@ export function AutoTTRecConfigForm(props: {
     console.log("autoTTRecArgs:", autoTTRecArgs);
     console.log("formState.isSubmitSuccessful:", formState.isSubmitSuccessful);
     console.log("formState.isSubmitted:", formState.isSubmitted);
-    await props.onSubmitCallback(autoTTRecArgs);
+    await props.onSubmitCallback(autoTTRecArgs, setSubmittedToggle);
   }
 
   function onError(errors: Object) {
@@ -433,7 +443,8 @@ export function AutoTTRecConfigForm(props: {
     <div>
       <form onSubmit={formMethods.handleSubmit(onSubmit, onError)}>
         <fieldset disabled={props.isAutoTTRecRunning}>
-          <AutoTTRecConfigFormComponents_Memo formMethods={formMethods} forceUpdate={submittedToggle}/>
+          {/*<AutoTTRecConfigFormComponents_Memo formMethods={formMethods} forceUpdate={submittedToggle} isAutoTTRecRunning={props.isAutoTTRecRunning}/>*/}
+          <AutoTTRecConfigFormComponents_Memo formMethods={formMethods} forceUpdate={submittedToggle} isAutoTTRecRunning={props.isAutoTTRecRunning}/>
         </fieldset>
         <AutoTTRecSubmitAbortButtons_Memo isAutoTTRecRunning={props.isAutoTTRecRunning} onAbortCallback={props.onAbortCallback}/>
       </form>

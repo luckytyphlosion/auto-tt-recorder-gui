@@ -40,15 +40,17 @@ import useRenderCounter from "../../RenderCounter";
 
 const PixelFormatInput_Memo = memo(PixelFormatInput);
 
-export function Top10GeckoCodeLayout() {
+/**/
+export function Top10GeckoCodeLayout(props: {isAutoTTRecRunning: boolean}) {
   const {register, getValues} = useFormContextAutoTT();
   const renderCounter = useRenderCounter(false, "Top10GeckoCodeLayout");
 
   return (
     <div>
-      <Top10GeckoCodeInput/>
       <MainGhostSourceInput/>
       <ComparisonGhostSourceInput/>
+      {/**/}
+      <Top10GeckoCodeInput isAutoTTRecRunning={props.isAutoTTRecRunning}/>
       <SZSSourceInput/>
       <MKChannelGhostDescriptionInput/>
       <TrackNameInput/>
@@ -57,7 +59,7 @@ export function Top10GeckoCodeLayout() {
       <InputDisplayInput/>
       <SpeedometerInput/>
       <EncodeTypeInput/>
-      <PixelFormatInput_Memo register={register}/>
+      <PixelFormatInput_Memo/>
       <h3>Quality settings</h3>
       <DolphinResolutionInput/>
       <HQTexturesInput/>

@@ -8,7 +8,7 @@ export function ChadsoftGhostPageInput() {
   const {register, formState} = useFormContextAutoTT();
 
   //console.log("formState.isSubmitted:", formState.isSubmitted);
-  const renderCounter = useRenderCounter(false, "ChadsoftGhostPageInput");
+  const renderCounter = useRenderCounter(true, "ChadsoftGhostPageInput");
 
   return (
     <div>

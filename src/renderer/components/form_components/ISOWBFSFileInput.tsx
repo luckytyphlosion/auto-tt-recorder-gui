@@ -3,6 +3,10 @@ import useRenderCounter from "../../RenderCounter";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { FileFilter } from "electron";
 
+import { UseFormRegister, UseFormSetValue } from "react-hook-form";
+
+import { AutoTTRecConfigFormFieldTypes } from "../AutoTTRecConfigForm";
+
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
 
 export function ISOWBFSFileInput() {

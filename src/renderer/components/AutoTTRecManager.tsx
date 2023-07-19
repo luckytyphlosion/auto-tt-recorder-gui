@@ -46,11 +46,12 @@ export function AutoTTRecManager() {
     setProgramStatusDetails((programStatusDetails) => appendAccountingForCarriage(programStatusDetails, stderrData));
   }, []);
 
-  const runAutoTTRec = useCallback(async function (autoTTRecArgs: AutoTTRecArgs) {
+  const runAutoTTRec = useCallback(async function (autoTTRecArgs: AutoTTRecArgs, setSubmittedToggle: React.Dispatch<React.SetStateAction<boolean>>) {
     const spawnSuccessful = await window.api.spawnAutoTTRec("data/barebones_personal_ghost_config.yml", autoTTRecArgs)
       .catch((err: Error) => {
         setProgramStatusHeader("Error");
         setProgramStatusDetails(err.message);
+        setSubmittedToggle((submittedToggle) => (!submittedToggle));
       });
 
     if (spawnSuccessful) {

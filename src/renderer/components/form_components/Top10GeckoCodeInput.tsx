@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import useRenderCounter from "../../RenderCounter";
+import { Controller, ValidateResult } from "react-hook-form";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { FileFilter } from "electron";
 import { FilenameAndContents } from "../../../shared-types"
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
+import { EditorView } from "@codemirror/view";
+
+import CodeMirror from '@uiw/react-codemirror';
 
 import Modal from "react-modal";
 
@@ -15,8 +19,20 @@ enum SaveModalFrom {
   OPEN
 }
 
-export function Top10GeckoCodeInput() {
-  const {register, getValues, setValue, formState} = useFormContextAutoTT();
+const borderTheme = EditorView.theme({
+  "&": {
+      border: "1px solid #c0c0c0"
+  },
+  "&.cm-editor.cm-focused": {
+      outline: "none"
+  }
+});
+
+const top10RegionDependentGeckoCodes = new Set(["C260BFAC", "C26414CC", "C260B720", "C25FA3CC"]);
+
+// 
+export function Top10GeckoCodeInput(props: {isAutoTTRecRunning: boolean}) {
+  const {register, getValues, setValue, control} = useFormContextAutoTT();
   const renderCounter = useRenderCounter(false, "Top10GeckoCodeInput");
   const [isModalOpen, setModalOpen] = useState(false);
   const [isGeckoCodeUnsaved, setGeckoCodeUnsaved] = useState(false);
@@ -142,6 +158,61 @@ export function Top10GeckoCodeInput() {
     setSaveModalOpenAndFrom(false, SaveModalFrom.CLOSING);
   }
 
+  function geckoCodeValidator(value: string): ValidateResult {
+    if (isGeckoCodeUnsaved) {
+      return "Please save your gecko code first.";
+    } else {
+      let lines = value.split("\n");
+      let foundTop10Code = false;
+      let top10CodeErrorMsgOrSuccess: boolean | string = "";
+
+      for (const [index, untrimmedLine] of lines.entries()) {
+        let lineNum = index + 1;
+  
+        const line = untrimmedLine.trim();
+        if (line === "") {
+          continue;
+        }
+        let isGeckoCodeValid = true;
+        let codelineSplit = line.split(/\s+/, 2);
+        if (codelineSplit.length !== 2) {
+          isGeckoCodeValid = false;
+        } else {
+          let [codelineFirstHalf, codelineSecondHalf] = codelineSplit;
+          codelineFirstHalf = codelineFirstHalf.trim();
+          codelineSecondHalf = codelineSecondHalf.trim();
+          
+          if (!/^[0-9A-Fa-f]{8}$/.test(codelineFirstHalf) || !/^[0-9A-Fa-f]{8}$/.test(codelineSecondHalf)) {
+            isGeckoCodeValid = false;
+          } else {
+            if (top10RegionDependentGeckoCodes.has(codelineFirstHalf.toUpperCase())) {
+              if (foundTop10Code) {
+                top10CodeErrorMsgOrSuccess = "Broken code provided! Please try creating it again.";
+                break;
+              }
+              foundTop10Code = true;
+            }
+          }
+
+          if (!isGeckoCodeValid) {
+            top10CodeErrorMsgOrSuccess = `Error: bad line \"{line}\" at line ${lineNum}.`;
+            break;
+          }
+        }
+      }
+
+      if (top10CodeErrorMsgOrSuccess === "") {
+        if (foundTop10Code) {
+          top10CodeErrorMsgOrSuccess = true;
+        } else {
+          top10CodeErrorMsgOrSuccess = "Error: Provided gecko code is not a custom top 10 code.";
+        }
+      }
+
+      return top10CodeErrorMsgOrSuccess;
+    }
+  }
+
   let top10GeckoCodeFilename = getValues("top-10-gecko-code-filename");
 
   return (
@@ -190,17 +261,46 @@ export function Top10GeckoCodeInput() {
       </div>
       <div>
         <h4>Gecko code {isGeckoCodeUnsaved ? "(Unsaved)" : ""}</h4>
-        <textarea id="top-10-gecko-code-contents"
+        <Controller
+          render={({
+            field: {onChange, onBlur, value, ref},
+            fieldState: {invalid, isTouched, isDirty, error},
+          }) => (
+            <CodeMirror
+              value={value}
+              height="16em"
+              width="15em"
+              theme={borderTheme}
+              editable={!props.isAutoTTRecRunning}
+              onChange={(event) => {
+                setGeckoCodeUnsaved(true);
+                onChange(event);
+              }}
+              onBlur={onBlur}
+              ref={ref}
+            />
+          )}
+          name="top-10-gecko-code-contents"
+          control={control}
+          rules={{
+            required: {
+              value: true,
+              message: "This input is required.",
+            },
+            validate: geckoCodeValidator,
+          }}
+        />
+
+          
+        {/*<textarea id="top-10-gecko-code-contents"
         cols={20} rows={16} wrap="soft"
         {...register("top-10-gecko-code-contents", {
-          required: {
-            value: true,
-            message: "This input is required.",
-          },
-          onChange: event => setGeckoCodeUnsaved(true)
-        })}></textarea>
+
+          
+        })}></textarea>*/}
+
       </div>
-      <SimpleErrorMessage name="top-10-gecko-code-filename"/>
+      <SimpleErrorMessage name="top-10-gecko-code-contents"/>
       {renderCounter}
     </div>
   );

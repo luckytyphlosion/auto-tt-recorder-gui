@@ -56,7 +56,7 @@ export function MarioKartChannelLayout() {
       <InputDisplayInput/>
       <SpeedometerInput/>
       <EncodeTypeInput/>
-      <PixelFormatInput_Memo register={register}/>
+      <PixelFormatInput_Memo/>
       <h3>Quality settings</h3>
       <DolphinResolutionInput/>
       <HQTexturesInput/>
