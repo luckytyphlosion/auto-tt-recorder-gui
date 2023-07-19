@@ -23,7 +23,12 @@ export function OutputVideoFilenameInput() {
         }})}
       ></input>
       <button onClick={event => {
-        let outputVideoFileFormat = getValues("output-video-file-format");
+        let outputVideoFileFormat;
+        if (getValues("no-top-10-category") === "noencode") {
+          outputVideoFileFormat = "mkv";
+        } else {
+          outputVideoFileFormat = getValues("output-video-file-format");
+        }
         queueSaveDialog(event, [
           {name: `${outputVideoFileFormat} files`, extensions: [outputVideoFileFormat]}
         ]);

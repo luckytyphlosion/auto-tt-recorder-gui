@@ -1,7 +1,7 @@
 import React, { useState, ReactElement } from "react";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 
-import { NoTop10CategoryInput } from "./NoTop10CategoryInput";
+import { NoTop10CategoryLayout } from "../layout_components/NoTop10CategoryLayout";
 import useRenderCounter from "../../RenderCounter";
 
 export type TimelineCategory = "notop10" | "top10chadsoft" | "top10gecko";

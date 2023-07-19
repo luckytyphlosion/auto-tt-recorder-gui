@@ -39,19 +39,15 @@ import useRenderCounter from "../../RenderCounter";
 
 const PixelFormatInput_Memo = memo(PixelFormatInput);
 
-export function MarioKartChannelLayout() {
-  const {register, getValues} = useFormContextAutoTT();
-  const [timelineCategory, setTimelineCategory] = useState("notop10");
-  const renderCounter = useRenderCounter(false, "MarioKartChannelLayout");
+export function GhostSelectLayout() {
+  const renderCounter = useRenderCounter(false, "GhostSelectLayout");
 
   return (
     <div>
       <MainGhostSourceInput/>
       <ComparisonGhostSourceInput/>
       <SZSSourceInput/>
-      <MKChannelGhostDescriptionInput/>
       <TrackNameInput/>
-      <Top10LocationInput/>
       <BackgroundMusicSourceInput/>
       <InputDisplayInput/>
       <SpeedometerInput/>

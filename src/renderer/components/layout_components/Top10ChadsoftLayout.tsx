@@ -4,7 +4,7 @@ import { useFormContext } from "react-hook-form";
 import { AutoTTRecConfigFormFieldTypes } from "../AutoTTRecConfigForm";
 
 import { ISOWBFSFileInput } from "../form_components/ISOWBFSFileInput";
-import { NoTop10CategoryInput } from "../form_components/NoTop10CategoryInput";
+import { NoTop10CategoryLayout } from "./NoTop10CategoryLayout";
 import { ChadsoftGhostPageInput } from "../form_components/ChadsoftGhostPageInput";
 import { ComparisonGhostSourceInput } from "../form_components/ComparisonGhostSourceInput";
 import { SZSSourceInput } from "../form_components/SZSSourceInput";
@@ -61,7 +61,7 @@ export function Top10ChadsoftLayout() {
       <EncodeTypeInput/>
       <PixelFormatInput_Memo/>
       <h3>Quality settings</h3>
-      <DolphinResolutionInput/>
+      <DolphinResolutionInput enableOutputWidth={true}/>
       <HQTexturesInput/>
       <NoBackgroundBlurInput/>
       <NoBloomInput/>

@@ -61,7 +61,7 @@ export function Top10GeckoCodeLayout(props: {isAutoTTRecRunning: boolean}) {
       <EncodeTypeInput/>
       <PixelFormatInput_Memo/>
       <h3>Quality settings</h3>
-      <DolphinResolutionInput/>
+      <DolphinResolutionInput enableOutputWidth={true}/>
       <HQTexturesInput/>
       <NoBackgroundBlurInput/>
       <NoBloomInput/>

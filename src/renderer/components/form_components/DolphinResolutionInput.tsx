@@ -5,7 +5,7 @@ import { OutputWidthInput } from "./OutputWidthInput";
 
 export type DolphinResolution = "2160p" | "1440p" | "1080p" | "720p" | "480p";
 
-export function DolphinResolutionInput() {
+export function DolphinResolutionInput(props: {enableOutputWidth: boolean}) {
   const {register, getValues} = useFormContextAutoTT();
   const renderCounter = useRenderCounter(true);
   const [dolphinResolution, setDolphinResolution] = useState(getValues("dolphin-resolution"));
@@ -28,7 +28,9 @@ export function DolphinResolutionInput() {
         <option value="480p">480p</option>
       </select>
       {renderCounter}
-      <OutputWidthInput dolphinResolution={dolphinResolution} dolphinResolutionToggle={dolphinResolutionToggle}/>
+      {props.enableOutputWidth ? 
+        <OutputWidthInput dolphinResolution={dolphinResolution} dolphinResolutionToggle={dolphinResolutionToggle}/> : ""
+      }
     </div>
   );
 }

@@ -33,39 +33,27 @@ import { KeepWindowInput } from "../form_components/KeepWindowInput";
 import { YoutubeSettingsInput } from "../form_components/YoutubeSettingsInput";
 import { DolphinResolutionInput } from "../form_components/DolphinResolutionInput";
 import { TimelineCategoryInput } from "../form_components/TimelineCategoryInput";
-import { MusicVolumeInput } from "../form_components/MusicVolumeInput";
+import { NoMusicInput } from "../form_components/NoMusicInput";
 
 import useRenderCounter from "../../RenderCounter";
 
-const PixelFormatInput_Memo = memo(PixelFormatInput);
-
-export function MarioKartChannelLayout() {
-  const {register, getValues} = useFormContextAutoTT();
-  const [timelineCategory, setTimelineCategory] = useState("notop10");
-  const renderCounter = useRenderCounter(false, "MarioKartChannelLayout");
+export function NoEncodeLayout() {
+  const renderCounter = useRenderCounter(false, "NoEncodeLayout");
 
   return (
     <div>
       <MainGhostSourceInput/>
       <ComparisonGhostSourceInput/>
       <SZSSourceInput/>
-      <MKChannelGhostDescriptionInput/>
-      <TrackNameInput/>
-      <Top10LocationInput/>
-      <BackgroundMusicSourceInput/>
-      <InputDisplayInput/>
+      <NoMusicInput/>
       <SpeedometerInput/>
-      <EncodeTypeInput/>
-      <PixelFormatInput_Memo/>
       <h3>Quality settings</h3>
-      <DolphinResolutionInput enableOutputWidth={true}/>
+      <DolphinResolutionInput enableOutputWidth={false}/>
       <HQTexturesInput/>
       <NoBackgroundBlurInput/>
       <NoBloomInput/>
       <h3>Extra settings (ignore if not sure)</h3>
       <UseFFV1Input/>
-      <EncodeOnlyInput/>
-      <InputDisplayDontCreateInput/>
       <KeepWindowInput/>
       {renderCounter}
 

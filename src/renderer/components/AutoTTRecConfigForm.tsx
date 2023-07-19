@@ -43,6 +43,8 @@ import { Top10GeckoCodeLocationRegion } from "./form_components/Top10GeckoCodeLo
 
 import { TimelineCategory } from "./form_components/TimelineCategoryInput";
 
+import { NoTop10Category } from "./layout_components/NoTop10CategoryLayout";
+
 import useRenderCounter from "../RenderCounter";
 
 interface AutoTTRecConfigFormComponentsProps {
@@ -89,7 +91,8 @@ export interface AutoTTRecConfigFormFieldTypes {
   "music-volume-slider": number,
   "no-background-blur": boolean,
   "no-bloom": boolean,
-  "no-top-10-category": string,
+  "no-music": boolean,
+  "no-top-10-category": NoTop10Category,
   "output-video-filename": string,
   "output-width-custom": number,
   "output-width-preset": OutputWidthPreset,
@@ -140,6 +143,7 @@ export interface AutoTTRecArgs {
   "hq-textures"?: boolean,
   "no-background-blur"?: boolean,
   "no-bloom"?: boolean,
+  "no-music"?: boolean,
   "encode-type": EncodeType,
   "video-codec"?: VideoCodec,
   "crf-value"?: number,
@@ -221,8 +225,12 @@ function convertFormDataToAutoTTRecArgs(formData: AutoTTRecConfigFormFieldTypes)
   let argsBuilder = new AutoTTRecArgsBuilder(formData);
   argsBuilder.add("iso-filename");
 
-  if (formData["timeline-category"] === "notop10") {
-    argsBuilder.addManual("timeline", "mkchannel");
+  const isNoTop10Timeline = formData["timeline-category"] === "notop10";
+  const isNoTop10CategoryMkchannel = formData["no-top-10-category"] === "mkchannel";
+  const isNoEncode = isNoTop10Timeline && formData["no-top-10-category"] === "noencode";
+
+  if (isNoTop10Timeline) {
+    argsBuilder.addManual("timeline", formData["no-top-10-category"]);
     addMainGhostSourceToAutoTTRecArgs(formData, argsBuilder);
   } else {
     argsBuilder.addManual("timeline", "top10");
@@ -253,28 +261,40 @@ function convertFormDataToAutoTTRecArgs(formData: AutoTTRecConfigFormFieldTypes)
     argsBuilder.add("szs-filename");
   }
 
-  argsBuilder.add("mk-channel-ghost-description");
-  argsBuilder.add("track-name");
-
-  if (formData["top-10-location-region"] === "worldwide") {
-    argsBuilder.addManual("top-10-location", "ww");
-  } else if (formData["top-10-location-region"] === "regional") {
-    argsBuilder.addManual("top-10-location", formData["top-10-location-regional-location"]);
-  } else if (formData["top-10-location-region"] === "country") {
-    argsBuilder.addManual("top-10-location", formData["top-10-location-country-location"]);
+  // mkchannel gets ghost description, while ghostselect, ghostonly, and noencode don't
+  if (!(isNoTop10Timeline && !isNoTop10CategoryMkchannel)) {
+    argsBuilder.add("mk-channel-ghost-description");
   }
 
-  if (formData["background-music-source"] === "music-filename") {
-    argsBuilder.add("music-filename");
-    argsBuilder.addManual("game-volume", formData["game-volume-numberinput"] / 100);
-    argsBuilder.addManual("music-volume", formData["music-volume-numberinput"] / 100);
-  } else if (formData["background-music-source"] === "game-bgm") {
-    argsBuilder.addManual("music-filename", "bgm");
-  } else if (formData["background-music-source"] === "none") {
-    argsBuilder.addManual("music-filename", "none");
+  if (!(isNoTop10Timeline && (formData["no-top-10-category"] === "ghostonly" || formData["no-top-10-category"] === "noencode"))) {
+    argsBuilder.add("track-name");
   }
 
-  argsBuilder.add("input-display");
+  // mkchannel gets top 10 location, while ghostselect, ghostonly, and noencode don't
+  if (!(isNoTop10Timeline && !isNoTop10CategoryMkchannel)) {
+    if (formData["top-10-location-region"] === "worldwide") {
+      argsBuilder.addManual("top-10-location", "ww");
+    } else if (formData["top-10-location-region"] === "regional") {
+      argsBuilder.addManual("top-10-location", formData["top-10-location-regional-location"]);
+    } else if (formData["top-10-location-region"] === "country") {
+      argsBuilder.addManual("top-10-location", formData["top-10-location-country-location"]);
+    }
+  }
+
+  if (!isNoEncode) {
+    if (formData["background-music-source"] === "music-filename") {
+      argsBuilder.add("music-filename");
+      argsBuilder.addManual("game-volume", formData["game-volume-numberinput"] / 100);
+      argsBuilder.addManual("music-volume", formData["music-volume-numberinput"] / 100);
+    } else if (formData["background-music-source"] === "game-bgm") {
+      argsBuilder.addManual("music-filename", "bgm");
+    } else if (formData["background-music-source"] === "none") {
+      argsBuilder.addManual("music-filename", "none");
+    }
+    argsBuilder.add("input-display");
+  } else {
+    argsBuilder.add("no-music");
+  }
 
   argsBuilder.addManual("speedometer", formData["speedometer-style"]);
 
@@ -289,39 +309,44 @@ function convertFormDataToAutoTTRecArgs(formData: AutoTTRecConfigFormFieldTypes)
   argsBuilder.add("no-background-blur");
   argsBuilder.add("no-bloom");
 
-  argsBuilder.add("encode-type");
-  argsBuilder.add("video-codec");
-
-  if (formData["encode-type"] === "crf") {
-    argsBuilder.add("crf-value");
-    argsBuilder.add("h26x-preset");
-    argsBuilder.add("youtube-settings");
-  } else if (formData["encode-type"] === "size") {
-    argsBuilder.add("encode-size");
-  }
-
-  argsBuilder.add("audio-codec");
-  argsBuilder.add("audio-bitrate");
-  argsBuilder.add("pixel-format");
-  argsBuilder.add("dolphin-resolution");
-
-  let outputWidth: number | null;
-
-  if (formData["output-width-preset"] === "custom") {
-    outputWidth = formData["output-width-custom"];
-  } else if (formData["output-width-preset"] === "none") {
-    outputWidth = null;
+  if (!isNoEncode) {
+    argsBuilder.add("encode-type");
+    argsBuilder.add("video-codec");
+  
+    if (formData["encode-type"] === "crf") {
+      argsBuilder.add("crf-value");
+      argsBuilder.add("h26x-preset");
+      argsBuilder.add("youtube-settings");
+    } else if (formData["encode-type"] === "size") {
+      argsBuilder.add("encode-size");
+    }
+  
+    argsBuilder.add("audio-codec");
+    argsBuilder.add("audio-bitrate");
+    argsBuilder.add("pixel-format");
+    argsBuilder.add("dolphin-resolution");
+  
+    let outputWidth: number | null;
+  
+    if (formData["output-width-preset"] === "custom") {
+      outputWidth = formData["output-width-custom"];
+    } else if (formData["output-width-preset"] === "none") {
+      outputWidth = null;
+    } else {
+      outputWidth = Number.parseInt(formData["output-width-preset"]);
+    }
+  
+    argsBuilder.addManual("output-width", outputWidth);
+  
+    argsBuilder.add("use-ffv1");
+    argsBuilder.add("encode-only");
+    argsBuilder.add("input-display-dont-create");
   } else {
-    outputWidth = Number.parseInt(formData["output-width-preset"]);
+    argsBuilder.add("use-ffv1");
+    argsBuilder.add("dolphin-resolution");
   }
 
-  argsBuilder.addManual("output-width", outputWidth);
-
-  argsBuilder.add("use-ffv1");
-  argsBuilder.add("encode-only");
-  argsBuilder.add("input-display-dont-create");
   argsBuilder.add("keep-window");
-
   argsBuilder.add("output-video-filename");
 
   return argsBuilder.autoTTRecArgs;
@@ -378,6 +403,7 @@ export function AutoTTRecConfigForm(props: {
       "music-volume-slider": 100,
       "no-background-blur": true,
       "no-bloom": false,
+      "no-music": false,
       "no-top-10-category": "mkchannel",
       "output-video-filename": DEBUG_PREFILLED_DEFAULTS ? "C:\\Users\\User\\Documents\\RMCE 01\\guitest1.mp4" : "",
       "output-width-custom": NaN,

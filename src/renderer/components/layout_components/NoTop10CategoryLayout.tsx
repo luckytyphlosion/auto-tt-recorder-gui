@@ -2,9 +2,14 @@ import React, { useState } from "react";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import useRenderCounter from "../../RenderCounter";
 
-import { MarioKartChannelLayout } from "../layout_components/MarioKartChannelLayout";
+import { MarioKartChannelLayout } from "./MarioKartChannelLayout";
+import { GhostSelectLayout } from "./GhostSelectLayout";
+import { GhostOnlyLayout } from "./GhostOnlyLayout";
+import { NoEncodeLayout } from "./NoEncodeLayout";
 
-export function NoTop10CategoryInput() {
+export type NoTop10Category = "mkchannel" | "ghostselect" | "ghostonly" | "noencode";
+
+export function NoTop10CategoryLayout() {
   const {register, getValues} = useFormContextAutoTT();
   const [noTop10Category, setNoTop10Category] = useState(getValues("no-top-10-category"));
   const renderCounter = useRenderCounter(true);
@@ -32,7 +37,10 @@ export function NoTop10CategoryInput() {
         {...register("no-top-10-category", {onChange: updateNoTop10Category})}
       ></input>
       {
-        noTop10Category === "mkchannel" ? <MarioKartChannelLayout/> : '' 
+        noTop10Category === "mkchannel" ? <MarioKartChannelLayout/> :
+          noTop10Category === "ghostselect" ? <GhostSelectLayout/> :
+          noTop10Category === "ghostonly" ? <GhostOnlyLayout/> : 
+          noTop10Category === "noencode" ? <NoEncodeLayout/> : ""
       }
       {renderCounter}
     </div>
