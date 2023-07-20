@@ -7,11 +7,12 @@ import { GhostSelectLayout } from "./GhostSelectLayout";
 import { GhostOnlyLayout } from "./GhostOnlyLayout";
 import { NoEncodeLayout } from "./NoEncodeLayout";
 import { OutputVideoFilenameInput } from "../form_components/OutputVideoFilenameInput";
+import { FormComplexity } from "./FormComplexityLayout";
 
 export type NoTop10Category = "mkchannel" | "ghostselect" | "ghostonly" | "noencode";
 
 const OutputVideoFilenameInput_Memo = memo(OutputVideoFilenameInput);
-export function NoTop10CategoryLayout(props: {isAutoTTRecRunning: boolean}) {
+export function NoTop10CategoryLayout(props: {isAutoTTRecRunning: boolean, formComplexity: FormComplexity}) {
   const {register, getValues} = useFormContextAutoTT();
   const [noTop10Category, setNoTop10Category] = useState(getValues("no-top-10-category"));
   const renderCounter = useRenderCounter(true);

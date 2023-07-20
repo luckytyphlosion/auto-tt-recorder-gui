@@ -31,20 +31,20 @@ import { InputDisplayDontCreateInput } from "../form_components/InputDisplayDont
 import { KeepWindowInput } from "../form_components/KeepWindowInput";
 import { YoutubeSettingsInput } from "../form_components/YoutubeSettingsInput";
 import { DolphinResolutionInput } from "../form_components/DolphinResolutionInput";
-import { TimelineCategoryInput } from "../form_components/TimelineCategoryInput";
+import { TimelineCategoryLayout } from "./TimelineCategoryLayout";
 import { MusicVolumeInput } from "../form_components/MusicVolumeInput";
 import { Top10HighlightEnableInput } from "../form_components/Top10HighlightEnableInput";
 import { ExtraGeckoCodesEnableInput } from "../form_components/ExtraGeckoCodesEnableInput";
 import { AspectRatio16By9Input } from "../form_components/AspectRatio16By9Input";
 import { FadeInAtStartInput } from "../form_components/FadeInAtStartInput";
 import { EndingDelayInput } from "../form_components/EndingDelayInput";
-
+import { FormComplexity } from "./FormComplexityLayout";
 
 import useRenderCounter from "../../RenderCounter";
 
 const PixelFormatInput_Memo = memo(PixelFormatInput);
 
-export function Top10ChadsoftLayout(props: {isAutoTTRecRunning: boolean}) {
+export function Top10ChadsoftLayout(props: {isAutoTTRecRunning: boolean, formComplexity: FormComplexity}) {
   const {register, getValues} = useFormContextAutoTT();
   const [timelineCategory, setTimelineCategory] = useState("notop10");
   const renderCounter = useRenderCounter(false, "MarioKartChannelLayout");

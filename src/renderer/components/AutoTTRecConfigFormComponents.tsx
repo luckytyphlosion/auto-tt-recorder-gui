@@ -6,21 +6,15 @@ import "../styles/AutoTTRecConfigFormComponents.css";
 
 import { useFormContextAutoTT } from "../use-form-context-auto-tt";
 
-import { MarioKartChannelLayout } from "./layout_components/MarioKartChannelLayout";
-import { TimelineCategoryInput } from "./form_components/TimelineCategoryInput";
-import { NoTop10CategoryLayout } from "./layout_components/NoTop10CategoryLayout";
-import { Top10ChadsoftLayout } from "./layout_components/Top10ChadsoftLayout";
-import { Top10GeckoCodeLayout } from "./layout_components/Top10GeckoCodeLayout";
-
 import { ISOWBFSFileInput } from "./form_components/ISOWBFSFileInput";
-import { OutputVideoFilenameInput } from "./form_components/OutputVideoFilenameInput";
+import { FormComplexityLayout } from "./layout_components/FormComplexityLayout";
 
 import { AutoTTRecConfigFormFieldTypes } from "./AutoTTRecConfigForm";
 
 import useRenderCounter from "../RenderCounter";
 
 const ISOWBFSFileInput_Memo = memo(ISOWBFSFileInput);
-const TimelineCategoryInput_Memo = memo(TimelineCategoryInput);
+
 
 export function AutoTTRecConfigFormComponents(props: {
     formMethods: UseFormReturn<AutoTTRecConfigFormFieldTypes, any, undefined>,
@@ -38,7 +32,8 @@ export function AutoTTRecConfigFormComponents(props: {
     <div className="auto-tt-rec-config-form">
       <FormProvider {...props.formMethods}>
         <ISOWBFSFileInput_Memo/>
-        <TimelineCategoryInput_Memo noTop10Child={<NoTop10CategoryLayout isAutoTTRecRunning={props.isAutoTTRecRunning}/>} top10ChadsoftChild={<Top10ChadsoftLayout  isAutoTTRecRunning={props.isAutoTTRecRunning}/>} top10GeckoChild={<Top10GeckoCodeLayout isAutoTTRecRunning={props.isAutoTTRecRunning}/>}/>
+        <FormComplexityLayout isAutoTTRecRunning={props.isAutoTTRecRunning}/>
+        
       {/*<TimelineCategoryInput noTop10Child={<NoTop10CategoryInput/>} top10ChadsoftChild={<div></div>} top10GeckoChild={<div></div>}/>*/}
       {/*<MainGhostFilenameInput arg={1}/>
       <ChadsoftGhostPageInput/>

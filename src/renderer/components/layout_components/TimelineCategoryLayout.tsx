@@ -1,14 +1,16 @@
 import React, { useState, ReactElement } from "react";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 
-import { NoTop10CategoryLayout } from "../layout_components/NoTop10CategoryLayout";
+import { NoTop10CategoryLayout } from "./NoTop10CategoryLayout";
+import { Top10ChadsoftLayout } from "./Top10ChadsoftLayout";
+import { Top10GeckoCodeLayout } from "./Top10GeckoCodeLayout";
+
 import useRenderCounter from "../../RenderCounter";
+import { FormComplexity } from "./FormComplexityLayout";
 
 export type TimelineCategory = "notop10" | "top10chadsoft" | "top10gecko";
 
-export function TimelineCategoryInput(props: {
-  noTop10Child: ReactElement, top10ChadsoftChild: ReactElement, top10GeckoChild: ReactElement
-}) {
+export function TimelineCategoryLayout(props: {isAutoTTRecRunning: boolean, formComplexity: FormComplexity}) {
   const {register, getValues} = useFormContextAutoTT();
   const [timelineCategory, setTimelineCategory] = useState(getValues("timeline-category"));
   const renderCounter = useRenderCounter(false, "TimelineCategoryInput");
@@ -33,9 +35,9 @@ export function TimelineCategoryInput(props: {
       ></input>
       {renderCounter}
       {
-        timelineCategory === "notop10" ? props.noTop10Child
-        : timelineCategory === "top10chadsoft" ? props.top10ChadsoftChild
-        : timelineCategory === "top10gecko" ? props.top10GeckoChild
+        timelineCategory === "notop10" ? <NoTop10CategoryLayout isAutoTTRecRunning={props.isAutoTTRecRunning} formComplexity={props.formComplexity}/>
+        : timelineCategory === "top10chadsoft" ? <Top10ChadsoftLayout isAutoTTRecRunning={props.isAutoTTRecRunning} formComplexity={props.formComplexity}/>
+        : timelineCategory === "top10gecko" ? <Top10GeckoCodeLayout isAutoTTRecRunning={props.isAutoTTRecRunning} formComplexity={props.formComplexity}/>
         : ""
       }
     </div>

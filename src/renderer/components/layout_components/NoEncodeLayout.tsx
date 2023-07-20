@@ -32,7 +32,7 @@ import { InputDisplayDontCreateInput } from "../form_components/InputDisplayDont
 import { KeepWindowInput } from "../form_components/KeepWindowInput";
 import { YoutubeSettingsInput } from "../form_components/YoutubeSettingsInput";
 import { DolphinResolutionInput } from "../form_components/DolphinResolutionInput";
-import { TimelineCategoryInput } from "../form_components/TimelineCategoryInput";
+import { TimelineCategoryLayout } from "./TimelineCategoryLayout";
 import { NoMusicInput } from "../form_components/NoMusicInput";
 import { ExtraGeckoCodesEnableInput } from "../form_components/ExtraGeckoCodesEnableInput";
 import { FadeInAtStartInput } from "../form_components/FadeInAtStartInput";

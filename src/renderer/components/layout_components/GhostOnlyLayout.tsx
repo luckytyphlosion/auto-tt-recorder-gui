@@ -32,7 +32,7 @@ import { InputDisplayDontCreateInput } from "../form_components/InputDisplayDont
 import { KeepWindowInput } from "../form_components/KeepWindowInput";
 import { ExtraGeckoCodesEnableInput } from "../form_components/ExtraGeckoCodesEnableInput";
 import { DolphinResolutionInput } from "../form_components/DolphinResolutionInput";
-import { TimelineCategoryInput } from "../form_components/TimelineCategoryInput";
+import { TimelineCategoryLayout } from "./TimelineCategoryLayout";
 import { MusicVolumeInput } from "../form_components/MusicVolumeInput";
 import { AspectRatio16By9Input } from "../form_components/AspectRatio16By9Input";
 import { FadeInAtStartInput } from "../form_components/FadeInAtStartInput";

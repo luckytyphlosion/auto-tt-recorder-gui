@@ -41,13 +41,14 @@ import { OutputWidthPreset } from "./form_components/OutputWidthInput";
 
 import { Top10GeckoCodeLocationRegion } from "./form_components/Top10GeckoCodeLocationInput";
 
-import { TimelineCategory } from "./form_components/TimelineCategoryInput";
+import { TimelineCategory } from "./layout_components/TimelineCategoryLayout";
 
 import { NoTop10Category } from "./layout_components/NoTop10CategoryLayout";
 import { AspectRatio16By9 } from "./form_components/AspectRatio16By9Input";
 import { TrackNameType } from "./form_components/TrackNameInput";
 
 import { MusicPresentation } from "./form_components/MusicPresentationInput";
+import { FormComplexity } from "./layout_components/FormComplexityLayout";
 
 import useRenderCounter from "../RenderCounter";
 
@@ -86,6 +87,7 @@ export interface AutoTTRecConfigFormFieldTypes {
   "extra-hq-textures-folder-enable": boolean,
   "extra-hq-textures-folder": string,
   "fade-in-at-start": boolean,
+  "form-complexity": FormComplexity,
   "game-volume-slider": number,
   "game-volume-numberinput": number,
   "h26x-preset": H26xPreset,
@@ -455,6 +457,7 @@ export function AutoTTRecConfigForm(props: {
       "extra-hq-textures-folder-enable": false,
       "extra-hq-textures-folder": "",
       "fade-in-at-start": false,
+      "form-complexity": "simple",
       "game-volume-slider": 100,
       "game-volume-numberinput": 100,
       "h26x-preset": DEBUG_PREFILLED_DEFAULTS ? "ultrafast" : "slow",
