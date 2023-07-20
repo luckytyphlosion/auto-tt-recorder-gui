@@ -34,12 +34,14 @@ import { YoutubeSettingsInput } from "../form_components/YoutubeSettingsInput";
 import { DolphinResolutionInput } from "../form_components/DolphinResolutionInput";
 import { TimelineCategoryInput } from "../form_components/TimelineCategoryInput";
 import { MusicVolumeInput } from "../form_components/MusicVolumeInput";
+import { ExtraGeckoCodesEnableInput } from "../form_components/ExtraGeckoCodesEnableInput";
+import { AspectRatio16By9Input } from "../form_components/AspectRatio16By9Input";
 
 import useRenderCounter from "../../RenderCounter";
 
 const PixelFormatInput_Memo = memo(PixelFormatInput);
 
-export function MarioKartChannelLayout() {
+export function MarioKartChannelLayout(props: {isAutoTTRecRunning: boolean}) {
   const {register, getValues} = useFormContextAutoTT();
   const [timelineCategory, setTimelineCategory] = useState("notop10");
   const renderCounter = useRenderCounter(false, "MarioKartChannelLayout");
@@ -52,13 +54,15 @@ export function MarioKartChannelLayout() {
       <MKChannelGhostDescriptionInput/>
       <TrackNameInput/>
       <Top10LocationInput/>
-      <BackgroundMusicSourceInput/>
+      <BackgroundMusicSourceInput timeline="mkchannel"/>
       <InputDisplayInput/>
+      <ExtraGeckoCodesEnableInput isAutoTTRecRunning={props.isAutoTTRecRunning}/>
       <SpeedometerInput/>
       <EncodeTypeInput/>
       <PixelFormatInput_Memo/>
       <h3>Quality settings</h3>
       <DolphinResolutionInput enableOutputWidth={true}/>
+      <AspectRatio16By9Input/>
       <HQTexturesInput/>
       <NoBackgroundBlurInput/>
       <NoBloomInput/>

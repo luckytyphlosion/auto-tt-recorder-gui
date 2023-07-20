@@ -24,7 +24,7 @@ export function OutputVideoFilenameInput() {
       ></input>
       <button onClick={event => {
         let outputVideoFileFormat;
-        if (getValues("no-top-10-category") === "noencode") {
+        if (getValues("timeline-category") === "notop10" && getValues("no-top-10-category") === "noencode") {
           outputVideoFileFormat = "mkv";
         } else {
           outputVideoFileFormat = getValues("output-video-file-format");

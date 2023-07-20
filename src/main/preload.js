@@ -3,6 +3,7 @@ const { contextBridge, ipcRenderer } = require("electron");
 
 contextBridge.exposeInMainWorld("api", {
   openFileDialog: (fileFilters) => ipcRenderer.invoke("open-file-dialog", fileFilters),
+  openFolderDialog: () => ipcRenderer.invoke("open-folder-dialog"),
   saveFileDialog: (fileFilters) => ipcRenderer.invoke("save-file-dialog", fileFilters),
   openFileDialogAndRead: (fileFilters) => ipcRenderer.invoke("open-file-dialog-and-read", fileFilters),
   saveFileDialogAndWriteText: (fileFilters, output, defaultPath) => ipcRenderer.invoke("save-file-dialog-and-write-text", fileFilters, output, defaultPath),

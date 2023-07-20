@@ -19,6 +19,19 @@ export async function openFileDialog(event: IpcMainInvokeEvent, fileFilters: Fil
   }
 }
 
+export async function openFolderDialog(event: IpcMainInvokeEvent) {
+  let dialogProperties: OpenDialogOptions["properties"] = ["openDirectory"];
+  let response = await dialog.showOpenDialog(mainWindow, {
+    properties: dialogProperties,
+  });
+  if (!response.canceled) {
+    console.log(response.filePaths[0]);
+    return response.filePaths[0];
+  } else {
+    return "";
+  }
+}
+
 export async function openFileDialogAndRead(event: IpcMainInvokeEvent, fileFilters: FileFilter[]) : Promise<FilenameAndContents> {
   let dialogProperties: OpenDialogOptions["properties"] = ["openFile"];
   let response = await dialog.showOpenDialog(mainWindow, {

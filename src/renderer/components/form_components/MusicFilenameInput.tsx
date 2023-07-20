@@ -9,7 +9,9 @@ export function MusicFilenameInput() {
 
   async function queueOpenDialog(event: React.MouseEvent<HTMLButtonElement>, fileFilters: FileFilter[]) {
     let response = await window.api.openFileDialog(fileFilters);
-    setValue("music-filename", response, {shouldTouch: true});
+    if (response !== "") {
+      setValue("music-filename", response, {shouldTouch: true});
+    }
   }
 
   return (

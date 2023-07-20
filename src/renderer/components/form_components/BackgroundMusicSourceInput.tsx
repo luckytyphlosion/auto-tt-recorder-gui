@@ -3,23 +3,29 @@ import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { MusicFilenameInput } from "./MusicFilenameInput";
 import { GameVolumeInput } from "./GameVolumeInput";
 import { MusicVolumeInput } from "./MusicVolumeInput";
+import { MusicPresentationInput } from "./MusicPresentationInput";
+
+import { Timeline } from "../AutoTTRecConfigForm";
 
 import useRenderCounter from "../../RenderCounter";
 
 export type BackgroundMusicSource = "music-filename" | "game-bgm" | "none";
 
-export function BackgroundMusicSourceInput() {
+export function BackgroundMusicSourceInput(props: {timeline: Timeline}) {
   const {register, getValues} = useFormContextAutoTT();
   function isFormBackgroundMusicFromFilename() {
     return getValues("background-music-source") === "music-filename";
   }
 
   const [musicFilenameInputEnable, setMusicFilenameInputEnable] = useState(isFormBackgroundMusicFromFilename());
-  const renderCounter = useRenderCounter();
+  const renderCounter = useRenderCounter(false, "BackgroundMusicSourceInput");
 
   function updateMusicFilenameInputEnable(event: React.MouseEvent<HTMLButtonElement>) {
     setMusicFilenameInputEnable(isFormBackgroundMusicFromFilename());
   }
+
+  let isOnMKChannel = props.timeline === "top10" || props.timeline === "mkchannel";
+  let enableMusicPresentationInput = isOnMKChannel || (props.timeline === "ghostselect" && musicFilenameInputEnable);
 
   return (
     <div>
@@ -34,7 +40,10 @@ export function BackgroundMusicSourceInput() {
         musicFilenameInputEnable ? 
          <MusicFilenameInput/> : ""
       }
-      {renderCounter}
+      {
+        enableMusicPresentationInput ?
+          <MusicPresentationInput hasMusic={musicFilenameInputEnable} isOnMKChannel={isOnMKChannel}/> : ""
+      }
       {
         musicFilenameInputEnable ?
         <>
@@ -42,6 +51,8 @@ export function BackgroundMusicSourceInput() {
           <MusicVolumeInput/>
         </> : ""
       }
+      {renderCounter}
+
     </div>    
   );
 }

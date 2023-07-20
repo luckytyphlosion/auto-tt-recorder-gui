@@ -11,7 +11,7 @@ import CodeMirror from '@uiw/react-codemirror';
 
 import Modal from "react-modal";
 
-import "./styles/Top10GeckoCodeInput.css";
+import "./styles/ExtraGeckoCodesInput.css";
 
 enum SaveModalFrom {
   CLOSING,
@@ -28,33 +28,31 @@ const borderTheme = EditorView.theme({
   }
 });
 
-const top10RegionDependentGeckoCodes = new Set(["C260BFAC", "C26414CC", "C260B720", "C25FA3CC"]);
-
-// 
-export function Top10GeckoCodeInput(props: {isAutoTTRecRunning: boolean}) {
-  const {register, getValues, setValue, control} = useFormContextAutoTT();
-  const renderCounter = useRenderCounter(false, "Top10GeckoCodeInput");
+export function ExtraGeckoCodesInput(props: {isAutoTTRecRunning: boolean}) {
+  const {register, getValues, setValue, control, formState} = useFormContextAutoTT();
+  const renderCounter = useRenderCounter(false, "ExtraGeckoCodesInput");
   const [isModalOpen, setModalOpen] = useState(false);
-  const [isGeckoCodeUnsaved, setGeckoCodeUnsaved] = useState(getValues("top-10-gecko-code-unsaved"));
-  const [top10GeckoCodeFilename, setTop10GeckoCodeFilename] = useState(getValues("top-10-gecko-code-filename"));
-  const [top10GeckoCodeInvalid, setTop10GeckoCodeInvalid] = useState(false);
+  const [isGeckoCodeUnsaved, setGeckoCodeUnsaved] = useState(getValues("extra-gecko-codes-unsaved"));
+  const [extraGeckoCodesFilename, setExtraGeckoCodesFilename] = useState(getValues("extra-gecko-codes-filename"));
 
   const [saveModalFrom, setSaveModalFrom] = useState(SaveModalFrom.CLOSING);
 
-  function updateTop10GeckoCodeFilename(newTop10GeckoCodeFilename: string) {
-    setTop10GeckoCodeFilename(newTop10GeckoCodeFilename);
-    setValue("top-10-gecko-code-filename", newTop10GeckoCodeFilename, {shouldTouch: true});
+  function updateExtraGeckoCodesFilename(newExtraGeckoCodesFilename: string) {
+    setExtraGeckoCodesFilename(newExtraGeckoCodesFilename);
+    setValue("extra-gecko-codes-filename", newExtraGeckoCodesFilename, {shouldTouch: true});
   }
+
   function clearGeckoCodeFields() {
-    updateTop10GeckoCodeFilename("");
-    setValue("top-10-gecko-code-contents", "", {shouldTouch: true});
+    updateExtraGeckoCodesFilename("");
+    setValue("extra-gecko-codes-contents", "", {shouldTouch: true});
     setGeckoCodeUnsaved(false);
   }
 
   function updateGeckoCodeUnsaved() {
     setGeckoCodeUnsaved(true);
-    setValue("top-10-gecko-code-unsaved", true, {shouldTouch: true});
+    setValue("extra-gecko-codes-unsaved", true, {shouldTouch: true});
   }
+
   function setSaveModalOpenAndFrom(newModalOpen: boolean, newSaveModalFrom: SaveModalFrom) {
     setModalOpen(newModalOpen);
     setSaveModalFrom(newSaveModalFrom);
@@ -73,7 +71,7 @@ export function Top10GeckoCodeInput(props: {isAutoTTRecRunning: boolean}) {
       setSaveModalOpenAndFrom(true, SaveModalFrom.OPEN);
     } else {
       await queueOpenDialogAndRead(event, [
-        {name: "Text files", extensions: ["txt"]}
+        {name: "ini files", extensions: ["ini"]}
       ]);
     }
   }
@@ -81,21 +79,21 @@ export function Top10GeckoCodeInput(props: {isAutoTTRecRunning: boolean}) {
   async function queueOpenDialogAndRead(event: React.MouseEvent<HTMLButtonElement>, fileFilters: FileFilter[]) {
     let filenameAndContents: FilenameAndContents = await window.api.openFileDialogAndRead(fileFilters);
     if (filenameAndContents.filename !== "") {
-      updateTop10GeckoCodeFilename(filenameAndContents.filename);
-      setValue("top-10-gecko-code-contents", filenameAndContents.contents, {shouldTouch: true});
+      updateExtraGeckoCodesFilename(filenameAndContents.filename);
+      setValue("extra-gecko-codes-contents", filenameAndContents.contents, {shouldTouch: true});
       setGeckoCodeUnsaved(false);
     }
   }
 
   async function queueSaveDialogAndWriteText(event: React.MouseEvent<HTMLButtonElement>, fileFilters: FileFilter[]): Promise<boolean> {
-    let defaultPath: string = top10GeckoCodeFilename;
-    let output: string = getValues("top-10-gecko-code-contents");
+    let defaultPath: string = getValues("extra-gecko-codes-filename");
+    let output: string = getValues("extra-gecko-codes-contents");
     let success: boolean;
 
     try {
       let response = await window.api.saveFileDialogAndWriteText(fileFilters, output, defaultPath);
       if (response !== "") {
-        updateTop10GeckoCodeFilename(response);
+        updateExtraGeckoCodesFilename(response);
         success = true;
       } else {
         success = false;
@@ -107,6 +105,7 @@ export function Top10GeckoCodeInput(props: {isAutoTTRecRunning: boolean}) {
 
     if (success) {
       setGeckoCodeUnsaved(false);
+      console.log("extra gecko queueSaveDialogAndWriteText formState.errors:", formState);
     }
 
     return success;
@@ -117,7 +116,7 @@ export function Top10GeckoCodeInput(props: {isAutoTTRecRunning: boolean}) {
       clearGeckoCodeFields();
     } else if (saveModalFrom == SaveModalFrom.OPEN) {
       await queueOpenDialogAndRead(event, [
-        {name: "Text files", extensions: ["txt"]}
+        {name: "ini files", extensions: ["ini"]}
       ]);
     }
     setSaveModalOpenAndFrom(false, SaveModalFrom.CLOSING);
@@ -125,7 +124,7 @@ export function Top10GeckoCodeInput(props: {isAutoTTRecRunning: boolean}) {
 
   async function saveModal_saveChanges(event: React.MouseEvent<HTMLButtonElement>) {
     let saveSuccess = await queueSaveDialogAndWriteText(event, [
-      {name: "Text files", extensions: ["txt"]}
+      {name: "ini files", extensions: ["ini"]}
     ]);
 
     setSaveModalOpenAndFrom(false, SaveModalFrom.CLOSING);
@@ -144,90 +143,42 @@ export function Top10GeckoCodeInput(props: {isAutoTTRecRunning: boolean}) {
   }
 
   function geckoCodeValidator(): ValidateResult {
-    setTop10GeckoCodeInvalid(false);
-    if (isGeckoCodeUnsaved || top10GeckoCodeFilename === "") {
+    if (isGeckoCodeUnsaved || extraGeckoCodesFilename === "") {
       return "Please save your gecko code first.";
+    } else if (getValues("extra-gecko-codes-contents").length === 0) {
+      return "Gecko code file can't be empty!";
     } else {
-      let top10GeckoCodeContents = getValues("top-10-gecko-code-contents");
-      let lines = top10GeckoCodeContents.split("\n");
-      let foundTop10Code = false;
-      let top10CodeErrorMsgOrSuccess: boolean | string = "";
-
-      for (const [index, untrimmedLine] of lines.entries()) {
-        let lineNum = index + 1;
-  
-        const line = untrimmedLine.trim();
-        if (line === "") {
-          continue;
-        }
-        let isGeckoCodeValid = true;
-        let codelineSplit = line.split(/\s+/, 2);
-        if (codelineSplit.length !== 2) {
-          isGeckoCodeValid = false;
-        } else {
-          let [codelineFirstHalf, codelineSecondHalf] = codelineSplit;
-          codelineFirstHalf = codelineFirstHalf.trim();
-          codelineSecondHalf = codelineSecondHalf.trim();
-          
-          if (!/^[0-9A-Fa-f]{8}$/.test(codelineFirstHalf) || !/^[0-9A-Fa-f]{8}$/.test(codelineSecondHalf)) {
-            isGeckoCodeValid = false;
-          } else {
-            if (top10RegionDependentGeckoCodes.has(codelineFirstHalf.toUpperCase())) {
-              if (foundTop10Code) {
-                top10CodeErrorMsgOrSuccess = "Broken code provided! Please try creating it again.";
-                break;
-              }
-              foundTop10Code = true;
-            }
-          }
-
-          if (!isGeckoCodeValid) {
-            top10CodeErrorMsgOrSuccess = `Error: bad line \"${line}\" at line ${lineNum}.`;
-            break;
-          }
-        }
-      }
-
-      if (top10CodeErrorMsgOrSuccess === "") {
-        if (foundTop10Code) {
-          top10CodeErrorMsgOrSuccess = true;
-        } else {
-          top10CodeErrorMsgOrSuccess = "Error: Provided gecko code is not a custom top 10 code.";
-        }
-      }
-
-      if (top10CodeErrorMsgOrSuccess !== true) {
-        setTop10GeckoCodeInvalid(true);
-      }
-      return top10CodeErrorMsgOrSuccess;
+      return true;
     }
   }
 
   return (
     <div>
       <div>
-        <h3>Gecko code (created at tt-rec.com)</h3>
-        <input type="hidden" {...register("top-10-gecko-code-unsaved")}/>
+        <h3>Extra gecko codes</h3>
+        <input type="hidden" {...register("extra-gecko-codes-unsaved")}/>
         <Modal
-          overlayClassName="top-10-gecko-code-save-modal"
-          className="top-10-gecko-code-save-modal-contents"
+          overlayClassName="extra-gecko-codes-save-modal"
+          className="extra-gecko-codes-save-modal-contents"
           isOpen={isModalOpen}
           onRequestClose={saveModal_cancel}
           shouldCloseOnOverlayClick={false}
           contentLabel="Save Gecko Code Dialog"
         >
-          {top10GeckoCodeFilename !== "" ?
-            <h4>Save gecko code file "{top10GeckoCodeFilename}"?</h4>
-            : <h4>Save Untitled gecko code file?</h4>
+          {extraGeckoCodesFilename !== "" ?
+            <h4>Save gecko code file "{extraGeckoCodesFilename}"?</h4>
+            : <h4>Save Untitled gecko code file?
+
+            </h4>
           }
           <button onClick={saveModal_saveChanges}>Yes</button>
           <button onClick={saveModal_discardChanges}>No</button>
           <button onClick={saveModal_cancel}>Cancel</button>
         </Modal>
 
-        <label htmlFor="top-10-gecko-code-filename">Filename:</label>
+        <label htmlFor="extra-gecko-codes-filename">Filename:</label>
         <input type="text" readOnly
-          {...register("top-10-gecko-code-filename", {validate: geckoCodeValidator})}
+          {...register("extra-gecko-codes-filename", {validate: geckoCodeValidator})}
         ></input>
 
         <button onClick={event => {
@@ -241,14 +192,14 @@ export function Top10GeckoCodeInput(props: {isAutoTTRecRunning: boolean}) {
 
         <button onClick={event => {
           queueSaveDialogAndWriteText(event, [
-            {name: "Text files", extensions: ["txt"]}
+            {name: "ini files", extensions: ["ini"]}
           ]);
         }} type="button">Save as&#8230;</button>
       </div>
       <div>
         {
-          (isGeckoCodeUnsaved || top10GeckoCodeFilename === "" || top10GeckoCodeInvalid) ?
-            <SimpleErrorMessage name="top-10-gecko-code-filename"/> : ""
+          (isGeckoCodeUnsaved || extraGeckoCodesFilename === "") ?
+            <SimpleErrorMessage name="extra-gecko-codes-filename"/> : ""
         }
         <h4>Gecko code {isGeckoCodeUnsaved ? "(Unsaved)" : ""}</h4>
         <Controller
@@ -259,7 +210,6 @@ export function Top10GeckoCodeInput(props: {isAutoTTRecRunning: boolean}) {
             <CodeMirror
               value={value}
               height="16em"
-              width="15em"
               theme={borderTheme}
               editable={!props.isAutoTTRecRunning}
               onChange={(event) => {
@@ -270,18 +220,9 @@ export function Top10GeckoCodeInput(props: {isAutoTTRecRunning: boolean}) {
               ref={ref}
             />
           )}
-          name="top-10-gecko-code-contents"
+          name="extra-gecko-codes-contents"
           control={control}
         />
-
-          
-        {/*<textarea id="top-10-gecko-code-contents"
-        cols={20} rows={16} wrap="soft"
-        {...register("top-10-gecko-code-contents", {
-
-          
-        })}></textarea>*/}
-
       </div>
       
       {renderCounter}

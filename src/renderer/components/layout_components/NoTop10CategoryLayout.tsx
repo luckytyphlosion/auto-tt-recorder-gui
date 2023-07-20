@@ -9,7 +9,7 @@ import { NoEncodeLayout } from "./NoEncodeLayout";
 
 export type NoTop10Category = "mkchannel" | "ghostselect" | "ghostonly" | "noencode";
 
-export function NoTop10CategoryLayout() {
+export function NoTop10CategoryLayout(props: {isAutoTTRecRunning: boolean}) {
   const {register, getValues} = useFormContextAutoTT();
   const [noTop10Category, setNoTop10Category] = useState(getValues("no-top-10-category"));
   const renderCounter = useRenderCounter(true);
@@ -37,10 +37,10 @@ export function NoTop10CategoryLayout() {
         {...register("no-top-10-category", {onChange: updateNoTop10Category})}
       ></input>
       {
-        noTop10Category === "mkchannel" ? <MarioKartChannelLayout/> :
-          noTop10Category === "ghostselect" ? <GhostSelectLayout/> :
-          noTop10Category === "ghostonly" ? <GhostOnlyLayout/> : 
-          noTop10Category === "noencode" ? <NoEncodeLayout/> : ""
+        noTop10Category === "mkchannel" ? <MarioKartChannelLayout isAutoTTRecRunning={props.isAutoTTRecRunning}/> :
+          noTop10Category === "ghostselect" ? <GhostSelectLayout isAutoTTRecRunning={props.isAutoTTRecRunning}/> :
+          noTop10Category === "ghostonly" ? <GhostOnlyLayout isAutoTTRecRunning={props.isAutoTTRecRunning}/> : 
+          noTop10Category === "noencode" ? <NoEncodeLayout isAutoTTRecRunning={props.isAutoTTRecRunning}/> : ""
       }
       {renderCounter}
     </div>

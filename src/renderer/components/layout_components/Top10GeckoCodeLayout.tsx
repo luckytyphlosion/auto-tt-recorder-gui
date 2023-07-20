@@ -34,8 +34,8 @@ import { DolphinResolutionInput } from "../form_components/DolphinResolutionInpu
 import { TimelineCategoryInput } from "../form_components/TimelineCategoryInput";
 import { MusicVolumeInput } from "../form_components/MusicVolumeInput";
 import { Top10HighlightEnableInput } from "../form_components/Top10HighlightEnableInput";
-
-
+import { ExtraGeckoCodesEnableInput } from "../form_components/ExtraGeckoCodesEnableInput";
+import { AspectRatio16By9Input } from "../form_components/AspectRatio16By9Input";
 import useRenderCounter from "../../RenderCounter";
 
 const PixelFormatInput_Memo = memo(PixelFormatInput);
@@ -55,13 +55,15 @@ export function Top10GeckoCodeLayout(props: {isAutoTTRecRunning: boolean}) {
       <MKChannelGhostDescriptionInput/>
       <TrackNameInput/>
       <Top10GeckoCodeLocationInput/>
-      <BackgroundMusicSourceInput/>
+      <BackgroundMusicSourceInput timeline="top10"/>
       <InputDisplayInput/>
+      <ExtraGeckoCodesEnableInput isAutoTTRecRunning={props.isAutoTTRecRunning}/>
       <SpeedometerInput/>
       <EncodeTypeInput/>
       <PixelFormatInput_Memo/>
       <h3>Quality settings</h3>
       <DolphinResolutionInput enableOutputWidth={true}/>
+      <AspectRatio16By9Input/>
       <HQTexturesInput/>
       <NoBackgroundBlurInput/>
       <NoBloomInput/>

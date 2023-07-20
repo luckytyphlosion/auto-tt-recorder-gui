@@ -34,10 +34,11 @@ import { YoutubeSettingsInput } from "../form_components/YoutubeSettingsInput";
 import { DolphinResolutionInput } from "../form_components/DolphinResolutionInput";
 import { TimelineCategoryInput } from "../form_components/TimelineCategoryInput";
 import { NoMusicInput } from "../form_components/NoMusicInput";
+import { ExtraGeckoCodesEnableInput } from "../form_components/ExtraGeckoCodesEnableInput";
 
 import useRenderCounter from "../../RenderCounter";
 
-export function NoEncodeLayout() {
+export function NoEncodeLayout(props: {isAutoTTRecRunning: boolean}) {
   const renderCounter = useRenderCounter(false, "NoEncodeLayout");
 
   return (
@@ -46,6 +47,7 @@ export function NoEncodeLayout() {
       <ComparisonGhostSourceInput/>
       <SZSSourceInput/>
       <NoMusicInput/>
+      <ExtraGeckoCodesEnableInput isAutoTTRecRunning={props.isAutoTTRecRunning}/>
       <SpeedometerInput/>
       <h3>Quality settings</h3>
       <DolphinResolutionInput enableOutputWidth={false}/>

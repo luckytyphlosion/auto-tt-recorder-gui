@@ -119,6 +119,7 @@ async function createWindow() {
     },
   });
   ipcMain.handle("open-file-dialog", gui2.openFileDialog);
+  ipcMain.handle("open-folder-dialog", gui2.openFolderDialog);
   ipcMain.handle("open-file-dialog-and-read", gui2.openFileDialogAndRead);
   ipcMain.handle("save-file-dialog", gui2.saveFileDialog);
   ipcMain.handle("save-file-dialog-and-write-text", gui2.saveFileDialogAndWriteText);

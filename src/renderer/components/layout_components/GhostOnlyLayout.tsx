@@ -30,16 +30,17 @@ import { UseFFV1Input } from "../form_components/UseFFV1Input";
 import { EncodeOnlyInput } from "../form_components/EncodeOnlyInput";
 import { InputDisplayDontCreateInput } from "../form_components/InputDisplayDontCreateInput";
 import { KeepWindowInput } from "../form_components/KeepWindowInput";
-import { YoutubeSettingsInput } from "../form_components/YoutubeSettingsInput";
+import { ExtraGeckoCodesInput } from "../form_components/ExtraGeckoCodesInput";
 import { DolphinResolutionInput } from "../form_components/DolphinResolutionInput";
 import { TimelineCategoryInput } from "../form_components/TimelineCategoryInput";
 import { MusicVolumeInput } from "../form_components/MusicVolumeInput";
+import { AspectRatio16By9Input } from "../form_components/AspectRatio16By9Input";
 
 import useRenderCounter from "../../RenderCounter";
 
 const PixelFormatInput_Memo = memo(PixelFormatInput);
 
-export function GhostOnlyLayout() {
+export function GhostOnlyLayout(props: {isAutoTTRecRunning: boolean}) {
   const renderCounter = useRenderCounter(false, "GhostOnlyLayout");
 
   return (
@@ -47,13 +48,15 @@ export function GhostOnlyLayout() {
       <MainGhostSourceInput/>
       <ComparisonGhostSourceInput/>
       <SZSSourceInput/>
-      <BackgroundMusicSourceInput/>
+      <BackgroundMusicSourceInput timeline="ghostonly"/>
       <InputDisplayInput/>
+      <ExtraGeckoCodesInput isAutoTTRecRunning={props.isAutoTTRecRunning}/>
       <SpeedometerInput/>
       <EncodeTypeInput/>
       <PixelFormatInput_Memo/>
       <h3>Quality settings</h3>
       <DolphinResolutionInput enableOutputWidth={true}/>
+      <AspectRatio16By9Input/>
       <HQTexturesInput/>
       <NoBackgroundBlurInput/>
       <NoBloomInput/>

@@ -44,6 +44,10 @@ import { Top10GeckoCodeLocationRegion } from "./form_components/Top10GeckoCodeLo
 import { TimelineCategory } from "./form_components/TimelineCategoryInput";
 
 import { NoTop10Category } from "./layout_components/NoTop10CategoryLayout";
+import { AspectRatio16By9 } from "./form_components/AspectRatio16By9Input";
+import { TrackNameType } from "./form_components/TrackNameInput";
+
+import { MusicPresentation } from "./form_components/MusicPresentationInput";
 
 import useRenderCounter from "../RenderCounter";
 
@@ -57,6 +61,7 @@ type ChildrenProps = {
 }
 
 export interface AutoTTRecConfigFormFieldTypes {
+  "aspect-ratio-16-by-9": AspectRatio16By9,
   "audio-bitrate": number,
   "audio-bitrate-displayed": number,
   "audio-bitrate-unit": AudioBitrateUnit,
@@ -73,10 +78,14 @@ export interface AutoTTRecConfigFormFieldTypes {
   "encode-size-displayed": number,
   "encode-size-unit": EncodeSizeUnit,
   "encode-type": EncodeType,
+  "extra-gecko-codes-enable": boolean,
+  "extra-gecko-codes-contents": string,
+  "extra-gecko-codes-filename": string,
+  "extra-gecko-codes-unsaved": boolean,
+  "extra-hq-textures-folder-enable": boolean,
+  "extra-hq-textures-folder": string,
   "game-volume-slider": number,
   "game-volume-numberinput": number,
-  "top-10-gecko-code-contents": string,
-  "top-10-gecko-code-filename": string,
   "h26x-preset": H26xPreset,
   "hq-textures": boolean,
   "input-display": InputDisplay,
@@ -102,11 +111,15 @@ export interface AutoTTRecConfigFormFieldTypes {
   "speedometer-decimal-places-str": SpeedometerDecimalPlaces,
   "speedometer-style": SpeedometerStyle,
   "speedometer-metric": SpeedometerMetric,
+  "music-presentation": MusicPresentation,
   "szs-filename": string,
   "szs-source": SZSSource,
   "timeline-category": TimelineCategory,
   "top-10-chadsoft": string,
   "top-10-gecko-code-location-region": Top10GeckoCodeLocationRegion,
+  "top-10-gecko-code-contents": string,
+  "top-10-gecko-code-filename": string,
+  "top-10-gecko-code-unsaved": boolean,
   "top-10-highlight-enable": boolean,
   "top-10-highlight": number,
   "top-10-location-country-location": Top10LocationCountry,
@@ -114,6 +127,7 @@ export interface AutoTTRecConfigFormFieldTypes {
   "top-10-location-regional-location": Top10LocationRegional,
   "top-10-title": string,
   "track-name": string,
+  "track-name-type": TrackNameType,
   "use-ffv1": boolean,
   "video-codec": VideoCodec,
   "youtube-settings": boolean,
@@ -164,6 +178,11 @@ export interface AutoTTRecArgs {
   "top-10-title"?: string,
   "top-10-highlight"?: number,
   "top-10-gecko-code-filename"?: string,
+  "extra-gecko-codes-filename"?: string,
+  "aspect-ratio-16-by-9"?: AspectRatio16By9,
+  "extra-hq-textures-folder"?: string,
+  "start-music-at-beginning"?: boolean,
+  "no-music-mkchannel"?: boolean,
 }
 
 const DEFAULT_AUTO_TT_REC_ARGS: AutoTTRecArgs = {
@@ -220,14 +239,25 @@ function addMainGhostSourceToAutoTTRecArgs(formData: AutoTTRecConfigFormFieldTyp
   }
 }
 
+function addMusicPresentationToAutoTTRecArgs(formData: AutoTTRecConfigFormFieldTypes, argsBuilder: AutoTTRecArgsBuilder) {
+  if (formData["music-presentation"] === "start-music-at-beginning") {
+    argsBuilder.addManual("start-music-at-beginning", true);
+  } else if (formData["music-presentation"] === "no-music-mkchannel") {
+    argsBuilder.addManual("no-music-mkchannel", true);
+  }
+}
 
 function convertFormDataToAutoTTRecArgs(formData: AutoTTRecConfigFormFieldTypes) {
   let argsBuilder = new AutoTTRecArgsBuilder(formData);
   argsBuilder.add("iso-filename");
 
   const isNoTop10Timeline = formData["timeline-category"] === "notop10";
-  const isNoTop10CategoryMkchannel = formData["no-top-10-category"] === "mkchannel";
+  const isOnMKChannel = !isNoTop10Timeline || formData["no-top-10-category"] === "mkchannel";
   const isNoEncode = isNoTop10Timeline && formData["no-top-10-category"] === "noencode";
+
+  if (formData["extra-gecko-codes-enable"]) {
+    argsBuilder.add("extra-gecko-codes-filename");
+  }
 
   if (isNoTop10Timeline) {
     argsBuilder.addManual("timeline", formData["no-top-10-category"]);
@@ -262,16 +292,22 @@ function convertFormDataToAutoTTRecArgs(formData: AutoTTRecConfigFormFieldTypes)
   }
 
   // mkchannel gets ghost description, while ghostselect, ghostonly, and noencode don't
-  if (!(isNoTop10Timeline && !isNoTop10CategoryMkchannel)) {
+  // !(isNoTop10Timeline && !isNoTop10CategoryMkchannel)
+  // !isNoTop10Timeline || isNoTop10CategoryMkchannel
+  if (isOnMKChannel) {
     argsBuilder.add("mk-channel-ghost-description");
   }
 
   if (!(isNoTop10Timeline && (formData["no-top-10-category"] === "ghostonly" || formData["no-top-10-category"] === "noencode"))) {
-    argsBuilder.add("track-name");
+    if (formData["track-name-type"] === "auto") {
+      argsBuilder.addManual("track-name", "auto");
+    } else {
+      argsBuilder.add("track-name");
+    }
   }
 
   // mkchannel gets top 10 location, while ghostselect, ghostonly, and noencode don't
-  if (!(isNoTop10Timeline && !isNoTop10CategoryMkchannel)) {
+  if (isOnMKChannel) {
     if (formData["top-10-location-region"] === "worldwide") {
       argsBuilder.addManual("top-10-location", "ww");
     } else if (formData["top-10-location-region"] === "regional") {
@@ -286,12 +322,19 @@ function convertFormDataToAutoTTRecArgs(formData: AutoTTRecConfigFormFieldTypes)
       argsBuilder.add("music-filename");
       argsBuilder.addManual("game-volume", formData["game-volume-numberinput"] / 100);
       argsBuilder.addManual("music-volume", formData["music-volume-numberinput"] / 100);
+      if (isNoTop10Timeline && formData["no-top-10-category"] === "ghostselect") {
+        addMusicPresentationToAutoTTRecArgs(formData, argsBuilder);
+      }
     } else if (formData["background-music-source"] === "game-bgm") {
       argsBuilder.addManual("music-filename", "bgm");
     } else if (formData["background-music-source"] === "none") {
       argsBuilder.addManual("music-filename", "none");
     }
+    if (isOnMKChannel) {
+      addMusicPresentationToAutoTTRecArgs(formData, argsBuilder);
+    }
     argsBuilder.add("input-display");
+    argsBuilder.add("aspect-ratio-16-by-9");
   } else {
     argsBuilder.add("no-music");
   }
@@ -306,6 +349,9 @@ function convertFormDataToAutoTTRecArgs(formData: AutoTTRecConfigFormFieldTypes)
   }
 
   argsBuilder.add("hq-textures");
+  if (formData["hq-textures"] && formData["extra-hq-textures-folder-enable"]) {
+    argsBuilder.add("extra-hq-textures-folder");
+  }
   argsBuilder.add("no-background-blur");
   argsBuilder.add("no-bloom");
 
@@ -352,7 +398,7 @@ function convertFormDataToAutoTTRecArgs(formData: AutoTTRecConfigFormFieldTypes)
   return argsBuilder.autoTTRecArgs;
 }
 
-const DEBUG_PREFILLED_DEFAULTS = false;
+const DEBUG_PREFILLED_DEFAULTS = true;
 
 const AutoTTRecConfigFormComponents_Memo = memo(AutoTTRecConfigFormComponents);
 const AutoTTRecSubmitAbortButtons_Memo = memo(AutoTTRecSubmitAbortButtons);
@@ -369,6 +415,7 @@ export function AutoTTRecConfigForm(props: {
   const formMethods = useForm<AutoTTRecConfigFormFieldTypes>({
     criteriaMode: "all",
     defaultValues: {
+      "aspect-ratio-16-by-9": "auto",
       "audio-bitrate": 128000,
       "audio-bitrate-displayed": 128,
       "audio-bitrate-unit": "kbps",
@@ -385,19 +432,24 @@ export function AutoTTRecConfigForm(props: {
       "encode-size-displayed": 50,
       "encode-size-unit": "mib",
       "encode-type": "crf",
+      "extra-gecko-codes-enable": false,
+      "extra-gecko-codes-contents": "",
+      "extra-gecko-codes-filename": "",
+      "extra-gecko-codes-unsaved": false,
+      "extra-hq-textures-folder-enable": false,
+      "extra-hq-textures-folder": "",
       "game-volume-slider": 100,
       "game-volume-numberinput": 100,
-      "top-10-gecko-code-contents": "",
-      "top-10-gecko-code-filename": "",
       "h26x-preset": DEBUG_PREFILLED_DEFAULTS ? "ultrafast" : "slow",
       "hq-textures": true,
-      "input-display": "gcn",
+      "input-display": "auto",
       "input-display-dont-create": false,
       "iso-filename": DEBUG_PREFILLED_DEFAULTS ? "C:\\Users\\User\\Documents\\RMCE 01\\RMCE01.iso" : "",
       "keep-window": true,
       "main-ghost-filename": "",
       "main-ghost-source": "chadsoft",
       "mk-channel-ghost-description": "Ghost Data",
+      "music-presentation": "normal",
       "music-filename": "",
       "music-volume-numberinput": 100,
       "music-volume-slider": 100,
@@ -418,6 +470,9 @@ export function AutoTTRecConfigForm(props: {
       "timeline-category": "notop10",
       "top-10-chadsoft": "",
       "top-10-gecko-code-location-region": "worldwide",
+      "top-10-gecko-code-contents": "",
+      "top-10-gecko-code-filename": "",
+      "top-10-gecko-code-unsaved": false,      
       "top-10-highlight-enable": true,
       "top-10-highlight": 1,
       "top-10-location-country-location": "Abkhazia",
@@ -425,6 +480,7 @@ export function AutoTTRecConfigForm(props: {
       "top-10-location-regional-location": "Europe",
       "top-10-title": "",
       "track-name": DEBUG_PREFILLED_DEFAULTS ? "Mario Circuit" : "",
+      "track-name-type": "auto",
       "use-ffv1": false,
       "video-codec": "libx264",
       "youtube-settings": true,

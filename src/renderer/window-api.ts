@@ -7,6 +7,7 @@ declare global {
   interface Window {
     api: {
       openFileDialog: (fileFilters: FileFilter[]) => Promise<string>;
+      openFolderDialog: () => Promise<string>;
       openFileDialogAndRead: (fileFilters: FileFilter[]) => Promise<FilenameAndContents>;
       saveFileDialog: (fileFilters: FileFilter[]) => Promise<string>;
       saveFileDialogAndWriteText: (fileFilters: FileFilter[], output: string, defaultPath: string | undefined) => Promise<string>;

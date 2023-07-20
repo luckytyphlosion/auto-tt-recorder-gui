@@ -38,7 +38,7 @@ export function AutoTTRecConfigFormComponents(props: {
     <div className="auto-tt-rec-config-form">
       <FormProvider {...props.formMethods}>
         <ISOWBFSFileInput_Memo/>
-        <TimelineCategoryInput_Memo noTop10Child={<NoTop10CategoryLayout/>} top10ChadsoftChild={<Top10ChadsoftLayout/>} top10GeckoChild={<Top10GeckoCodeLayout isAutoTTRecRunning={props.isAutoTTRecRunning}/>}/>
+        <TimelineCategoryInput_Memo noTop10Child={<NoTop10CategoryLayout isAutoTTRecRunning={props.isAutoTTRecRunning}/>} top10ChadsoftChild={<Top10ChadsoftLayout  isAutoTTRecRunning={props.isAutoTTRecRunning}/>} top10GeckoChild={<Top10GeckoCodeLayout isAutoTTRecRunning={props.isAutoTTRecRunning}/>}/>
         <OutputVideoFilenameInput/>
       {/*<TimelineCategoryInput noTop10Child={<NoTop10CategoryInput/>} top10ChadsoftChild={<div></div>} top10GeckoChild={<div></div>}/>*/}
       {/*<MainGhostFilenameInput arg={1}/>

@@ -10,7 +10,9 @@ export function MainGhostFilenameInput() {
 
   async function queueOpenDialog(event: React.MouseEvent<HTMLButtonElement>, fileFilters: FileFilter[]) {
     let response = await window.api.openFileDialog(fileFilters);
-    setValue("main-ghost-filename", response, {shouldTouch: true});
+    if (response !== "") {
+      setValue("main-ghost-filename", response, {shouldTouch: true});
+    }
   }
 
   return (
