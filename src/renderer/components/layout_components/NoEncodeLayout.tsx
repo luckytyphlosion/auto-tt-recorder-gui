@@ -35,6 +35,8 @@ import { DolphinResolutionInput } from "../form_components/DolphinResolutionInpu
 import { TimelineCategoryInput } from "../form_components/TimelineCategoryInput";
 import { NoMusicInput } from "../form_components/NoMusicInput";
 import { ExtraGeckoCodesEnableInput } from "../form_components/ExtraGeckoCodesEnableInput";
+import { FadeInAtStartInput } from "../form_components/FadeInAtStartInput";
+import { EndingDelayInput } from "../form_components/EndingDelayInput";
 
 import useRenderCounter from "../../RenderCounter";
 
@@ -49,6 +51,8 @@ export function NoEncodeLayout(props: {isAutoTTRecRunning: boolean}) {
       <NoMusicInput/>
       <ExtraGeckoCodesEnableInput isAutoTTRecRunning={props.isAutoTTRecRunning}/>
       <SpeedometerInput/>
+      <h3>Presentation settings</h3>
+      <EndingDelayInput/>
       <h3>Quality settings</h3>
       <DolphinResolutionInput enableOutputWidth={false}/>
       <HQTexturesInput/>

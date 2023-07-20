@@ -36,6 +36,8 @@ import { TimelineCategoryInput } from "../form_components/TimelineCategoryInput"
 import { MusicVolumeInput } from "../form_components/MusicVolumeInput";
 import { ExtraGeckoCodesEnableInput } from "../form_components/ExtraGeckoCodesEnableInput";
 import { AspectRatio16By9Input } from "../form_components/AspectRatio16By9Input";
+import { FadeInAtStartInput } from "../form_components/FadeInAtStartInput";
+import { EndingDelayInput } from "../form_components/EndingDelayInput";
 
 import useRenderCounter from "../../RenderCounter";
 
@@ -54,8 +56,12 @@ export function GhostSelectLayout(props: {isAutoTTRecRunning: boolean}) {
       <InputDisplayInput/>
       <ExtraGeckoCodesEnableInput isAutoTTRecRunning={props.isAutoTTRecRunning}/>
       <SpeedometerInput/>
+      <h3>Presentation settings</h3>
+      <FadeInAtStartInput/>
+      <EndingDelayInput/>
       <EncodeTypeInput/>
       <PixelFormatInput_Memo/>
+
       <h3>Quality settings</h3>
       <DolphinResolutionInput enableOutputWidth={true}/>
       <AspectRatio16By9Input/>

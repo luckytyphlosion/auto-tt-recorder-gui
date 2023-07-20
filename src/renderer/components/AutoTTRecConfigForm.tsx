@@ -78,12 +78,14 @@ export interface AutoTTRecConfigFormFieldTypes {
   "encode-size-displayed": number,
   "encode-size-unit": EncodeSizeUnit,
   "encode-type": EncodeType,
+  "ending-delay": number,
   "extra-gecko-codes-enable": boolean,
   "extra-gecko-codes-contents": string,
   "extra-gecko-codes-filename": string,
   "extra-gecko-codes-unsaved": boolean,
   "extra-hq-textures-folder-enable": boolean,
   "extra-hq-textures-folder": string,
+  "fade-in-at-start": boolean,
   "game-volume-slider": number,
   "game-volume-numberinput": number,
   "h26x-preset": H26xPreset,
@@ -183,6 +185,8 @@ export interface AutoTTRecArgs {
   "extra-hq-textures-folder"?: string,
   "start-music-at-beginning"?: boolean,
   "no-music-mkchannel"?: boolean,
+  "ending-delay"?: number,
+  "fade-in-at-start"?: boolean,
 }
 
 const DEFAULT_AUTO_TT_REC_ARGS: AutoTTRecArgs = {
@@ -255,15 +259,22 @@ function convertFormDataToAutoTTRecArgs(formData: AutoTTRecConfigFormFieldTypes)
   const isOnMKChannel = !isNoTop10Timeline || formData["no-top-10-category"] === "mkchannel";
   const isNoEncode = isNoTop10Timeline && formData["no-top-10-category"] === "noencode";
 
+  let timeline: Timeline;
+  if (!isNoTop10Timeline) {
+    timeline = "top10";
+  } else {
+    timeline = formData["no-top-10-category"];
+  }
+
   if (formData["extra-gecko-codes-enable"]) {
     argsBuilder.add("extra-gecko-codes-filename");
   }
 
+  argsBuilder.addManual("timeline", timeline);
+
   if (isNoTop10Timeline) {
-    argsBuilder.addManual("timeline", formData["no-top-10-category"]);
     addMainGhostSourceToAutoTTRecArgs(formData, argsBuilder);
   } else {
-    argsBuilder.addManual("timeline", "top10");
     if (formData["timeline-category"] === "top10chadsoft") {
       argsBuilder.add("top-10-chadsoft");
       argsBuilder.add("top-10-title");
@@ -298,7 +309,7 @@ function convertFormDataToAutoTTRecArgs(formData: AutoTTRecConfigFormFieldTypes)
     argsBuilder.add("mk-channel-ghost-description");
   }
 
-  if (!(isNoTop10Timeline && (formData["no-top-10-category"] === "ghostonly" || formData["no-top-10-category"] === "noencode"))) {
+  if (timeline !== "ghostonly" && timeline !== "noencode") {
     if (formData["track-name-type"] === "auto") {
       argsBuilder.addManual("track-name", "auto");
     } else {
@@ -322,7 +333,7 @@ function convertFormDataToAutoTTRecArgs(formData: AutoTTRecConfigFormFieldTypes)
       argsBuilder.add("music-filename");
       argsBuilder.addManual("game-volume", formData["game-volume-numberinput"] / 100);
       argsBuilder.addManual("music-volume", formData["music-volume-numberinput"] / 100);
-      if (isNoTop10Timeline && formData["no-top-10-category"] === "ghostselect") {
+      if (timeline === "ghostselect") {
         addMusicPresentationToAutoTTRecArgs(formData, argsBuilder);
       }
     } else if (formData["background-music-source"] === "game-bgm") {
@@ -340,6 +351,10 @@ function convertFormDataToAutoTTRecArgs(formData: AutoTTRecConfigFormFieldTypes)
   }
 
   argsBuilder.addManual("speedometer", formData["speedometer-style"]);
+  argsBuilder.add("ending-delay");
+  if (isOnMKChannel || timeline === "ghostselect") {
+    argsBuilder.add("fade-in-at-start");
+  }
 
   if (formData["speedometer-style"] !== "none") {
     argsBuilder.add("speedometer-metric");
@@ -432,12 +447,14 @@ export function AutoTTRecConfigForm(props: {
       "encode-size-displayed": 50,
       "encode-size-unit": "mib",
       "encode-type": "crf",
+      "ending-delay": 600,
       "extra-gecko-codes-enable": false,
       "extra-gecko-codes-contents": "",
       "extra-gecko-codes-filename": "",
       "extra-gecko-codes-unsaved": false,
       "extra-hq-textures-folder-enable": false,
       "extra-hq-textures-folder": "",
+      "fade-in-at-start": false,
       "game-volume-slider": 100,
       "game-volume-numberinput": 100,
       "h26x-preset": DEBUG_PREFILLED_DEFAULTS ? "ultrafast" : "slow",
@@ -458,6 +475,7 @@ export function AutoTTRecConfigForm(props: {
       "no-music": false,
       "no-top-10-category": "mkchannel",
       "output-video-filename": DEBUG_PREFILLED_DEFAULTS ? "C:\\Users\\User\\Documents\\RMCE 01\\guitest1.mp4" : "",
+      "output-video-file-format": "mp4",
       "output-width-custom": NaN,
       "output-width-preset": DEBUG_PREFILLED_DEFAULTS ? "none" : "2560",
       "pixel-format": "yuv420p",

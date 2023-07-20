@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import useRenderCounter from "../../RenderCounter";
 
@@ -6,9 +6,11 @@ import { MarioKartChannelLayout } from "./MarioKartChannelLayout";
 import { GhostSelectLayout } from "./GhostSelectLayout";
 import { GhostOnlyLayout } from "./GhostOnlyLayout";
 import { NoEncodeLayout } from "./NoEncodeLayout";
+import { OutputVideoFilenameInput } from "../form_components/OutputVideoFilenameInput";
 
 export type NoTop10Category = "mkchannel" | "ghostselect" | "ghostonly" | "noencode";
 
+const OutputVideoFilenameInput_Memo = memo(OutputVideoFilenameInput);
 export function NoTop10CategoryLayout(props: {isAutoTTRecRunning: boolean}) {
   const {register, getValues} = useFormContextAutoTT();
   const [noTop10Category, setNoTop10Category] = useState(getValues("no-top-10-category"));
@@ -43,6 +45,7 @@ export function NoTop10CategoryLayout(props: {isAutoTTRecRunning: boolean}) {
           noTop10Category === "noencode" ? <NoEncodeLayout isAutoTTRecRunning={props.isAutoTTRecRunning}/> : ""
       }
       {renderCounter}
+      <OutputVideoFilenameInput_Memo noTop10CategoryIsNoEncode={noTop10Category === "noencode"}/>
     </div>
   );
 }

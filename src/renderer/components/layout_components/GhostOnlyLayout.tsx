@@ -30,11 +30,13 @@ import { UseFFV1Input } from "../form_components/UseFFV1Input";
 import { EncodeOnlyInput } from "../form_components/EncodeOnlyInput";
 import { InputDisplayDontCreateInput } from "../form_components/InputDisplayDontCreateInput";
 import { KeepWindowInput } from "../form_components/KeepWindowInput";
-import { ExtraGeckoCodesInput } from "../form_components/ExtraGeckoCodesInput";
+import { ExtraGeckoCodesEnableInput } from "../form_components/ExtraGeckoCodesEnableInput";
 import { DolphinResolutionInput } from "../form_components/DolphinResolutionInput";
 import { TimelineCategoryInput } from "../form_components/TimelineCategoryInput";
 import { MusicVolumeInput } from "../form_components/MusicVolumeInput";
 import { AspectRatio16By9Input } from "../form_components/AspectRatio16By9Input";
+import { FadeInAtStartInput } from "../form_components/FadeInAtStartInput";
+import { EndingDelayInput } from "../form_components/EndingDelayInput";
 
 import useRenderCounter from "../../RenderCounter";
 
@@ -50,8 +52,10 @@ export function GhostOnlyLayout(props: {isAutoTTRecRunning: boolean}) {
       <SZSSourceInput/>
       <BackgroundMusicSourceInput timeline="ghostonly"/>
       <InputDisplayInput/>
-      <ExtraGeckoCodesInput isAutoTTRecRunning={props.isAutoTTRecRunning}/>
+      <ExtraGeckoCodesEnableInput isAutoTTRecRunning={props.isAutoTTRecRunning}/>
       <SpeedometerInput/>
+      <h3>Presentation settings</h3>
+      <EndingDelayInput/>
       <EncodeTypeInput/>
       <PixelFormatInput_Memo/>
       <h3>Quality settings</h3>
