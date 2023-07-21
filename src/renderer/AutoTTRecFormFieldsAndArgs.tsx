@@ -47,6 +47,7 @@ import { TrackNameType } from "./components/form_components/TrackNameInput";
 
 import { MusicPresentation } from "./components/form_components/MusicPresentationInput";
 import { FormComplexity } from "./components/layout_components/FormComplexityLayout";
+import { Top10TitleType } from "./components/form_components/Top10TitleInput";
 
 export type Timeline = "noencode" | "ghostonly" | "ghostselect" | "mkchannel" | "top10";
 export type ExtendedTimeline = "noencode" | "ghostonly" | "ghostselect" | "mkchannel" | "top10chadsoft" | "top10gecko";
@@ -120,6 +121,7 @@ export interface AutoTTRecConfigFormFieldTypes {
   "top-10-location-region": Top10LocationRegion,
   "top-10-location-regional-location": Top10LocationRegional,
   "top-10-title": string,
+  "top-10-title-type": Top10TitleType,
   "track-name": string,
   "track-name-type": TrackNameType,
   "use-ffv1": boolean,
@@ -198,6 +200,7 @@ export const DEFAULT_FORM_VALUES: AutoTTRecConfigFormFieldTypes = {
   "top-10-location-region": "worldwide",
   "top-10-location-regional-location": "Europe",
   "top-10-title": "",
+  "top-10-title-type": "auto",
   "track-name": DEBUG_PREFILLED_DEFAULTS ? "Mario Circuit" : "",
   "track-name-type": "auto",
   "use-ffv1": false,

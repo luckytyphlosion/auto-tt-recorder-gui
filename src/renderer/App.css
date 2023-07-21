@@ -34,3 +34,7 @@
 #output-video-filename {
 	width: 30em;
 }
+
+.option-label {
+	font-weight: bold;
+}
