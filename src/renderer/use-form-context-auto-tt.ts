@@ -1,6 +1,6 @@
 import { useWatch, useFormContext } from "react-hook-form";
 
-import { AutoTTRecConfigFormFieldTypes } from "./components/AutoTTRecConfigForm";
+import { AutoTTRecConfigFormFieldTypes } from "./AutoTTRecFieldsAndArgs";
 
 export function useFormContextAutoTT() {
   return useFormContext<AutoTTRecConfigFormFieldTypes>();

@@ -6,7 +6,7 @@ import { CRFEncodeSettingsLayout } from "../layout_components/sub_layouts/CRFEnc
 import useRenderCounter from "../../RenderCounter";
 
 import { EncodeType } from "../layout_components/choice_layouts/EncodeSettingsLayout";
-import { AutoTTRecConfigFormFieldTypes } from "../AutoTTRecConfigForm";
+import { AutoTTRecConfigFormFieldTypes } from "../../AutoTTRecFieldsAndArgs";
 
 export type VideoCodec = "libx264" | "libx265" | "libvpx-vp9";
 

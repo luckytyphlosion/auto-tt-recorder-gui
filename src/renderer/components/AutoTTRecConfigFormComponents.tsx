@@ -9,7 +9,7 @@ import { useFormContextAutoTT } from "../use-form-context-auto-tt";
 import { ISOWBFSFileInput } from "./form_components/ISOWBFSFileInput";
 import { FormComplexityLayout } from "./layout_components/FormComplexityLayout";
 
-import { AutoTTRecConfigFormFieldTypes } from "./AutoTTRecConfigForm";
+import { AutoTTRecConfigFormFieldTypes } from "../AutoTTRecFieldsAndArgs";
 
 import useRenderCounter from "../RenderCounter";
 

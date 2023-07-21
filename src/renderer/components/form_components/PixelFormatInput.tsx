@@ -3,7 +3,7 @@ import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
 import { UseFormRegister } from "react-hook-form";
 
-import { AutoTTRecConfigFormFieldTypes } from "../AutoTTRecConfigForm";
+import { AutoTTRecConfigFormFieldTypes } from "../../AutoTTRecFieldsAndArgs";
 
 import useRenderCounter from "../../RenderCounter";
 

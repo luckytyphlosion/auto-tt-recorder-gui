@@ -1,7 +1,7 @@
 import React, { useState, ReactElement, memo } from "react";
 import { useFormContextAutoTT } from "../../../use-form-context-auto-tt";
 import { useFormContext } from "react-hook-form";
-import { AutoTTRecConfigFormFieldTypes } from "../../AutoTTRecConfigForm";
+import { AutoTTRecConfigFormFieldTypes } from "../../../AutoTTRecFieldsAndArgs";
 
 import { Top10GeckoCodeInput } from "../../form_components/Top10GeckoCodeInput";
 import { MainGhostSourceInput } from "../../form_components/MainGhostSourceInput";
