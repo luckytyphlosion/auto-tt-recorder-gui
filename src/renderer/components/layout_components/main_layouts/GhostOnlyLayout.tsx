@@ -36,14 +36,12 @@ import { TimelineCategoryLayout } from "../TimelineCategoryLayout";
 import { MusicVolumeInput } from "../../form_components/MusicVolumeInput";
 import { AspectRatio16By9Input } from "../../form_components/AspectRatio16By9Input";
 import { FadeInAtStartInput } from "../../form_components/FadeInAtStartInput";
-import { EndingDelayInput } from "../../form_components/EndingDelayInput";
+import { PresentationSettingsLayout } from "../sub_layouts/PresentationSettingsLayout";
 import { FormComplexity } from "../FormComplexityLayout";
 import { QualitySettingsLayout } from "../sub_layouts/QualitySettingsLayout";
 import { ExtraSettingsLayout } from "../sub_layouts/ExtraSettingsLayout";
 
 import useRenderCounter from "../../../RenderCounter";
-
-const PixelFormatInput_Memo = memo(PixelFormatInput);
 
 export function GhostOnlyLayout(props: {isAutoTTRecRunning: boolean, formComplexity: FormComplexity}) {
   const renderCounter = useRenderCounter(false, "GhostOnlyLayout");
@@ -57,10 +55,9 @@ export function GhostOnlyLayout(props: {isAutoTTRecRunning: boolean, formComplex
       <InputDisplayInput/>
       <ExtraGeckoCodesEnableInput isAutoTTRecRunning={props.isAutoTTRecRunning}/>
       <SpeedometerInput/>
-      <h3>Presentation settings</h3>
-      <EndingDelayInput/>
+      <PresentationSettingsLayout formComplexity={props.formComplexity} enableFadeInAtStart={false}/>
       <EncodeTypeLayout/>
-      <QualitySettingsLayout formComplexity={props.formComplexity}/>
+      <QualitySettingsLayout formComplexity={props.formComplexity} isNoEncode={false}/>
       <ExtraSettingsLayout formComplexity={props.formComplexity}/>
       {renderCounter}
 

@@ -40,6 +40,7 @@ import useRenderCounter from "../../../RenderCounter";
 import { FadeInAtStartInput } from "../../form_components/FadeInAtStartInput";
 import { EndingDelayInput } from "../../form_components/EndingDelayInput";
 import { FormComplexity } from "../FormComplexityLayout";
+import { PresentationSettingsLayout } from "../sub_layouts/PresentationSettingsLayout";
 
 /**/
 export function Top10GeckoCodeLayout(props: {isAutoTTRecRunning: boolean, formComplexity: FormComplexity}) {
@@ -58,11 +59,9 @@ export function Top10GeckoCodeLayout(props: {isAutoTTRecRunning: boolean, formCo
       <InputDisplayInput/>
       <ExtraGeckoCodesEnableInput isAutoTTRecRunning={props.isAutoTTRecRunning}/>
       <SpeedometerInput/>
-      <h3>Presentation settings</h3>
-      <FadeInAtStartInput/>
-      <EndingDelayInput/>
+      <PresentationSettingsLayout formComplexity={props.formComplexity} enableFadeInAtStart={true}/>
       <EncodeTypeLayout/>
-      <QualitySettingsLayout formComplexity={props.formComplexity}/>
+      <QualitySettingsLayout formComplexity={props.formComplexity} isNoEncode={false}/>
       <ExtraSettingsLayout formComplexity={props.formComplexity}/>
       {renderCounter}
       <OutputVideoFilenameInput noTop10CategoryIsNoEncode={false}/>

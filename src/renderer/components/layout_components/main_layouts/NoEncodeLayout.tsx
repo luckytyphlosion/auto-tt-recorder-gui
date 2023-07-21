@@ -36,7 +36,9 @@ import { TimelineCategoryLayout } from "../TimelineCategoryLayout";
 import { NoMusicInput } from "../../form_components/NoMusicInput";
 import { ExtraGeckoCodesEnableInput } from "../../form_components/ExtraGeckoCodesEnableInput";
 import { FadeInAtStartInput } from "../../form_components/FadeInAtStartInput";
-import { EndingDelayInput } from "../../form_components/EndingDelayInput";
+import { QualitySettingsLayout } from "../sub_layouts/QualitySettingsLayout";
+import { PresentationSettingsLayout } from "../sub_layouts/PresentationSettingsLayout";
+import { FormComplexity } from "../FormComplexityLayout";
 
 import useRenderCounter from "../../../RenderCounter";
 
@@ -51,13 +53,8 @@ export function NoEncodeLayout(props: {isAutoTTRecRunning: boolean}) {
       <NoMusicInput/>
       <ExtraGeckoCodesEnableInput isAutoTTRecRunning={props.isAutoTTRecRunning}/>
       <SpeedometerInput/>
-      <h3>Presentation settings</h3>
-      <EndingDelayInput/>
-      <h3>Quality settings</h3>
-      <DolphinResolutionInput enableOutputWidth={false}/>
-      <HQTexturesInput/>
-      <NoBackgroundBlurInput/>
-      <NoBloomInput/>
+      <PresentationSettingsLayout formComplexity={FormComplexity.ALL} enableFadeInAtStart={false}/>
+      <QualitySettingsLayout formComplexity={FormComplexity.ALL} isNoEncode={true}/>
       <h3>Extra settings (ignore if not sure)</h3>
       <UseFFV1Input/>
       <KeepWindowInput/>

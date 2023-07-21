@@ -40,6 +40,7 @@ import { EndingDelayInput } from "../../form_components/EndingDelayInput";
 import { FormComplexity } from "../FormComplexityLayout";
 import { QualitySettingsLayout } from "../sub_layouts/QualitySettingsLayout";
 import { ExtraSettingsLayout } from "../sub_layouts/ExtraSettingsLayout";
+import { PresentationSettingsLayout } from "../sub_layouts/PresentationSettingsLayout";
 
 import useRenderCounter from "../../../RenderCounter";
 
@@ -60,11 +61,9 @@ export function MarioKartChannelLayout(props: {isAutoTTRecRunning: boolean, form
       <InputDisplayInput/>
       <ExtraGeckoCodesEnableInput isAutoTTRecRunning={props.isAutoTTRecRunning}/>
       <SpeedometerInput/>
-      <h3>Presentation settings</h3>
-      <FadeInAtStartInput/>
-      <EndingDelayInput/>
+      <PresentationSettingsLayout formComplexity={props.formComplexity} enableFadeInAtStart={true}/>
       <EncodeTypeLayout/>
-      <QualitySettingsLayout formComplexity={props.formComplexity}/>
+      <QualitySettingsLayout formComplexity={props.formComplexity} isNoEncode={false}/>
       <ExtraSettingsLayout formComplexity={props.formComplexity}/>
 
       {renderCounter}

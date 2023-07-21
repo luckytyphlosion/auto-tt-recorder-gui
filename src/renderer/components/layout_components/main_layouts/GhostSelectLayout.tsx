@@ -37,7 +37,7 @@ import { MusicVolumeInput } from "../../form_components/MusicVolumeInput";
 import { ExtraGeckoCodesEnableInput } from "../../form_components/ExtraGeckoCodesEnableInput";
 import { AspectRatio16By9Input } from "../../form_components/AspectRatio16By9Input";
 import { FadeInAtStartInput } from "../../form_components/FadeInAtStartInput";
-import { EndingDelayInput } from "../../form_components/EndingDelayInput";
+import { PresentationSettingsLayout } from "../sub_layouts/PresentationSettingsLayout";
 import { FormComplexity } from "../FormComplexityLayout";
 import { QualitySettingsLayout } from "../sub_layouts/QualitySettingsLayout";
 import { ExtraSettingsLayout } from "../sub_layouts/ExtraSettingsLayout";
@@ -59,12 +59,10 @@ export function GhostSelectLayout(props: {isAutoTTRecRunning: boolean, formCompl
       <InputDisplayInput/>
       <ExtraGeckoCodesEnableInput isAutoTTRecRunning={props.isAutoTTRecRunning}/>
       <SpeedometerInput/>
-      <h3>Presentation settings</h3>
-      <FadeInAtStartInput/>
-      <EndingDelayInput/>
+      <PresentationSettingsLayout formComplexity={props.formComplexity} enableFadeInAtStart={true}/>
       <EncodeTypeLayout/>
 
-      <QualitySettingsLayout formComplexity={props.formComplexity}/>
+      <QualitySettingsLayout formComplexity={props.formComplexity} isNoEncode={false}/>
       <ExtraSettingsLayout formComplexity={props.formComplexity}/>
       {renderCounter}
 

@@ -8,14 +8,14 @@ import { HQTexturesInput } from "../../form_components/HQTexturesInput";
 import { NoBackgroundBlurInput } from "../../form_components/NoBackgroundBlurInput";
 import { NoBloomInput } from "../../form_components/NoBloomInput";
 
-export function QualitySettingsLayout(props: {formComplexity: FormComplexity}) {
+export function QualitySettingsLayout(props: {formComplexity: FormComplexity, isNoEncode: boolean}) {
   return <>
     <h3>Quality settings</h3>
     {
       props.formComplexity > FormComplexity.SIMPLE ?
       <>
-        <DolphinResolutionInput enableOutputWidth={true}/>
-        <AspectRatio16By9Input/>
+        <DolphinResolutionInput enableOutputWidth={!props.isNoEncode}/>
+        {!props.isNoEncode ? <AspectRatio16By9Input/> : ""}
         <HQTexturesInput/>
         <NoBackgroundBlurInput/>
         <NoBloomInput/>
