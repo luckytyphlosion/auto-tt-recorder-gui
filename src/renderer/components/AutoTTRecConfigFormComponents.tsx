@@ -33,35 +33,6 @@ export function AutoTTRecConfigFormComponents(props: {
       <FormProvider {...props.formMethods}>
         <ISOWBFSFileInput_Memo/>
         <FormComplexityLayout isAutoTTRecRunning={props.isAutoTTRecRunning}/>
-        
-      {/*<TimelineCategoryInput noTop10Child={<NoTop10CategoryInput/>} top10ChadsoftChild={<div></div>} top10GeckoChild={<div></div>}/>*/}
-      {/*<MainGhostFilenameInput arg={1}/>
-      <ChadsoftGhostPageInput/>
-      <ChadsoftComparisonGhostPageInput/>
-      <SZSFilenameInput/>
-      <Set200ccInput/>
-      <MKChannelGhostDescriptionInput/>
-      <TrackNameInput/>
-      <Top10HighlightEnableInput/>
-      <Top10HighlightInput/>
-      <Top10ChadsoftInput/>
-      <Top10TitleInput/>
-      <Top10LocationInput/>
-      <BackgroundMusicSourceInput/>
-      <GameVolumeInput/>
-      <InputDisplayInput/>
-      <SpeedometerInput/>
-      <HQTexturesInput/>
-      <NoBackgroundBlurInput/>
-      <NoBloomInput/>
-      <UseFFV1Input/>
-      <EncodeOnlyInput/>
-      <InputDisplayDontCreateInput/>
-      <KeepWindowInput/>
-      <YoutubeSettingsInput/>
-      <DolphinResolutionInput/>
-      <QualityInput/>
-      <OutputVideoFilenameInput/>*/}
         {renderCounter}
       </FormProvider>
     </div>

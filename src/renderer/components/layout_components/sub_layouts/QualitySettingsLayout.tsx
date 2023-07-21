@@ -15,12 +15,11 @@ export function QualitySettingsLayout(props: {formComplexity: FormComplexity, is
     {
       props.formComplexity > FormComplexity.SIMPLE ?
       <>
-        <DolphinResolutionInput enableOutputWidth={!props.isNoEncode}/>
+        <DolphinResolutionInput enableOutputWidth={!props.isNoEncode} formComplexity={props.formComplexity}/>
         {!props.isNoEncode && props.formComplexity === FormComplexity.ALL ? <AspectRatio16By9Input/> : ""}
-        <HQTexturesInput/>
         <NoBackgroundBlurInput/>
         <NoBloomInput/>
-      </> : <DolphinResolutionInput enableOutputWidth={false}/>
+      </> : <DolphinResolutionInput enableOutputWidth={false} formComplexity={props.formComplexity}/>
     }
   </>
 }
