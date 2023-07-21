@@ -5,17 +5,20 @@ import { H26xPresetInput } from "../../form_components/H26xPresetInput";
 import { CRFValueInput } from "../../form_components/CRFValueInput";
 import { AudioCodecAndBitrateInput } from "../../form_components/AudioCodecAndBitrateInput";
 import { YoutubeSettingsInput } from "../../form_components/YoutubeSettingsInput";
+import { FormComplexity } from "../FormComplexityLayout";
 
-export function CRFEncodeSettingsLayout(props: {encodeTypeChanged: boolean}) {
-  const {register, getValues} = useFormContextAutoTT();
-
+export function CRFEncodeSettingsLayout(props: {encodeTypeChanged: boolean, formComplexity: FormComplexity}) {
   return (
     <div>
-      <VideoCodecInput encodeType="crf"/>
-      <CRFValueInput/>
-      <H26xPresetInput/>
-      <YoutubeSettingsInput/>
-      <AudioCodecAndBitrateInput encodeType="crf" encodeTypeChanged={props.encodeTypeChanged}/>
+      {
+        props.formComplexity === FormComplexity.ALL ? <>
+          <VideoCodecInput encodeType="crf" formComplexity={props.formComplexity}/>
+          <CRFValueInput/>
+          <H26xPresetInput/>
+          <YoutubeSettingsInput/>
+          <AudioCodecAndBitrateInput encodeType="crf" encodeTypeChanged={props.encodeTypeChanged}/>
+        </> : <CRFValueInput/>
+      }
     </div>
   );
 }

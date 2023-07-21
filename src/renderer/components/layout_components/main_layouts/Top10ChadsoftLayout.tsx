@@ -81,7 +81,7 @@ export function Top10ChadsoftLayout(props: {isAutoTTRecRunning: boolean, formCom
       }
       <PresentationSettingsLayout formComplexity={props.formComplexity} enableFadeInAtStart={true}/>
       {
-        props.formComplexity === FormComplexity.ALL ? <EncodeSettingsLayout/>
+        props.formComplexity > FormComplexity.SIMPLE ? <EncodeSettingsLayout formComplexity={props.formComplexity}/>
         : ""
       }
       <QualitySettingsLayout formComplexity={props.formComplexity} isNoEncode={false}/>

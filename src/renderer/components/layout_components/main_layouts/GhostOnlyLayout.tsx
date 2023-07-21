@@ -62,7 +62,7 @@ export function GhostOnlyLayout(props: {isAutoTTRecRunning: boolean, formComplex
       }
       <PresentationSettingsLayout formComplexity={props.formComplexity} enableFadeInAtStart={false}/>
       {
-        props.formComplexity === FormComplexity.ALL ? <EncodeSettingsLayout/>
+        props.formComplexity > FormComplexity.SIMPLE ? <EncodeSettingsLayout formComplexity={props.formComplexity}/>
         : ""
       }
       <QualitySettingsLayout formComplexity={props.formComplexity} isNoEncode={false}/>

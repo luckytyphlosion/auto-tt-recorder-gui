@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { MusicFilenameInput } from "./MusicFilenameInput";
 import { Top10LocationRegionalInput } from "./Top10LocationRegionalInput";
-import { CRFEncodeSettingsLayout } from "../layout_components/sub_layouts/CRFEncodeSettingsLayout";
+import { FormComplexity } from "../layout_components/FormComplexityLayout";
 
 import { VideoCodec } from "./VideoCodecInput";
 
@@ -10,7 +10,7 @@ import useRenderCounter from "../../RenderCounter";
 
 export type OutputVideoFileFormat = "mp4" | "webm" | "mkv";
 
-export function OutputVideoFileFormatInput(props: {videoCodec: VideoCodec}) {
+export function OutputVideoFileFormatInput(props: {videoCodec: VideoCodec, formComplexity: FormComplexity}) {
   const {register, getValues, setValue} = useFormContextAutoTT();
   //const [videoCodec, setVideoCodec] = useState(getValues("video-codec"));
   const renderCounter = useRenderCounter();
@@ -25,28 +25,57 @@ export function OutputVideoFileFormatInput(props: {videoCodec: VideoCodec}) {
 
   useEffect(() => {
     let outputVideoFileFormat = getValues("output-video-file-format");
-    if ((props.videoCodec === "libx264" || props.videoCodec === "libx265") && outputVideoFileFormat === "webm") {
-      //console.log("OutputVideoFileFormatInput set mp4");
-      setValue("output-video-file-format", "mp4", {shouldTouch: true});
-    } else if (props.videoCodec === "libvpx-vp9" && outputVideoFileFormat === "mp4") {
-      //console.log("OutputVideoFileFormatInput set webm");
-      setValue("output-video-file-format", "webm", {shouldTouch: true});
+    if (props.formComplexity === FormComplexity.ALL) {
+      if ((props.videoCodec === "libx264" || props.videoCodec === "libx265") && outputVideoFileFormat === "webm") {
+        //console.log("OutputVideoFileFormatInput set mp4");
+        setValue("output-video-file-format", "mp4", {shouldTouch: true});
+      } else if (props.videoCodec === "libvpx-vp9" && outputVideoFileFormat === "mp4") {
+        //console.log("OutputVideoFileFormatInput set webm");
+        setValue("output-video-file-format", "webm", {shouldTouch: true});
+      } else {
+        //console.log("OutputVideoFileFormatInput outputVideoFileFormat:", outputVideoFileFormat)
+      }
     } else {
-      //console.log("OutputVideoFileFormatInput outputVideoFileFormat:", outputVideoFileFormat)
+      if (outputVideoFileFormat === "mkv") {
+        if (props.videoCodec === "libx264" || props.videoCodec === "libx265") {
+          setValue("output-video-file-format", "mp4", {shouldTouch: true});
+        } else if (props.videoCodec === "libvpx-vp9") {
+          setValue("output-video-file-format", "webm", {shouldTouch: true});
+        }
+      }
     }
   }, [props.videoCodec]);
+
+  function updateVideoCodecForAdvancedForm() {
+    let outputVideoFileFormat = getValues("output-video-file-format");
+    if (outputVideoFileFormat === "mp4") {
+      setValue("video-codec", "libx264", {shouldTouch: true});
+    } else if (outputVideoFileFormat === "webm") {
+      setValue("video-codec", "libvpx-vp9", {shouldTouch: true});
+    }
+  }
 
   return (
     <div> 
       <label htmlFor="output-video-file-format">Video format: </label>
       <select {...register("output-video-file-format", {
-        required: false})}>
+        required: false, onChange: props.formComplexity === FormComplexity.ADVANCED ? updateVideoCodecForAdvancedForm : () => {}})}>
         {
-          props.videoCodec === "libvpx-vp9" ? <option value="webm">webm</option> :
-          (props.videoCodec === "libx264" || props.videoCodec === "libx265") ? <option value="mp4">mp4</option> :
-          ""
+          props.formComplexity === FormComplexity.ALL ? 
+          (
+            <>
+              {props.videoCodec === "libvpx-vp9" ? <option value="webm">webm</option> :
+              props.videoCodec === "libx264" || props.videoCodec === "libx265" ? <option value="mp4">mp4</option> : ""}
+              <option value="mkv">mkv</option>
+            </>
+          ) : (
+            <>
+              <option value="mp4">mp4</option>
+              <option value="webm">webm</option>
+            </>
+          )
         }
-        <option value="mkv">mkv</option>
+
       </select>
       {renderCounter}
     </div>

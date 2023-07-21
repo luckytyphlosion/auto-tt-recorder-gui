@@ -15,9 +15,6 @@ export function QualitySettingsLayout(props: {formComplexity: FormComplexity, is
     {
       props.formComplexity > FormComplexity.SIMPLE ?
       <>
-        {
-          props.formComplexity === FormComplexity.ADVANCED ? <CRFValueInput/> : ""
-        }
         <DolphinResolutionInput enableOutputWidth={!props.isNoEncode}/>
         {!props.isNoEncode && props.formComplexity === FormComplexity.ALL ? <AspectRatio16By9Input/> : ""}
         <HQTexturesInput/>

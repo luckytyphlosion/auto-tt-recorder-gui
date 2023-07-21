@@ -35,7 +35,7 @@ import { AudioCodec } from "./components/form_components/AudioCodecAndBitrateInp
 import { AudioBitrateUnit } from "./components/form_components/AudioBitrateInput";
 
 import { H26xPreset } from "./components/form_components/H26xPresetInput";
-import { OutputWidthPreset } from "./components/form_components/OutputWidthInput";
+import { OutputWidthPreset, recommendedOutputWidths } from "./components/form_components/OutputWidthInput";
 
 import { Top10GeckoCodeLocationRegion } from "./components/form_components/Top10GeckoCodeLocationInput";
 
@@ -48,8 +48,8 @@ import { TrackNameType } from "./components/form_components/TrackNameInput";
 import { MusicPresentation } from "./components/form_components/MusicPresentationInput";
 import { FormComplexity } from "./components/layout_components/FormComplexityLayout";
 
-
 export type Timeline = "noencode" | "ghostonly" | "ghostselect" | "mkchannel" | "top10";
+export type ExtendedTimeline = "noencode" | "ghostonly" | "ghostselect" | "mkchannel" | "top10chadsoft" | "top10gecko";
 
 export interface AutoTTRecConfigFormFieldTypes {
   "aspect-ratio-16-by-9": AspectRatio16By9,
@@ -298,6 +298,88 @@ class AutoTTRecArgsBuilder {
 
   public get autoTTRecArgs() {
     return this._autoTTRecArgs;
+  }
+}
+
+function shallowCopy<T>(obj: T): T {
+  return Object.assign({}, obj);
+}
+
+class AutoTTRecFormData {
+  private _formData: AutoTTRecConfigFormFieldTypes;
+  private _extendedTimeline: ExtendedTimeline;
+  private _formComplexity: FormComplexity;
+
+  constructor(formData: AutoTTRecConfigFormFieldTypes) {
+    this._formData = shallowCopy(formData);
+    this._extendedTimeline = this.determineExtendedTimeline();
+    this._formComplexity = this.formData["form-complexity"];
+  }
+
+  public fillFormComplexityDefaults() {
+    if (this.formComplexity === FormComplexity.SIMPLE) {
+
+    } else if (this.formComplexity === FormComplexity.ADVANCED) {
+
+    }
+  }
+
+  public fillFormComplexitySimpleDefaults() {
+    if (this.extendedTimeline === "mkchannel") {
+      this.formData["mk-channel-ghost-description"] = "Ghost Data";
+      this.formData["top-10-location-region"] = "worldwide";
+    }
+
+    if (this.formData["background-music-source"] === "music-filename" && this.extendedTimeline !== "ghostonly") {
+      this.formData["music-presentation"] = "normal";
+    }
+
+    this.formData["input-display"] = "auto";
+    this.formData["extra-gecko-codes-enable"] = false;
+    this.formData["speedometer-style"] = "fancy";
+    this.formData["speedometer-metric"] = "engine";
+    this.formData["speedometer-decimal-places-str"] = "1";
+    this.formData["fade-in-at-start"] = false;
+    this.formData["ending-delay"] = 600;
+    this.formData["encode-type"] = "crf";
+    this.formData["video-codec"] = "libx264";
+    this.formData["output-video-file-format"] = "mp4";
+    this.formData["crf-value"] = 15;
+    this.formData["h26x-preset"] = this.formData["dolphin-resolution"] === "480p" ? "ultrafast" : "slow";
+    this.formData["youtube-settings"] = true;
+    this.formData["audio-codec"] = "libopus";
+    this.formData["audio-bitrate"] = 128000;
+    this.formData["pixel-format"] = "yuv420p";
+    this.formData["output-width-preset"] = recommendedOutputWidths[this.formData["dolphin-resolution"]];
+    this.formData["aspect-ratio-16-by-9"] = "auto";
+    this.formData["hq-textures"] = this.formData["dolphin-resolution"] === "480p" ? false : true;
+    this.formData["extra-hq-textures-folder-enable"] = false;
+    this.formData["no-background-blur"] = true;
+    this.formData["no-bloom"] = false;
+    this.formData["use-ffv1"] = false;
+    this.formData["encode-only"] = false;
+    this.formData["input-display-dont-create"] = false;
+    this.formData["keep-window"] = true;
+  }
+
+  private determineExtendedTimeline(): ExtendedTimeline {
+    if (this.formData["timeline-category"] === "notop10") {
+      return this.formData["no-top-10-category"];
+    } else {
+      return this.formData["timeline-category"];
+    }
+  }
+
+  public get formData() {
+    return this._formData;
+  }
+
+  public get extendedTimeline() {
+    return this._extendedTimeline;
+  }
+
+  public get formComplexity() {
+    return this._formComplexity;
   }
 }
 

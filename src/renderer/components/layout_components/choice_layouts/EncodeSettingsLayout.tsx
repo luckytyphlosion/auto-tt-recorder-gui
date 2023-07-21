@@ -3,13 +3,15 @@ import { useFormContextAutoTT } from "../../../use-form-context-auto-tt";
 import { PixelFormatInput } from "../../form_components/PixelFormatInput";
 import { SizeBasedEncodeSettingsLayout } from "../sub_layouts/SizeBasedEncodeSettingsLayout";
 import { CRFEncodeSettingsLayout } from "../sub_layouts/CRFEncodeSettingsLayout";
+import { FormComplexity } from "../FormComplexityLayout";
+
 import useRenderCounter from "../../../RenderCounter";
 
 export type EncodeType = "crf" | "size";
 
 const PixelFormatInput_Memo = memo(PixelFormatInput);
 
-export function EncodeSettingsLayout() {
+export function EncodeSettingsLayout(props: {formComplexity: FormComplexity}) {
   const {register, getValues} = useFormContextAutoTT();
   const [encodeType, setEncodeType] = useState(getValues("encode-type"));
   const [encodeTypeChanged, setEncodeTypeChanged] = useState(false);
@@ -34,11 +36,13 @@ export function EncodeSettingsLayout() {
       ></input>
       {renderCounter}
       {
-        encodeType === "crf" ? <CRFEncodeSettingsLayout encodeTypeChanged={encodeTypeChanged}/> :
-        encodeType === "size" ? <SizeBasedEncodeSettingsLayout encodeTypeChanged={encodeTypeChanged}/> :
+        encodeType === "crf" ? <CRFEncodeSettingsLayout encodeTypeChanged={encodeTypeChanged} formComplexity={props.formComplexity}/> :
+        encodeType === "size" ? <SizeBasedEncodeSettingsLayout encodeTypeChanged={encodeTypeChanged} formComplexity={props.formComplexity}/> :
         ''
       }
-      <PixelFormatInput_Memo/>
+      {
+        props.formComplexity === FormComplexity.ALL ? <PixelFormatInput_Memo/> : ""
+      }
     </div>
   );
 }
