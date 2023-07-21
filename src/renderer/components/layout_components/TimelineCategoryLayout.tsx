@@ -34,6 +34,7 @@ export function TimelineCategoryLayout(props: {isAutoTTRecRunning: boolean, form
         {...register("timeline-category", {onChange: updateTimelineCategory})}
       ></input>
       {renderCounter}
+      <hr style={{height: "2px", borderWidth: 0, color: "gray", backgroundColor: "gray"}}/>
       {
         timelineCategory === "notop10" ? <NoTop10CategoryLayout isAutoTTRecRunning={props.isAutoTTRecRunning} formComplexity={props.formComplexity}/>
         : timelineCategory === "top10chadsoft" ? <Top10ChadsoftLayout isAutoTTRecRunning={props.isAutoTTRecRunning} formComplexity={props.formComplexity}/>

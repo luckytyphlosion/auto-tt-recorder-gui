@@ -42,6 +42,7 @@ import { FormComplexity } from "../FormComplexityLayout";
 import { QualitySettingsLayout } from "../sub_layouts/QualitySettingsLayout";
 import { ExtraSettingsLayout } from "../sub_layouts/ExtraSettingsLayout";
 import { PresentationSettingsLayout } from "../sub_layouts/PresentationSettingsLayout";
+import { CRFValueInput } from "../../form_components/CRFValueInput";
 
 import useRenderCounter from "../../../RenderCounter";
 
@@ -55,19 +56,34 @@ export function Top10ChadsoftLayout(props: {isAutoTTRecRunning: boolean, formCom
   return (
     <div>
       <Top10ChadsoftInput/>
-      <Top10TitleInput/>
-      <Top10HighlightEnableInput/>
+      {
+        props.formComplexity > FormComplexity.SIMPLE ? <>
+          <Top10TitleInput/>
+          <Top10HighlightEnableInput/>
+        </> : ""
+      }
       <ComparisonGhostSourceInput/>
       <SZSSourceInput/>
-      <MKChannelGhostDescriptionInput/>
-      <TrackNameInput/>
-      <Top10LocationInput/>
-      <BackgroundMusicSourceInput timeline="top10"/>
-      <InputDisplayInput/>
-      <ExtraGeckoCodesEnableInput isAutoTTRecRunning={props.isAutoTTRecRunning}/>
-      <SpeedometerInput/>
+      {
+        props.formComplexity > FormComplexity.SIMPLE ? <>
+          <MKChannelGhostDescriptionInput/>
+          <TrackNameInput/>
+          <Top10LocationInput/>
+        </> : <TrackNameInput/>
+      }
+      <BackgroundMusicSourceInput timeline="top10" formComplexity={props.formComplexity}/>
+      {
+        props.formComplexity > FormComplexity.SIMPLE ? <>
+          <InputDisplayInput/>
+          <ExtraGeckoCodesEnableInput isAutoTTRecRunning={props.isAutoTTRecRunning}/>
+          <SpeedometerInput/>
+        </> : ""
+      }
       <PresentationSettingsLayout formComplexity={props.formComplexity} enableFadeInAtStart={true}/>
-      <EncodeSettingsLayout/>
+      {
+        props.formComplexity === FormComplexity.ALL ? <EncodeSettingsLayout/>
+        : ""
+      }
       <QualitySettingsLayout formComplexity={props.formComplexity} isNoEncode={false}/>
       <ExtraSettingsLayout formComplexity={props.formComplexity}/>
       {renderCounter}

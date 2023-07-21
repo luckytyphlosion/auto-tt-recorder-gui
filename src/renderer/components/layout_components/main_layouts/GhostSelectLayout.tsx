@@ -41,6 +41,7 @@ import { PresentationSettingsLayout } from "../sub_layouts/PresentationSettingsL
 import { FormComplexity } from "../FormComplexityLayout";
 import { QualitySettingsLayout } from "../sub_layouts/QualitySettingsLayout";
 import { ExtraSettingsLayout } from "../sub_layouts/ExtraSettingsLayout";
+import { CRFValueInput } from "../../form_components/CRFValueInput";
 
 import useRenderCounter from "../../../RenderCounter";
 
@@ -55,13 +56,19 @@ export function GhostSelectLayout(props: {isAutoTTRecRunning: boolean, formCompl
       <ComparisonGhostSourceInput/>
       <SZSSourceInput/>
       <TrackNameInput/>
-      <BackgroundMusicSourceInput timeline="ghostselect"/>
-      <InputDisplayInput/>
-      <ExtraGeckoCodesEnableInput isAutoTTRecRunning={props.isAutoTTRecRunning}/>
-      <SpeedometerInput/>
+      <BackgroundMusicSourceInput timeline="ghostselect" formComplexity={props.formComplexity}/>
+      {
+        props.formComplexity > FormComplexity.SIMPLE ? <>
+          <InputDisplayInput/>
+          <ExtraGeckoCodesEnableInput isAutoTTRecRunning={props.isAutoTTRecRunning}/>
+          <SpeedometerInput/>
+        </> : ""
+      }
       <PresentationSettingsLayout formComplexity={props.formComplexity} enableFadeInAtStart={true}/>
-      <EncodeSettingsLayout/>
-
+      {
+        props.formComplexity === FormComplexity.ALL ? <EncodeSettingsLayout/>
+        : ""
+      }
       <QualitySettingsLayout formComplexity={props.formComplexity} isNoEncode={false}/>
       <ExtraSettingsLayout formComplexity={props.formComplexity}/>
       {renderCounter}

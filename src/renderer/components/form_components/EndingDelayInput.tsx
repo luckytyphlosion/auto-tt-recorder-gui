@@ -7,7 +7,7 @@ export function EndingDelayInput() {
 
   return (
     <div>
-      <label htmlFor="ending-delay">Ending video delay:</label>
+      <label htmlFor="ending-delay">Ending video delay (in frames):</label>
       <input type="number"
         {...register("ending-delay", {valueAsNumber: true, required: {
           value: true,

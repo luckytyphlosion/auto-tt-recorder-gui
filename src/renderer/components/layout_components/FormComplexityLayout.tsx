@@ -5,9 +5,9 @@ import useRenderCounter from "../../RenderCounter";
 
 export enum FormComplexity
 {
-  SIMPLE = 0,
-  ADVANCED = 1,
-  ALL = 2
+  SIMPLE = "0",
+  ADVANCED = "1",
+  ALL = "2"
 };
 
 import { TimelineCategoryLayout } from "./TimelineCategoryLayout";
@@ -27,18 +27,19 @@ export function FormComplexityLayout(props: {isAutoTTRecRunning: boolean}) {
     <div>
       <label htmlFor="form-complexity">Layout: </label>
       <label htmlFor="form-complexity-simple">Simple: </label>
-      <input type="radio" id="form-complexity-simple" value="simple"
+      <input type="radio" id="form-complexity-simple" value={FormComplexity.SIMPLE}
         {...register("form-complexity", {onChange: updateFormComplexity})}
       ></input>
       <label htmlFor="form-complexity-advanced">Advanced: </label>
-      <input type="radio" id="form-complexity-advanced" value="advanced"
+      <input type="radio" id="form-complexity-advanced" value={FormComplexity.ADVANCED}
         {...register("form-complexity", {onChange: updateFormComplexity})}
       ></input>
       <label htmlFor="speedometer-metric-all">All: </label>
-      <input type="radio" id="form-complexity-all" value="all"
+      <input type="radio" id="form-complexity-all" value={FormComplexity.ALL}
         {...register("form-complexity", {onChange: updateFormComplexity})}
       ></input>
       {renderCounter}
+      <hr style={{height: "2px", borderWidth: 0, color: "gray", backgroundColor: "gray"}}/>
       <TimelineCategoryLayout_Memo isAutoTTRecRunning={props.isAutoTTRecRunning} formComplexity={formComplexity}/>
     </div>
   );

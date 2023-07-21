@@ -206,7 +206,7 @@ export function Top10GeckoCodeInput(props: {isAutoTTRecRunning: boolean}) {
   return (
     <div>
       <div>
-        <h3>Gecko code (created at tt-rec.com)</h3>
+        <h3>Gecko code (create using https://tt-rec.com/customtop10/)</h3>
         <input type="hidden" {...register("top-10-gecko-code-unsaved")}/>
         <Modal
           overlayClassName="top-10-gecko-code-save-modal"

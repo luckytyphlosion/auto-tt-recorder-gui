@@ -4,14 +4,14 @@ import { MusicFilenameInput } from "./MusicFilenameInput";
 import { GameVolumeInput } from "./GameVolumeInput";
 import { MusicVolumeInput } from "./MusicVolumeInput";
 import { MusicPresentationInput } from "./MusicPresentationInput";
-
+import { FormComplexity } from "../layout_components/FormComplexityLayout";
 import { Timeline } from "../AutoTTRecConfigForm";
 
 import useRenderCounter from "../../RenderCounter";
 
 export type BackgroundMusicSource = "music-filename" | "game-bgm" | "none";
 
-export function BackgroundMusicSourceInput(props: {timeline: Timeline}) {
+export function BackgroundMusicSourceInput(props: {timeline: Timeline, formComplexity: FormComplexity}) {
   const {register, getValues} = useFormContextAutoTT();
   function isFormBackgroundMusicFromFilename() {
     return getValues("background-music-source") === "music-filename";
@@ -41,7 +41,7 @@ export function BackgroundMusicSourceInput(props: {timeline: Timeline}) {
          <MusicFilenameInput/> : ""
       }
       {
-        enableMusicPresentationInput ?
+        enableMusicPresentationInput && props.formComplexity > FormComplexity.SIMPLE ?
           <MusicPresentationInput hasMusic={musicFilenameInputEnable} isOnMKChannel={isOnMKChannel}/> : ""
       }
       {
