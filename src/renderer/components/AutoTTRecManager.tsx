@@ -1,6 +1,6 @@
 import React, { useState, useCallback, memo } from "react";
 import { AutoTTRecConfigForm } from "./AutoTTRecConfigForm";
-import { AutoTTRecArgs } from "../AutoTTRecFieldsAndArgs";
+import { AutoTTRecArgs } from "../AutoTTRecFormFieldsAndArgs";
 import { AutoTTRecStatus } from "./AutoTTRecStatus";
 import { IpcRendererEvent } from "electron";
 

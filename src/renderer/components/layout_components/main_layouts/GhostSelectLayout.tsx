@@ -1,7 +1,7 @@
 import React, { useState, ReactElement, memo } from "react";
 import { useFormContextAutoTT } from "../../../use-form-context-auto-tt";
 import { useFormContext } from "react-hook-form";
-import { AutoTTRecConfigFormFieldTypes } from "../../../AutoTTRecFieldsAndArgs";
+import { AutoTTRecConfigFormFieldTypes } from "../../../AutoTTRecFormFieldsAndArgs";
 
 import { ISOWBFSFileInput } from "../../form_components/ISOWBFSFileInput";
 import { NoTop10CategoryLayout } from "../choice_layouts/NoTop10CategoryLayout";

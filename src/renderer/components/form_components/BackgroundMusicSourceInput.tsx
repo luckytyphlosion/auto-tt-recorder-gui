@@ -5,7 +5,7 @@ import { GameVolumeInput } from "./GameVolumeInput";
 import { MusicVolumeInput } from "./MusicVolumeInput";
 import { MusicPresentationInput } from "./MusicPresentationInput";
 import { FormComplexity } from "../layout_components/FormComplexityLayout";
-import { Timeline } from "../../AutoTTRecFieldsAndArgs";
+import { Timeline } from "../../AutoTTRecFormFieldsAndArgs";
 
 import useRenderCounter from "../../RenderCounter";
 

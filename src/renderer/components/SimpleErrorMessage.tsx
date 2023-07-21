@@ -2,7 +2,7 @@ import React from "react";
 import { useFormContextAutoTT } from "../use-form-context-auto-tt";
 import { ErrorMessage } from "@hookform/error-message";
 
-import { AutoTTRecConfigFormFieldTypes } from "../AutoTTRecFieldsAndArgs";
+import { AutoTTRecConfigFormFieldTypes } from "../AutoTTRecFormFieldsAndArgs";
 
 export function SimpleErrorMessage(props: {name: keyof AutoTTRecConfigFormFieldTypes}) {
   const {formState} = useFormContextAutoTT();

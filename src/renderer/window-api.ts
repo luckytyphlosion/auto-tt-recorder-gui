@@ -1,6 +1,6 @@
 import { FileFilter, IpcRendererEvent } from "electron";
 import { AutoTTRecResponse } from "../enums";
-import { AutoTTRecArgs } from "./AutoTTRecFieldsAndArgs";
+import { AutoTTRecArgs } from "./AutoTTRecFormFieldsAndArgs";
 import { FilenameAndContents } from "../shared-types";
 
 declare global {

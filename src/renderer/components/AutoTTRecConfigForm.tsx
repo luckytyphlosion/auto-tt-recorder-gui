@@ -50,7 +50,7 @@ import { TrackNameType } from "./form_components/TrackNameInput";
 import { MusicPresentation } from "./form_components/MusicPresentationInput";
 import { FormComplexity } from "./layout_components/FormComplexityLayout";
 
-import { AutoTTRecConfigFormFieldTypes, AutoTTRecArgs, Timeline, DEFAULT_FORM_VALUES, convertFormDataToAutoTTRecArgs } from "../AutoTTRecFieldsAndArgs";
+import { AutoTTRecConfigFormFieldTypes, AutoTTRecArgs, Timeline, DEFAULT_FORM_VALUES, convertFormDataToAutoTTRecArgs } from "../AutoTTRecFormFieldsAndArgs";
 
 import useRenderCounter from "../RenderCounter";
 

@@ -5,7 +5,7 @@ import { FileFilter } from "electron";
 
 import { UseFormRegister, UseFormSetValue } from "react-hook-form";
 
-import { AutoTTRecConfigFormFieldTypes } from "../../AutoTTRecFieldsAndArgs";
+import { AutoTTRecConfigFormFieldTypes } from "../../AutoTTRecFormFieldsAndArgs";
 
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
 
