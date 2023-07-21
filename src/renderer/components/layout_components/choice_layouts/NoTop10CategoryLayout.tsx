@@ -1,13 +1,13 @@
 import React, { useState, memo } from "react";
-import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
-import useRenderCounter from "../../RenderCounter";
+import { useFormContextAutoTT } from "../../../use-form-context-auto-tt";
+import useRenderCounter from "../../../RenderCounter";
 
-import { MarioKartChannelLayout } from "./main_layouts/MarioKartChannelLayout";
-import { GhostSelectLayout } from "./main_layouts/GhostSelectLayout";
-import { GhostOnlyLayout } from "./main_layouts/GhostOnlyLayout";
-import { NoEncodeLayout } from "./main_layouts/NoEncodeLayout";
-import { OutputVideoFilenameInput } from "../form_components/OutputVideoFilenameInput";
-import { FormComplexity } from "./FormComplexityLayout";
+import { MarioKartChannelLayout } from "../main_layouts/MarioKartChannelLayout";
+import { GhostSelectLayout } from "../main_layouts/GhostSelectLayout";
+import { GhostOnlyLayout } from "../main_layouts/GhostOnlyLayout";
+import { NoEncodeLayout } from "../main_layouts/NoEncodeLayout";
+import { OutputVideoFilenameInput } from "../../form_components/OutputVideoFilenameInput";
+import { FormComplexity } from "../FormComplexityLayout";
 
 export type NoTop10Category = "mkchannel" | "ghostselect" | "ghostonly" | "noencode";
 
@@ -49,7 +49,7 @@ export function NoTop10CategoryLayout(props: {isAutoTTRecRunning: boolean, formC
           noTop10Category === "ghostselect" ? <GhostSelectLayout isAutoTTRecRunning={props.isAutoTTRecRunning} formComplexity={props.formComplexity}/> :
           noTop10Category === "ghostonly" ? <GhostOnlyLayout isAutoTTRecRunning={props.isAutoTTRecRunning} formComplexity={props.formComplexity}/> : 
           noTop10Category === "noencode" ?
-            props.formComplexity === FormComplexity.ALL ? <NoEncodeLayout isAutoTTRecRunning={props.isAutoTTRecRunning}/> : ""
+            props.formComplexity === FormComplexity.ALL ? <NoEncodeLayout isAutoTTRecRunning={props.isAutoTTRecRunning}/> : "" : ""
       }
       {renderCounter}
       <OutputVideoFilenameInput_Memo noTop10CategoryIsNoEncode={noTop10Category === "noencode"}/>

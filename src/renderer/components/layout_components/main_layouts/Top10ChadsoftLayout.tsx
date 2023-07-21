@@ -4,7 +4,7 @@ import { useFormContext } from "react-hook-form";
 import { AutoTTRecConfigFormFieldTypes } from "../../AutoTTRecConfigForm";
 
 import { ISOWBFSFileInput } from "../../form_components/ISOWBFSFileInput";
-import { NoTop10CategoryLayout } from "../NoTop10CategoryLayout";
+import { NoTop10CategoryLayout } from "../choice_layouts/NoTop10CategoryLayout";
 import { ChadsoftGhostPageInput } from "../../form_components/ChadsoftGhostPageInput";
 import { ComparisonGhostSourceInput } from "../../form_components/ComparisonGhostSourceInput";
 import { SZSSourceInput } from "../../form_components/SZSSourceInput";
@@ -16,7 +16,7 @@ import { Set200ccInput } from "../../form_components/Set200ccInput";
 import { Top10ChadsoftInput } from "../../form_components/Top10ChadsoftInput";
 import { Top10TitleInput } from "../../form_components/Top10TitleInput";
 import { PixelFormatInput } from "../../form_components/PixelFormatInput";
-import { EncodeTypeInput } from "../choice_layouts/EncodeTypeInput";
+import { EncodeTypeLayout } from "../choice_layouts/EncodeTypeInput";
 import { BackgroundMusicSourceInput } from "../../form_components/BackgroundMusicSourceInput";
 import { GameVolumeInput } from "../../form_components/GameVolumeInput";
 import { Top10LocationInput } from "../../form_components/Top10LocationInput";
@@ -68,7 +68,7 @@ export function Top10ChadsoftLayout(props: {isAutoTTRecRunning: boolean, formCom
       <h3>Presentation settings</h3>
       <FadeInAtStartInput/>
       <EndingDelayInput/>
-      <EncodeTypeInput/>
+      <EncodeTypeLayout/>
       <QualitySettingsLayout formComplexity={props.formComplexity}/>
       <ExtraSettingsLayout formComplexity={props.formComplexity}/>
       {renderCounter}

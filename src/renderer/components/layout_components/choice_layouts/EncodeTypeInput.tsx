@@ -9,7 +9,7 @@ export type EncodeType = "crf" | "size";
 
 const PixelFormatInput_Memo = memo(PixelFormatInput);
 
-export function EncodeTypeInput() {
+export function EncodeTypeLayout() {
   const {register, getValues} = useFormContextAutoTT();
   const [encodeType, setEncodeType] = useState(getValues("encode-type"));
   const [encodeTypeChanged, setEncodeTypeChanged] = useState(false);

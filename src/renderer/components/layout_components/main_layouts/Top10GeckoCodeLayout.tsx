@@ -16,7 +16,7 @@ import { Set200ccInput } from "../../form_components/Set200ccInput";
 import { Top10ChadsoftInput } from "../../form_components/Top10ChadsoftInput";
 import { Top10TitleInput } from "../../form_components/Top10TitleInput";
 import { PixelFormatInput } from "../../form_components/PixelFormatInput";
-import { EncodeTypeInput } from "../choice_layouts/EncodeTypeInput";
+import { EncodeTypeLayout } from "../choice_layouts/EncodeTypeInput";
 import { BackgroundMusicSourceInput } from "../../form_components/BackgroundMusicSourceInput";
 import { GameVolumeInput } from "../../form_components/GameVolumeInput";
 import { Top10GeckoCodeLocationInput } from "../../form_components/Top10GeckoCodeLocationInput";
@@ -61,7 +61,7 @@ export function Top10GeckoCodeLayout(props: {isAutoTTRecRunning: boolean, formCo
       <h3>Presentation settings</h3>
       <FadeInAtStartInput/>
       <EndingDelayInput/>
-      <EncodeTypeInput/>
+      <EncodeTypeLayout/>
       <QualitySettingsLayout formComplexity={props.formComplexity}/>
       <ExtraSettingsLayout formComplexity={props.formComplexity}/>
       {renderCounter}

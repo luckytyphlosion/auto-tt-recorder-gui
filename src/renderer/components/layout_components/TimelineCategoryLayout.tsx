@@ -1,7 +1,7 @@
 import React, { useState, ReactElement } from "react";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 
-import { NoTop10CategoryLayout } from "./NoTop10CategoryLayout";
+import { NoTop10CategoryLayout } from "./choice_layouts/NoTop10CategoryLayout";
 import { Top10ChadsoftLayout } from "./main_layouts/Top10ChadsoftLayout";
 import { Top10GeckoCodeLayout } from "./main_layouts/Top10GeckoCodeLayout";
 
