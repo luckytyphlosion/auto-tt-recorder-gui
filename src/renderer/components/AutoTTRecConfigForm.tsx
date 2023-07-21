@@ -28,7 +28,7 @@ import { SpeedometerStyle } from "./form_components/SpeedometerInput";
 import { SpeedometerMetric } from "./form_components/SpeedometerMetricInput";
 import { SpeedometerDecimalPlaces } from "./form_components/SpeedometerDecimalPlacesInput";
 
-import { EncodeType } from "./layout_components/choice_layouts/EncodeTypeInput";
+import { EncodeType } from "./layout_components/choice_layouts/EncodeTypeLayout";
 import { OutputVideoFileFormat } from "./form_components/OutputVideoFileFormatInput";
 import { VideoCodec } from "./form_components/VideoCodecInput";
 
