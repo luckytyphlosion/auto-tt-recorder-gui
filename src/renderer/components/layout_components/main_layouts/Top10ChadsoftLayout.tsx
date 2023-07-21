@@ -16,7 +16,7 @@ import { Set200ccInput } from "../../form_components/Set200ccInput";
 import { Top10ChadsoftInput } from "../../form_components/Top10ChadsoftInput";
 import { Top10TitleInput } from "../../form_components/Top10TitleInput";
 import { PixelFormatInput } from "../../form_components/PixelFormatInput";
-import { EncodeTypeInput } from "../../form_components/EncodeTypeInput";
+import { EncodeTypeInput } from "../choice_layouts/EncodeTypeInput";
 import { BackgroundMusicSourceInput } from "../../form_components/BackgroundMusicSourceInput";
 import { GameVolumeInput } from "../../form_components/GameVolumeInput";
 import { Top10LocationInput } from "../../form_components/Top10LocationInput";

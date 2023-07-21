@@ -6,7 +6,7 @@ import { Top10LocationRegionalInput } from "./Top10LocationRegionalInput";
 import { AudioBitrateInput } from "./AudioBitrateInput";
 import useRenderCounter from "../../RenderCounter";
 
-import { EncodeType } from "./EncodeTypeInput";
+import { EncodeType } from "../layout_components/choice_layouts/EncodeTypeInput";
 
 export type AudioCodec = "libopus" | "aac";
 

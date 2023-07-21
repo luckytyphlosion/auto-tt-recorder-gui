@@ -16,7 +16,7 @@ import { Set200ccInput } from "../../form_components/Set200ccInput";
 import { Top10ChadsoftInput } from "../../form_components/Top10ChadsoftInput";
 import { Top10TitleInput } from "../../form_components/Top10TitleInput";
 import { PixelFormatInput } from "../../form_components/PixelFormatInput";
-import { EncodeTypeInput } from "../../form_components/EncodeTypeInput";
+import { EncodeTypeInput } from "../choice_layouts/EncodeTypeInput";
 import { BackgroundMusicSourceInput } from "../../form_components/BackgroundMusicSourceInput";
 import { GameVolumeInput } from "../../form_components/GameVolumeInput";
 import { Top10GeckoCodeLocationInput } from "../../form_components/Top10GeckoCodeLocationInput";
@@ -43,14 +43,12 @@ import { FormComplexity } from "../FormComplexityLayout";
 
 /**/
 export function Top10GeckoCodeLayout(props: {isAutoTTRecRunning: boolean, formComplexity: FormComplexity}) {
-  const {register, getValues} = useFormContextAutoTT();
   const renderCounter = useRenderCounter(false, "Top10GeckoCodeLayout");
 
   return (
     <div>
       <MainGhostSourceInput/>
       <ComparisonGhostSourceInput/>
-      {/**/}
       <Top10GeckoCodeInput isAutoTTRecRunning={props.isAutoTTRecRunning}/>
       <SZSSourceInput/>
       <MKChannelGhostDescriptionInput/>
