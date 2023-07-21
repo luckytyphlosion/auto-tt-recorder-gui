@@ -457,7 +457,7 @@ export function AutoTTRecConfigForm(props: {
       "extra-hq-textures-folder-enable": false,
       "extra-hq-textures-folder": "",
       "fade-in-at-start": false,
-      "form-complexity": "simple",
+      "form-complexity": FormComplexity.SIMPLE,
       "game-volume-slider": 100,
       "game-volume-numberinput": 100,
       "h26x-preset": DEBUG_PREFILLED_DEFAULTS ? "ultrafast" : "slow",

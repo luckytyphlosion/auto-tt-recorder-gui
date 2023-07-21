@@ -60,7 +60,6 @@ export function GhostSelectLayout(props: {isAutoTTRecRunning: boolean}) {
       <FadeInAtStartInput/>
       <EndingDelayInput/>
       <EncodeTypeInput/>
-      <PixelFormatInput_Memo/>
 
       <h3>Quality settings</h3>
       <DolphinResolutionInput enableOutputWidth={true}/>

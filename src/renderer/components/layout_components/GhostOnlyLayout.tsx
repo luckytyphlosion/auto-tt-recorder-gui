@@ -57,7 +57,7 @@ export function GhostOnlyLayout(props: {isAutoTTRecRunning: boolean}) {
       <h3>Presentation settings</h3>
       <EndingDelayInput/>
       <EncodeTypeInput/>
-      <PixelFormatInput_Memo/>
+      
       <h3>Quality settings</h3>
       <DolphinResolutionInput enableOutputWidth={true}/>
       <AspectRatio16By9Input/>

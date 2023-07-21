@@ -1,13 +1,13 @@
 import React, { useState, memo } from "react";
-import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
-import useRenderCounter from "../../RenderCounter";
+import { useFormContextAutoTT } from "../../../use-form-context-auto-tt";
+import useRenderCounter from "../../../RenderCounter";
 
 import { MarioKartChannelLayout } from "./MarioKartChannelLayout";
 import { GhostSelectLayout } from "./GhostSelectLayout";
 import { GhostOnlyLayout } from "./GhostOnlyLayout";
 import { NoEncodeLayout } from "./NoEncodeLayout";
-import { OutputVideoFilenameInput } from "../form_components/OutputVideoFilenameInput";
-import { FormComplexity } from "./FormComplexityLayout";
+import { OutputVideoFilenameInput } from "../../form_components/OutputVideoFilenameInput";
+import { FormComplexity } from "../FormComplexityLayout";
 
 export type NoTop10Category = "mkchannel" | "ghostselect" | "ghostonly" | "noencode";
 
@@ -35,15 +35,21 @@ export function NoTop10CategoryLayout(props: {isAutoTTRecRunning: boolean, formC
       <input type="radio" id="no-top-10-category-ghostonly" value="ghostonly"
         {...register("no-top-10-category", {onChange: updateNoTop10Category})}
       ></input>
-      <label htmlFor="no-top-10-category-noencode">Raw Frame Dump: </label>
-      <input type="radio" id="no-top-10-category-noencode" value="noencode"
-        {...register("no-top-10-category", {onChange: updateNoTop10Category})}
-      ></input>
       {
-        noTop10Category === "mkchannel" ? <MarioKartChannelLayout isAutoTTRecRunning={props.isAutoTTRecRunning}/> :
-          noTop10Category === "ghostselect" ? <GhostSelectLayout isAutoTTRecRunning={props.isAutoTTRecRunning}/> :
-          noTop10Category === "ghostonly" ? <GhostOnlyLayout isAutoTTRecRunning={props.isAutoTTRecRunning}/> : 
-          noTop10Category === "noencode" ? <NoEncodeLayout isAutoTTRecRunning={props.isAutoTTRecRunning}/> : ""
+        props.formComplexity === FormComplexity.ALL ? <>
+          <label htmlFor="no-top-10-category-noencode">Raw Frame Dump: </label>
+            <input type="radio" id="no-top-10-category-noencode" value="noencode"
+            {...register("no-top-10-category", {onChange: updateNoTop10Category})}
+          ></input>
+        </> : ""
+      }
+
+      {
+        noTop10Category === "mkchannel" ? <MarioKartChannelLayout isAutoTTRecRunning={props.isAutoTTRecRunning} formComplexity={props.formComplexity}/> :
+          noTop10Category === "ghostselect" ? <GhostSelectLayout isAutoTTRecRunning={props.isAutoTTRecRunning} formComplexity={props.formComplexity}/> :
+          noTop10Category === "ghostonly" ? <GhostOnlyLayout isAutoTTRecRunning={props.isAutoTTRecRunning} formComplexity={props.formComplexity}/> : 
+          noTop10Category === "noencode" ?
+            props.formComplexity === FormComplexity.ALL ? <NoEncodeLayout isAutoTTRecRunning={props.isAutoTTRecRunning}/> : ""
       }
       {renderCounter}
       <OutputVideoFilenameInput_Memo noTop10CategoryIsNoEncode={noTop10Category === "noencode"}/>

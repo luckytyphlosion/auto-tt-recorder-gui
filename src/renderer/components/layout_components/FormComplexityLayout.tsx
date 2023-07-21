@@ -3,7 +3,12 @@ import React, { useState, memo } from "react";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import useRenderCounter from "../../RenderCounter";
 
-export type FormComplexity = "simple" | "advanced" | "all";
+export enum FormComplexity
+{
+  SIMPLE = 0,
+  ADVANCED = 1,
+  ALL = 2
+};
 
 import { TimelineCategoryLayout } from "./TimelineCategoryLayout";
 

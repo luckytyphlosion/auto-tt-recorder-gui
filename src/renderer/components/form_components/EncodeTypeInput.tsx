@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
-import { MusicFilenameInput } from "./MusicFilenameInput";
+import { PixelFormatInput } from "./PixelFormatInput";
 import { SizeBasedEncodeSettingsLayout } from "../layout_components/SizeBasedEncodeSettingsLayout";
 import { CRFEncodeSettingsLayout } from "../layout_components/CRFEncodeSettingsLayout";
 import useRenderCounter from "../../RenderCounter";
 
 export type EncodeType = "crf" | "size";
+
+const PixelFormatInput_Memo = memo(PixelFormatInput);
 
 export function EncodeTypeInput() {
   const {register, getValues} = useFormContextAutoTT();
@@ -36,6 +38,7 @@ export function EncodeTypeInput() {
         encodeType === "size" ? <SizeBasedEncodeSettingsLayout encodeTypeChanged={encodeTypeChanged}/> :
         ''
       }
+      <PixelFormatInput_Memo/>
     </div>
   );
 }
