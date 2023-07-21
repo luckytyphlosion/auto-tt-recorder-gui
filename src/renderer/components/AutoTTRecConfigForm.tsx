@@ -43,7 +43,7 @@ import { Top10GeckoCodeLocationRegion } from "./form_components/Top10GeckoCodeLo
 
 import { TimelineCategory } from "./layout_components/TimelineCategoryLayout";
 
-import { NoTop10Category } from "./layout_components/main_layouts/NoTop10CategoryLayout";
+import { NoTop10Category } from "./layout_components/NoTop10CategoryLayout";
 import { AspectRatio16By9 } from "./form_components/AspectRatio16By9Input";
 import { TrackNameType } from "./form_components/TrackNameInput";
 

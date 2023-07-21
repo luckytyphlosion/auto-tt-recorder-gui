@@ -1,13 +1,13 @@
 import React, { useState, memo } from "react";
-import { useFormContextAutoTT } from "../../../use-form-context-auto-tt";
-import useRenderCounter from "../../../RenderCounter";
+import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
+import useRenderCounter from "../../RenderCounter";
 
-import { MarioKartChannelLayout } from "./MarioKartChannelLayout";
-import { GhostSelectLayout } from "./GhostSelectLayout";
-import { GhostOnlyLayout } from "./GhostOnlyLayout";
-import { NoEncodeLayout } from "./NoEncodeLayout";
-import { OutputVideoFilenameInput } from "../../form_components/OutputVideoFilenameInput";
-import { FormComplexity } from "../FormComplexityLayout";
+import { MarioKartChannelLayout } from "./main_layouts/MarioKartChannelLayout";
+import { GhostSelectLayout } from "./main_layouts/GhostSelectLayout";
+import { GhostOnlyLayout } from "./main_layouts/GhostOnlyLayout";
+import { NoEncodeLayout } from "./main_layouts/NoEncodeLayout";
+import { OutputVideoFilenameInput } from "../form_components/OutputVideoFilenameInput";
+import { FormComplexity } from "./FormComplexityLayout";
 
 export type NoTop10Category = "mkchannel" | "ghostselect" | "ghostonly" | "noencode";
 

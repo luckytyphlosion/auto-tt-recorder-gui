@@ -64,7 +64,6 @@ export function Top10GeckoCodeLayout(props: {isAutoTTRecRunning: boolean, formCo
       <FadeInAtStartInput/>
       <EndingDelayInput/>
       <EncodeTypeInput/>
-      <h3>Extra settings (ignore if not sure)</h3>
       <ExtraSettingsLayout formComplexity={props.formComplexity}/>
       {renderCounter}
       <OutputVideoFilenameInput noTop10CategoryIsNoEncode={false}/>

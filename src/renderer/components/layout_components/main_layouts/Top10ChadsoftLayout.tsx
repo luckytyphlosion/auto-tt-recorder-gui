@@ -4,7 +4,7 @@ import { useFormContext } from "react-hook-form";
 import { AutoTTRecConfigFormFieldTypes } from "../../AutoTTRecConfigForm";
 
 import { ISOWBFSFileInput } from "../../form_components/ISOWBFSFileInput";
-import { NoTop10CategoryLayout } from "./NoTop10CategoryLayout";
+import { NoTop10CategoryLayout } from "../NoTop10CategoryLayout";
 import { ChadsoftGhostPageInput } from "../../form_components/ChadsoftGhostPageInput";
 import { ComparisonGhostSourceInput } from "../../form_components/ComparisonGhostSourceInput";
 import { SZSSourceInput } from "../../form_components/SZSSourceInput";
@@ -73,7 +73,6 @@ export function Top10ChadsoftLayout(props: {isAutoTTRecRunning: boolean, formCom
       <HQTexturesInput/>
       <NoBackgroundBlurInput/>
       <NoBloomInput/>
-      <h3>Extra settings (ignore if not sure)</h3>
       <ExtraSettingsLayout formComplexity={props.formComplexity}/>
       {renderCounter}
       <OutputVideoFilenameInput noTop10CategoryIsNoEncode={false}/>

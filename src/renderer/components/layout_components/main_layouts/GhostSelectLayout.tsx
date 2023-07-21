@@ -4,7 +4,7 @@ import { useFormContext } from "react-hook-form";
 import { AutoTTRecConfigFormFieldTypes } from "../../AutoTTRecConfigForm";
 
 import { ISOWBFSFileInput } from "../../form_components/ISOWBFSFileInput";
-import { NoTop10CategoryLayout } from "./NoTop10CategoryLayout";
+import { NoTop10CategoryLayout } from "../NoTop10CategoryLayout";
 import { MainGhostSourceInput } from "../../form_components/MainGhostSourceInput";
 import { ChadsoftGhostPageInput } from "../../form_components/ChadsoftGhostPageInput";
 import { ComparisonGhostSourceInput } from "../../form_components/ComparisonGhostSourceInput";
