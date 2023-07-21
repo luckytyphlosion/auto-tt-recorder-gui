@@ -17,7 +17,7 @@ import { Set200ccInput } from "../../form_components/Set200ccInput";
 import { Top10ChadsoftInput } from "../../form_components/Top10ChadsoftInput";
 import { Top10TitleInput } from "../../form_components/Top10TitleInput";
 import { PixelFormatInput } from "../../form_components/PixelFormatInput";
-import { EncodeTypeLayout } from "../choice_layouts/EncodeTypeLayout";
+import { EncodeSettingsLayout } from "../choice_layouts/EncodeTypeLayout";
 import { BackgroundMusicSourceInput } from "../../form_components/BackgroundMusicSourceInput";
 import { GameVolumeInput } from "../../form_components/GameVolumeInput";
 import { Top10LocationInput } from "../../form_components/Top10LocationInput";
@@ -62,7 +62,7 @@ export function MarioKartChannelLayout(props: {isAutoTTRecRunning: boolean, form
       <ExtraGeckoCodesEnableInput isAutoTTRecRunning={props.isAutoTTRecRunning}/>
       <SpeedometerInput/>
       <PresentationSettingsLayout formComplexity={props.formComplexity} enableFadeInAtStart={true}/>
-      <EncodeTypeLayout/>
+      <EncodeSettingsLayout/>
       <QualitySettingsLayout formComplexity={props.formComplexity} isNoEncode={false}/>
       <ExtraSettingsLayout formComplexity={props.formComplexity}/>
 
