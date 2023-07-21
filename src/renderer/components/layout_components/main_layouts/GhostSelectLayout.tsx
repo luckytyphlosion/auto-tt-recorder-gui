@@ -38,12 +38,15 @@ import { ExtraGeckoCodesEnableInput } from "../../form_components/ExtraGeckoCode
 import { AspectRatio16By9Input } from "../../form_components/AspectRatio16By9Input";
 import { FadeInAtStartInput } from "../../form_components/FadeInAtStartInput";
 import { EndingDelayInput } from "../../form_components/EndingDelayInput";
+import { FormComplexity } from "../FormComplexityLayout";
+import { QualitySettingsLayout } from "../sub_layouts/QualitySettingsLayout";
+import { ExtraSettingsLayout } from "../sub_layouts/ExtraSettingsLayout";
 
 import useRenderCounter from "../../../RenderCounter";
 
 const PixelFormatInput_Memo = memo(PixelFormatInput);
 
-export function GhostSelectLayout(props: {isAutoTTRecRunning: boolean}) {
+export function GhostSelectLayout(props: {isAutoTTRecRunning: boolean, formComplexity: FormComplexity}) {
   const renderCounter = useRenderCounter(false, "GhostSelectLayout");
 
   return (
@@ -61,17 +64,8 @@ export function GhostSelectLayout(props: {isAutoTTRecRunning: boolean}) {
       <EndingDelayInput/>
       <EncodeTypeInput/>
 
-      <h3>Quality settings</h3>
-      <DolphinResolutionInput enableOutputWidth={true}/>
-      <AspectRatio16By9Input/>
-      <HQTexturesInput/>
-      <NoBackgroundBlurInput/>
-      <NoBloomInput/>
-      <h3>Extra settings (ignore if not sure)</h3>
-      <UseFFV1Input/>
-      <EncodeOnlyInput/>
-      <InputDisplayDontCreateInput/>
-      <KeepWindowInput/>
+      <QualitySettingsLayout formComplexity={props.formComplexity}/>
+      <ExtraSettingsLayout formComplexity={props.formComplexity}/>
       {renderCounter}
 
     </div>

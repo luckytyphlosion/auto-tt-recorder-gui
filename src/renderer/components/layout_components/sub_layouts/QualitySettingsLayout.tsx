@@ -8,7 +8,7 @@ import { HQTexturesInput } from "../../form_components/HQTexturesInput";
 import { NoBackgroundBlurInput } from "../../form_components/NoBackgroundBlurInput";
 import { NoBloomInput } from "../../form_components/NoBloomInput";
 
-export function ExtraSettingsLayout(props: {formComplexity: FormComplexity}) {
+export function QualitySettingsLayout(props: {formComplexity: FormComplexity}) {
   return <>
     <h3>Quality settings</h3>
     {

@@ -33,9 +33,9 @@ import { YoutubeSettingsInput } from "../../form_components/YoutubeSettingsInput
 import { DolphinResolutionInput } from "../../form_components/DolphinResolutionInput";
 import { TimelineCategoryLayout } from "../TimelineCategoryLayout";
 import { MusicVolumeInput } from "../../form_components/MusicVolumeInput";
-import { Top10HighlightEnableInput } from "../../form_components/Top10HighlightEnableInput";
 import { ExtraGeckoCodesEnableInput } from "../../form_components/ExtraGeckoCodesEnableInput";
-import { AspectRatio16By9Input } from "../../form_components/AspectRatio16By9Input";
+import { QualitySettingsLayout } from "../sub_layouts/QualitySettingsLayout";
+import { ExtraSettingsLayout } from "../sub_layouts/ExtraSettingsLayout";
 import useRenderCounter from "../../../RenderCounter";
 import { FadeInAtStartInput } from "../../form_components/FadeInAtStartInput";
 import { EndingDelayInput } from "../../form_components/EndingDelayInput";
@@ -64,6 +64,7 @@ export function Top10GeckoCodeLayout(props: {isAutoTTRecRunning: boolean, formCo
       <FadeInAtStartInput/>
       <EndingDelayInput/>
       <EncodeTypeInput/>
+      <QualitySettingsLayout formComplexity={props.formComplexity}/>
       <ExtraSettingsLayout formComplexity={props.formComplexity}/>
       {renderCounter}
       <OutputVideoFilenameInput noTop10CategoryIsNoEncode={false}/>

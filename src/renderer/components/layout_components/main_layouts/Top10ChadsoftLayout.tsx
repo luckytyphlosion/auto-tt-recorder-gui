@@ -39,6 +39,8 @@ import { AspectRatio16By9Input } from "../../form_components/AspectRatio16By9Inp
 import { FadeInAtStartInput } from "../../form_components/FadeInAtStartInput";
 import { EndingDelayInput } from "../../form_components/EndingDelayInput";
 import { FormComplexity } from "../FormComplexityLayout";
+import { QualitySettingsLayout } from "../sub_layouts/QualitySettingsLayout";
+import { ExtraSettingsLayout } from "../sub_layouts/ExtraSettingsLayout";
 
 import useRenderCounter from "../../../RenderCounter";
 
@@ -67,12 +69,7 @@ export function Top10ChadsoftLayout(props: {isAutoTTRecRunning: boolean, formCom
       <FadeInAtStartInput/>
       <EndingDelayInput/>
       <EncodeTypeInput/>
-      <h3>Quality settings</h3>
-      <DolphinResolutionInput enableOutputWidth={true}/>
-      <AspectRatio16By9Input/>
-      <HQTexturesInput/>
-      <NoBackgroundBlurInput/>
-      <NoBloomInput/>
+      <QualitySettingsLayout formComplexity={props.formComplexity}/>
       <ExtraSettingsLayout formComplexity={props.formComplexity}/>
       {renderCounter}
       <OutputVideoFilenameInput noTop10CategoryIsNoEncode={false}/>
