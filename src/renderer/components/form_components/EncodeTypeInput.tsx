@@ -1,8 +1,8 @@
 import React, { useState, memo } from "react";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { PixelFormatInput } from "./PixelFormatInput";
-import { SizeBasedEncodeSettingsLayout } from "../layout_components/SizeBasedEncodeSettingsLayout";
-import { CRFEncodeSettingsLayout } from "../layout_components/CRFEncodeSettingsLayout";
+import { SizeBasedEncodeSettingsLayout } from "../layout_components/sub_layouts/SizeBasedEncodeSettingsLayout";
+import { CRFEncodeSettingsLayout } from "../layout_components/sub_layouts/CRFEncodeSettingsLayout";
 import useRenderCounter from "../../RenderCounter";
 
 export type EncodeType = "crf" | "size";

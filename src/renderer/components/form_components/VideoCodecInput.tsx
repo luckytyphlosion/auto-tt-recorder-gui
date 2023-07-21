@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useFormContextAutoTT, useWatchAutoTT } from "../../use-form-context-auto-tt";
 import { MusicFilenameInput } from "./MusicFilenameInput";
 import { OutputVideoFileFormatInput } from "./OutputVideoFileFormatInput";
-import { CRFEncodeSettingsLayout } from "../layout_components/CRFEncodeSettingsLayout";
+import { CRFEncodeSettingsLayout } from "../layout_components/sub_layouts/CRFEncodeSettingsLayout";
 import useRenderCounter from "../../RenderCounter";
 
 import { EncodeType } from "./EncodeTypeInput";

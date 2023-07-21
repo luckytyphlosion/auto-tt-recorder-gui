@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { MusicFilenameInput } from "./MusicFilenameInput";
 import { Top10LocationRegionalInput } from "./Top10LocationRegionalInput";
-import { CRFEncodeSettingsLayout } from "../layout_components/CRFEncodeSettingsLayout";
+import { CRFEncodeSettingsLayout } from "../layout_components/sub_layouts/CRFEncodeSettingsLayout";
 
 import { VideoCodec } from "./VideoCodecInput";
 
