@@ -5,7 +5,7 @@ import useRenderCounter from "../../RenderCounter";
 
 import { AudioCodec } from "./AudioCodecAndBitrateInput";
 
-import { EncodeType } from "../layout_components/choice_layouts/EncodeTypeLayout";
+import { EncodeType } from "../layout_components/choice_layouts/EncodeSettingsLayout";
 
 export type EncodeSizeUnit = "mib" | "bytes";
 

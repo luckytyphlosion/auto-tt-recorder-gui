@@ -7,7 +7,7 @@ import { AudioCodec } from "./AudioCodecAndBitrateInput";
 
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
 
-import { EncodeType } from "../layout_components/choice_layouts/EncodeTypeLayout";
+import { EncodeType } from "../layout_components/choice_layouts/EncodeSettingsLayout";
 
 export type AudioBitrateUnit = "kbps" | "bps";
 
