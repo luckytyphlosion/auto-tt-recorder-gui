@@ -14,7 +14,7 @@ export function Top10TitleInput() {
 
   return (
     <div>
-      <label className="option-label" htmlFor="top-10-title">Top 10 Title: </label>
+      <label htmlFor="top-10-title">Top 10 Title: </label>
       <label htmlFor="top-10-title-auto">Autogenerate:</label>
       <input type="radio" id="top-10-title-auto" value="auto"
         {...register("top-10-title-type", {onChange: updateTop10TitleType})}

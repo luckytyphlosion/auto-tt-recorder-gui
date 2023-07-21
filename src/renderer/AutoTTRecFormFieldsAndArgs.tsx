@@ -129,7 +129,7 @@ export interface AutoTTRecConfigFormFieldTypes {
   "youtube-settings": boolean,
 }
 
-const DEBUG_PREFILLED_DEFAULTS = true;
+const DEBUG_PREFILLED_DEFAULTS = false;
 
 export const DEFAULT_FORM_VALUES: AutoTTRecConfigFormFieldTypes = {
   "aspect-ratio-16-by-9": "auto",
@@ -312,25 +312,38 @@ class AutoTTRecFormData {
   private _formData: AutoTTRecConfigFormFieldTypes;
   private _extendedTimeline: ExtendedTimeline;
   private _formComplexity: FormComplexity;
+  private _isOnMKChannel: boolean;
 
   constructor(formData: AutoTTRecConfigFormFieldTypes) {
     this._formData = shallowCopy(formData);
     this._extendedTimeline = this.determineExtendedTimeline();
     this._formComplexity = this.formData["form-complexity"];
+    const isNoTop10Timeline = formData["timeline-category"] === "notop10";
+    this._isOnMKChannel = !isNoTop10Timeline || formData["no-top-10-category"] === "mkchannel";
+    this.fillFormComplexityDefaults();
   }
 
-  public fillFormComplexityDefaults() {
-    if (this.formComplexity === FormComplexity.SIMPLE) {
-
-    } else if (this.formComplexity === FormComplexity.ADVANCED) {
-
+  private determineExtendedTimeline(): ExtendedTimeline {
+    if (this.formData["timeline-category"] === "notop10") {
+      return this.formData["no-top-10-category"];
+    } else {
+      return this.formData["timeline-category"];
     }
   }
 
-  private fillFormComplexityNoTop10Defaults() {
-    if (this.extendedTimeline === "mkchannel" && this.formComplexity === FormComplexity.SIMPLE) {
+  private fillFormComplexityDefaults() {
+    if (this.isOnMKChannel && this.formComplexity === FormComplexity.SIMPLE) {
       this.formData["mk-channel-ghost-description"] = "Ghost Data";
-      this.formData["top-10-location-region"] = "worldwide";
+      if (this.formData["timeline-category"] === "top10chadsoft") {
+        this.formData["top-10-location-region"] = "worldwide";
+      } else if (this.formData["timeline-category"] === "top10gecko") {
+        this.formData["top-10-gecko-code-location-region"] = "worldwide";
+      }
+    }
+
+    if (this.formData["timeline-category"] === "top10chadsoft" && this.formComplexity === FormComplexity.SIMPLE) {
+      this.formData["top-10-highlight-enable"] = true;
+      this.formData["top-10-highlight"] = 1;
     }
 
     if (this.formData["background-music-source"] === "music-filename"
@@ -396,17 +409,6 @@ class AutoTTRecFormData {
     this.formData["keep-window"] = true;
   }
 
-  private fillFormComplexityAdvancedDefaults() {
-
-  }
-  private determineExtendedTimeline(): ExtendedTimeline {
-    if (this.formData["timeline-category"] === "notop10") {
-      return this.formData["no-top-10-category"];
-    } else {
-      return this.formData["timeline-category"];
-    }
-  }
-
   public get formData() {
     return this._formData;
   }
@@ -417,6 +419,10 @@ class AutoTTRecFormData {
 
   public get formComplexity() {
     return this._formComplexity;
+  }
+
+  public get isOnMKChannel() {
+    return this._isOnMKChannel;
   }
 }
 
@@ -440,7 +446,8 @@ function addMusicPresentationToAutoTTRecArgs(formData: AutoTTRecConfigFormFieldT
 }
 
 export function convertFormDataToAutoTTRecArgs(formData: AutoTTRecConfigFormFieldTypes) {
-  let argsBuilder = new AutoTTRecArgsBuilder(formData);
+  let formDataManager = new AutoTTRecFormData(formData);
+  let argsBuilder = new AutoTTRecArgsBuilder(formDataManager.formData);
   argsBuilder.add("iso-filename");
 
   const isNoTop10Timeline = formData["timeline-category"] === "notop10";
@@ -465,7 +472,12 @@ export function convertFormDataToAutoTTRecArgs(formData: AutoTTRecConfigFormFiel
   } else {
     if (formData["timeline-category"] === "top10chadsoft") {
       argsBuilder.add("top-10-chadsoft");
-      argsBuilder.add("top-10-title");
+      if (formData["top-10-title-type"] === "auto") {
+        argsBuilder.addManual("top-10-title", "auto");
+      } else if (formData["top-10-title-type"] === "manual") {
+        argsBuilder.add("top-10-title");
+      }
+
       if (formData["top-10-highlight-enable"]) {
         argsBuilder.add("top-10-highlight");
       } else {
@@ -506,7 +518,13 @@ export function convertFormDataToAutoTTRecArgs(formData: AutoTTRecConfigFormFiel
   }
 
   // mkchannel gets top 10 location, while ghostselect, ghostonly, and noencode don't
-  if (isOnMKChannel) {
+  if (formData["timeline-category"] === "top10gecko") {
+    if (formData["top-10-gecko-code-location-region"] === "worldwide") {
+      argsBuilder.addManual("top-10-location", "ww");
+    } else {
+      argsBuilder.addManual("top-10-location", "Europe");
+    }
+  } else if (isOnMKChannel) {
     if (formData["top-10-location-region"] === "worldwide") {
       argsBuilder.addManual("top-10-location", "ww");
     } else if (formData["top-10-location-region"] === "regional") {
