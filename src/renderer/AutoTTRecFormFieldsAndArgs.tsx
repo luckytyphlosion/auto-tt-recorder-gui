@@ -324,44 +324,78 @@ class AutoTTRecFormData {
     }
   }
 
-  public fillFormComplexitySimpleDefaults() {
-    if (this.extendedTimeline === "mkchannel") {
+  private fillFormComplexityNoTop10Defaults() {
+    if (this.extendedTimeline === "mkchannel" && this.formComplexity === FormComplexity.SIMPLE) {
       this.formData["mk-channel-ghost-description"] = "Ghost Data";
       this.formData["top-10-location-region"] = "worldwide";
     }
 
-    if (this.formData["background-music-source"] === "music-filename" && this.extendedTimeline !== "ghostonly") {
+    if (this.formData["background-music-source"] === "music-filename"
+      && this.extendedTimeline !== "ghostonly" && this.formComplexity === FormComplexity.SIMPLE) {
       this.formData["music-presentation"] = "normal";
     }
 
-    this.formData["input-display"] = "auto";
-    this.formData["extra-gecko-codes-enable"] = false;
-    this.formData["speedometer-style"] = "fancy";
-    this.formData["speedometer-metric"] = "engine";
-    this.formData["speedometer-decimal-places-str"] = "1";
-    this.formData["fade-in-at-start"] = false;
-    this.formData["ending-delay"] = 600;
-    this.formData["encode-type"] = "crf";
-    this.formData["video-codec"] = "libx264";
-    this.formData["output-video-file-format"] = "mp4";
-    this.formData["crf-value"] = 15;
-    this.formData["h26x-preset"] = this.formData["dolphin-resolution"] === "480p" ? "ultrafast" : "slow";
+    if (this.formComplexity === FormComplexity.SIMPLE) {
+      this.formData["input-display"] = "auto";
+      this.formData["extra-gecko-codes-enable"] = false;
+      this.formData["speedometer-style"] = "fancy";
+      this.formData["speedometer-metric"] = "engine";
+      this.formData["speedometer-decimal-places-str"] = "1";
+      this.formData["fade-in-at-start"] = false;
+      this.formData["ending-delay"] = 600;
+    }
+    if (this.formComplexity === FormComplexity.SIMPLE) {
+      this.formData["encode-type"] = "crf";
+      this.formData["video-codec"] = "libx264";
+    } else if (this.formComplexity === FormComplexity.ADVANCED) {
+      if (this.formData["encode-type"] === "crf") {
+        this.formData["video-codec"] = "libx264";
+      } else if (this.formData["encode-type"] === "size") {
+        if (this.formData["output-video-file-format"] === "mp4") {
+          this.formData["video-codec"] = "libx264";
+        } else if (this.formData["output-video-file-format"] === "webm") {
+          this.formData["video-codec"] = "libvpx-vp9";
+        }
+      }
+    }
+
+    if (this.formComplexity === FormComplexity.SIMPLE) {
+      this.formData["output-video-file-format"] = "mp4";
+      this.formData["crf-value"] = 15;
+    }
+    this.formData["h26x-preset"] = (this.formData["encode-type"] !== "size" && this.formData["dolphin-resolution"] === "480p") ? "ultrafast" : "slow";
+
     this.formData["youtube-settings"] = true;
     this.formData["audio-codec"] = "libopus";
-    this.formData["audio-bitrate"] = 128000;
+    if (this.formData["encode-type"] === "crf") {
+      this.formData["audio-bitrate"] = 128000;
+    } else if (this.formData["encode-type"] === "size") {
+      this.formData["audio-bitrate"] = 64000;
+    }
+
     this.formData["pixel-format"] = "yuv420p";
-    this.formData["output-width-preset"] = recommendedOutputWidths[this.formData["dolphin-resolution"]];
+
+    if (this.formComplexity === FormComplexity.SIMPLE) {
+      this.formData["output-width-preset"] = recommendedOutputWidths[this.formData["dolphin-resolution"]];
+    }
+
     this.formData["aspect-ratio-16-by-9"] = "auto";
-    this.formData["hq-textures"] = this.formData["dolphin-resolution"] === "480p" ? false : true;
-    this.formData["extra-hq-textures-folder-enable"] = false;
-    this.formData["no-background-blur"] = true;
-    this.formData["no-bloom"] = false;
+    if (this.formComplexity === FormComplexity.SIMPLE) {
+      this.formData["hq-textures"] = this.formData["dolphin-resolution"] === "480p" ? false : true;
+      this.formData["extra-hq-textures-folder-enable"] = false;
+      this.formData["no-background-blur"] = true;
+      this.formData["no-bloom"] = false;
+    }
+
     this.formData["use-ffv1"] = false;
     this.formData["encode-only"] = false;
     this.formData["input-display-dont-create"] = false;
     this.formData["keep-window"] = true;
   }
 
+  private fillFormComplexityAdvancedDefaults() {
+
+  }
   private determineExtendedTimeline(): ExtendedTimeline {
     if (this.formData["timeline-category"] === "notop10") {
       return this.formData["no-top-10-category"];
