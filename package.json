@@ -213,7 +213,7 @@
     "files": [
       "package.json",
       "dist/**",
-      "auto-tt-recorder_v1.3.4_for_gui/**",
+      "auto-tt-recorder_v*.*.*_for_gui/**",
       "data/**",
       "!build_scripts/**/*",
       "!node_modules/**/*",
