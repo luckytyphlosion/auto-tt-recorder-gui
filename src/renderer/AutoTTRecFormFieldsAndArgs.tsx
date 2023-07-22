@@ -393,6 +393,7 @@ class AutoTTRecFormData {
 
     if (this.formComplexity === FormComplexity.SIMPLE) {
       this.formData["output-width-preset"] = recommendedOutputWidths[this.formData["dolphin-resolution"]];
+      console.log("this.formData['output-width-preset']:", this.formData["output-width-preset"]);
     }
 
     this.formData["aspect-ratio-16-by-9"] = "auto";
@@ -446,8 +447,11 @@ function addMusicPresentationToAutoTTRecArgs(formData: AutoTTRecConfigFormFieldT
 }
 
 export function convertFormDataToAutoTTRecArgs(formData: AutoTTRecConfigFormFieldTypes) {
-  let formDataManager = new AutoTTRecFormData(formData);
-  let argsBuilder = new AutoTTRecArgsBuilder(formDataManager.formData);
+  if (formData["form-complexity"] !== FormComplexity.ALL) {
+    let formDataManager = new AutoTTRecFormData(formData);
+    formData = formDataManager.formData  
+  }
+  let argsBuilder = new AutoTTRecArgsBuilder(formData);
   argsBuilder.add("iso-filename");
 
   const isNoTop10Timeline = formData["timeline-category"] === "notop10";
@@ -594,6 +598,8 @@ export function convertFormDataToAutoTTRecArgs(formData: AutoTTRecConfigFormFiel
     argsBuilder.add("dolphin-resolution");
   
     let outputWidth: number | null;
+  
+    console.log("formData['output-width-preset'] 2:", formData["output-width-preset"]);
   
     if (formData["output-width-preset"] === "custom") {
       outputWidth = formData["output-width-custom"];
