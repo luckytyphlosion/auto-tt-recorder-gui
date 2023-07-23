@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import useRenderCounter from "../../RenderCounter";
+import { makeReadonlyArraySet, ValidValues } from "../../array-set";
+
+export const SPEEDOMETER_DECIMAL_PLACES_NUMERIC = makeReadonlyArraySet([0, 1, 2] as const);
+export type SpeedometerDecimalPlacesNumeric = ValidValues<typeof SPEEDOMETER_DECIMAL_PLACES_NUMERIC>;
 
 export type SpeedometerDecimalPlaces = "0" | "1" | "2";
 

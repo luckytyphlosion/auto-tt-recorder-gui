@@ -4,10 +4,13 @@ import useRenderCounter from "../../RenderCounter";
 
 import { SpeedometerMetricInput } from "./SpeedometerMetricInput";
 import { SpeedometerDecimalPlacesInput } from "./SpeedometerDecimalPlacesInput";
+import { makeReadonlyArraySet, ValidValues } from "../../array-set";
 
 const SpeedometerMetricInput_Memo = memo(SpeedometerMetricInput);
 
-export type SpeedometerStyle = "fancy" | "regular" | "standard" | "none";
+export const SPEEDOMETER_STYLES = makeReadonlyArraySet(["fancy", "regular", "standard", "none"] as const);
+export type SpeedometerStyle = ValidValues<typeof SPEEDOMETER_STYLES>;
+export const SPEEDOMETER_STYLES2 = makeReadonlyArraySet(["fancy", "regular"] as const);
 
 export function SpeedometerInput() {
   const {register, getValues} = useFormContextAutoTT();

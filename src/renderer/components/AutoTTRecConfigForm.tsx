@@ -23,7 +23,7 @@ import { Top10LocationRegional } from "./form_components/Top10LocationRegionalIn
 
 import { BackgroundMusicSource } from "./form_components/BackgroundMusicSourceInput";
 
-import { InputDisplay } from "./form_components/InputDisplayInput";
+import { INPUT_DISPLAYS } from "./form_components/InputDisplayInput";
 import { SpeedometerStyle } from "./form_components/SpeedometerInput";
 import { SpeedometerMetric } from "./form_components/SpeedometerMetricInput";
 import { SpeedometerDecimalPlaces } from "./form_components/SpeedometerDecimalPlacesInput";

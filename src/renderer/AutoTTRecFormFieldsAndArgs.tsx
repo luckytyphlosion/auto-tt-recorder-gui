@@ -16,25 +16,25 @@ import { ComparisonGhostSource } from "./components/form_components/ComparisonGh
 import { SZSSource } from "./components/form_components/SZSSourceInput";
 import { Top10LocationRegion } from "./components/form_components/Top10LocationInput";
 
-import { Top10LocationCountry } from "./components/form_components/Top10LocationCountryInput";
-import { Top10LocationRegional } from "./components/form_components/Top10LocationRegionalInput";
+import { Top10LocationCountry, countryLocations } from "./components/form_components/Top10LocationCountryInput";
+import { Top10LocationRegional, regionalLocations } from "./components/form_components/Top10LocationRegionalInput";
 
 import { BackgroundMusicSource } from "./components/form_components/BackgroundMusicSourceInput";
 
-import { InputDisplay } from "./components/form_components/InputDisplayInput";
-import { SpeedometerStyle } from "./components/form_components/SpeedometerInput";
-import { SpeedometerMetric } from "./components/form_components/SpeedometerMetricInput";
-import { SpeedometerDecimalPlaces } from "./components/form_components/SpeedometerDecimalPlacesInput";
+import { InputDisplay, INPUT_DISPLAYS } from "./components/form_components/InputDisplayInput";
+import { SpeedometerStyle, SPEEDOMETER_STYLES, SPEEDOMETER_STYLES2 } from "./components/form_components/SpeedometerInput";
+import { SpeedometerMetric, SPEEDOMETER_METRICS } from "./components/form_components/SpeedometerMetricInput";
+import { SpeedometerDecimalPlaces, SpeedometerDecimalPlacesNumeric, SPEEDOMETER_DECIMAL_PLACES_NUMERIC } from "./components/form_components/SpeedometerDecimalPlacesInput";
 
-import { EncodeType } from "./components/layout_components/choice_layouts/EncodeSettingsLayout";
+import { EncodeType, ENCODE_TYPES } from "./components/layout_components/choice_layouts/EncodeSettingsLayout";
 import { OutputVideoFileFormat } from "./components/form_components/OutputVideoFileFormatInput";
-import { VideoCodec } from "./components/form_components/VideoCodecInput";
+import { VideoCodec, VIDEO_CODECS } from "./components/form_components/VideoCodecInput";
 
-import { DolphinResolution } from "./components/form_components/DolphinResolutionInput";
-import { AudioCodec } from "./components/form_components/AudioCodecAndBitrateInput";
+import { DolphinResolution, DOLPHIN_RESOLUTIONS } from "./components/form_components/DolphinResolutionInput";
+import { AudioCodec, AUDIO_CODECS } from "./components/form_components/AudioCodecAndBitrateInput";
 import { AudioBitrateUnit } from "./components/form_components/AudioBitrateInput";
 
-import { H26xPreset } from "./components/form_components/H26xPresetInput";
+import { H26xPreset, H26X_PRESETS } from "./components/form_components/H26xPresetInput";
 import { OutputWidthPreset, recommendedOutputWidths } from "./components/form_components/OutputWidthInput";
 
 import { Top10GeckoCodeLocationRegion } from "./components/form_components/Top10GeckoCodeLocationInput";
@@ -42,14 +42,20 @@ import { Top10GeckoCodeLocationRegion } from "./components/form_components/Top10
 import { TimelineCategory } from "./components/layout_components/TimelineCategoryLayout";
 
 import { NoTop10Category } from "./components/layout_components/choice_layouts/NoTop10CategoryLayout";
-import { AspectRatio16By9 } from "./components/form_components/AspectRatio16By9Input";
+import { AspectRatio16By9, ASPECT_RATIO_16_BY_9_VALUES } from "./components/form_components/AspectRatio16By9Input";
 import { TrackNameType } from "./components/form_components/TrackNameInput";
 
 import { MusicPresentation } from "./components/form_components/MusicPresentationInput";
 import { FormComplexity } from "./components/layout_components/FormComplexityLayout";
 import { Top10TitleType } from "./components/form_components/Top10TitleInput";
 
-export type Timeline = "noencode" | "ghostonly" | "ghostselect" | "mkchannel" | "top10";
+import { AutoTTRecConfig } from "../main/auto-tt-rec-bridge";
+
+import { ValidValues, ReadonlyArraySet, makeReadonlyArraySet } from "./array-set";
+
+const TIMELINES = makeReadonlyArraySet(["noencode", "ghostonly", "ghostselect", "mkchannel", "top10"] as const);
+export type Timeline = ValidValues<typeof TIMELINES>;
+
 export type ExtendedTimeline = "noencode" | "ghostonly" | "ghostselect" | "mkchannel" | "top10chadsoft" | "top10gecko";
 
 export interface AutoTTRecConfigFormFieldTypes {
@@ -83,7 +89,7 @@ export interface AutoTTRecConfigFormFieldTypes {
   "game-volume-numberinput": number,
   "h26x-preset": H26xPreset,
   "hq-textures": boolean,
-  "input-display": InputDisplay,
+  "input-display": ValidValues<typeof INPUT_DISPLAYS>,
   "input-display-dont-create": boolean,
   "iso-filename": string,
   "keep-window": boolean,
@@ -208,96 +214,413 @@ export const DEFAULT_FORM_VALUES: AutoTTRecConfigFormFieldTypes = {
   "youtube-settings": true,
 };
 
+const AUTO_TT_REC_TOP_10_LOCATIONS = makeReadonlyArraySet(["ww", "worldwide", ...countryLocations, ...regionalLocations] as const);
+type Top10LocationFull = ValidValues<typeof AUTO_TT_REC_TOP_10_LOCATIONS>;
 
-export interface AutoTTRecArgs {
-  "iso-filename": string,
-  "timeline"?: Timeline,
-  "main-ghost-filename"?: string,
-  "chadsoft-ghost-page"?: string,
-  "on-200cc"?: boolean
-  "chadsoft-comparison-ghost-page"?: string,
-  "comparison-ghost-filename"?: string,
-  "szs-filename"?: string,
-  "mk-channel-ghost-description"?: string,
-  "track-name"?: string,
-  "top-10-location"?: "ww" | "worldwide" | Top10LocationCountry | Top10LocationRegional,
-  "music-filename"?: string,
-  "game-volume"?: number,
-  "music-volume"?: number,
-  "input-display"?: InputDisplay,
-  "speedometer"?: SpeedometerStyle,
-  "speedometer-metric"?: SpeedometerMetric,
-  "speedometer-decimal-places"?: number,
-  "hq-textures"?: boolean,
-  "no-background-blur"?: boolean,
-  "no-bloom"?: boolean,
-  "no-music"?: boolean,
-  "encode-type": EncodeType,
-  "video-codec"?: VideoCodec,
-  "crf-value"?: number,
-  "h26x-preset"?: H26xPreset,
-  "encode-size"?: number,
-  "audio-codec"?: AudioCodec,
-  "audio-bitrate"?: number,
-  "pixel-format"?: string,
-  "dolphin-resolution"?: DolphinResolution,
-  "output-width"?: number | null,
-  "youtube-settings"?: boolean,
-  "use-ffv1"?: boolean,
-  "encode-only"?: boolean,
-  "input-display-dont-create"?: boolean,
-  "keep-window"?: boolean,
-  "output-video-filename": string,
-  "top-10-chadsoft"?: string,
-  "top-10-title"?: string,
-  "top-10-highlight"?: number,
-  "top-10-gecko-code-filename"?: string,
-  "extra-gecko-codes-filename"?: string,
-  "aspect-ratio-16-by-9"?: AspectRatio16By9,
-  "extra-hq-textures-folder"?: string,
-  "start-music-at-beginning"?: boolean,
-  "no-music-mkchannel"?: boolean,
-  "ending-delay"?: number,
-  "fade-in-at-start"?: boolean,
+class AutoTTRecArgsClass {
+  "iso-filename"?: string = "";
+  "timeline"?: Timeline = "mkchannel";
+  "main-ghost-filename"?: string = "";
+  "chadsoft-ghost-page"?: string = "";
+  "on-200cc"?: boolean = false;
+  "chadsoft-comparison-ghost-page"?: string = "";
+  "comparison-ghost-filename"?: string = "";
+  "szs-filename"?: string = "";
+  "mk-channel-ghost-description"?: string = "";
+  "track-name"?: string = "";
+  "top-10-location"?: Top10LocationFull;
+  "music-filename"?: string = "";
+  "game-volume"?: number = 1.0;
+  "music-volume"?: number = 1.0;
+  "input-display"?: InputDisplay = "auto";
+  "speedometer"?: SpeedometerStyle = "fancy";
+  "speedometer-metric"?: SpeedometerMetric = "engine";
+  "speedometer-decimal-places"?: SpeedometerDecimalPlacesNumeric = 1;
+  "hq-textures"?: boolean = true;
+  "no-background-blur"?: boolean = true;
+  "no-bloom"?: boolean = false;
+  "no-music"?: boolean = false;
+  "encode-type"?: EncodeType = "crf";
+  "video-codec"?: VideoCodec = "libx264";
+  "crf-value"?: number = 15;
+  "h26x-preset"?: H26xPreset = "slow";
+  "encode-size"?: number = 52428800;
+  "audio-codec"?: AudioCodec = "libopus";
+  "audio-bitrate"?: number | string = 128000;
+  "pixel-format"?: string = "yuv420p";
+  "dolphin-resolution"?: DolphinResolution = "1440p";
+  "output-width"?: number = 2560;
+  "youtube-settings"?: boolean = true;
+  "use-ffv1"?: boolean = false;
+  "encode-only"?: boolean = false;
+  "input-display-dont-create"?: boolean = false;
+  "keep-window"?: boolean = true;
+  "output-video-filename"?: string = "";
+  "top-10-chadsoft"?: string = "";
+  "top-10-title"?: string = "";
+  "top-10-highlight"?: number = 1;
+  "top-10-gecko-code-filename"?: string = "";
+  "extra-gecko-codes-filename"?: string = "";
+  "aspect-ratio-16-by-9"?: AspectRatio16By9 = "true";
+  "extra-hq-textures-folder"?: string = "";
+  "start-music-at-beginning"?: boolean = false;
+  "no-music-mkchannel"?: boolean = false;
+  "ending-delay"?: number = 600;
+  "fade-in-at-start"?: boolean = false;
 }
 
-const DEFAULT_AUTO_TT_REC_ARGS: AutoTTRecArgs = {
-  "iso-filename": "",
-  "speedometer": "fancy",
-  "encode-type": "crf",
-  "output-video-filename": ""
+function isInSet<T>(values: ReadonlySet<T>, x: any): x is T {
+  return values.has(x);
+}
+
+export type PartialNull<T> = {
+  [P in keyof T]: T[P] | null;
 };
+
+interface AutoTTRecArgsWithoutNulls extends AutoTTRecArgsClass {}
+export type AutoTTRecArgs = PartialNull<AutoTTRecArgsWithoutNulls>;
+
+type AutoTTRecArgName = keyof AutoTTRecArgs;
+
+const autoTTRecArgsClassObj = new AutoTTRecArgsClass();
+
+type AutoTTRecArgNamesType = Array<keyof AutoTTRecArgs>;
+
+const AUTO_TT_REC_ARG_NAMES: AutoTTRecArgNamesType = Object.keys(autoTTRecArgsClassObj) as AutoTTRecArgNamesType;
+
+type GhostAuto = "main-ghost-auto" | "comparison-ghost-auto";
+
+type AutoTTRecArgNameExtended = AutoTTRecArgName | GhostAuto | "no-200cc" | "top-10-censors" | "ending-message" | "dolphin-volume";
+
+export interface AutoTTRecConfigImporterError {
+  option: AutoTTRecArgName,
+  messages: string[]
+}
+
+type IfEquals<T, U, Y=unknown, N=never> =
+  (<G>() => G extends T ? 1 : 2) extends
+  (<G>() => G extends U ? 1 : 2) ? Y : N;
+
+class Test1 {
+  "top-10-gecko-code-filename"?: string = "";
+  "extra-gecko-codes-filename"?: string = "";
+  "aspect-ratio-16-by-9"?: AspectRatio16By9 = "true";
+  "extra-hq-textures-folder"?: string = "";
+  "start-music-at-beginning"?: boolean = false;
+  "no-music-mkchannel"?: boolean = false;
+  "ending-delay"?: number = 600;
+  "fade-in-at-start"?: boolean = false;
+}
+
+type AutoTTRecPrimitiveArgs = Pick<AutoTTRecArgs, {
+  [K in keyof AutoTTRecArgs]-?:
+    IfEquals<AutoTTRecArgs[K], (string | undefined | null), K,
+      IfEquals<AutoTTRecArgs[K], (number | undefined | null), K,
+        IfEquals<AutoTTRecArgs[K], (boolean | undefined | null), K, never>
+      >
+    >
+}[keyof AutoTTRecArgs]>;
+
+interface AutoTTRecConfigImporterErrorOrWarningMessage {
+  isWarning: boolean,
+  message: string
+}
+
+class AutoTTRecConfigImporterErrorsAndWarnings {
+  private _errorsAndWarnings: Map<AutoTTRecArgNameExtended, AutoTTRecConfigImporterErrorOrWarningMessage[]>;
+
+  constructor() {
+    this._errorsAndWarnings = new Map();
+  }
+
+  private add(name: AutoTTRecArgNameExtended, message: string, isWarning: boolean) {
+    let errorsAndWarningsForName = this._errorsAndWarnings.get(name);
+    if (errorsAndWarningsForName === undefined) {
+      errorsAndWarningsForName = [];
+      this._errorsAndWarnings.set(name, errorsAndWarningsForName);
+    }
+
+    errorsAndWarningsForName.push({
+      isWarning: isWarning,
+      message: message
+    });
+  }
+
+  public addError(name: AutoTTRecArgNameExtended, message: string) {
+    this.add(name, message, false);
+  }
+  public addWarning(name: AutoTTRecArgNameExtended, message: string) {
+    this.add(name, message, true);
+  }
+}
+
+const listFormatter = new Intl.ListFormat("en", {style: "long", type: "disjunction"});
+const ghostPageLinkRegex = /^https:\/\/(?:www\.)?chadsoft\.co\.uk\/time-trials\/rkgd\/([0-9A-Fa-f]{2}\/[0-9A-Fa-f]{2}\/[0-9A-Fa-f]{36})\.html/;
+
+type CheckValidValues<T, U> = U extends { arr: ReadonlyArray<infer V> } ? T extends V ? U : never : never;
+
+
+class AutoTTRecConfigImporter {
+  private autoTTRecArgs: AutoTTRecArgs;
+  private autoTTRecConfig: AutoTTRecConfig;
+  private errorsAndWarnings: AutoTTRecConfigImporterErrorsAndWarnings;
+
+  constructor(autoTTRecConfig: AutoTTRecConfig) {
+    this.autoTTRecArgs = {};
+    //for (const autoTTRecArgName in AUTO_TT_REC_ARG_NAMES) {
+    //  this.autoTTRecArgs[autoTTRecArgName as AutoTTRecArgName] = null;
+    //}
+
+    this.autoTTRecConfig = {};
+    for (const [name, value] of Object.entries(autoTTRecConfig)) {
+      if (typeof value === "string" && value.startsWith("<FILLME") && value.charAt(value.length - 1) == ">") {
+        this.autoTTRecConfig[name] = undefined;
+      } else {
+        this.autoTTRecConfig[name] = value;
+      }
+    }
+    this.errorsAndWarnings = new AutoTTRecConfigImporterErrorsAndWarnings();
+  }
+
+  //public add<K extends AutoTTRecArgName>(key: K, value: AutoTTRecArgs[K]) {
+  //  this.autoTTRecArgs[key] = value;
+  //}
+
+  public addError<K extends AutoTTRecArgName>(key: K, message: string) {
+    this.errorsAndWarnings.addError(key, message);
+    this.autoTTRecArgs[key] = undefined;
+  }
+
+  public addWarning<K extends AutoTTRecArgName>(key: K, message: string) {
+    this.errorsAndWarnings.addWarning(key, message);
+  }
+
+  public addErrorExtended<K extends AutoTTRecArgNameExtended>(key: K, message: string) {
+    this.errorsAndWarnings.addError(key, message);
+  }
+
+  public addWarningExtended<K extends AutoTTRecArgNameExtended>(key: K, message: string) {
+    this.errorsAndWarnings.addWarning(key, message);
+  }
+  public add<K extends AutoTTRecArgName>(key: K, value: AutoTTRecArgs[K]) {
+    if (key in this.autoTTRecArgs) {
+      let message = `Option ${key} was already defined. Was originally ${this.autoTTRecArgs[key]}, but is now being defined to ${value}.`
+      this.addWarning(key, message);
+    }
+    this.autoTTRecArgs[key] = value;
+  }
+
+  private tryAddSameOption_Common<K extends keyof AutoTTRecArgs>(key: K, validValues?: ReadonlyArraySet<AutoTTRecArgs[K]>) {
+    let expectedType = typeof autoTTRecArgsClassObj[key];
+    if (expectedType === "string" || expectedType === "boolean" || expectedType === "number") {
+      let configValue = this.autoTTRecConfig[key];
+      if (configValue !== undefined && configValue !== null) {
+        if (typeof configValue === expectedType) {
+          if (validValues !== undefined) {
+            if (isInSet(validValues.set, configValue)) {
+              this.add(key, configValue);
+            } else {
+              this.addError(key, `${key} should be one of ${listFormatter.format(validValues.arr.map(x => String(x)))}`);
+            }
+          } else {
+            let configValueWithType = configValue as AutoTTRecArgs[K];
+            this.add(key, configValueWithType);
+          }
+        } else {
+          this.addError(key, `${key} should be a ${expectedType}, but got a ${typeof configValue} instead.`);
+        }
+      } else {
+        this.add(key, configValue);
+      }
+    } else {
+      this.addError(key, "Error in determining expected type (please contact the developer).");
+    }
+  }
+
+  public tryAddSameOption<K extends keyof AutoTTRecPrimitiveArgs>(key: K) {
+    this.tryAddSameOption_Common(key);
+  }
+
+  public tryAddSameOptionComplex<K extends AutoTTRecArgName>(key: K, validValues: ReadonlyArraySet<AutoTTRecArgs[K]>) {
+    this.tryAddSameOption_Common(key, validValues);
+  }
+
+  private tryAddGhostAuto(ghostAutoOptionName: GhostAuto,
+    ghostFilenameOptionName: "main-ghost-filename" | "comparison-ghost-filename",
+    ghostLinkOptionName: "chadsoft-ghost-page" | "chadsoft-comparison-ghost-page"
+  ) {
+    let ghostAutoValue = this.autoTTRecConfig[ghostAutoOptionName];
+    if (ghostAutoValue !== null && ghostAutoValue !== undefined) {
+      if (typeof ghostAutoValue === "string") {
+        if (ghostAutoValue.match(ghostPageLinkRegex)) {
+          this.add(ghostLinkOptionName, ghostAutoValue);
+        } else {
+          this.add(ghostFilenameOptionName, ghostAutoValue);
+        }
+      } else {
+        this.addErrorExtended(ghostAutoOptionName, `${ghostAutoOptionName} should be a string, but got ${typeof ghostAutoValue} instead.`);
+      }
+    } else {
+      this.add(ghostFilenameOptionName, ghostAutoValue);
+      this.add(ghostLinkOptionName, ghostAutoValue);
+    }
+  }
+
+  public import() {
+    // add in main ghost
+    this.tryAddSameOption("chadsoft-ghost-page");
+    this.tryAddSameOption("main-ghost-filename");
+    this.tryAddGhostAuto("main-ghost-auto", "main-ghost-filename", "chadsoft-ghost-page");
+
+    // add in comparison ghost
+    this.tryAddSameOption("chadsoft-comparison-ghost-page");
+    this.tryAddSameOption("comparison-ghost-filename");
+    this.tryAddGhostAuto("comparison-ghost-auto", "comparison-ghost-filename", "chadsoft-comparison-ghost-page");
+
+    this.tryAddSameOption("iso-filename");
+    this.tryAddSameOption("szs-filename");
+    this.tryAddSameOption("output-video-filename");
+
+    this.tryAddSameOption("on-200cc");
+    let no200cc = this.autoTTRecConfig["no-200cc"];
+
+    if (no200cc !== null && no200cc !== undefined) {
+      if (typeof no200cc === "boolean") {
+        this.add("on-200cc", !no200cc);
+      } else {
+        this.addErrorExtended("no-200cc", `no-200cc should be a boolean, but got ${typeof no200cc} instead.`);
+      }
+    } else if (no200cc === undefined) {
+      this.add("on-200cc", undefined);
+    }
+
+    this.tryAddSameOptionComplex("timeline", TIMELINES);
+    this.tryAddSameOption("mk-channel-ghost-description");
+    this.tryAddSameOption("track-name");
+    this.tryAddSameOption("top-10-chadsoft");
+    this.tryAddSameOptionComplex("top-10-location", AUTO_TT_REC_TOP_10_LOCATIONS);
+    this.tryAddSameOption("top-10-highlight");
+    if (this.autoTTRecConfig["top-10-censors"] !== null) {
+      this.addWarningExtended("top-10-censors", "top-10-censors currently not supported!");
+    }
+
+    this.tryAddSameOption("top-10-gecko-code-filename");
+    this.tryAddSameOption("no-music");
+    this.tryAddSameOption("music-filename");
+    this.tryAddSameOption("game-volume");
+    this.tryAddSameOption("music-volume");
+    this.tryAddSameOption("start-music-at-beginning");
+    this.tryAddSameOption("no-music-mkchannel");
+    this.tryAddSameOptionComplex("input-display", INPUT_DISPLAYS);
+    this.tryAddSameOptionComplex("speedometer", SPEEDOMETER_STYLES2);
+    this.tryAddSameOptionComplex("speedometer-metric", SPEEDOMETER_METRICS)
+    this.tryAddSameOptionComplex("speedometer-decimal-places", SPEEDOMETER_DECIMAL_PLACES_NUMERIC);
+    if (this.autoTTRecConfig["ending-message"] !== null) {
+      this.addWarningExtended("ending-message", "ending-message currently not supported!");
+    }
+    this.tryAddSameOption("fade-in-at-start");
+    this.tryAddSameOption("ending-delay");
+    this.tryAddSameOptionComplex("dolphin-resolution", DOLPHIN_RESOLUTIONS);
+    this.tryAddSameOption("no-background-blur");
+    this.tryAddSameOption("no-bloom");
+    this.tryAddSameOption("hq-textures");
+    this.tryAddSameOption("extra-hq-textures-folder");
+    this.tryAddSameOption("use-ffv1");
+    this.tryAddSameOptionComplex("encode-type", ENCODE_TYPES);
+    this.tryAddSameOption("crf-value");
+    this.tryAddSameOptionComplex("h26x-preset", H26X_PRESETS);
+    this.tryAddSameOptionComplex("video-codec", VIDEO_CODECS);
+    this.tryAddSameOptionComplex("audio-codec", AUDIO_CODECS);
+    this.tryAddSameOption("encode-size");
+
+    let audioBitrate = this.autoTTRecConfig["audio-bitrate"];
+    if (audioBitrate !== null && audioBitrate !== undefined) {
+      if (typeof audioBitrate === "string" || typeof audioBitrate === "number") {
+        this.add("audio-bitrate", audioBitrate);
+        //if (audioBitrate.charAt(audioBitrate.length - 1) == "k") {
+        //  audioBitrateAsNum = Number(audioBitrate.substring(0, audioBitrate.length - 1));
+        //  if (!Number.isNaN(audioBitrateAsNum)) {
+        //    this.add("audio-bitrate", )
+        //   } else {
+        //    this.addError("audio-bitrate", `audio-bitrate has invalid kbps ("k") format.`);
+        //  }
+        //} else {
+        //  this.addError("audio-bitrate", `audio-bitrate is a string but not in kbps ("k") format.`);
+        //}
+      } else {
+        this.addError("audio-bitrate", `audio-bitrate should be a string or number, but got a ${typeof audioBitrate} instead.`);
+      }
+    } else {
+      this.add("audio-bitrate", audioBitrate);
+    }
+
+    this.tryAddSameOption("pixel-format");
+    this.tryAddSameOption("output-width");
+
+    let aspectRatio16By9 = this.autoTTRecConfig["aspect-ratio-16-by-9"];
+    if (aspectRatio16By9 !== null && aspectRatio16By9 !== undefined) {
+      if (typeof aspectRatio16By9 === "boolean" || typeof aspectRatio16By9 === "string") {
+        let aspectRatio16By9AsStr: string;
+        if (typeof aspectRatio16By9 === "boolean") {
+          aspectRatio16By9AsStr = aspectRatio16By9.toString();
+        } else {
+          aspectRatio16By9AsStr = aspectRatio16By9;
+        }
+        aspectRatio16By9AsStr = aspectRatio16By9AsStr.toLowerCase();
+        if (isInSet(ASPECT_RATIO_16_BY_9_VALUES.set, aspectRatio16By9AsStr)) {
+          this.add("aspect-ratio-16-by-9", aspectRatio16By9AsStr);
+        } else {
+          this.addError("aspect-ratio-16-by-9", "aspect-ratio-16-by-9 should be one of true, false, or auto");
+        }
+      } else {
+        this.addError("aspect-ratio-16-by-9", `aspect-ratio-16-by-9 should be a string or number, but got a ${typeof aspectRatio16By9} instead.`);
+      }
+    } else {
+      this.add("aspect-ratio-16-by-9", aspectRatio16By9);
+    }
+
+    this.tryAddSameOption("youtube-settings");
+    this.tryAddSameOption("extra-gecko-codes-filename");
+
+    this.tryAddSameOption("keep-window");
+    this.tryAddSameOption("encode-only");
+    if (this.autoTTRecConfig["dolphin-volume"] !== null) {
+      this.addWarningExtended("dolphin-volume", "dolphin-volume currently not supported!");
+    }
+    this.tryAddSameOption("input-display-dont-create");
+  }
+}
+
+function importAutoTTRecConfig(autoTTRecConfig: AutoTTRecConfig) {
+  let autoTTRecArgs: AutoTTRecArgs = {};
+  let warnings: string[] = [];
+
+
+  
+
+    //autoTTRecArgs["chadsoft-ghost-page"] = 
+  
+}
 
 class AutoTTRecArgsBuilder {
   private _autoTTRecArgs: AutoTTRecArgs;
   private formData: AutoTTRecConfigFormFieldTypes;
 
   constructor(formData: AutoTTRecConfigFormFieldTypes) {
-    this._autoTTRecArgs = {...DEFAULT_AUTO_TT_REC_ARGS};
+    this._autoTTRecArgs = {};
     this.formData = formData;
   }
 
   // add an argument with the same name and type from the submitted formData
   // to the resulting auto-tt-rec arguments
-  public add<K extends keyof AutoTTRecConfigFormFieldTypes & keyof AutoTTRecArgs>(key: K) {
+  public add<K extends keyof AutoTTRecConfigFormFieldTypes & AutoTTRecArgName>(key: K) {
     this._autoTTRecArgs[key] = this.formData[key];
   }
 
   // simple key value argument add, not taking data from formData
-  public addManual<K extends keyof AutoTTRecArgs>(key: K, value: AutoTTRecArgs[K]) {
+  public addManual<K extends AutoTTRecArgName>(key: K, value: AutoTTRecArgs[K]) {
     this._autoTTRecArgs[key] = value;
   }
-
-  // same value, different key name
-  /*public addDifferentKey<
-    T extends keyof AutoTTRecArgs,
-    U extends keyof AutoTTRecConfigFormFieldTypes,
-    V extends AutoTTRecArgs[T] & AutoTTRecConfigFormFieldTypes[U],    
-    K1 extends keyof Record<T, V>,
-    K2 extends keyof Record<U, V>
-  >(autoTTRecKey: K1, formKey: K2) {
-    this._autoTTRecArgs[autoTTRecKey] = this.formData[formKey];
-  }*/
 
   public get autoTTRecArgs() {
     return this._autoTTRecArgs;
@@ -569,7 +892,11 @@ export function convertFormDataToAutoTTRecArgs(formData: AutoTTRecConfigFormFiel
   if (formData["speedometer-style"] !== "none") {
     argsBuilder.add("speedometer-metric");
     if (formData["speedometer-style"] === "fancy" || formData["speedometer-style"] === "regular") {
-      argsBuilder.addManual("speedometer-decimal-places", Number.parseInt(formData["speedometer-decimal-places-str"]));
+      let numDecimalPlaces = Number.parseInt(formData["speedometer-decimal-places-str"]);
+      if (isInSet(SPEEDOMETER_DECIMAL_PLACES_NUMERIC.set, numDecimalPlaces)) {
+        argsBuilder.addManual("speedometer-decimal-places", numDecimalPlaces);
+      }
+      
     }
   }
 
@@ -597,14 +924,14 @@ export function convertFormDataToAutoTTRecArgs(formData: AutoTTRecConfigFormFiel
     argsBuilder.add("pixel-format");
     argsBuilder.add("dolphin-resolution");
   
-    let outputWidth: number | null;
+    let outputWidth: number | undefined;
   
     console.log("formData['output-width-preset'] 2:", formData["output-width-preset"]);
   
     if (formData["output-width-preset"] === "custom") {
       outputWidth = formData["output-width-custom"];
     } else if (formData["output-width-preset"] === "none") {
-      outputWidth = null;
+      outputWidth = undefined;
     } else {
       outputWidth = Number.parseInt(formData["output-width-preset"]);
     }
@@ -624,4 +951,3 @@ export function convertFormDataToAutoTTRecArgs(formData: AutoTTRecConfigFormFiel
 
   return argsBuilder.autoTTRecArgs;
 }
-

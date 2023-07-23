@@ -4,10 +4,13 @@ import { PixelFormatInput } from "../../form_components/PixelFormatInput";
 import { SizeBasedEncodeSettingsLayout } from "../sub_layouts/SizeBasedEncodeSettingsLayout";
 import { CRFEncodeSettingsLayout } from "../sub_layouts/CRFEncodeSettingsLayout";
 import { FormComplexity } from "../FormComplexityLayout";
+import { makeReadonlyArraySet, ValidValues } from "../../../array-set";
 
 import useRenderCounter from "../../../RenderCounter";
 
-export type EncodeType = "crf" | "size";
+export const ENCODE_TYPES = makeReadonlyArraySet(["crf", "size"] as const);
+
+export type EncodeType = ValidValues<typeof ENCODE_TYPES>;
 
 const PixelFormatInput_Memo = memo(PixelFormatInput);
 

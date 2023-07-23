@@ -8,7 +8,10 @@ import useRenderCounter from "../../RenderCounter";
 import { EncodeType } from "../layout_components/choice_layouts/EncodeSettingsLayout";
 import { AutoTTRecConfigFormFieldTypes } from "../../AutoTTRecFormFieldsAndArgs";
 
-export type VideoCodec = "libx264" | "libx265" | "libvpx-vp9";
+import { makeReadonlyArraySet, ValidValues } from "../../array-set";
+
+export const VIDEO_CODECS = makeReadonlyArraySet(["libx264", "libx265", "libvpx-vp9"] as const);
+export type VideoCodec = ValidValues<typeof VIDEO_CODECS>;
 
 export function VideoCodecInput(props: {encodeType: EncodeType, formComplexity: FormComplexity}) {
   const {register, setValue, getValues} = useFormContextAutoTT();

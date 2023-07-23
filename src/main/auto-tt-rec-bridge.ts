@@ -43,9 +43,11 @@ async function readStream(streamObj : Readable) : Promise<ReadStreamResponse> {
   return {hasData: true, output: output.split("").join("")};
 }
 
-interface AutoTTRecConfig {
-  [key: string]: string | number | boolean
+export interface AutoTTRecConfig {
+  [key: string]: string | number | boolean | null | undefined;
 }
+
+export type AutoTTRecConfigKey = keyof AutoTTRecConfig;
 
 function writeFixedDynamicAutoTTRecArgs(autoTTRecTemplate: AutoTTRecConfig) {
   autoTTRecTemplate["dolphin-folder"] = globalConfig.dolphinPath.replaceAll("\\", "/");

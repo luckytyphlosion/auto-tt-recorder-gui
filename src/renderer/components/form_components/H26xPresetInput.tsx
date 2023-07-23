@@ -1,9 +1,11 @@
 import React from "react";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
+import { makeReadonlyArraySet, ValidValues } from "../../array-set";
+
 import useRenderCounter from "../../RenderCounter";
 
-export type H26xPreset = "ultrafast" | "superfast" | "veryfast" | "faster"
-  | "fast" | "medium" | "slow" | "slower" | "veryslow" | "placebo";
+export const H26X_PRESETS = makeReadonlyArraySet(["ultrafast", "superfast", "veryfast", "faster", "fast", "medium", "slow", "slower", "veryslow", "placebo"] as const);
+export type H26xPreset = ValidValues<typeof H26X_PRESETS>;
 
 export function H26xPresetInput() {
   const {register} = useFormContextAutoTT();

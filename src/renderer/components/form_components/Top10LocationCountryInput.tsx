@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { MusicFilenameInput } from "./MusicFilenameInput";
 
-const countryLocations = [
+export const countryLocations = [
   "Abkhazia",
   "Afghanistan",
   "Åland",

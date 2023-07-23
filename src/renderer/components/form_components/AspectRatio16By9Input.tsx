@@ -2,8 +2,10 @@
 import React, { useState } from "react";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import useRenderCounter from "../../RenderCounter";
+import { makeReadonlyArraySet, ValidValues } from "../../array-set";
 
-export type AspectRatio16By9 = "auto" | "true" | "false";
+export const ASPECT_RATIO_16_BY_9_VALUES = makeReadonlyArraySet(["auto", "true", "false"] as const);
+export type AspectRatio16By9 = ValidValues<typeof ASPECT_RATIO_16_BY_9_VALUES>;
 
 export function AspectRatio16By9Input() {
   const {register} = useFormContextAutoTT();

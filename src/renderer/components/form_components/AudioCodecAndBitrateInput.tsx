@@ -6,9 +6,12 @@ import { Top10LocationRegionalInput } from "./Top10LocationRegionalInput";
 import { AudioBitrateInput } from "./AudioBitrateInput";
 import useRenderCounter from "../../RenderCounter";
 
+import { makeReadonlyArraySet, ValidValues } from "../../array-set";
+
 import { EncodeType } from "../layout_components/choice_layouts/EncodeSettingsLayout";
 
-export type AudioCodec = "libopus" | "aac";
+export const AUDIO_CODECS = makeReadonlyArraySet(["libopus", "aac"] as const);
+export type AudioCodec = ValidValues<typeof AUDIO_CODECS>;
 
 export function AudioCodecAndBitrateInput(props: {encodeType: EncodeType, encodeTypeChanged: boolean}) {
   const {register, getValues} = useFormContextAutoTT();
