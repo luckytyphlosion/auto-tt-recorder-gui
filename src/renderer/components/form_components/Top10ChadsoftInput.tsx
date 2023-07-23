@@ -13,7 +13,7 @@ export function Top10ChadsoftInput() {
           value: true,
           message: "This input is required"
         }, pattern: {
-          value: /^https:\/\/(?:www\.)?chadsoft\.co\.uk\/time-trials\/leaderboard\/[0-1][0-9A-Fa-f]\/[0-9A-Fa-f]{40}\/(?:00|01|02|03|04|05|06)\.html(?:#.*)$/,
+          value: /^https:\/\/(?:www\.)?chadsoft\.co\.uk\/time-trials\/leaderboard\/[0-1][0-9A-Fa-f]\/[0-9A-Fa-f]{40}\/(?:00|01|02|03|04|05|06)\.html(?:#.*)?$/,
           message: "Must be a valid chadsoft leaderboard link."
         }})}
       ></input>

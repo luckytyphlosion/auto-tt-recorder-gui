@@ -16,7 +16,7 @@
 //console.log("console");
 
 import { dialog, ipcMain, app, BrowserWindow } from "electron";
-import { autoUpdater } from "electron-updater";
+import { autoUpdater, UpdateCheckResult, UpdateInfo } from "electron-updater";
 import fsPromises from "fs/promises";
 
 //if (require("electron-squirrel-startup")) {
@@ -46,6 +46,7 @@ if (isDev) {
 }
 
 export let mainWindow: BrowserWindow;
+let mainWindowCreated: boolean = false;
 
 /*
 put dolphin-folder in <..>/Roaming/Auto-TT-Recorder GUI/auto-tt-recorder-gui-working/dolphin
@@ -101,6 +102,12 @@ async function updateAutoTTRecDirectories() {
 }
 
 async function createWindow() {
+  if (mainWindowCreated) {
+    console.log("Main window already created!");
+    return;
+  }
+
+  mainWindowCreated = true;
   loadGlobalConfig(app, "Auto-TT-Recorder GUI");
 
   await updateAutoTTRecDirectories();
@@ -147,9 +154,28 @@ async function createWindow() {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.whenReady().then(() => {
-  autoUpdater.checkForUpdates();
+app.whenReady().then(async () => {
+  let updateCheckResult: UpdateCheckResult | null = await autoUpdater.checkForUpdates();
+  if (updateCheckResult === null) {
+    console.log("updateCheckResult is", updateCheckResult);
+    createWindow();
+  } else {
+    console.log("updateCheckResult:", updateCheckResult);
+  }
+});
+
+autoUpdater.on("update-not-available", (info) => {
+  console.log("update-not-available");
   createWindow();
+});
+
+autoUpdater.on("error", (error: Error) => {
+  console.log("update error");
+  createWindow();
+});
+
+autoUpdater.on("update-downloaded", (info: UpdateInfo) => {
+  autoUpdater.quitAndInstall(false, true);
 });
 
 //app.on("ready", () => {
@@ -165,9 +191,10 @@ app.on('window-all-closed', () => {
   }
 });
 
+/*
 app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
   }
 });
-
+*/

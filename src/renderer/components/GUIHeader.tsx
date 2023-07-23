@@ -1,9 +1,10 @@
 import React from "react";
+import * as versions from "../../versions";
 
 export function GUIHeader() {
   return (
     <div className="auto-tt-rec-notes">
-      <h1 className="title-header">Auto-TT-Recorder GUI (v1.1.0)</h1>
+      <h1 className="title-header">Auto-TT-Recorder GUI ({versions.AUTO_TT_RECORDER_GUI_VERSION})</h1>
       <ul className="auto-tt-rec-notes-first-half">
         <li>All regions are supported, including NTSC-K.</li>
         <li>Supports all relevant features for mkchannel ghost recordings.</li>
