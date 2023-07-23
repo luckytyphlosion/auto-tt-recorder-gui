@@ -4,10 +4,10 @@ import { FileFilter } from "electron";
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
 
 export function SZSFilenameInput() {
-  const {register, setValue} = useFormContextAutoTT();
+  const {register, setValue, getValues} = useFormContextAutoTT();
 
   async function queueOpenDialog(event: React.MouseEvent<HTMLButtonElement>, fileFilters: FileFilter[]) {
-    let response = await window.api.openFileDialog(fileFilters);
+    let response = await window.api.openFileDialog(fileFilters, getValues("szs-filename"), "szs");
     if (response !== "") {
       setValue("szs-filename", response, {shouldTouch: true});      
     }

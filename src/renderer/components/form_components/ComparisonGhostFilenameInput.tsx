@@ -4,10 +4,10 @@ import { FileFilter } from "electron";
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
 
 export function ComparisonGhostFilenameInput() {
-  const {register, setValue} = useFormContextAutoTT();
+  const {register, setValue, getValues} = useFormContextAutoTT();
 
   async function queueOpenDialog(event: React.MouseEvent<HTMLButtonElement>, fileFilters: FileFilter[]) {
-    let response = await window.api.openFileDialog(fileFilters);
+    let response = await window.api.openFileDialog(fileFilters, getValues("comparison-ghost-filename"), "rkgs");
     if (response !== "") {
       setValue("comparison-ghost-filename", response, {shouldTouch: true});
     }

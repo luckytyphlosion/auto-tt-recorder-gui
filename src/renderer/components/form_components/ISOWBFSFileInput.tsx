@@ -10,11 +10,11 @@ import { AutoTTRecConfigFormFieldTypes } from "../../AutoTTRecFormFieldsAndArgs"
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
 
 export function ISOWBFSFileInput() {
-  const {register, setValue} = useFormContextAutoTT();
+  const {register, setValue, getValues} = useFormContextAutoTT();
   const renderCounter = useRenderCounter(false, "ISOWBFSFileInput");
 
   async function queueOpenDialog(event: React.MouseEvent<HTMLButtonElement>, fileFilters: FileFilter[]) {
-    let response = await window.api.openFileDialog(fileFilters);
+    let response = await window.api.openFileDialog(fileFilters, getValues("iso-filename"), "iso-wbfs");
     if (response !== "") {
       setValue("iso-filename", response, {shouldTouch: true});
     }

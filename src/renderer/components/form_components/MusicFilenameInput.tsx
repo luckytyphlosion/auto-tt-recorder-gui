@@ -5,10 +5,10 @@ import { FileFilter } from "electron";
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
 
 export function MusicFilenameInput() {
-  const {register, setValue} = useFormContextAutoTT();
+  const {register, setValue, getValues} = useFormContextAutoTT();
 
   async function queueOpenDialog(event: React.MouseEvent<HTMLButtonElement>, fileFilters: FileFilter[]) {
-    let response = await window.api.openFileDialog(fileFilters);
+    let response = await window.api.openFileDialog(fileFilters, getValues("music-filename"), "music");
     if (response !== "") {
       setValue("music-filename", response, {shouldTouch: true});
     }

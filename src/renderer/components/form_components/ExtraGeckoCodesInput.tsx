@@ -77,7 +77,7 @@ export function ExtraGeckoCodesInput(props: {isAutoTTRecRunning: boolean}) {
   }
 
   async function queueOpenDialogAndRead(event: React.MouseEvent<HTMLButtonElement>, fileFilters: FileFilter[]) {
-    let filenameAndContents: FilenameAndContents = await window.api.openFileDialogAndRead(fileFilters);
+    let filenameAndContents: FilenameAndContents = await window.api.openFileDialogAndRead(fileFilters, getValues("extra-gecko-codes-filename"), "extra-gecko-codes");
     if (filenameAndContents.filename !== "") {
       updateExtraGeckoCodesFilename(filenameAndContents.filename);
       setValue("extra-gecko-codes-contents", filenameAndContents.contents, {shouldTouch: true});
@@ -91,7 +91,7 @@ export function ExtraGeckoCodesInput(props: {isAutoTTRecRunning: boolean}) {
     let success: boolean;
 
     try {
-      let response = await window.api.saveFileDialogAndWriteText(fileFilters, output, defaultPath);
+      let response = await window.api.saveFileDialogAndWriteText(fileFilters, output, defaultPath, "extra-gecko-codes");
       if (response !== "") {
         updateExtraGeckoCodesFilename(response);
         success = true;

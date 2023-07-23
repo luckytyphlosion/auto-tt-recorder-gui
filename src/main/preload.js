@@ -2,11 +2,11 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
 contextBridge.exposeInMainWorld("api", {
-  openFileDialog: (fileFilters) => ipcRenderer.invoke("open-file-dialog", fileFilters),
-  openFolderDialog: () => ipcRenderer.invoke("open-folder-dialog"),
-  saveFileDialog: (fileFilters) => ipcRenderer.invoke("save-file-dialog", fileFilters),
-  openFileDialogAndRead: (fileFilters) => ipcRenderer.invoke("open-file-dialog-and-read", fileFilters),
-  saveFileDialogAndWriteText: (fileFilters, output, defaultPath) => ipcRenderer.invoke("save-file-dialog-and-write-text", fileFilters, output, defaultPath),
+  openFileDialog: (fileFilters, lastFilename, dialogId) => ipcRenderer.invoke("open-file-dialog", fileFilters, lastFilename, dialogId),
+  openFolderDialog: (lastFolderName, dialogId) => ipcRenderer.invoke("open-folder-dialog", lastFolderName, dialogId),
+  openFileDialogAndRead: (fileFilters, lastFilename, dialogId) => ipcRenderer.invoke("open-file-dialog-and-read", fileFilters, lastFilename, dialogId),
+  saveFileDialog: (fileFilters, lastFilename, dialogId) => ipcRenderer.invoke("save-file-dialog", fileFilters, lastFilename, dialogId),
+  saveFileDialogAndWriteText: (fileFilters, output, lastFilename, dialogId) => ipcRenderer.invoke("save-file-dialog-and-write-text", fileFilters, output, lastFilename, dialogId),
   overwriteTextFile: (outputFilename, output) => ipcRenderer.invoke("overwrite-text-file", outputFilename, output),
   spawnAutoTTRec: (templateFilename, autoTTRecArgs) => ipcRenderer.invoke("spawn-auto-tt-rec", templateFilename, autoTTRecArgs),
   waitAutoTTRec: () => ipcRenderer.invoke("wait-auto-tt-rec"),

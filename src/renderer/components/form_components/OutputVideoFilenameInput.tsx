@@ -12,7 +12,7 @@ export function OutputVideoFilenameInput(props: {noTop10CategoryIsNoEncode: bool
   const renderCounter = useRenderCounter(false, "OutputVideoFilenameInput");
 
   async function queueSaveDialog(event: React.MouseEvent<HTMLButtonElement>, fileFilters: FileFilter[]) {
-    let response = await window.api.saveFileDialog(fileFilters);
+    let response = await window.api.saveFileDialog(fileFilters, getValues("output-video-filename"), "output-video");
     if (response !== "") {
       setValue("output-video-filename", response, {shouldTouch: true});
     }

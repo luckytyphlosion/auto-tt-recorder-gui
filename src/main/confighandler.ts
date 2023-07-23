@@ -11,16 +11,30 @@ import * as versions from "../versions";
 
 export let globalConfig: Config;
 
+export interface SavedDialogPathnames {
+  "iso-wbfs": string,
+  "music": string,
+  "rkgs": string,
+  "extra-gecko-codes": string,
+  "extra-hq-textures": string,
+  "output-video": string,
+  "szs": string,
+  "top-10-gecko-code": string,
+}
+
+export type DialogId = keyof SavedDialogPathnames;
+
 interface ConfigOptions {
   autoTTRecorderVersion: string,
   guiVersion: string,
-  dolphinVersion: string
+  dolphinVersion: string,
+  savedDialogPathnames: SavedDialogPathnames,
 }
 
 export class Config {
   app: App;
   fileIOMutex: Mutex;
-  options: ConfigOptions;
+  _options: ConfigOptions;
   configFilepath: string;
 
   // paths
@@ -37,7 +51,7 @@ export class Config {
     this.userDataPath = path.resolve(appDataPath, name, "auto-tt-recorder-gui-working");
     console.log("this.userDataPath:", this.userDataPath);
     this.configFilepath = path.resolve(this.userDataPath, "config.json");
-    this.options = this.readConfig();
+    this._options = this.readConfig();
     this.dolphinPath = path.resolve(this.userDataPath, "dolphin");
     console.log("this.workingDolphinPath:", this.dolphinPath);
     this.storagePath = path.resolve(this.userDataPath, "storage");
@@ -55,6 +69,16 @@ export class Config {
       autoTTRecorderVersion: versions.AUTO_TT_RECORDER_VERSION,
       guiVersion: versions.AUTO_TT_RECORDER_GUI_VERSION,
       dolphinVersion: versions.DOLPHIN_VERSION,
+      savedDialogPathnames: {
+        "iso-wbfs": "",
+        "music": "",
+        "rkgs": "",
+        "extra-gecko-codes": "",
+        "extra-hq-textures": "",
+        "output-video": "",
+        "szs": "",
+        "top-10-gecko-code": ""
+      }
     };
   }
 
@@ -95,9 +119,9 @@ export class Config {
       partialOptions = {};
     }
 
-    this.options = this.fillOptionsWithDefaults(partialOptions);
+    this._options = this.fillOptionsWithDefaults(partialOptions);
     this.writeConfig().then();
-    return this.options;
+    return this._options;
   }
 
   async writeConfig() {
@@ -108,12 +132,20 @@ export class Config {
   }
 
   async updateVersions() {
-    this.options.autoTTRecorderVersion = versions.AUTO_TT_RECORDER_VERSION;
-    this.options.guiVersion = versions.AUTO_TT_RECORDER_GUI_VERSION;
-    this.options.dolphinVersion = versions.DOLPHIN_VERSION;
+    this._options.autoTTRecorderVersion = versions.AUTO_TT_RECORDER_VERSION;
+    this._options.guiVersion = versions.AUTO_TT_RECORDER_GUI_VERSION;
+    this._options.dolphinVersion = versions.DOLPHIN_VERSION;
     await this.writeConfig();
   }
 
+  get options() {
+    return this._options;
+  }
+
+  async setNewDialogPathnameAndSave(dialogId: DialogId, newDialogPathname: string) {
+    this._options.savedDialogPathnames[dialogId] = newDialogPathname;
+    await this.writeConfig();
+  }
 }
 
 export function loadGlobalConfig(app: App, name: string) {

@@ -10,12 +10,12 @@ import { AutoTTRecConfigFormFieldTypes } from "../../AutoTTRecFormFieldsAndArgs"
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
 
 export function ExtraHQTexturesFolderInput() {
-  const {register, setValue} = useFormContextAutoTT();
+  const {register, setValue, getValues} = useFormContextAutoTT();
   const renderCounter = useRenderCounter(false, "ExtraHQTexturesFolderInput");
   const extraHQTexturesFolderEnable = useWatchAutoTT({name: "extra-hq-textures-folder-enable"});
 
   async function queueOpenFolderDialog(event: React.MouseEvent<HTMLButtonElement>) {
-    let response = await window.api.openFolderDialog();
+    let response = await window.api.openFolderDialog(getValues("extra-hq-textures-folder"), "extra-hq-textures");
     if (response !== "") {
       setValue("extra-hq-textures-folder", response, {shouldTouch: true});
     }

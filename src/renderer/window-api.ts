@@ -2,15 +2,16 @@ import { FileFilter, IpcRendererEvent } from "electron";
 import { AutoTTRecResponse } from "../enums";
 import { AutoTTRecArgs } from "./AutoTTRecFormFieldsAndArgs";
 import { FilenameAndContents } from "../shared-types";
+import { DialogId } from "../main/confighandler";
 
 declare global {
   interface Window {
     api: {
-      openFileDialog: (fileFilters: FileFilter[]) => Promise<string>;
-      openFolderDialog: () => Promise<string>;
-      openFileDialogAndRead: (fileFilters: FileFilter[]) => Promise<FilenameAndContents>;
-      saveFileDialog: (fileFilters: FileFilter[]) => Promise<string>;
-      saveFileDialogAndWriteText: (fileFilters: FileFilter[], output: string, defaultPath: string | undefined) => Promise<string>;
+      openFileDialog: (fileFilters: FileFilter[], lastFilename: string | undefined, dialogId: DialogId) => Promise<string>;
+      openFolderDialog: (lastFolderName: string | undefined, dialogId: DialogId) => Promise<string>;
+      openFileDialogAndRead: (fileFilters: FileFilter[], lastFilename: string | undefined, dialogId: DialogId) => Promise<FilenameAndContents>;
+      saveFileDialog: (fileFilters: FileFilter[], lastFilename: string | undefined, dialogId: DialogId) => Promise<string>;
+      saveFileDialogAndWriteText: (fileFilters: FileFilter[], output: string, lastFilename: string | undefined, dialogId: DialogId) => Promise<string>;
       overwriteTextFile: (outputFilename: string, output: string) => Promise<void>;
       spawnAutoTTRec: (templateFilename: string, autoTTRecArgs: AutoTTRecArgs) => Promise<boolean>;
       waitAutoTTRec: () => Promise<AutoTTRecResponse>;

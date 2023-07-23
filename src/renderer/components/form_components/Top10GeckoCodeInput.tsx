@@ -79,7 +79,7 @@ export function Top10GeckoCodeInput(props: {isAutoTTRecRunning: boolean}) {
   }
 
   async function queueOpenDialogAndRead(event: React.MouseEvent<HTMLButtonElement>, fileFilters: FileFilter[]) {
-    let filenameAndContents: FilenameAndContents = await window.api.openFileDialogAndRead(fileFilters);
+    let filenameAndContents: FilenameAndContents = await window.api.openFileDialogAndRead(fileFilters, getValues("top-10-gecko-code-filename"), "top-10-gecko-code");
     if (filenameAndContents.filename !== "") {
       updateTop10GeckoCodeFilename(filenameAndContents.filename);
       setValue("top-10-gecko-code-contents", filenameAndContents.contents, {shouldTouch: true});
@@ -93,7 +93,7 @@ export function Top10GeckoCodeInput(props: {isAutoTTRecRunning: boolean}) {
     let success: boolean;
 
     try {
-      let response = await window.api.saveFileDialogAndWriteText(fileFilters, output, defaultPath);
+      let response = await window.api.saveFileDialogAndWriteText(fileFilters, output, defaultPath, "top-10-gecko-code");
       if (response !== "") {
         updateTop10GeckoCodeFilename(response);
         success = true;

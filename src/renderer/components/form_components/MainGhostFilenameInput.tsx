@@ -6,10 +6,10 @@ import { Set200ccInput } from "./Set200ccInput";
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
 
 export function MainGhostFilenameInput() {
-  const {register, setValue} = useFormContextAutoTT();
+  const {register, setValue, getValues} = useFormContextAutoTT();
 
   async function queueOpenDialog(event: React.MouseEvent<HTMLButtonElement>, fileFilters: FileFilter[]) {
-    let response = await window.api.openFileDialog(fileFilters);
+    let response = await window.api.openFileDialog(fileFilters, getValues("main-ghost-filename"), "rkgs");
     if (response !== "") {
       setValue("main-ghost-filename", response, {shouldTouch: true});
     }
