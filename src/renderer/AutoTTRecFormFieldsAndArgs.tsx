@@ -93,9 +93,9 @@ export class AutoTTRecConfigFormFieldTypesClass {
   "extra-hq-textures-folder-enable": boolean = false; // checkbox
   "extra-hq-textures-folder": string = ""; // arbitrary
   "fade-in-at-start": boolean = false; // checkbox
-  "form-complexity": FormComplexity = FormComplexity.SIMPLE;
-  "game-volume-slider": number = 100;
-  "game-volume-numberinput": number = 100;
+  "form-complexity": FormComplexity = FormComplexity.SIMPLE; // choice
+  "game-volume-slider": number = 100; // number
+  "game-volume-numberinput": number = 100; // number
   "h26x-preset": H26xPreset = DEBUG_PREFILLED_DEFAULTS ? "ultrafast" : "slow";
   "hq-textures": boolean = true; // checkbox
   "input-display": InputDisplay = "auto";
@@ -141,7 +141,7 @@ export class AutoTTRecConfigFormFieldTypesClass {
   "track-name-type": TrackNameType = "auto";
   "use-ffv1": boolean = false;
   "video-codec": VideoCodec = "libx264";
-  "youtube-settings": boolean | "<FILLME>" = true;
+  "youtube-settings": boolean | undefined = true;
 }
 
 export interface AutoTTRecConfigFormFieldTypes extends AutoTTRecConfigFormFieldTypesClass {};
@@ -161,7 +161,7 @@ export type AutoTTRecConfigFormStringFieldTypes = Pick<AutoTTRecConfigFormFieldT
 
 export type AutoTTRecConfigFormTriCheckboxFieldTypes = Pick<AutoTTRecConfigFormFieldTypes, {
   [K in keyof AutoTTRecConfigFormFieldTypes]-?:
-    IfEquals<AutoTTRecConfigFormFieldTypes[K], boolean | "<FILLME>", K, never>
+    IfEquals<AutoTTRecConfigFormFieldTypes[K], boolean | undefined, K, never>
 }[keyof AutoTTRecConfigFormFieldTypes]>;
 
 const AUTO_TT_REC_TOP_10_LOCATIONS = makeReadonlyArraySet(["ww", "worldwide", ...countryLocations, ...regionalLocations] as const);
@@ -564,9 +564,6 @@ class AutoTTRecArgsBuilder {
   // to the resulting auto-tt-rec arguments
   public add<K extends keyof AutoTTRecConfigFormFieldTypes & AutoTTRecArgName>(key: K) {
     let formDataValue = this.formData[key];
-    if (formDataValue === "<FILLME>") {
-      formDataValue = undefined;
-    }
     this._autoTTRecArgs[key] = this.formData[key];
   }
 
@@ -721,8 +718,8 @@ function addMusicPresentationToAutoTTRecArgs(formData: AutoTTRecConfigFormFieldT
 function excludeFILLMEFromAutoTTRecConfigFormData(formData: AutoTTRecConfigFormFieldTypes) {
   let formDataNoFILLMEPartial: PartialAutoTTRecConfigFormFieldTypesWithoutFILLME = {};
 
-  export type AutoTTRecConfigFormFieldTypesWithoutFILLME = ExcludeFILLME<AutoTTRecConfigFormFieldTypes>;
-  export type PartialAutoTTRecConfigFormFieldTypesWithoutFILLME = Partial<AutoTTRecConfigFormFieldTypesWithoutFILLME>;
+  //export type AutoTTRecConfigFormFieldTypesWithoutFILLME = ExcludeFILLME<AutoTTRecConfigFormFieldTypes>;
+  //export type PartialAutoTTRecConfigFormFieldTypesWithoutFILLME = Partial<AutoTTRecConfigFormFieldTypesWithoutFILLME>;
   
 }
 
