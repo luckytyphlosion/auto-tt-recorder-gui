@@ -49,6 +49,8 @@ import { MusicPresentation } from "./components/form_components/MusicPresentatio
 import { FormComplexity } from "./components/layout_components/FormComplexityLayout";
 import { Top10TitleType } from "./components/form_components/Top10TitleInput";
 
+import { Set200cc } from "./components/form_components/Set200ccInput";
+
 import { AutoTTRecConfig } from "../main/auto-tt-rec-bridge";
 
 import { ValidValues, ReadonlyArraySet, makeReadonlyArraySet } from "./array-set";
@@ -58,161 +60,90 @@ export type Timeline = ValidValues<typeof TIMELINES>;
 
 export type ExtendedTimeline = "noencode" | "ghostonly" | "ghostselect" | "mkchannel" | "top10chadsoft" | "top10gecko";
 
-export interface AutoTTRecConfigFormFieldTypes {
-  "aspect-ratio-16-by-9": AspectRatio16By9,
-  "audio-bitrate": number,
-  "audio-bitrate-displayed": number,
-  "audio-bitrate-unit": AudioBitrateUnit,
-  "audio-codec": AudioCodec,
-  "background-music-source": BackgroundMusicSource,
-  "chadsoft-comparison-ghost-page": string,
-  "chadsoft-ghost-page": string,
-  "comparison-ghost-filename": string,
-  "comparison-ghost-source": ComparisonGhostSource,
-  "crf-value": number,
-  "dolphin-resolution": DolphinResolution,
-  "encode-only": boolean,
-  "encode-size": number,
-  "encode-size-displayed": number,
-  "encode-size-unit": EncodeSizeUnit,
-  "encode-type": EncodeType,
-  "ending-delay": number,
-  "extra-gecko-codes-enable": boolean,
-  "extra-gecko-codes-contents": string,
-  "extra-gecko-codes-filename": string,
-  "extra-gecko-codes-unsaved": boolean,
-  "extra-hq-textures-folder-enable": boolean,
-  "extra-hq-textures-folder": string,
-  "fade-in-at-start": boolean,
-  "form-complexity": FormComplexity,
-  "game-volume-slider": number,
-  "game-volume-numberinput": number,
-  "h26x-preset": H26xPreset,
-  "hq-textures": boolean,
-  "input-display": ValidValues<typeof INPUT_DISPLAYS>,
-  "input-display-dont-create": boolean,
-  "iso-filename": string,
-  "keep-window": boolean,
-  "main-ghost-filename": string,
-  "main-ghost-source": MainGhostSource,
-  "mk-channel-ghost-description": string,
-  "music-filename": string,
-  "music-volume-numberinput": number,
-  "music-volume-slider": number,
-  "no-background-blur": boolean,
-  "no-bloom": boolean,
-  "no-music": boolean,
-  "no-top-10-category": NoTop10Category,
-  "output-video-filename": string,
-  "output-width-custom": number,
-  "output-width-preset": OutputWidthPreset,
-  "output-video-file-format": OutputVideoFileFormat,
-  "pixel-format": string,
-  "set-200cc": string,
-  "speedometer-decimal-places-str": SpeedometerDecimalPlaces,
-  "speedometer-style": SpeedometerStyle,
-  "speedometer-metric": SpeedometerMetric,
-  "music-presentation": MusicPresentation,
-  "szs-filename": string,
-  "szs-source": SZSSource,
-  "timeline-category": TimelineCategory,
-  "top-10-chadsoft": string,
-  "top-10-gecko-code-location-region": Top10GeckoCodeLocationRegion,
-  "top-10-gecko-code-contents": string,
-  "top-10-gecko-code-filename": string,
-  "top-10-gecko-code-unsaved": boolean,
-  "top-10-highlight-enable": boolean,
-  "top-10-highlight": number,
-  "top-10-location-country-location": Top10LocationCountry,
-  "top-10-location-region": Top10LocationRegion,
-  "top-10-location-regional-location": Top10LocationRegional,
-  "top-10-title": string,
-  "top-10-title-type": Top10TitleType,
-  "track-name": string,
-  "track-name-type": TrackNameType,
-  "use-ffv1": boolean,
-  "video-codec": VideoCodec,
-  "youtube-settings": boolean,
-}
-
 const DEBUG_PREFILLED_DEFAULTS = false;
 
-export const DEFAULT_FORM_VALUES: AutoTTRecConfigFormFieldTypes = {
-  "aspect-ratio-16-by-9": "auto",
-  "audio-bitrate": 128000,
-  "audio-bitrate-displayed": 128,
-  "audio-bitrate-unit": "kbps",
-  "audio-codec": "libopus",
-  "background-music-source": DEBUG_PREFILLED_DEFAULTS ? "game-bgm" : "music-filename",
-  "chadsoft-comparison-ghost-page": "",
-  "chadsoft-ghost-page": DEBUG_PREFILLED_DEFAULTS ? "https://www.chadsoft.co.uk/time-trials/rkgd/D3/25/D29456963F8A9C5D7D9A8949118A19873EA6.html" : "",
-  "comparison-ghost-filename": "",
-  "comparison-ghost-source": "none",
-  "crf-value": 15,
-  "dolphin-resolution": DEBUG_PREFILLED_DEFAULTS ? "480p" : "1440p",
-  "encode-only": false,
-  "encode-size": 52428800,
-  "encode-size-displayed": 50,
-  "encode-size-unit": "mib",
-  "encode-type": "crf",
-  "ending-delay": 600,
-  "extra-gecko-codes-enable": false,
-  "extra-gecko-codes-contents": "",
-  "extra-gecko-codes-filename": "",
-  "extra-gecko-codes-unsaved": false,
-  "extra-hq-textures-folder-enable": false,
-  "extra-hq-textures-folder": "",
-  "fade-in-at-start": false,
-  "form-complexity": FormComplexity.SIMPLE,
-  "game-volume-slider": 100,
-  "game-volume-numberinput": 100,
-  "h26x-preset": DEBUG_PREFILLED_DEFAULTS ? "ultrafast" : "slow",
-  "hq-textures": true,
-  "input-display": "auto",
-  "input-display-dont-create": false,
-  "iso-filename": DEBUG_PREFILLED_DEFAULTS ? "C:\\Users\\User\\Documents\\RMCE 01\\RMCE01.iso" : "",
-  "keep-window": true,
-  "main-ghost-filename": "",
-  "main-ghost-source": "chadsoft",
-  "mk-channel-ghost-description": "Ghost Data",
-  "music-presentation": "normal",
-  "music-filename": "",
-  "music-volume-numberinput": 100,
-  "music-volume-slider": 100,
-  "no-background-blur": true,
-  "no-bloom": false,
-  "no-music": false,
-  "no-top-10-category": "mkchannel",
-  "output-video-filename": DEBUG_PREFILLED_DEFAULTS ? "C:\\Users\\User\\Documents\\RMCE 01\\guitest1.mp4" : "",
-  "output-video-file-format": "mp4",
-  "output-width-custom": NaN,
-  "output-width-preset": DEBUG_PREFILLED_DEFAULTS ? "none" : "2560",
-  "pixel-format": "yuv420p",
-  "set-200cc": "no-200cc",
-  "speedometer-decimal-places-str": "1",
-  "speedometer-style": "fancy",
-  "speedometer-metric": "engine",
-  "szs-filename": "",
-  "szs-source": "automatic",
-  "timeline-category": "notop10",
-  "top-10-chadsoft": "",
-  "top-10-gecko-code-location-region": "worldwide",
-  "top-10-gecko-code-contents": "",
-  "top-10-gecko-code-filename": "",
-  "top-10-gecko-code-unsaved": false,      
-  "top-10-highlight-enable": true,
-  "top-10-highlight": 1,
-  "top-10-location-country-location": "Abkhazia",
-  "top-10-location-region": "worldwide",
-  "top-10-location-regional-location": "Europe",
-  "top-10-title": "",
-  "top-10-title-type": "auto",
-  "track-name": DEBUG_PREFILLED_DEFAULTS ? "Mario Circuit" : "",
-  "track-name-type": "auto",
-  "use-ffv1": false,
-  "video-codec": "libx264",
-  "youtube-settings": true,
-};
+export class AutoTTRecConfigFormFieldTypesClass {
+  "aspect-ratio-16-by-9": AspectRatio16By9 = "auto";
+  "audio-bitrate": number = 128000;
+  "audio-bitrate-displayed": number = 128;
+  "audio-bitrate-unit": AudioBitrateUnit = "kbps";
+  "audio-codec": AudioCodec = "libopus";
+  "background-music-source": BackgroundMusicSource = DEBUG_PREFILLED_DEFAULTS ? "game-bgm" : "music-filename";
+  "chadsoft-comparison-ghost-page": string = "";
+  "chadsoft-ghost-page": string = DEBUG_PREFILLED_DEFAULTS ? "https://www.chadsoft.co.uk/time-trials/rkgd/D3/25/D29456963F8A9C5D7D9A8949118A19873EA6.html" : "";
+  "comparison-ghost-filename": string = "";
+  "comparison-ghost-source": ComparisonGhostSource = "none";
+  "crf-value": number = 15;
+  "dolphin-resolution": DolphinResolution = DEBUG_PREFILLED_DEFAULTS ? "480p" : "1440p";
+  "encode-only": boolean = false;
+  "encode-size": number = 52428800;
+  "encode-size-displayed": number = 50;
+  "encode-size-unit": EncodeSizeUnit = "mib";
+  "encode-type": EncodeType = "crf";
+  "ending-delay": number = 600;
+  "extra-gecko-codes-enable": boolean = false;
+  "extra-gecko-codes-contents": string = "";
+  "extra-gecko-codes-filename": string = "";
+  "extra-gecko-codes-unsaved": boolean = false;
+  "extra-hq-textures-folder-enable": boolean = false;
+  "extra-hq-textures-folder": string = "";
+  "fade-in-at-start": boolean = false;
+  "form-complexity": FormComplexity = FormComplexity.SIMPLE;
+  "game-volume-slider": number = 100;
+  "game-volume-numberinput": number = 100;
+  "h26x-preset": H26xPreset = DEBUG_PREFILLED_DEFAULTS ? "ultrafast" : "slow";
+  "hq-textures": boolean = true;
+  "input-display": InputDisplay = "auto";
+  "input-display-dont-create": boolean = false;
+  "iso-filename": string = DEBUG_PREFILLED_DEFAULTS ? "C:\\Users\\User\\Documents\\RMCE 01\\RMCE01.iso" : "";
+  "keep-window": boolean = true;
+  "main-ghost-filename": string = "";
+  "main-ghost-source": MainGhostSource = "chadsoft";
+  "mk-channel-ghost-description": string = "Ghost Data";
+  "music-filename": string = "";
+  "music-presentation": MusicPresentation = "normal";
+  "music-volume-numberinput": number = 100;
+  "music-volume-slider": number = 100;
+  "no-background-blur": boolean = true;
+  "no-bloom": boolean = false;
+  "no-music": boolean = false;
+  "no-top-10-category": NoTop10Category = "mkchannel";
+  "output-video-filename": string = DEBUG_PREFILLED_DEFAULTS ? "C:\\Users\\User\\Documents\\RMCE 01\\guitest1.mp4" : "";
+  "output-video-file-format": OutputVideoFileFormat = "mp4";
+  "output-width-custom": number = NaN;
+  "output-width-preset": OutputWidthPreset = DEBUG_PREFILLED_DEFAULTS ? "none" : "2560";
+  "pixel-format": string = "yuv420p";
+  "set-200cc": Set200cc = "no-200cc";
+  "speedometer-decimal-places-str": SpeedometerDecimalPlaces = "1";
+  "speedometer-style": SpeedometerStyle = "fancy";
+  "speedometer-metric": SpeedometerMetric = "engine";
+  "szs-filename": string = "";
+  "szs-source": SZSSource = "automatic";
+  "timeline-category": TimelineCategory = "notop10";
+  "top-10-chadsoft": string = "";
+  "top-10-gecko-code-location-region": Top10GeckoCodeLocationRegion = "worldwide";
+  "top-10-gecko-code-contents": string = "";
+  "top-10-gecko-code-filename": string = "";
+  "top-10-gecko-code-unsaved": boolean = false;
+  "top-10-highlight-enable": boolean = true;
+  "top-10-highlight": number = 1;
+  "top-10-location-country-location": Top10LocationCountry = "Abkhazia";
+  "top-10-location-region": Top10LocationRegion = "worldwide";
+  "top-10-location-regional-location": Top10LocationRegional = "Europe";
+  "top-10-title": string = "";
+  "top-10-title-type": Top10TitleType = "auto";
+  "track-name": string = DEBUG_PREFILLED_DEFAULTS ? "Mario Circuit" : "";
+  "track-name-type": TrackNameType = "auto";
+  "use-ffv1": boolean = false;
+  "video-codec": VideoCodec = "libx264";
+  "youtube-settings": boolean = true;
+}
+
+export interface AutoTTRecConfigFormFieldTypes extends AutoTTRecConfigFormFieldTypesClass {};
+
+const autoTTRecConfigFormFieldTypesClassObj = new AutoTTRecConfigFormFieldTypesClass();
+
+export const DEFAULT_FORM_VALUES: AutoTTRecConfigFormFieldTypes = autoTTRecConfigFormFieldTypesClassObj;
 
 const AUTO_TT_REC_TOP_10_LOCATIONS = makeReadonlyArraySet(["ww", "worldwide", ...countryLocations, ...regionalLocations] as const);
 type Top10LocationFull = ValidValues<typeof AUTO_TT_REC_TOP_10_LOCATIONS>;
