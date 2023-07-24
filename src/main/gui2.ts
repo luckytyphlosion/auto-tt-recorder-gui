@@ -3,6 +3,8 @@ import { dialog, IpcMainInvokeEvent, FileFilter, OpenDialogOptions, SaveDialogOp
 import { mainWindow } from "./electron";
 import { FilenameAndContents } from "../shared-types";
 import fsPromises from "fs/promises";
+import fs from "fs";
+
 import { DialogId, globalConfig } from "./confighandler";
 
 function retrieveLastPathname(lastPathname: string | undefined, dialogId: DialogId) {
@@ -114,4 +116,20 @@ export async function saveFileDialogAndWriteText(event: IpcMainInvokeEvent, file
 
 export async function overwriteTextFile(event: IpcMainInvokeEvent, outputFilename: string, output: string) {
   await fsPromises.writeFile(outputFilename, output, "utf8");
+}
+
+async function fsAccessHelper(filename: string, mode: number): Promise<boolean> {
+  try {
+    await fsPromises.access(filename, mode);
+    return true;
+  } catch {
+    return false;
+  }
+}
+export async function isFileReadable(event: IpcMainInvokeEvent, filename: string): Promise<boolean> {
+  return fsAccessHelper(filename, fs.constants.R_OK);
+}
+
+export async function isFileWritable(event: IpcMainInvokeEvent, filename: string): Promise<boolean> {
+  return !fsAccessHelper(filename, fs.constants.X_OK) || fsAccessHelper(filename, fs.constants.W_OK);
 }

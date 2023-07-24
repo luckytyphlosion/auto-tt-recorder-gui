@@ -3,6 +3,7 @@ import useRenderCounter from "../../RenderCounter";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { FileFilter } from "electron";
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
+import { isFileReadable } from "../../util"
 
 export function MusicFilenameInput() {
   const {register, setValue, getValues} = useFormContextAutoTT();
@@ -21,7 +22,7 @@ export function MusicFilenameInput() {
         {...register("music-filename", {required: {
           value: true,
           message: "This input is required."
-        }})}
+        }, validate: isFileReadable})}
       ></input>
       <button onClick={event => {
         queueOpenDialog(event, [

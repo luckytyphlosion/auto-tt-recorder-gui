@@ -321,6 +321,11 @@ type AutoTTRecPrimitiveArgs = Pick<AutoTTRecArgs, {
     >
 }[keyof AutoTTRecArgs]>;
 
+export type AutoTTRecConfigFormStringFieldTypes = Pick<AutoTTRecConfigFormFieldTypes, {
+  [K in keyof AutoTTRecConfigFormFieldTypes]-?:
+    IfEquals<AutoTTRecConfigFormFieldTypes[K], string, K, never>
+}[keyof AutoTTRecConfigFormFieldTypes]>;
+
 interface AutoTTRecConfigImporterErrorOrWarningMessage {
   isWarning: boolean,
   message: string

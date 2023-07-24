@@ -48,13 +48,14 @@ export function Top10GeckoCodeInput(props: {isAutoTTRecRunning: boolean}) {
   function clearGeckoCodeFields() {
     updateTop10GeckoCodeFilename("");
     setValue("top-10-gecko-code-contents", "", {shouldTouch: true});
-    setGeckoCodeUnsaved(false);
+    updateGeckoCodeUnsaved(false);
   }
 
-  function updateGeckoCodeUnsaved() {
-    setGeckoCodeUnsaved(true);
-    setValue("top-10-gecko-code-unsaved", true, {shouldTouch: true});
+  function updateGeckoCodeUnsaved(newGeckoCodeUnsaved: boolean) {
+    setGeckoCodeUnsaved(newGeckoCodeUnsaved);
+    setValue("top-10-gecko-code-unsaved", newGeckoCodeUnsaved, {shouldTouch: true});
   }
+
   function setSaveModalOpenAndFrom(newModalOpen: boolean, newSaveModalFrom: SaveModalFrom) {
     setModalOpen(newModalOpen);
     setSaveModalFrom(newSaveModalFrom);
@@ -83,7 +84,7 @@ export function Top10GeckoCodeInput(props: {isAutoTTRecRunning: boolean}) {
     if (filenameAndContents.filename !== "") {
       updateTop10GeckoCodeFilename(filenameAndContents.filename);
       setValue("top-10-gecko-code-contents", filenameAndContents.contents, {shouldTouch: true});
-      setGeckoCodeUnsaved(false);
+      updateGeckoCodeUnsaved(false);
     }
   }
 
@@ -106,7 +107,7 @@ export function Top10GeckoCodeInput(props: {isAutoTTRecRunning: boolean}) {
     }
 
     if (success) {
-      setGeckoCodeUnsaved(false);
+      updateGeckoCodeUnsaved(false);
     }
 
     return success;
@@ -143,11 +144,18 @@ export function Top10GeckoCodeInput(props: {isAutoTTRecRunning: boolean}) {
     setSaveModalOpenAndFrom(false, SaveModalFrom.CLOSING);
   }
 
-  function geckoCodeValidator(): ValidateResult {
+  async function geckoCodeValidator(): Promise<ValidateResult> {
     setTop10GeckoCodeInvalid(false);
     if (isGeckoCodeUnsaved || top10GeckoCodeFilename === "") {
       return "Please save your gecko code first.";
     } else {
+      let isGeckoCodeFilenameReadable = await window.api.isFileReadable(top10GeckoCodeFilename);
+      console.log("isGeckoCodeFilenameReadable:", isGeckoCodeFilenameReadable);
+      if (!isGeckoCodeFilenameReadable) {
+        updateGeckoCodeUnsaved(true);
+        return "Top 10 Gecko Code file does not exist (deleted or renamed outside of the program) or is not readable."
+      }
+
       let top10GeckoCodeContents = getValues("top-10-gecko-code-contents");
       let lines = top10GeckoCodeContents.split("\n");
       let foundTop10Code = false;
@@ -263,7 +271,7 @@ export function Top10GeckoCodeInput(props: {isAutoTTRecRunning: boolean}) {
               theme={borderTheme}
               editable={!props.isAutoTTRecRunning}
               onChange={(event) => {
-                updateGeckoCodeUnsaved();
+                updateGeckoCodeUnsaved(true);
                 onChange(event);
               }}
               onBlur={onBlur}

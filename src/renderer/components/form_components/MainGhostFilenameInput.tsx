@@ -5,6 +5,8 @@ import { FileFilter } from "electron";
 import { Set200ccInput } from "./Set200ccInput";
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
 
+import { isFileReadable } from "../../util"
+
 export function MainGhostFilenameInput() {
   const {register, setValue, getValues} = useFormContextAutoTT();
 
@@ -22,7 +24,7 @@ export function MainGhostFilenameInput() {
         {...register("main-ghost-filename", {required: {
           value: true,
           message: "This input is required."
-        }})}
+        }, validate: isFileReadable})}
       ></input>
       <button onClick={event => {
         queueOpenDialog(event, [

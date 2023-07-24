@@ -13,6 +13,8 @@ declare global {
       saveFileDialog: (fileFilters: FileFilter[], lastFilename: string | undefined, dialogId: DialogId) => Promise<string>;
       saveFileDialogAndWriteText: (fileFilters: FileFilter[], output: string, lastFilename: string | undefined, dialogId: DialogId) => Promise<string>;
       overwriteTextFile: (outputFilename: string, output: string) => Promise<void>;
+      isFileReadable: (filename: string) => Promise<boolean>;
+      isFileWritable: (filename: string) => Promise<boolean>;
       spawnAutoTTRec: (templateFilename: string, autoTTRecArgs: AutoTTRecArgs) => Promise<boolean>;
       waitAutoTTRec: () => Promise<AutoTTRecResponse>;
       handleSendStdout: (callable: (event: IpcRendererEvent, stdoutData: string) => void) => void;

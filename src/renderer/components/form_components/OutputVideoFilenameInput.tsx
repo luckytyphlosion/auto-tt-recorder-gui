@@ -3,6 +3,7 @@ import { FileFilter } from "electron";
 
 import { useFormContextAutoTT, useWatchAutoTT } from "../../use-form-context-auto-tt";
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
+import { isFileWritable } from "../../util"
 
 import useRenderCounter from "../../RenderCounter";
 
@@ -49,7 +50,7 @@ export function OutputVideoFilenameInput(props: {noTop10CategoryIsNoEncode: bool
         {...register("output-video-filename", {required: {
           value: true,
           message: "This input is required."
-        }})}
+        }, validate: isFileWritable})}
       ></input>
       <button onClick={event => {
         let outputVideoFileFormat = getAllowedOutputVideoFileFormat();

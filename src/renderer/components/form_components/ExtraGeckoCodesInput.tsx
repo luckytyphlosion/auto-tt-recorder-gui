@@ -45,12 +45,12 @@ export function ExtraGeckoCodesInput(props: {isAutoTTRecRunning: boolean}) {
   function clearGeckoCodeFields() {
     updateExtraGeckoCodesFilename("");
     setValue("extra-gecko-codes-contents", "", {shouldTouch: true});
-    setGeckoCodeUnsaved(false);
+    updateGeckoCodeUnsaved(false);
   }
 
-  function updateGeckoCodeUnsaved() {
-    setGeckoCodeUnsaved(true);
-    setValue("extra-gecko-codes-unsaved", true, {shouldTouch: true});
+  function updateGeckoCodeUnsaved(newGeckoCodeUnsaved: boolean) {
+    setGeckoCodeUnsaved(newGeckoCodeUnsaved);
+    setValue("extra-gecko-codes-unsaved", newGeckoCodeUnsaved, {shouldTouch: true});
   }
 
   function setSaveModalOpenAndFrom(newModalOpen: boolean, newSaveModalFrom: SaveModalFrom) {
@@ -81,7 +81,7 @@ export function ExtraGeckoCodesInput(props: {isAutoTTRecRunning: boolean}) {
     if (filenameAndContents.filename !== "") {
       updateExtraGeckoCodesFilename(filenameAndContents.filename);
       setValue("extra-gecko-codes-contents", filenameAndContents.contents, {shouldTouch: true});
-      setGeckoCodeUnsaved(false);
+      updateGeckoCodeUnsaved(false);
     }
   }
 
@@ -104,7 +104,7 @@ export function ExtraGeckoCodesInput(props: {isAutoTTRecRunning: boolean}) {
     }
 
     if (success) {
-      setGeckoCodeUnsaved(false);
+      updateGeckoCodeUnsaved(false);
       console.log("extra gecko queueSaveDialogAndWriteText formState.errors:", formState);
     }
 
@@ -142,13 +142,19 @@ export function ExtraGeckoCodesInput(props: {isAutoTTRecRunning: boolean}) {
     setSaveModalOpenAndFrom(false, SaveModalFrom.CLOSING);
   }
 
-  function geckoCodeValidator(): ValidateResult {
+  async function geckoCodeValidator(): Promise<ValidateResult> {
     if (isGeckoCodeUnsaved || extraGeckoCodesFilename === "") {
       return "Please save your gecko code first.";
     } else if (getValues("extra-gecko-codes-contents").length === 0) {
       return "Gecko code file can't be empty!";
     } else {
-      return true;
+      let geckoCodeFilename = getValues("extra-gecko-codes-filename");
+      if (await window.api.isFileReadable(geckoCodeFilename)) {
+        return true;
+      } else {
+        updateGeckoCodeUnsaved(true);
+        return "Gecko code file does not exist (deleted or renamed outside of the program) or is not readable."
+      }
     }
   }
 
@@ -213,7 +219,7 @@ export function ExtraGeckoCodesInput(props: {isAutoTTRecRunning: boolean}) {
               theme={borderTheme}
               editable={!props.isAutoTTRecRunning}
               onChange={(event) => {
-                updateGeckoCodeUnsaved();
+                updateGeckoCodeUnsaved(true);
                 onChange(event);
               }}
               onBlur={onBlur}

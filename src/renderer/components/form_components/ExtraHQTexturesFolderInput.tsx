@@ -6,6 +6,7 @@ import { FileFilter } from "electron";
 import { UseFormRegister, UseFormSetValue } from "react-hook-form";
 
 import { AutoTTRecConfigFormFieldTypes } from "../../AutoTTRecFormFieldsAndArgs";
+import { isFolderReadable } from "../../util"
 
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
 
@@ -31,7 +32,7 @@ export function ExtraHQTexturesFolderInput() {
             {...register("extra-hq-textures-folder", {required: {
               value: true,
               message: "This input is required."
-            }})}
+            }, validate: isFolderReadable})}
           ></input>
           <button onClick={event => {
             queueOpenFolderDialog(event);

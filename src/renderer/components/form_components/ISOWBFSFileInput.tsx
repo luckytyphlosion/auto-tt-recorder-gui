@@ -7,6 +7,8 @@ import { UseFormRegister, UseFormSetValue } from "react-hook-form";
 
 import { AutoTTRecConfigFormFieldTypes } from "../../AutoTTRecFormFieldsAndArgs";
 
+import { isFileReadable } from "../../util";
+
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
 
 export function ISOWBFSFileInput() {
@@ -27,7 +29,7 @@ export function ISOWBFSFileInput() {
         {...register("iso-filename", {required: {
           value: true,
           message: "This input is required."
-        }})}
+        }, validate: isFileReadable})}
       ></input>
       <button onClick={event => {
         queueOpenDialog(event, [
