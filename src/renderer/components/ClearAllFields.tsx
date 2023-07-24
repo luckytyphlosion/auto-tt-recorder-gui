@@ -25,9 +25,25 @@ export function ClearAllFields(props: {
     //setValue("no-top-10-category", noTop10Category);
 
     let clearedDefaultValues = {...DEFAULT_FORM_VALUES};
-    clearedDefaultValues["youtube-settings"] = undefined;
+    clearedDefaultValues["youtube-settings"] = null as any;//"<FILLME>" as any;
     console.log(clearedDefaultValues)
-    props.setFormDefaultValues(clearedDefaultValues);
+    //props.setFormDefaultValues(clearedDefaultValues);
+    const {reset, getValues, setValue} = props.formMethods;
+    let formComplexity = getValues("form-complexity");
+    let timelineCategory = getValues("timeline-category");
+    let noTop10Category = getValues("no-top-10-category");
+
+    /*const barebonesValues: AutoTTRecConfigFormFieldTypes = {
+      "form-complexity": formComplexity,
+      "timeline-category": timelineCategory,
+      "no-top-10-category": noTop10Category
+      
+    }*/
+    reset(clearedDefaultValues);
+    setAllFieldsCleared(false);
+    props.setSubmittedToggle((submittedToggle) => (!submittedToggle));
+    //props.setFormDefaultValues(clearedDefaultValues);
+    //setAfterAllFieldsCleared(true);
 
     setModalOpen(false);
     setAllFieldsCleared(true);
@@ -42,26 +58,11 @@ export function ClearAllFields(props: {
     setModalOpen(true);
   }
 
-  useEffect(() => {
+  /*useEffect(() => {
     if (allFieldsCleared) {
-      const {reset, getValues, setValue} = props.formMethods;
-      let formComplexity = getValues("form-complexity");
-      let timelineCategory = getValues("timeline-category");
-      let noTop10Category = getValues("no-top-10-category");
 
-      /*const barebonesValues: AutoTTRecConfigFormFieldTypes = {
-        "form-complexity": formComplexity,
-        "timeline-category": timelineCategory,
-        "no-top-10-category": noTop10Category
-        
-      }*/
-      reset();
-      setAllFieldsCleared(false);
-      props.setSubmittedToggle((submittedToggle) => (!submittedToggle));
-      //props.setFormDefaultValues(barebonesValues);
-      //setAfterAllFieldsCleared(true);
     }
-  }, [allFieldsCleared]);
+  }, [allFieldsCleared]);*/
 
   // useEffect(() => {
   //   if (afterAllFieldsCleared) {

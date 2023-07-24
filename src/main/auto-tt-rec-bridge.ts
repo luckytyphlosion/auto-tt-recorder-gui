@@ -11,6 +11,8 @@ import { mainWindow } from "./electron";
 import { AutoTTRecResponse } from "../enums";
 import { globalConfig } from "./confighandler";
 
+import { AutoTTRecConfig } from "../shared-types";
+
 interface ReadStreamResponse {
   hasData: boolean;
   output: string;
@@ -41,10 +43,6 @@ async function readStream(streamObj : Readable) : Promise<ReadStreamResponse> {
 
   streamObj.removeListener("data", streamObjOnData);
   return {hasData: true, output: output.split("").join("")};
-}
-
-export interface AutoTTRecConfig {
-  [key: string]: string | number | boolean | null | undefined;
 }
 
 export type AutoTTRecConfigKey = keyof AutoTTRecConfig;

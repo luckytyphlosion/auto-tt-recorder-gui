@@ -1,14 +1,5 @@
 import React from "react";
 
-import { ISOWBFSFileInput } from "./components/form_components/ISOWBFSFileInput";
-import { ChadsoftGhostPageInput } from "./components/form_components/ChadsoftGhostPageInput";
-import { TrackNameInput } from "./components/form_components/TrackNameInput";
-import { QualityInput } from "./components/form_components/QualityInput";
-import { OutputVideoFilenameInput } from "./components/form_components/OutputVideoFilenameInput";
-import AutoTTRecSubmitAbortButtons from "./components/AutoTTRecSubmitAbortButtons";
-import { AutoTTRecConfigFormComponents } from "./components/AutoTTRecConfigFormComponents";
-import { MainGhostFilenameInput } from "./components/form_components/MainGhostFilenameInput";
-
 import { EncodeSizeUnit } from "./components/form_components/EncodeSizeInput";
 
 import { MainGhostSource } from "./components/form_components/MainGhostSourceInput";
@@ -51,7 +42,7 @@ import { Top10TitleType } from "./components/form_components/Top10TitleInput";
 
 import { Set200cc } from "./components/form_components/Set200ccInput";
 
-import { AutoTTRecConfig } from "../main/auto-tt-rec-bridge";
+import { AutoTTRecConfig } from "../shared-types";
 
 import { ValidValues, ReadonlyArraySet, makeReadonlyArraySet } from "./array-set";
 
@@ -151,9 +142,67 @@ export class AutoTTRecConfigFormFieldTypesClass {
   "youtube-settings": boolean | undefined = true; // checkbox
 }
 
-export interface AutoTTRecConfigFormFieldTypes extends AutoTTRecConfigFormFieldTypesClass {};
+class AutoTTRecArgsClass {
+  "aspect-ratio-16-by-9"?: AspectRatio16By9 = "true";
+  "audio-bitrate"?: number | string = 128000;
+  "audio-codec"?: AudioCodec = "libopus";
+  "chadsoft-comparison-ghost-page"?: string = "";
+  "chadsoft-ghost-page"?: string = "";
+  "comparison-ghost-filename"?: string = "";
+  "crf-value"?: number = 15;
+  "dolphin-resolution"?: DolphinResolution = "1440p";
+  "encode-only"?: boolean = false;
+  "encode-size"?: number = 52428800;
+  "encode-type"?: EncodeType = "crf";
+  "ending-delay"?: number = 600;
+  "extra-gecko-codes-filename"?: string = "";
+  "extra-hq-textures-folder"?: string = "";
+  "fade-in-at-start"?: boolean = false;
+  "game-volume"?: number = 1.0;
+  "h26x-preset"?: H26xPreset = "slow";
+  "hq-textures"?: boolean = true;
+  "input-display"?: InputDisplay = "auto";
+  "input-display-dont-create"?: boolean = false;
+  "iso-filename"?: string = "";
+  "keep-window"?: boolean = true;
+  "main-ghost-filename"?: string = "";
+  "mk-channel-ghost-description"?: string = "";
+  "music-filename"?: string = "";
+  "music-volume"?: number = 1.0;
+  "no-background-blur"?: boolean = true;
+  "no-bloom"?: boolean = false;
+  "no-music"?: boolean = false;
+  "no-music-mkchannel"?: boolean = false;
+  "on-200cc"?: boolean = false;
+  "output-video-filename"?: string = "";
+  "output-width"?: number = 2560;
+  "pixel-format"?: string = "yuv420p";
+  "speedometer"?: SpeedometerStyle = "fancy";
+  "speedometer-decimal-places"?: SpeedometerDecimalPlacesNumeric = 1;
+  "speedometer-metric"?: SpeedometerMetric = "engine";
+  "start-music-at-beginning"?: boolean = false;
+  "szs-filename"?: string = "";
+  "timeline"?: Timeline = "mkchannel";
+  "top-10-chadsoft"?: string = "";
+  "top-10-gecko-code-filename"?: string = "";
+  "top-10-highlight"?: number = 1;
+  "top-10-location"?: Top10LocationFull = "worldwide";
+  "top-10-title"?: string = "";
+  "track-name"?: string = "";
+  "use-ffv1"?: boolean = false;
+  "video-codec"?: VideoCodec = "libx264";
+  "youtube-settings"?: boolean = true;
+}
+
+type Writable<T> = { -readonly [P in keyof T]: T[P] };
 
 const autoTTRecConfigFormFieldTypesClassObj = new AutoTTRecConfigFormFieldTypesClass();
+
+export interface AutoTTRecConfigFormFieldTypes extends AutoTTRecConfigFormFieldTypesClass {};
+
+//export type AutoTTRecConfigFormFieldTypes = Writable<AutoTTRecConfigFormFieldTypesReadonly>;
+
+
 
 type AutoTTRecConfigFormFieldNames = Array<keyof AutoTTRecConfigFormFieldTypes>;
 
@@ -173,58 +222,6 @@ export type AutoTTRecConfigFormTriCheckboxFieldTypes = Pick<AutoTTRecConfigFormF
 
 const AUTO_TT_REC_TOP_10_LOCATIONS = makeReadonlyArraySet(["ww", "worldwide", ...countryLocations, ...regionalLocations] as const);
 type Top10LocationFull = ValidValues<typeof AUTO_TT_REC_TOP_10_LOCATIONS>;
-
-class AutoTTRecArgsClass {
-  "iso-filename"?: string = "";
-  "timeline"?: Timeline = "mkchannel";
-  "main-ghost-filename"?: string = "";
-  "chadsoft-ghost-page"?: string = "";
-  "on-200cc"?: boolean = false;
-  "chadsoft-comparison-ghost-page"?: string = "";
-  "comparison-ghost-filename"?: string = "";
-  "szs-filename"?: string = "";
-  "mk-channel-ghost-description"?: string = "";
-  "track-name"?: string = "";
-  "top-10-location"?: Top10LocationFull;
-  "music-filename"?: string = "";
-  "game-volume"?: number = 1.0;
-  "music-volume"?: number = 1.0;
-  "input-display"?: InputDisplay = "auto";
-  "speedometer"?: SpeedometerStyle = "fancy";
-  "speedometer-metric"?: SpeedometerMetric = "engine";
-  "speedometer-decimal-places"?: SpeedometerDecimalPlacesNumeric = 1;
-  "hq-textures"?: boolean = true;
-  "no-background-blur"?: boolean = true;
-  "no-bloom"?: boolean = false;
-  "no-music"?: boolean = false;
-  "encode-type"?: EncodeType = "crf";
-  "video-codec"?: VideoCodec = "libx264";
-  "crf-value"?: number = 15;
-  "h26x-preset"?: H26xPreset = "slow";
-  "encode-size"?: number = 52428800;
-  "audio-codec"?: AudioCodec = "libopus";
-  "audio-bitrate"?: number | string = 128000;
-  "pixel-format"?: string = "yuv420p";
-  "dolphin-resolution"?: DolphinResolution = "1440p";
-  "output-width"?: number = 2560;
-  "youtube-settings"?: boolean = true;
-  "use-ffv1"?: boolean = false;
-  "encode-only"?: boolean = false;
-  "input-display-dont-create"?: boolean = false;
-  "keep-window"?: boolean = true;
-  "output-video-filename"?: string = "";
-  "top-10-chadsoft"?: string = "";
-  "top-10-title"?: string = "";
-  "top-10-highlight"?: number = 1;
-  "top-10-gecko-code-filename"?: string = "";
-  "extra-gecko-codes-filename"?: string = "";
-  "aspect-ratio-16-by-9"?: AspectRatio16By9 = "true";
-  "extra-hq-textures-folder"?: string = "";
-  "start-music-at-beginning"?: boolean = false;
-  "no-music-mkchannel"?: boolean = false;
-  "ending-delay"?: number = 600;
-  "fade-in-at-start"?: boolean = false;
-}
 
 function isInSet<T>(values: ReadonlySet<T>, x: any): x is T {
   return values.has(x);
@@ -312,7 +309,7 @@ const listFormatter = new Intl.ListFormat("en", {style: "long", type: "disjuncti
 const ghostPageLinkRegex = /^https:\/\/(?:www\.)?chadsoft\.co\.uk\/time-trials\/rkgd\/([0-9A-Fa-f]{2}\/[0-9A-Fa-f]{2}\/[0-9A-Fa-f]{36})\.html/;
 
 class AutoTTRecConfigImporter {
-  private autoTTRecArgs: AutoTTRecArgsWithFILLME;
+  private autoTTRecArgs: AutoTTRecArgs;
   private autoTTRecConfig: AutoTTRecConfig;
   private errorsAndWarnings: AutoTTRecConfigImporterErrorsAndWarnings;
 
@@ -540,13 +537,47 @@ class AutoTTRecConfigImporter {
     }
     this.tryAddSameOption("input-display-dont-create");
   }
+
+  public createFormDataConverter() {
+    return new AutoTTRecConfigToFormData(this.autoTTRecArgs);
+  }
 }
 
-function importAutoTTRecConfig(autoTTRecConfig: AutoTTRecConfig) {
-  let autoTTRecArgs: AutoTTRecArgs = {};
-  let warnings: string[] = [];
+class AutoTTRecConfigToFormData {
+  private autoTTRecArgs: AutoTTRecArgs;
+  private formData: AutoTTRecConfigFormFieldTypes;
 
+  constructor(autoTTRecArgs: AutoTTRecArgs) {
+    this.autoTTRecArgs = autoTTRecArgs;
+    this.formData = {...autoTTRecConfigFormFieldTypesClassObj};
+  }
 
+    // add an argument with the same name and type from the submitted formData
+  // to the resulting auto-tt-rec arguments
+  public add<K extends keyof AutoTTRecConfigFormFieldTypes & keyof AutoTTRecArgs>(key: K) {
+    let value = this.autoTTRecArgs[key];
+    if (value !== null && value !== undefined) {
+      //let value2 = value;
+      //let oldFormData = this.formData[key];
+      this.formData[key] = value as AutoTTRecConfigFormFieldTypes[K];
+    }
+  }
+
+  // simple key value argument add, not taking data from formData
+  public addManual<K extends AutoTTRecArgName>(key: K, value: AutoTTRecArgs[K]) {
+    this.autoTTRecArgs[key] = value;
+  }
+
+  public convert() {
+    //this.formData["aspect-ratio-16-by-9"] = this.autoTTRecArgs["aspect-ratio-16-by-9"];
+  }
+}
+
+export function importAutoTTRecConfig(autoTTRecConfig: AutoTTRecConfig) {
+  let autoTTRecConfigImporter = new AutoTTRecConfigImporter(autoTTRecConfig);
+  autoTTRecConfigImporter.import();
+
+  //let toFormDataConverter: AutoTTRecConfigToFormData = autoTTRecConfigImporter.createFormDataConverter();
   
 
     //autoTTRecArgs["chadsoft-ghost-page"] = 
@@ -570,7 +601,6 @@ class AutoTTRecArgsBuilder {
   // add an argument with the same name and type from the submitted formData
   // to the resulting auto-tt-rec arguments
   public add<K extends keyof AutoTTRecConfigFormFieldTypes & AutoTTRecArgName>(key: K) {
-    let formDataValue = this.formData[key];
     this._autoTTRecArgs[key] = this.formData[key];
   }
 

@@ -43,7 +43,7 @@ function TriCheckboxInternal(props: {
       <input type="checkbox" ref={(inputRef) => {
         checkboxRef.current = inputRef;
         props.refCallback(inputRef);
-      }} checked={props.value} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+      }} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
         console.log("e.target.checked:", e.target.checked);
         props.onChange(e);
       }}/>

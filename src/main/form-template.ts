@@ -1,27 +1,11 @@
 import { IpcMainInvokeEvent } from "electron";
 
-import { AutoTTRecConfig } from "./auto-tt-rec-bridge";
+import { AutoTTRecConfig, ImportTemplateStatus, ImportTemplateResult } from "../shared-types";
 
 import fsPromises from "fs/promises";
 import path from "path";
 import JSYAML, { YAMLException, JSON_SCHEMA } from "js-yaml";
 import YAML from "yaml";
-
-export enum ImportTemplateStatus {
-  INDETERMINATE = -1,
-  SUCCESS = 0,
-  ERROR_ON_READ = 1,
-  ERROR_ON_PARSE = 2,
-  ERROR_ON_STRUCTURE = 3,
-  ERROR_ON_VALUES = 4,
-}
-
-export interface ImportTemplateResult {
-  status: ImportTemplateStatus,
-  errorWarningData: string,
-  data: AutoTTRecConfig,
-  hasWarnings: boolean
-}
 
 async function readFileEnforceUTF8(filename: string, badEncodingErrorMessage: string): Promise<string> {
   const buffer = await fsPromises.readFile(filename);

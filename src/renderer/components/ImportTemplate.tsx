@@ -4,8 +4,7 @@ import Modal from "react-modal";
 import { FormProvider, UseFormReturn } from "react-hook-form";
 import { AutoTTRecConfigFormFieldTypes, AUTO_TT_REC_CONFIG_FORM_FIELD_NAMES, DEFAULT_FORM_VALUES } from "../AutoTTRecFormFieldsAndArgs";
 
-import { ImportTemplateResult, ImportTemplateStatus } from "../../main/form-template";
-import { AutoTTRecConfig } from "../../main/auto-tt-rec-bridge";
+import { ImportTemplateResult, ImportTemplateStatus, AutoTTRecConfig } from "../../shared-types";
 
 export enum ImportTemplateStatu2s {
   INDETERMINATE = -1,
@@ -39,7 +38,7 @@ export function ImportTemplate() {
     setErrorWarningData(importTemplateResult.errorWarningData);
     autoTTRecConfigRef.current = importTemplateResult.data;
     if (importTemplateResult.status === ImportTemplateStatus.SUCCESS) {
-      
+
     }
     setModalOpen(true);
   }
