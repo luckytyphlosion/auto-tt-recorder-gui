@@ -27,7 +27,7 @@ export function OutputWidthInput(props: {dolphinResolution: DolphinResolution, d
     setOutputWidthPreset(getValues("output-width-preset"));
   }
 
-  console.log("props.dolphinResolutionToggle:", props.dolphinResolutionToggle);
+  //console.log("props.dolphinResolutionToggle:", props.dolphinResolutionToggle);
 
   if (dolphinResolutionToggle != props.dolphinResolutionToggle) {
     let newOutputWidthPreset = recommendedOutputWidths[props.dolphinResolution];

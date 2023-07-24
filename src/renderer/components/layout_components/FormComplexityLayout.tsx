@@ -23,6 +23,8 @@ export function FormComplexityLayout(props: {isAutoTTRecRunning: boolean}) {
     setFormComplexity(getValues("form-complexity"));
   }
 
+  //console.log("FormComplexityLayout form-complexity:", getValues("form-complexity"));
+
   return (
     <div>
       <label htmlFor="form-complexity">Layout: </label>

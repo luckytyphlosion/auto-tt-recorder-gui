@@ -3,6 +3,7 @@ import { AutoTTRecConfigForm } from "./AutoTTRecConfigForm";
 import { AutoTTRecArgs } from "../AutoTTRecFormFieldsAndArgs";
 import { AutoTTRecStatus } from "./AutoTTRecStatus";
 import { IpcRendererEvent } from "electron";
+import { DEFAULT_FORM_VALUES } from "../AutoTTRecFormFieldsAndArgs";
 
 import { AutoTTRecResponse } from "../../enums";
 
@@ -28,6 +29,8 @@ export function AutoTTRecManager() {
   const [programStatusHeader, setProgramStatusHeader] = useState("Ready");
   const [programStatusDetails, setProgramStatusDetails] = useState("");
   const [isAutoTTRecRunning, setAutoTTRecRunning] = useState(false);
+  const [formDefaultValues, setFormDefaultValues] = useState(DEFAULT_FORM_VALUES);
+
   console.log("AutoTTRecManager programStatusDetails:", programStatusDetails);
   const renderCounter = useRenderCounter(false, "AutoTTRecManager");
 
@@ -88,10 +91,12 @@ export function AutoTTRecManager() {
     await window.api.terminateAutoTTRec();
   }, []);
 
+  console.log("AutoTTRecManager formDefaultValues['youtube-settings']:", formDefaultValues['youtube-settings']);
+
   return (
     <div>
       <AutoTTRecConfigForm_Memo whichUI={true} onSubmitCallback={runAutoTTRec}
-        onAbortCallback={abortAutoTTRec} isAutoTTRecRunning={isAutoTTRecRunning}/>
+        onAbortCallback={abortAutoTTRec} isAutoTTRecRunning={isAutoTTRecRunning} formDefaultValues={formDefaultValues} setFormDefaultValues={setFormDefaultValues}/>
       {renderCounter}
       <AutoTTRecStatus programStatusHeader={programStatusHeader}
         programStatusDetails={programStatusDetails}/>

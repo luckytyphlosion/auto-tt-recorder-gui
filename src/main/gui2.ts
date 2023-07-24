@@ -126,10 +126,11 @@ async function fsAccessHelper(filename: string, mode: number): Promise<boolean> 
     return false;
   }
 }
+
 export async function isFileReadable(event: IpcMainInvokeEvent, filename: string): Promise<boolean> {
   return fsAccessHelper(filename, fs.constants.R_OK);
 }
 
 export async function isFileWritable(event: IpcMainInvokeEvent, filename: string): Promise<boolean> {
-  return !fsAccessHelper(filename, fs.constants.X_OK) || fsAccessHelper(filename, fs.constants.W_OK);
+  return !await fsAccessHelper(filename, fs.constants.X_OK) || await fsAccessHelper(filename, fs.constants.W_OK);
 }

@@ -62,41 +62,46 @@ export type ExtendedTimeline = "noencode" | "ghostonly" | "ghostselect" | "mkcha
 
 const DEBUG_PREFILLED_DEFAULTS = false;
 
+type IfEquals<T, U, Y=unknown, N=never> =
+  (<G>() => G extends T ? 1 : 2) extends
+  (<G>() => G extends U ? 1 : 2) ? Y : N;
+
+
 export class AutoTTRecConfigFormFieldTypesClass {
-  "aspect-ratio-16-by-9": AspectRatio16By9 = "auto";
-  "audio-bitrate": number = 128000;
-  "audio-bitrate-displayed": number = 128;
-  "audio-bitrate-unit": AudioBitrateUnit = "kbps";
-  "audio-codec": AudioCodec = "libopus";
-  "background-music-source": BackgroundMusicSource = DEBUG_PREFILLED_DEFAULTS ? "game-bgm" : "music-filename";
-  "chadsoft-comparison-ghost-page": string = "";
-  "chadsoft-ghost-page": string = DEBUG_PREFILLED_DEFAULTS ? "https://www.chadsoft.co.uk/time-trials/rkgd/D3/25/D29456963F8A9C5D7D9A8949118A19873EA6.html" : "";
-  "comparison-ghost-filename": string = "";
-  "comparison-ghost-source": ComparisonGhostSource = "none";
-  "crf-value": number = 15;
-  "dolphin-resolution": DolphinResolution = DEBUG_PREFILLED_DEFAULTS ? "480p" : "1440p";
-  "encode-only": boolean = false;
-  "encode-size": number = 52428800;
-  "encode-size-displayed": number = 50;
-  "encode-size-unit": EncodeSizeUnit = "mib";
-  "encode-type": EncodeType = "crf";
-  "ending-delay": number = 600;
-  "extra-gecko-codes-enable": boolean = false;
-  "extra-gecko-codes-contents": string = "";
-  "extra-gecko-codes-filename": string = "";
-  "extra-gecko-codes-unsaved": boolean = false;
-  "extra-hq-textures-folder-enable": boolean = false;
-  "extra-hq-textures-folder": string = "";
-  "fade-in-at-start": boolean = false;
+  "aspect-ratio-16-by-9": AspectRatio16By9 = "auto"; // choice
+  "audio-bitrate": number = 128000; // number
+  "audio-bitrate-displayed": number = 128; // constrained number
+  "audio-bitrate-unit": AudioBitrateUnit = "kbps"; // internal
+  "audio-codec": AudioCodec = "libopus"; // choice
+  "background-music-source": BackgroundMusicSource = DEBUG_PREFILLED_DEFAULTS ? "game-bgm" : "music-filename"; // choice
+  "chadsoft-comparison-ghost-page": string = ""; // arbitrary
+  "chadsoft-ghost-page": string = DEBUG_PREFILLED_DEFAULTS ? "https://www.chadsoft.co.uk/time-trials/rkgd/D3/25/D29456963F8A9C5D7D9A8949118A19873EA6.html" : ""; // arbitrary
+  "comparison-ghost-filename": string = ""; // arbitrary
+  "comparison-ghost-source": ComparisonGhostSource = "none"; // choice
+  "crf-value": number = 15; // number
+  "dolphin-resolution": DolphinResolution = DEBUG_PREFILLED_DEFAULTS ? "480p" : "1440p"; // choice
+  "encode-only"?: boolean = false; // checkbox
+  "encode-size": number = 52428800; // number
+  "encode-size-displayed": number = 50; // constrained number
+  "encode-size-unit": EncodeSizeUnit = "mib"; // internal
+  "encode-type": EncodeType = "crf"; // choice
+  "ending-delay": number = 600; // number
+  "extra-gecko-codes-enable": boolean = false; // checkbox
+  "extra-gecko-codes-contents": string = ""; // arbitrary
+  "extra-gecko-codes-filename": string = ""; // arbitrary
+  "extra-gecko-codes-unsaved": boolean = false; // internal
+  "extra-hq-textures-folder-enable": boolean = false; // checkbox
+  "extra-hq-textures-folder": string = ""; // arbitrary
+  "fade-in-at-start": boolean = false; // checkbox
   "form-complexity": FormComplexity = FormComplexity.SIMPLE;
   "game-volume-slider": number = 100;
   "game-volume-numberinput": number = 100;
   "h26x-preset": H26xPreset = DEBUG_PREFILLED_DEFAULTS ? "ultrafast" : "slow";
-  "hq-textures": boolean = true;
+  "hq-textures": boolean = true; // checkbox
   "input-display": InputDisplay = "auto";
-  "input-display-dont-create": boolean = false;
+  "input-display-dont-create": boolean = false; // checkbox
   "iso-filename": string = DEBUG_PREFILLED_DEFAULTS ? "C:\\Users\\User\\Documents\\RMCE 01\\RMCE01.iso" : "";
-  "keep-window": boolean = true;
+  "keep-window": boolean = true; // checkbox
   "main-ghost-filename": string = "";
   "main-ghost-source": MainGhostSource = "chadsoft";
   "mk-channel-ghost-description": string = "Ghost Data";
@@ -104,9 +109,9 @@ export class AutoTTRecConfigFormFieldTypesClass {
   "music-presentation": MusicPresentation = "normal";
   "music-volume-numberinput": number = 100;
   "music-volume-slider": number = 100;
-  "no-background-blur": boolean = true;
-  "no-bloom": boolean = false;
-  "no-music": boolean = false;
+  "no-background-blur": boolean = true; // checkbox
+  "no-bloom": boolean = false; // checkbox
+  "no-music": boolean = false; // checkbox
   "no-top-10-category": NoTop10Category = "mkchannel";
   "output-video-filename": string = DEBUG_PREFILLED_DEFAULTS ? "C:\\Users\\User\\Documents\\RMCE 01\\guitest1.mp4" : "";
   "output-video-file-format": OutputVideoFileFormat = "mp4";
@@ -136,14 +141,28 @@ export class AutoTTRecConfigFormFieldTypesClass {
   "track-name-type": TrackNameType = "auto";
   "use-ffv1": boolean = false;
   "video-codec": VideoCodec = "libx264";
-  "youtube-settings": boolean = true;
+  "youtube-settings": boolean | "<FILLME>" = true;
 }
 
 export interface AutoTTRecConfigFormFieldTypes extends AutoTTRecConfigFormFieldTypesClass {};
 
 const autoTTRecConfigFormFieldTypesClassObj = new AutoTTRecConfigFormFieldTypesClass();
 
+type AutoTTRecConfigFormFieldNames = Array<keyof AutoTTRecConfigFormFieldTypes>;
+
 export const DEFAULT_FORM_VALUES: AutoTTRecConfigFormFieldTypes = autoTTRecConfigFormFieldTypesClassObj;
+
+export const AUTO_TT_REC_CONFIG_FORM_FIELD_NAMES = Object.keys(autoTTRecConfigFormFieldTypesClassObj) as AutoTTRecConfigFormFieldNames;
+
+export type AutoTTRecConfigFormStringFieldTypes = Pick<AutoTTRecConfigFormFieldTypes, {
+  [K in keyof AutoTTRecConfigFormFieldTypes]-?:
+    IfEquals<AutoTTRecConfigFormFieldTypes[K], string, K, never>
+}[keyof AutoTTRecConfigFormFieldTypes]>;
+
+export type AutoTTRecConfigFormTriCheckboxFieldTypes = Pick<AutoTTRecConfigFormFieldTypes, {
+  [K in keyof AutoTTRecConfigFormFieldTypes]-?:
+    IfEquals<AutoTTRecConfigFormFieldTypes[K], boolean | "<FILLME>", K, never>
+}[keyof AutoTTRecConfigFormFieldTypes]>;
 
 const AUTO_TT_REC_TOP_10_LOCATIONS = makeReadonlyArraySet(["ww", "worldwide", ...countryLocations, ...regionalLocations] as const);
 type Top10LocationFull = ValidValues<typeof AUTO_TT_REC_TOP_10_LOCATIONS>;
@@ -208,8 +227,20 @@ export type PartialNull<T> = {
   [P in keyof T]: T[P] | null;
 };
 
+export type PartialFILLME<T> = {
+  [P in keyof T]: T[P] | "<FILLME>";
+};
+
+export type ExcludeFILLME<T> = {
+  [P in keyof T]: Exclude<T[P], "<FILLME>">;
+}
+
 interface AutoTTRecArgsWithoutNulls extends AutoTTRecArgsClass {}
 export type AutoTTRecArgs = PartialNull<AutoTTRecArgsWithoutNulls>;
+export type AutoTTRecArgsWithFILLME = PartialFILLME<AutoTTRecArgs>;
+
+export type AutoTTRecConfigFormFieldTypesWithoutFILLME = ExcludeFILLME<AutoTTRecConfigFormFieldTypes>;
+export type PartialAutoTTRecConfigFormFieldTypesWithoutFILLME = Partial<AutoTTRecConfigFormFieldTypesWithoutFILLME>;
 
 type AutoTTRecArgName = keyof AutoTTRecArgs;
 
@@ -228,21 +259,6 @@ export interface AutoTTRecConfigImporterError {
   messages: string[]
 }
 
-type IfEquals<T, U, Y=unknown, N=never> =
-  (<G>() => G extends T ? 1 : 2) extends
-  (<G>() => G extends U ? 1 : 2) ? Y : N;
-
-class Test1 {
-  "top-10-gecko-code-filename"?: string = "";
-  "extra-gecko-codes-filename"?: string = "";
-  "aspect-ratio-16-by-9"?: AspectRatio16By9 = "true";
-  "extra-hq-textures-folder"?: string = "";
-  "start-music-at-beginning"?: boolean = false;
-  "no-music-mkchannel"?: boolean = false;
-  "ending-delay"?: number = 600;
-  "fade-in-at-start"?: boolean = false;
-}
-
 type AutoTTRecPrimitiveArgs = Pick<AutoTTRecArgs, {
   [K in keyof AutoTTRecArgs]-?:
     IfEquals<AutoTTRecArgs[K], (string | undefined | null), K,
@@ -251,11 +267,6 @@ type AutoTTRecPrimitiveArgs = Pick<AutoTTRecArgs, {
       >
     >
 }[keyof AutoTTRecArgs]>;
-
-export type AutoTTRecConfigFormStringFieldTypes = Pick<AutoTTRecConfigFormFieldTypes, {
-  [K in keyof AutoTTRecConfigFormFieldTypes]-?:
-    IfEquals<AutoTTRecConfigFormFieldTypes[K], string, K, never>
-}[keyof AutoTTRecConfigFormFieldTypes]>;
 
 interface AutoTTRecConfigImporterErrorOrWarningMessage {
   isWarning: boolean,
@@ -293,11 +304,8 @@ class AutoTTRecConfigImporterErrorsAndWarnings {
 const listFormatter = new Intl.ListFormat("en", {style: "long", type: "disjunction"});
 const ghostPageLinkRegex = /^https:\/\/(?:www\.)?chadsoft\.co\.uk\/time-trials\/rkgd\/([0-9A-Fa-f]{2}\/[0-9A-Fa-f]{2}\/[0-9A-Fa-f]{36})\.html/;
 
-type CheckValidValues<T, U> = U extends { arr: ReadonlyArray<infer V> } ? T extends V ? U : never : never;
-
-
 class AutoTTRecConfigImporter {
-  private autoTTRecArgs: AutoTTRecArgs;
+  private autoTTRecArgs: AutoTTRecArgsWithFILLME;
   private autoTTRecConfig: AutoTTRecConfig;
   private errorsAndWarnings: AutoTTRecConfigImporterErrorsAndWarnings;
 
@@ -538,6 +546,11 @@ function importAutoTTRecConfig(autoTTRecConfig: AutoTTRecConfig) {
   
 }
 
+
+function shallowCopy<T>(obj: T): T {
+  return Object.assign({}, obj);
+}
+
 class AutoTTRecArgsBuilder {
   private _autoTTRecArgs: AutoTTRecArgs;
   private formData: AutoTTRecConfigFormFieldTypes;
@@ -550,6 +563,10 @@ class AutoTTRecArgsBuilder {
   // add an argument with the same name and type from the submitted formData
   // to the resulting auto-tt-rec arguments
   public add<K extends keyof AutoTTRecConfigFormFieldTypes & AutoTTRecArgName>(key: K) {
+    let formDataValue = this.formData[key];
+    if (formDataValue === "<FILLME>") {
+      formDataValue = undefined;
+    }
     this._autoTTRecArgs[key] = this.formData[key];
   }
 
@@ -561,10 +578,6 @@ class AutoTTRecArgsBuilder {
   public get autoTTRecArgs() {
     return this._autoTTRecArgs;
   }
-}
-
-function shallowCopy<T>(obj: T): T {
-  return Object.assign({}, obj);
 }
 
 class AutoTTRecFormData {
@@ -703,6 +716,14 @@ function addMusicPresentationToAutoTTRecArgs(formData: AutoTTRecConfigFormFieldT
   } else if (formData["music-presentation"] === "no-music-mkchannel") {
     argsBuilder.addManual("no-music-mkchannel", true);
   }
+}
+
+function excludeFILLMEFromAutoTTRecConfigFormData(formData: AutoTTRecConfigFormFieldTypes) {
+  let formDataNoFILLMEPartial: PartialAutoTTRecConfigFormFieldTypesWithoutFILLME = {};
+
+  export type AutoTTRecConfigFormFieldTypesWithoutFILLME = ExcludeFILLME<AutoTTRecConfigFormFieldTypes>;
+  export type PartialAutoTTRecConfigFormFieldTypesWithoutFILLME = Partial<AutoTTRecConfigFormFieldTypesWithoutFILLME>;
+  
 }
 
 export function convertFormDataToAutoTTRecArgs(formData: AutoTTRecConfigFormFieldTypes) {

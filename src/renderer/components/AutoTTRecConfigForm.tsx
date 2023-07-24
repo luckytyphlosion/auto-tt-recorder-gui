@@ -50,6 +50,8 @@ import { TrackNameType } from "./form_components/TrackNameInput";
 import { MusicPresentation } from "./form_components/MusicPresentationInput";
 import { FormComplexity } from "./layout_components/FormComplexityLayout";
 
+import { ClearAllFields } from "./ClearAllFields";
+
 import { AutoTTRecConfigFormFieldTypes, AutoTTRecArgs, Timeline, DEFAULT_FORM_VALUES, convertFormDataToAutoTTRecArgs } from "../AutoTTRecFormFieldsAndArgs";
 
 import useRenderCounter from "../RenderCounter";
@@ -57,15 +59,22 @@ import useRenderCounter from "../RenderCounter";
 const AutoTTRecConfigFormComponents_Memo = memo(AutoTTRecConfigFormComponents);
 const AutoTTRecSubmitAbortButtons_Memo = memo(AutoTTRecSubmitAbortButtons);
 
-export function AutoTTRecConfigForm(props: {
-  whichUI: boolean, onSubmitCallback: (autoTTRecArgs: AutoTTRecArgs, setSubmittedToggle: React.Dispatch<React.SetStateAction<boolean>>) => any,
-  onAbortCallback: (event: React.MouseEvent<HTMLButtonElement>) => void,
-  isAutoTTRecRunning: boolean}) {  
+export function AutoTTRecConfigForm(
+  props: {
+    whichUI: boolean, onSubmitCallback: (autoTTRecArgs: AutoTTRecArgs, setSubmittedToggle: React.Dispatch<React.SetStateAction<boolean>>) => any,
+    onAbortCallback: (event: React.MouseEvent<HTMLButtonElement>) => void,
+    isAutoTTRecRunning: boolean,
+    formDefaultValues: AutoTTRecConfigFormFieldTypes,
+    setFormDefaultValues: React.Dispatch<React.SetStateAction<AutoTTRecConfigFormFieldTypes>>
+  }
+) {  
   const renderCounter = useRenderCounter(false, "AutoTTRecConfigForm");
   const formMethods = useForm<AutoTTRecConfigFormFieldTypes>({
     criteriaMode: "all",
-    defaultValues: DEFAULT_FORM_VALUES
+    defaultValues: props.formDefaultValues
   });
+  console.log("AutoTTRecConfigForm formState:", formMethods.formState);
+
   //console.log("formMethods:", formMethods);
   //const isoWbfsFileInput = <ISOWBFSFileInput/>;
   //const mainGhostFilenameInput = <MainGhostFilenameInput arg={1}/>;
@@ -94,6 +103,7 @@ export function AutoTTRecConfigForm(props: {
     console.log("formState.dirtyFields:", formState.dirtyFields);
     console.log("formState.touchedFields:", formState.touchedFields);
     setSubmittedToggle((submittedToggle) => !submittedToggle);
+    //props.setFormDefaultValues(DEFAULT_FORM_VALUES);
     formMethods.reset(undefined, {keepValues: true, keepErrors: true});
   }
 
@@ -104,6 +114,7 @@ export function AutoTTRecConfigForm(props: {
   return (
     <div>
       <form onSubmit={formMethods.handleSubmit(onSubmit, onError)}>
+        <ClearAllFields formMethods={formMethods} submittedToggle={submittedToggle} setSubmittedToggle={setSubmittedToggle} setFormDefaultValues={props.setFormDefaultValues}/>
         <fieldset disabled={props.isAutoTTRecRunning}>
           {/*<AutoTTRecConfigFormComponents_Memo formMethods={formMethods} forceUpdate={submittedToggle} isAutoTTRecRunning={props.isAutoTTRecRunning}/>*/}
           <AutoTTRecConfigFormComponents_Memo formMethods={formMethods} forceUpdate={submittedToggle} isAutoTTRecRunning={props.isAutoTTRecRunning}/>
