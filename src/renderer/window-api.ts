@@ -3,6 +3,7 @@ import { AutoTTRecResponse } from "../enums";
 import { AutoTTRecArgs } from "./AutoTTRecFormFieldsAndArgs";
 import { FilenameAndContents } from "../shared-types";
 import { DialogId } from "../main/confighandler";
+import { ImportTemplateResult } from "../main/form-template";
 
 declare global {
   interface Window {
@@ -22,6 +23,7 @@ declare global {
       removeHandleSendStdout: (callable: (event: IpcRendererEvent, stdoutData: string) => void) => void;
       removeHandleSendStderr: (callable: (event: IpcRendererEvent, stderrData: string) => void) => void;
       terminateAutoTTRec: () => Promise<void>;
+      importFormTemplate: (filename: string) => Promise<ImportTemplateResult>;
     }
   }
 }

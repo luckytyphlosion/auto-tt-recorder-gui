@@ -13,7 +13,7 @@ export function ClearAllFields(props: {
   const [allFieldsCleared, setAllFieldsCleared] = useState(false);
   const [afterAllFieldsCleared, setAfterAllFieldsCleared] = useState(false);
 
-  function clearAlFieldsModal_confirm(event: React.MouseEvent<HTMLButtonElement>) {
+  function clearAllFieldsModal_confirm(event: React.MouseEvent<HTMLButtonElement>) {
     //
 
     //for (const autoTTRecConfigFormFieldName of AUTO_TT_REC_CONFIG_FORM_FIELD_NAMES) {
@@ -84,7 +84,7 @@ export function ClearAllFields(props: {
       contentLabel="Save Gecko Code Dialog"
     >
       <h3>Are you SURE you want to clear all input fields?</h3>
-      <button onClick={clearAlFieldsModal_confirm}>Yes</button>
+      <button onClick={clearAllFieldsModal_confirm}>Yes</button>
       <button onClick={clearAlFieldsModal_cancel}>No</button>
     </Modal>
     </div>

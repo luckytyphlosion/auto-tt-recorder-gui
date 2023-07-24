@@ -51,6 +51,7 @@ import { MusicPresentation } from "./form_components/MusicPresentationInput";
 import { FormComplexity } from "./layout_components/FormComplexityLayout";
 
 import { ClearAllFields } from "./ClearAllFields";
+import { ImportTemplate } from "./ImportTemplate";
 
 import { AutoTTRecConfigFormFieldTypes, AutoTTRecArgs, Timeline, DEFAULT_FORM_VALUES, convertFormDataToAutoTTRecArgs } from "../AutoTTRecFormFieldsAndArgs";
 
@@ -114,6 +115,7 @@ export function AutoTTRecConfigForm(
   return (
     <div>
       <form onSubmit={formMethods.handleSubmit(onSubmit, onError)}>
+        <ImportTemplate/>
         <ClearAllFields formMethods={formMethods} submittedToggle={submittedToggle} setSubmittedToggle={setSubmittedToggle} setFormDefaultValues={props.setFormDefaultValues}/>
         <fieldset disabled={props.isAutoTTRecRunning}>
           {/*<AutoTTRecConfigFormComponents_Memo formMethods={formMethods} forceUpdate={submittedToggle} isAutoTTRecRunning={props.isAutoTTRecRunning}/>*/}

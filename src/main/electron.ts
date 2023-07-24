@@ -32,6 +32,7 @@ import * as versions from "../versions";
 import * as autoTTRecBridge from "./auto-tt-rec-bridge";
 import * as gui2 from "./gui2";
 import * as confighandler from "./confighandler";
+import * as formTemplate from "./form-template";
 
 import fs from "fs";
 
@@ -139,6 +140,9 @@ async function createWindow() {
   ipcMain.handle("terminate-auto-tt-rec", autoTTRecBridge.terminateAutoTTRec);
 
   ipcMain.handle("get-global-config", confighandler.getGlobalConfig);
+
+  ipcMain.handle("import-form-template", formTemplate.importTemplate);
+
   // and load the index.html of the app.
   // win.loadFile("index.html");
   console.log("isDev:", isDev);
