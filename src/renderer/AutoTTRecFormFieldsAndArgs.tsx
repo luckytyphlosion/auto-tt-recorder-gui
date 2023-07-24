@@ -65,10 +65,45 @@ type IfEquals<T, U, Y=unknown, N=never> =
 // choice inputs (dropdown, radio button)
 // checkbox inputs (tri-checkbox)
 
+type Fruit = "apple" | "orange";
+
+type Fruit2 = Fruit extends infer R ? R extends any ? R & Property : never : never;
+
+const fruit22: Fruit2 = null as never;
+
+type Fruit2ExtendsProperty = IfExtends<Fruit2, Property>;
+type FruitExtendsProperty = IfExtends<Fruit, Property>;
+
+type IfExtends<T, U> = T extends U ? true : false;
+
+type Property = { myProperty: boolean };
+
+//type GhostAutoWithProperty = { [K in GhostAuto2]: K } & Property;
+
+//type GhostAuto3 = GhostAutoWithProperty[keyof GhostAutoWithProperty];
+
+// Usage example
+//type Result1 = IfExtends<GhostAuto3, Property>; // true
+type Result2 = IfExtends<GhostAuto2, Property>; // false
+
+type InternalField<T extends string> = {[K in T]: never};
+
+type GhostAuto2 = InternalField<GhostAuto>;
+type GhostAuto2Keyof = keyof GhostAuto2;
+
+type InternalField2<T> = T | null;
+
+let ghostAuto2: GhostAuto2 = {"main-ghost-auto": null as never, "comparison-ghost-auto": null as never};
+
+type InternalFieldProperty = { myProperty: boolean };
+
+type AudioBitrateUnitInternal = {[K in AudioBitrateUnit]: K} & InternalFieldProperty;
+type AudioBitrateUnitInternalKey = keyof AudioBitrateUnitInternal;
+
 export class AutoTTRecConfigFormFieldTypesClass {
   "aspect-ratio-16-by-9": AspectRatio16By9 = "auto"; // choice
   "audio-bitrate": number = 128000; // number
-  "audio-bitrate-displayed": number = 128; // internal
+  "audio-bitrate-displayed": number | null = 128; // internal
   "audio-bitrate-unit": AudioBitrateUnit = "kbps"; // internal
   "audio-codec": AudioCodec = "libopus"; // choice
   "background-music-source": BackgroundMusicSource = DEBUG_PREFILLED_DEFAULTS ? "game-bgm" : "music-filename"; // choice
@@ -194,15 +229,23 @@ class AutoTTRecArgsClass {
   "youtube-settings"?: boolean = true;
 }
 
+interface AutoTTRecConfigFormFieldTypesClassHasNulls extends AutoTTRecConfigFormFieldTypesClass {};
+
+type IncludesNull<T> = null extends T ? true : false;
+
+type DoesExtendNull = (number | null) extends AutoTTRecConfigFormFieldTypesClassHasNulls["audio-bitrate-displayed"] ? true : false;
+
+type NonNullable<T> = {[P in keyof T]: Exclude<T[P], null>};
+
 type Writable<T> = { -readonly [P in keyof T]: T[P] };
+
+type AutoTTRecConfigFormFieldTypesClassNoNulls = NonNullable<AutoTTRecConfigFormFieldTypesClass>;
 
 const autoTTRecConfigFormFieldTypesClassObj = new AutoTTRecConfigFormFieldTypesClass();
 
 export interface AutoTTRecConfigFormFieldTypes extends AutoTTRecConfigFormFieldTypesClass {};
 
 //export type AutoTTRecConfigFormFieldTypes = Writable<AutoTTRecConfigFormFieldTypesReadonly>;
-
-
 
 type AutoTTRecConfigFormFieldNames = Array<keyof AutoTTRecConfigFormFieldTypes>;
 
@@ -215,10 +258,22 @@ export type AutoTTRecConfigFormStringFieldTypes = Pick<AutoTTRecConfigFormFieldT
     IfEquals<AutoTTRecConfigFormFieldTypes[K], string, K, never>
 }[keyof AutoTTRecConfigFormFieldTypes]>;
 
+export type AutoTTRecConfigFormNumberFieldTypes = Pick<AutoTTRecConfigFormFieldTypes, {
+  [K in keyof AutoTTRecConfigFormFieldTypes]-?:
+    IfEquals<AutoTTRecConfigFormFieldTypes[K], number, K, never>
+}[keyof AutoTTRecConfigFormFieldTypes]>;
+
 export type AutoTTRecConfigFormTriCheckboxFieldTypes = Pick<AutoTTRecConfigFormFieldTypes, {
   [K in keyof AutoTTRecConfigFormFieldTypes]-?:
     IfEquals<AutoTTRecConfigFormFieldTypes[K], boolean | undefined, K, never>
 }[keyof AutoTTRecConfigFormFieldTypes]>;
+
+export type AutoTTRecConfigFormInternalFieldTypes = Pick<AutoTTRecConfigFormFieldTypes, {
+  [K in keyof AutoTTRecConfigFormFieldTypes]-?:
+    null extends AutoTTRecConfigFormFieldTypes[K] ? K : never
+}[keyof AutoTTRecConfigFormFieldTypes]>;
+
+type GhostAuto = "main-ghost-auto" | "comparison-ghost-auto";
 
 const AUTO_TT_REC_TOP_10_LOCATIONS = makeReadonlyArraySet(["ww", "worldwide", ...countryLocations, ...regionalLocations] as const);
 type Top10LocationFull = ValidValues<typeof AUTO_TT_REC_TOP_10_LOCATIONS>;
@@ -253,8 +308,6 @@ const autoTTRecArgsClassObj = new AutoTTRecArgsClass();
 type AutoTTRecArgNamesType = Array<keyof AutoTTRecArgs>;
 
 const AUTO_TT_REC_ARG_NAMES: AutoTTRecArgNamesType = Object.keys(autoTTRecArgsClassObj) as AutoTTRecArgNamesType;
-
-type GhostAuto = "main-ghost-auto" | "comparison-ghost-auto";
 
 type AutoTTRecArgNameExtended = AutoTTRecArgName | GhostAuto | "no-200cc" | "top-10-censors" | "ending-message" | "dolphin-volume";
 
@@ -310,11 +363,13 @@ const ghostPageLinkRegex = /^https:\/\/(?:www\.)?chadsoft\.co\.uk\/time-trials\/
 
 class AutoTTRecConfigImporter {
   private autoTTRecArgs: AutoTTRecArgs;
+  private formData: Partial<AutoTTRecConfigFormFieldTypes>;
   private autoTTRecConfig: AutoTTRecConfig;
   private errorsAndWarnings: AutoTTRecConfigImporterErrorsAndWarnings;
 
   constructor(autoTTRecConfig: AutoTTRecConfig) {
     this.autoTTRecArgs = {};
+    this.formData = {};
     //for (const autoTTRecArgName in AUTO_TT_REC_ARG_NAMES) {
     //  this.autoTTRecArgs[autoTTRecArgName as AutoTTRecArgName] = null;
     //}
@@ -350,12 +405,17 @@ class AutoTTRecConfigImporter {
   public addWarningExtended<K extends AutoTTRecArgNameExtended>(key: K, message: string) {
     this.errorsAndWarnings.addWarning(key, message);
   }
-  public add<K extends AutoTTRecArgName>(key: K, value: AutoTTRecArgs[K]) {
-    if (key in this.autoTTRecArgs) {
+  public add<K extends AutoTTRecArgName & keyof AutoTTRecConfigFormFieldTypes, V extends AutoTTRecArgs[K] & AutoTTRecConfigFormFieldTypes[K]>(key: K, value: V) {
+    if (key in this.formData) {
       let message = `Option ${key} was already defined. Was originally ${this.autoTTRecArgs[key]}, but is now being defined to ${value}.`
       this.addWarning(key, message);
     }
-    this.autoTTRecArgs[key] = value;
+    if (value === null) {
+      this.formData[key] = DEFAULT_FORM_VALUES[key];
+    } else {
+      this.formData[key] = value;
+
+    }
   }
 
   private tryAddSameOption_Common<K extends keyof AutoTTRecArgs>(key: K, validValues?: ReadonlyArraySet<AutoTTRecArgs[K]>) {
@@ -554,22 +614,31 @@ class AutoTTRecConfigToFormData {
 
     // add an argument with the same name and type from the submitted formData
   // to the resulting auto-tt-rec arguments
-  public add<K extends keyof AutoTTRecConfigFormFieldTypes & keyof AutoTTRecArgs>(key: K) {
+  public add<K extends keyof AutoTTRecConfigFormFieldTypes & keyof AutoTTRecArgs, V extends AutoTTRecArgs[K] & AutoTTRecConfigFormFieldTypes[K]>(key: K) {
     let value = this.autoTTRecArgs[key];
     if (value !== null && value !== undefined) {
       //let value2 = value;
       //let oldFormData = this.formData[key];
-      this.formData[key] = value as AutoTTRecConfigFormFieldTypes[K];
+      this.formData[key] = value;
     }
   }
 
   // simple key value argument add, not taking data from formData
-  public addManual<K extends AutoTTRecArgName>(key: K, value: AutoTTRecArgs[K]) {
-    this.autoTTRecArgs[key] = value;
+  public addManual<K extends keyof AutoTTRecConfigFormFieldTypes>(key: K, value: AutoTTRecConfigFormFieldTypes[K] | null | undefined) {
+    let nonNullValue: AutoTTRecConfigFormFieldTypes[K];
+    if (value === null) {
+      nonNullValue = DEFAULT_FORM_VALUES[key];
+    } else if (value === undefined) {
+      nonNullValue = "<FILLME>";
+    } else {
+      nonNullValue = value;
+    }
+    this.formData[key] = nonNullValue;
   }
 
   public convert() {
-    //this.formData["aspect-ratio-16-by-9"] = this.autoTTRecArgs["aspect-ratio-16-by-9"];
+    this.addManual("aspect-ratio-16-by-9", this.autoTTRecArgs["aspect-ratio-16-by-9"]);
+    //this.formData["aspect-ratio-16-by-9"] = ;
   }
 }
 
