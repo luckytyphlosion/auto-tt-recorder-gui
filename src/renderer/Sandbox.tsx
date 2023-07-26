@@ -2,6 +2,21 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Modal from 'react-modal';
 
+type GhostAuto = "main-ghost-auto" | "comparison-ghost-auto";
+type IfExtends<T, U> = T extends U ? true : false;
+
+type Property = { myProperty: boolean };
+
+type GhostAutoWithProperty = { [K in GhostAuto]: K } & Property;
+
+type GhostAuto2 = keyof GhostAutoWithProperty;
+
+// Usage example
+type Result1 = IfExtends<GhostAuto2, Property>; // true
+type Result2 = IfExtends<GhostAuto, Property>; // false
+
+let ghostAuto: GhostAuto2 = "main-ghost-auto";
+
 const customStyles = {
   content: {
     top: '50%',

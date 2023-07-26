@@ -1,17 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
+import { FormComplexity } from "../layout_components/FormComplexityLayout";
+import useRenderCounter from "../../RenderCounter";
 
-export type TrackNameType = "auto" | "manual";
+export type TrackNameType = "auto" | "manual" | "rkg-slot";
 
-export function TrackNameInput() {
-  const {register, getValues} = useFormContextAutoTT();
+export function TrackNameInput(props: {formComplexity: FormComplexity}) {
+  const {register, getValues, setValue} = useFormContextAutoTT();
   const [trackNameType, setTrackNameType] = useState(getValues("track-name-type"));
+  const renderCounter = useRenderCounter(false, "TrackNameInput");
+
+  useEffect(() => {
+    let trackNameType = getValues("track-name-type");
+    if (props.formComplexity < FormComplexity.ALL && trackNameType === "rkg-slot") {
+      setValue("track-name-type", "auto");
+      setTrackNameType("auto");
+    }
+  }, [props.formComplexity]);
 
   function updateTrackNameType(event: Event) {
     setTrackNameType(getValues("track-name-type"));
   }
-
 
   return (
     <div>
@@ -20,6 +30,15 @@ export function TrackNameInput() {
       <input type="radio" id="track-name-type-auto" value="auto"
         {...register("track-name-type", {onChange: updateTrackNameType})}
       ></input>
+      {
+        props.formComplexity === FormComplexity.ALL ? 
+        <>
+          <label htmlFor="track-name-type-rkg-slot">Use rkg slot name:</label>
+          <input type="radio" id="track-name-type-rkg-slot" value="rkg-slot"
+            {...register("track-name-type", {onChange: updateTrackNameType})}
+          ></input>
+        </> : ""
+      }
       <label htmlFor="track-name-type-manual">Supply manually:</label>
       <input type="radio" id="track-name-type-manual" value="manual"
         {...register("track-name-type", {onChange: updateTrackNameType})}
@@ -34,6 +53,7 @@ export function TrackNameInput() {
           <SimpleErrorMessage name="track-name"/>
         </> : ""
       }
+      {renderCounter}
     </div>
   );
 }

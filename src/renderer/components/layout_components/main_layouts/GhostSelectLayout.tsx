@@ -45,7 +45,7 @@ import { CRFValueInput } from "../../form_components/CRFValueInput";
 
 import useRenderCounter from "../../../RenderCounter";
 
-const PixelFormatInput_Memo = memo(PixelFormatInput);
+const TrackNameInput_Memo = memo(TrackNameInput);
 
 export function GhostSelectLayout(props: {isAutoTTRecRunning: boolean, formComplexity: FormComplexity}) {
   const renderCounter = useRenderCounter(false, "GhostSelectLayout");
@@ -55,7 +55,7 @@ export function GhostSelectLayout(props: {isAutoTTRecRunning: boolean, formCompl
       <MainGhostSourceInput/>
       <ComparisonGhostSourceInput/>
       <SZSSourceInput/>
-      <TrackNameInput/>
+      <TrackNameInput_Memo formComplexity={props.formComplexity}/>
       <BackgroundMusicSourceInput timeline="ghostselect" formComplexity={props.formComplexity}/>
       {
         props.formComplexity > FormComplexity.SIMPLE ? <>

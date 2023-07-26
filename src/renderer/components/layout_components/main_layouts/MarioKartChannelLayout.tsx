@@ -45,7 +45,7 @@ import { CRFValueInput } from "../../form_components/CRFValueInput";
 
 import useRenderCounter from "../../../RenderCounter";
 
-const PixelFormatInput_Memo = memo(PixelFormatInput);
+const TrackNameInput_Memo = memo(TrackNameInput);
 
 export function MarioKartChannelLayout(props: {isAutoTTRecRunning: boolean, formComplexity: FormComplexity}) {
   const renderCounter = useRenderCounter(false, "MarioKartChannelLayout");
@@ -58,9 +58,9 @@ export function MarioKartChannelLayout(props: {isAutoTTRecRunning: boolean, form
       {
         props.formComplexity > FormComplexity.SIMPLE ? <>
           <MKChannelGhostDescriptionInput/>
-          <TrackNameInput/>
+          <TrackNameInput_Memo formComplexity={props.formComplexity}/>
           <Top10LocationInput/>
-        </> : <TrackNameInput/>
+        </> : <TrackNameInput_Memo formComplexity={props.formComplexity}/>
       }
       <BackgroundMusicSourceInput timeline="mkchannel" formComplexity={props.formComplexity}/>
       {

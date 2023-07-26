@@ -21,7 +21,7 @@ export function AudioCodecAndBitrateInput(props: {encodeType: EncodeType, encode
 
   function updateAudioCodec(event: Event) {
     setAudioCodec(getValues("audio-codec"));
-    setEncodeTypeOrAudioCodecChanged(true);
+    setEncodeTypeOrAudioCodecChanged((oldEncodeTypeOrAudioCodecChanged) => (!oldEncodeTypeOrAudioCodecChanged));
   }
 
   return (

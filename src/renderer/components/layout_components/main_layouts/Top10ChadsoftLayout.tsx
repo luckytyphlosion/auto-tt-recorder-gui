@@ -46,7 +46,7 @@ import { CRFValueInput } from "../../form_components/CRFValueInput";
 
 import useRenderCounter from "../../../RenderCounter";
 
-const PixelFormatInput_Memo = memo(PixelFormatInput);
+const TrackNameInput_Memo = memo(TrackNameInput);
 
 export function Top10ChadsoftLayout(props: {isAutoTTRecRunning: boolean, formComplexity: FormComplexity}) {
   const {register, getValues} = useFormContextAutoTT();
@@ -67,9 +67,9 @@ export function Top10ChadsoftLayout(props: {isAutoTTRecRunning: boolean, formCom
       {
         props.formComplexity > FormComplexity.SIMPLE ? <>
           <MKChannelGhostDescriptionInput/>
-          <TrackNameInput/>
+          <TrackNameInput_Memo formComplexity={props.formComplexity}/>
           <Top10LocationInput/>
-        </> : <TrackNameInput/>
+        </> : <TrackNameInput_Memo formComplexity={props.formComplexity}/>
       }
       <BackgroundMusicSourceInput timeline="top10" formComplexity={props.formComplexity}/>
       {

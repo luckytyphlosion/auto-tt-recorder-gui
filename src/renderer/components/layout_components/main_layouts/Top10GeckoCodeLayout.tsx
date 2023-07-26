@@ -43,7 +43,8 @@ import { FormComplexity } from "../FormComplexityLayout";
 import { PresentationSettingsLayout } from "../sub_layouts/PresentationSettingsLayout";
 import { CRFValueInput } from "../../form_components/CRFValueInput";
 
-/**/
+const TrackNameInput_Memo = memo(TrackNameInput);
+
 export function Top10GeckoCodeLayout(props: {isAutoTTRecRunning: boolean, formComplexity: FormComplexity}) {
   const renderCounter = useRenderCounter(false, "Top10GeckoCodeLayout");
 
@@ -56,9 +57,9 @@ export function Top10GeckoCodeLayout(props: {isAutoTTRecRunning: boolean, formCo
       {
         props.formComplexity > FormComplexity.SIMPLE ? <>
           <MKChannelGhostDescriptionInput/>
-          <TrackNameInput/>
+          <TrackNameInput_Memo formComplexity={props.formComplexity}/>
           <Top10GeckoCodeLocationInput/>
-        </> : <TrackNameInput/>
+        </> : <TrackNameInput_Memo formComplexity={props.formComplexity}/>
       }
       <BackgroundMusicSourceInput timeline="top10" formComplexity={props.formComplexity}/>
       {

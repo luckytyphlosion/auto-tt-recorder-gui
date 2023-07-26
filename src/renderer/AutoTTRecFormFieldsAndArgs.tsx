@@ -65,46 +65,15 @@ type IfEquals<T, U, Y=unknown, N=never> =
 // choice inputs (dropdown, radio button)
 // checkbox inputs (tri-checkbox)
 
-type Fruit = "apple" | "orange";
+type InternalField<T> = T | null;
 
-type Fruit2 = Fruit extends infer R ? R extends any ? R & Property : never : never;
+type AnyFIXME = any;
 
-const fruit22: Fruit2 = null as never;
-
-type Fruit2ExtendsProperty = IfExtends<Fruit2, Property>;
-type FruitExtendsProperty = IfExtends<Fruit, Property>;
-
-type IfExtends<T, U> = T extends U ? true : false;
-
-type Property = { myProperty: boolean };
-
-//type GhostAutoWithProperty = { [K in GhostAuto2]: K } & Property;
-
-//type GhostAuto3 = GhostAutoWithProperty[keyof GhostAutoWithProperty];
-
-// Usage example
-//type Result1 = IfExtends<GhostAuto3, Property>; // true
-type Result2 = IfExtends<GhostAuto2, Property>; // false
-
-type InternalField<T extends string> = {[K in T]: never};
-
-type GhostAuto2 = InternalField<GhostAuto>;
-type GhostAuto2Keyof = keyof GhostAuto2;
-
-type InternalField2<T> = T | null;
-
-let ghostAuto2: GhostAuto2 = {"main-ghost-auto": null as never, "comparison-ghost-auto": null as never};
-
-type InternalFieldProperty = { myProperty: boolean };
-
-type AudioBitrateUnitInternal = {[K in AudioBitrateUnit]: K} & InternalFieldProperty;
-type AudioBitrateUnitInternalKey = keyof AudioBitrateUnitInternal;
-
-export class AutoTTRecConfigFormFieldTypesClass {
+export class AutoTTRecConfigFormFieldTypesClassWithInternalIndicators {
   "aspect-ratio-16-by-9": AspectRatio16By9 = "auto"; // choice
   "audio-bitrate": number = 128000; // number
-  "audio-bitrate-displayed": number | null = 128; // internal
-  "audio-bitrate-unit": AudioBitrateUnit = "kbps"; // internal
+   "audio-bitrate-displayed": InternalField<number> = 128; // internal
+   "audio-bitrate-unit": InternalField<AudioBitrateUnit> = "kbps"; // internal
   "audio-codec": AudioCodec = "libopus"; // choice
   "background-music-source": BackgroundMusicSource = DEBUG_PREFILLED_DEFAULTS ? "game-bgm" : "music-filename"; // choice
   "chadsoft-comparison-ghost-page": string = ""; // arbitrary
@@ -115,14 +84,14 @@ export class AutoTTRecConfigFormFieldTypesClass {
   "dolphin-resolution": DolphinResolution = DEBUG_PREFILLED_DEFAULTS ? "480p" : "1440p"; // choice
   "encode-only"?: boolean = false; // checkbox
   "encode-size": number = 52428800; // number
-  "encode-size-displayed": number = 50; // internal
-  "encode-size-unit": EncodeSizeUnit = "mib"; // internal
+   "encode-size-displayed": InternalField<number> = 50; // internal
+   "encode-size-unit": InternalField<EncodeSizeUnit> = "mib"; // internal
   "encode-type": EncodeType = "crf"; // choice
   "ending-delay": number = 600; // number
   "extra-gecko-codes-enable": boolean = false; // checkbox
   "extra-gecko-codes-contents": string = ""; // arbitrary
   "extra-gecko-codes-filename": string = ""; // arbitrary
-  "extra-gecko-codes-unsaved": boolean = false; // internal
+   "extra-gecko-codes-unsaved": InternalField<boolean> = false; // internal
   "extra-hq-textures-folder-enable": boolean = false; // checkbox
   "extra-hq-textures-folder": string = ""; // arbitrary
   "fade-in-at-start": boolean = false; // checkbox
@@ -162,7 +131,7 @@ export class AutoTTRecConfigFormFieldTypesClass {
   "top-10-gecko-code-location-region": Top10GeckoCodeLocationRegion = "worldwide"; // choice
   "top-10-gecko-code-contents": string = ""; // arbitrary
   "top-10-gecko-code-filename": string = ""; // arbitrary
-  "top-10-gecko-code-unsaved": boolean = false; // internal
+   "top-10-gecko-code-unsaved": InternalField<boolean> = false; // internal
   "top-10-highlight-enable": boolean = true; // checkbox
   "top-10-highlight": number = 1; // number
   "top-10-location-country-location": Top10LocationCountry = "Abkhazia"; // choice
@@ -229,27 +198,41 @@ class AutoTTRecArgsClass {
   "youtube-settings"?: boolean = true;
 }
 
-interface AutoTTRecConfigFormFieldTypesClassHasNulls extends AutoTTRecConfigFormFieldTypesClass {};
-
-type IncludesNull<T> = null extends T ? true : false;
-
-type DoesExtendNull = (number | null) extends AutoTTRecConfigFormFieldTypesClassHasNulls["audio-bitrate-displayed"] ? true : false;
-
 type NonNullable<T> = {[P in keyof T]: Exclude<T[P], null>};
 
-type Writable<T> = { -readonly [P in keyof T]: T[P] };
+type asfsf = {[P in keyof typeof AutoTTRecConfigFormFieldTypesClassWithInternalIndicators]: typeof AutoTTRecConfigFormFieldTypesClassWithInternalIndicators[P]};
 
-type AutoTTRecConfigFormFieldTypesClassNoNulls = NonNullable<AutoTTRecConfigFormFieldTypesClass>;
+interface AutoTTRecConfigFormFieldTypesWithInternalIndicators extends AutoTTRecConfigFormFieldTypesClassWithInternalIndicators {};
+export type AutoTTRecConfigFormFieldTypes = NonNullable<AutoTTRecConfigFormFieldTypesWithInternalIndicators>;
 
-const autoTTRecConfigFormFieldTypesClassObj = new AutoTTRecConfigFormFieldTypesClass();
-
-export interface AutoTTRecConfigFormFieldTypes extends AutoTTRecConfigFormFieldTypesClass {};
+const autoTTRecConfigFormFieldTypesClassObj = new AutoTTRecConfigFormFieldTypesClassWithInternalIndicators();
 
 //export type AutoTTRecConfigFormFieldTypes = Writable<AutoTTRecConfigFormFieldTypesReadonly>;
 
 type AutoTTRecConfigFormFieldNames = Array<keyof AutoTTRecConfigFormFieldTypes>;
 
-export const DEFAULT_FORM_VALUES: AutoTTRecConfigFormFieldTypes = autoTTRecConfigFormFieldTypesClassObj;
+class Test50 {
+  static readonly "audio-bitrate-displayed": number = 128; // internal
+  static readonly "audio-bitrate-unit": string = "kbps"; // internal
+}
+
+function enforceOneTwentyEight<T extends number & 128>(value: T): T {
+  return value;
+}
+
+type OneTwentyEight = 128;
+
+//let x: OneTwentyEight = enforceOneTwentyEight(Test50["audio-bitrate-displayed"]);
+//const Test50_DEFAULT_VALUES
+
+type Test50Interface = Omit<{[P in keyof typeof Test50]: typeof Test50[P]}, "prototype">;
+type Test50NoNulls = NonNullable<Test50Interface>;
+
+//export const Test50_DEFAULT_VALUES: Test50NoNulls = Test50;
+
+//let abcde = Object.entries<AutoTTRecConfigFormFieldTypes>(autoTTRecConfigFormFieldTypesClassObj);
+
+export const DEFAULT_FORM_VALUES: AutoTTRecConfigFormFieldTypes = autoTTRecConfigFormFieldTypesClassObj as AutoTTRecConfigFormFieldTypes;
 
 export const AUTO_TT_REC_CONFIG_FORM_FIELD_NAMES = Object.keys(autoTTRecConfigFormFieldTypesClassObj) as AutoTTRecConfigFormFieldNames;
 
@@ -426,19 +409,19 @@ class AutoTTRecConfigImporter {
         if (typeof configValue === expectedType) {
           if (validValues !== undefined) {
             if (isInSet(validValues.set, configValue)) {
-              this.add(key, configValue);
+              this.add(key as AnyFIXME, configValue);
             } else {
               this.addError(key, `${key} should be one of ${listFormatter.format(validValues.arr.map(x => String(x)))}`);
             }
           } else {
             let configValueWithType = configValue as AutoTTRecArgs[K];
-            this.add(key, configValueWithType);
+            this.add(key as AnyFIXME, configValueWithType);
           }
         } else {
           this.addError(key, `${key} should be a ${expectedType}, but got a ${typeof configValue} instead.`);
         }
       } else {
-        this.add(key, configValue);
+        this.add(key as AnyFIXME, configValue);
       }
     } else {
       this.addError(key, "Error in determining expected type (please contact the developer).");
@@ -469,8 +452,8 @@ class AutoTTRecConfigImporter {
         this.addErrorExtended(ghostAutoOptionName, `${ghostAutoOptionName} should be a string, but got ${typeof ghostAutoValue} instead.`);
       }
     } else {
-      this.add(ghostFilenameOptionName, ghostAutoValue);
-      this.add(ghostLinkOptionName, ghostAutoValue);
+      this.add(ghostFilenameOptionName, ghostAutoValue as AnyFIXME);
+      this.add(ghostLinkOptionName, ghostAutoValue as AnyFIXME);
     }
   }
 
@@ -494,12 +477,12 @@ class AutoTTRecConfigImporter {
 
     if (no200cc !== null && no200cc !== undefined) {
       if (typeof no200cc === "boolean") {
-        this.add("on-200cc", !no200cc);
+        this.add("on-200cc" as AnyFIXME, !no200cc);
       } else {
         this.addErrorExtended("no-200cc", `no-200cc should be a boolean, but got ${typeof no200cc} instead.`);
       }
     } else if (no200cc === undefined) {
-      this.add("on-200cc", undefined);
+      this.add("on-200cc" as AnyFIXME, undefined);
     }
 
     this.tryAddSameOptionComplex("timeline", TIMELINES);
@@ -544,7 +527,7 @@ class AutoTTRecConfigImporter {
     let audioBitrate = this.autoTTRecConfig["audio-bitrate"];
     if (audioBitrate !== null && audioBitrate !== undefined) {
       if (typeof audioBitrate === "string" || typeof audioBitrate === "number") {
-        this.add("audio-bitrate", audioBitrate);
+        this.add("audio-bitrate", audioBitrate as AnyFIXME);
         //if (audioBitrate.charAt(audioBitrate.length - 1) == "k") {
         //  audioBitrateAsNum = Number(audioBitrate.substring(0, audioBitrate.length - 1));
         //  if (!Number.isNaN(audioBitrateAsNum)) {
@@ -559,7 +542,7 @@ class AutoTTRecConfigImporter {
         this.addError("audio-bitrate", `audio-bitrate should be a string or number, but got a ${typeof audioBitrate} instead.`);
       }
     } else {
-      this.add("audio-bitrate", audioBitrate);
+      this.add("audio-bitrate", audioBitrate as AnyFIXME);
     }
 
     this.tryAddSameOption("pixel-format");
@@ -584,7 +567,7 @@ class AutoTTRecConfigImporter {
         this.addError("aspect-ratio-16-by-9", `aspect-ratio-16-by-9 should be a string or number, but got a ${typeof aspectRatio16By9} instead.`);
       }
     } else {
-      this.add("aspect-ratio-16-by-9", aspectRatio16By9);
+      this.add("aspect-ratio-16-by-9", aspectRatio16By9 as AnyFIXME);
     }
 
     this.tryAddSameOption("youtube-settings");
@@ -609,7 +592,7 @@ class AutoTTRecConfigToFormData {
 
   constructor(autoTTRecArgs: AutoTTRecArgs) {
     this.autoTTRecArgs = autoTTRecArgs;
-    this.formData = {...autoTTRecConfigFormFieldTypesClassObj};
+    this.formData = {...autoTTRecConfigFormFieldTypesClassObj} as AnyFIXME;
   }
 
     // add an argument with the same name and type from the submitted formData
@@ -619,7 +602,7 @@ class AutoTTRecConfigToFormData {
     if (value !== null && value !== undefined) {
       //let value2 = value;
       //let oldFormData = this.formData[key];
-      this.formData[key] = value;
+      this.formData[key] = value as AnyFIXME;
     }
   }
 
@@ -629,7 +612,7 @@ class AutoTTRecConfigToFormData {
     if (value === null) {
       nonNullValue = DEFAULT_FORM_VALUES[key];
     } else if (value === undefined) {
-      nonNullValue = "<FILLME>";
+      nonNullValue = "<FILLME>" as AnyFIXME;
     } else {
       nonNullValue = value;
     }
