@@ -65,33 +65,34 @@ type IfEquals<T, U, Y=unknown, N=never> =
 // choice inputs (dropdown, radio button)
 // checkbox inputs (tri-checkbox)
 
-type InternalField<T> = T | null;
-
 type AnyFIXME = any;
 
-export class AutoTTRecConfigFormFieldTypesClassWithInternalIndicators {
+export class AutoTTRecConfigFormFieldTypesClass {
   "aspect-ratio-16-by-9": AspectRatio16By9 = "auto"; // choice
   "audio-bitrate": number = 128000; // number
-   "audio-bitrate-displayed": InternalField<number> = 128; // internal
-   "audio-bitrate-unit": InternalField<AudioBitrateUnit> = "kbps"; // internal
+  "audio-bitrate-displayed": number = 128; // internal
+  "audio-bitrate-unit": AudioBitrateUnit = "kbps"; // internal
   "audio-codec": AudioCodec = "libopus"; // choice
   "background-music-source": BackgroundMusicSource = DEBUG_PREFILLED_DEFAULTS ? "game-bgm" : "music-filename"; // choice
   "chadsoft-comparison-ghost-page": string = ""; // arbitrary
   "chadsoft-ghost-page": string = DEBUG_PREFILLED_DEFAULTS ? "https://www.chadsoft.co.uk/time-trials/rkgd/D3/25/D29456963F8A9C5D7D9A8949118A19873EA6.html" : ""; // arbitrary
+  "chadsoft-read-cache": boolean = true;
+  "chadsoft-write-cache": boolean = true;
+  "chadsoft-cache-expiry": string = "24h";
   "comparison-ghost-filename": string = ""; // arbitrary
   "comparison-ghost-source": ComparisonGhostSource = "none"; // choice
   "crf-value": number = 15; // number
   "dolphin-resolution": DolphinResolution = DEBUG_PREFILLED_DEFAULTS ? "480p" : "1440p"; // choice
   "encode-only"?: boolean = false; // checkbox
   "encode-size": number = 52428800; // number
-   "encode-size-displayed": InternalField<number> = 50; // internal
-   "encode-size-unit": InternalField<EncodeSizeUnit> = "mib"; // internal
+  "encode-size-displayed": number = 50; // internal
+  "encode-size-unit": EncodeSizeUnit = "mib"; // internal
   "encode-type": EncodeType = "crf"; // choice
   "ending-delay": number = 600; // number
   "extra-gecko-codes-enable": boolean = false; // checkbox
   "extra-gecko-codes-contents": string = ""; // arbitrary
   "extra-gecko-codes-filename": string = ""; // arbitrary
-   "extra-gecko-codes-unsaved": InternalField<boolean> = false; // internal
+  "extra-gecko-codes-unsaved": boolean = false; // internal
   "extra-hq-textures-folder-enable": boolean = false; // checkbox
   "extra-hq-textures-folder": string = ""; // arbitrary
   "fade-in-at-start": boolean = false; // checkbox
@@ -131,7 +132,7 @@ export class AutoTTRecConfigFormFieldTypesClassWithInternalIndicators {
   "top-10-gecko-code-location-region": Top10GeckoCodeLocationRegion = "worldwide"; // choice
   "top-10-gecko-code-contents": string = ""; // arbitrary
   "top-10-gecko-code-filename": string = ""; // arbitrary
-   "top-10-gecko-code-unsaved": InternalField<boolean> = false; // internal
+  "top-10-gecko-code-unsaved": boolean = false; // internal
   "top-10-highlight-enable": boolean = true; // checkbox
   "top-10-highlight": number = 1; // number
   "top-10-location-country-location": Top10LocationCountry = "Abkhazia"; // choice
@@ -152,6 +153,9 @@ class AutoTTRecArgsClass {
   "audio-codec"?: AudioCodec = "libopus";
   "chadsoft-comparison-ghost-page"?: string = "";
   "chadsoft-ghost-page"?: string = "";
+  "chadsoft-read-cache"?: boolean = true;
+  "chadsoft-write-cache"?: boolean = true;
+  "chadsoft-cache-expiry"?: string = "24h";
   "comparison-ghost-filename"?: string = "";
   "crf-value"?: number = 15;
   "dolphin-resolution"?: DolphinResolution = "1440p";
@@ -200,37 +204,13 @@ class AutoTTRecArgsClass {
 
 type NonNullable<T> = {[P in keyof T]: Exclude<T[P], null>};
 
-type asfsf = {[P in keyof typeof AutoTTRecConfigFormFieldTypesClassWithInternalIndicators]: typeof AutoTTRecConfigFormFieldTypesClassWithInternalIndicators[P]};
+export interface AutoTTRecConfigFormFieldTypes extends AutoTTRecConfigFormFieldTypesClass {};
 
-interface AutoTTRecConfigFormFieldTypesWithInternalIndicators extends AutoTTRecConfigFormFieldTypesClassWithInternalIndicators {};
-export type AutoTTRecConfigFormFieldTypes = NonNullable<AutoTTRecConfigFormFieldTypesWithInternalIndicators>;
-
-const autoTTRecConfigFormFieldTypesClassObj = new AutoTTRecConfigFormFieldTypesClassWithInternalIndicators();
+const autoTTRecConfigFormFieldTypesClassObj = new AutoTTRecConfigFormFieldTypesClass();
 
 //export type AutoTTRecConfigFormFieldTypes = Writable<AutoTTRecConfigFormFieldTypesReadonly>;
 
 type AutoTTRecConfigFormFieldNames = Array<keyof AutoTTRecConfigFormFieldTypes>;
-
-class Test50 {
-  static readonly "audio-bitrate-displayed": number = 128; // internal
-  static readonly "audio-bitrate-unit": string = "kbps"; // internal
-}
-
-function enforceOneTwentyEight<T extends number & 128>(value: T): T {
-  return value;
-}
-
-type OneTwentyEight = 128;
-
-//let x: OneTwentyEight = enforceOneTwentyEight(Test50["audio-bitrate-displayed"]);
-//const Test50_DEFAULT_VALUES
-
-type Test50Interface = Omit<{[P in keyof typeof Test50]: typeof Test50[P]}, "prototype">;
-type Test50NoNulls = NonNullable<Test50Interface>;
-
-//export const Test50_DEFAULT_VALUES: Test50NoNulls = Test50;
-
-//let abcde = Object.entries<AutoTTRecConfigFormFieldTypes>(autoTTRecConfigFormFieldTypesClassObj);
 
 export const DEFAULT_FORM_VALUES: AutoTTRecConfigFormFieldTypes = autoTTRecConfigFormFieldTypesClassObj as AutoTTRecConfigFormFieldTypes;
 
@@ -265,6 +245,10 @@ function isInSet<T>(values: ReadonlySet<T>, x: any): x is T {
   return values.has(x);
 }
 
+function deleteFromSet<T>(values: Set<T>, x: any): boolean {
+  return values.delete(x);
+}
+
 export type PartialNull<T> = {
   [P in keyof T]: T[P] | null;
 };
@@ -290,7 +274,7 @@ const autoTTRecArgsClassObj = new AutoTTRecArgsClass();
 
 type AutoTTRecArgNamesType = Array<keyof AutoTTRecArgs>;
 
-const AUTO_TT_REC_ARG_NAMES: AutoTTRecArgNamesType = Object.keys(autoTTRecArgsClassObj) as AutoTTRecArgNamesType;
+const AUTO_TT_REC_ARG_NAMES = makeReadonlyArraySet(Object.keys(autoTTRecArgsClassObj) as AutoTTRecArgNamesType);
 
 type AutoTTRecArgNameExtended = AutoTTRecArgName | GhostAuto | "no-200cc" | "top-10-censors" | "ending-message" | "dolphin-volume";
 
@@ -353,19 +337,50 @@ class AutoTTRecConfigImporter {
   constructor(autoTTRecConfig: AutoTTRecConfig) {
     this.autoTTRecArgs = {};
     this.formData = {};
-    //for (const autoTTRecArgName in AUTO_TT_REC_ARG_NAMES) {
-    //  this.autoTTRecArgs[autoTTRecArgName as AutoTTRecArgName] = null;
-    //}
 
     this.autoTTRecConfig = {};
+
+    
+    this.errorsAndWarnings = new AutoTTRecConfigImporterErrorsAndWarnings();
+  }
+
+
+  private static preprocessConfig(inputAutoTTRecConfig: AutoTTRecConfig) {
+    let autoTTRecConfig = shallowCopy(inputAutoTTRecConfig);
+    let missingAutoTTRecArgs = new Set([...AUTO_TT_REC_ARG_NAMES.arr]);
+
     for (const [name, value] of Object.entries(autoTTRecConfig)) {
-      if (typeof value === "string" && value.startsWith("<FILLME") && value.charAt(value.length - 1) == ">") {
-        this.autoTTRecConfig[name] = undefined;
-      } else {
-        this.autoTTRecConfig[name] = value;
+      let isAutoTTRecArgName = deleteFromSet(missingAutoTTRecArgs, name);
+      if (isAutoTTRecArgName) {
+        if (typeof value === "string" && value.startsWith("<FILLME") && value.charAt(value.length - 1) == ">") {
+          autoTTRecConfig[name] = undefined;
+        } else {
+          autoTTRecConfig[name] = value;
+        }  
       }
     }
-    this.errorsAndWarnings = new AutoTTRecConfigImporterErrorsAndWarnings();
+  }
+  
+  private tryAddGhostAuto(ghostAutoOptionName: GhostAuto,
+    ghostFilenameOptionName: "main-ghost-filename" | "comparison-ghost-filename",
+    ghostLinkOptionName: "chadsoft-ghost-page" | "chadsoft-comparison-ghost-page"
+  ) {
+    let ghostAutoValue = this.autoTTRecConfig[ghostAutoOptionName];
+
+    if (ghostAutoValue !== null && ghostAutoValue !== undefined) {
+      if (typeof ghostAutoValue === "string") {
+        if (ghostAutoValue.match(ghostPageLinkRegex)) {
+          this.add(ghostLinkOptionName, ghostAutoValue);
+        } else {
+          this.add(ghostFilenameOptionName, ghostAutoValue);
+        }
+      } else {
+        this.addErrorExtended(ghostAutoOptionName, `${ghostAutoOptionName} should be a string, but got ${typeof ghostAutoValue} instead.`);
+      }
+    } else {
+      this.add(ghostFilenameOptionName, ghostAutoValue as AnyFIXME);
+      this.add(ghostLinkOptionName, ghostAutoValue as AnyFIXME);
+    }
   }
 
   //public add<K extends AutoTTRecArgName>(key: K, value: AutoTTRecArgs[K]) {
@@ -434,27 +449,6 @@ class AutoTTRecConfigImporter {
 
   public tryAddSameOptionComplex<K extends AutoTTRecArgName>(key: K, validValues: ReadonlyArraySet<AutoTTRecArgs[K]>) {
     this.tryAddSameOption_Common(key, validValues);
-  }
-
-  private tryAddGhostAuto(ghostAutoOptionName: GhostAuto,
-    ghostFilenameOptionName: "main-ghost-filename" | "comparison-ghost-filename",
-    ghostLinkOptionName: "chadsoft-ghost-page" | "chadsoft-comparison-ghost-page"
-  ) {
-    let ghostAutoValue = this.autoTTRecConfig[ghostAutoOptionName];
-    if (ghostAutoValue !== null && ghostAutoValue !== undefined) {
-      if (typeof ghostAutoValue === "string") {
-        if (ghostAutoValue.match(ghostPageLinkRegex)) {
-          this.add(ghostLinkOptionName, ghostAutoValue);
-        } else {
-          this.add(ghostFilenameOptionName, ghostAutoValue);
-        }
-      } else {
-        this.addErrorExtended(ghostAutoOptionName, `${ghostAutoOptionName} should be a string, but got ${typeof ghostAutoValue} instead.`);
-      }
-    } else {
-      this.add(ghostFilenameOptionName, ghostAutoValue as AnyFIXME);
-      this.add(ghostLinkOptionName, ghostAutoValue as AnyFIXME);
-    }
   }
 
   public import() {

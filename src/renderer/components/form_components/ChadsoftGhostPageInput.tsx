@@ -27,22 +27,6 @@ export function ChadsoftGhostPageInput() {
         ></input>
         <SimpleErrorMessage name="chadsoft-ghost-page"/>
         {renderCounter}
-        {/*<ErrorMessage
-          errors={formState.errors}
-          name="chadsoft-ghost-page"
-          render={({ messages }) => {
-            console.log("messages", messages);
-            if (messages === undefined) {
-              return null;
-            } else {
-              let messagesEntries = Object.entries(messages);
-              let result = messagesEntries.map(([type, message]: [string, ValidateResult]) => (
-                <p style={{display: "inline"}} key={type}>{message}</p>
-              ));
-              return result; 
-            }
-          }}
-        />*/}
     </div>
   );
 }

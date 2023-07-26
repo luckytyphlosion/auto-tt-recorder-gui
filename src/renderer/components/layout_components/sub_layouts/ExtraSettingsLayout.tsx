@@ -5,6 +5,7 @@ import { UseFFV1Input } from "../../form_components/UseFFV1Input";
 import { EncodeOnlyInput } from "../../form_components/EncodeOnlyInput";
 import { InputDisplayDontCreateInput } from "../../form_components/InputDisplayDontCreateInput";
 import { KeepWindowInput } from "../../form_components/KeepWindowInput";
+import { ChadsoftReadCacheAndSettingsInput } from "../../form_components/ChadsoftReadCacheAndSettingsInput";
 
 export function ExtraSettingsLayout(props: {formComplexity: FormComplexity}) {
   return <>{
@@ -15,6 +16,7 @@ export function ExtraSettingsLayout(props: {formComplexity: FormComplexity}) {
       <EncodeOnlyInput/>
       <InputDisplayDontCreateInput/>
       <KeepWindowInput/>
+      <ChadsoftReadCacheAndSettingsInput/>
     </> : ""
   }</>
 }
