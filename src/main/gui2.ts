@@ -24,6 +24,10 @@ export async function readFileEnforceUTF8(filename: string, badEncodingErrorMess
   }
   return buffer.toString();
 }
+/*
+export async function ipcReadFileEnforceUTF8(event: IpcMainInvokeEvent, filename: string, badEncodingErrorMessage: string): Promise<string> {
+  return await readFileEnforceUTF8(filename, badEncodingErrorMessage);
+}*/
 
 export async function openFileDialog(event: IpcMainInvokeEvent, fileFilters: FileFilter[],
     lastFilename: string | undefined, dialogId: DialogId): Promise<string> {
@@ -79,9 +83,10 @@ export async function openFileDialogAndRead(event: IpcMainInvokeEvent, fileFilte
     let contents: string;
 
     try {
-      contents = await readFileEnforceUTF8(filename, "Provided template file is not a text file!");
+      contents = await readFileEnforceUTF8(filename, "Provided file is not a text file!");
     } catch (e) {
-      contents = "Error: Provided template file is not a text file!";
+      contents = `Error: Provided file ${filename} is not a text file!`;
+      filename = "";
     }
 
     //const contents = await fsPromises.readFile(filename, "utf8");

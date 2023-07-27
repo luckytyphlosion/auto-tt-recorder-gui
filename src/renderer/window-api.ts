@@ -1,6 +1,6 @@
 import { FileFilter, IpcRendererEvent } from "electron";
 import { AutoTTRecResponse } from "../enums";
-import { AutoTTRecArgs } from "./AutoTTRecFormFieldsAndArgs";
+import { AutoTTRecArgs } from "../main/AutoTTRecFormFieldsAndArgs";
 import { FilenameAndContents, ImportTemplateResult } from "../shared-types";
 import { DialogId } from "../main/confighandler";
 

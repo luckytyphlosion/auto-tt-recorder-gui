@@ -5,7 +5,7 @@ import useRenderCounter from "../../RenderCounter";
 import { ChadsoftGhostPageInput } from "./ChadsoftGhostPageInput";
 import { MainGhostFilenameInput } from "./MainGhostFilenameInput";
 
-import { AutoTTRecConfigFormFields } from "../../AutoTTRecFormFieldsAndArgs";
+import { AutoTTRecConfigFormFields } from "../../../main/AutoTTRecFormFieldsAndArgs";
 
 import { makeReadonlyArraySet, ValidValues } from "../../array-set";
 

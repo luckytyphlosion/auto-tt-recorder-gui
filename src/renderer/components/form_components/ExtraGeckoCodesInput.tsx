@@ -82,6 +82,11 @@ export function ExtraGeckoCodesInput(props: {isAutoTTRecRunning: boolean}) {
       updateExtraGeckoCodesFilename(filenameAndContents.filename);
       setValue("extra-gecko-codes-contents", filenameAndContents.contents, {shouldTouch: true});
       updateGeckoCodeUnsaved(false);
+    } else if (filenameAndContents.contents !== "") {
+      // read error occurred
+      updateExtraGeckoCodesFilename("");
+      setValue("extra-gecko-codes-contents", filenameAndContents.contents, {shouldTouch: true});
+      updateGeckoCodeUnsaved(true);
     }
   }
 

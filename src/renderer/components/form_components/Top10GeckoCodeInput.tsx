@@ -85,6 +85,11 @@ export function Top10GeckoCodeInput(props: {isAutoTTRecRunning: boolean}) {
       updateTop10GeckoCodeFilename(filenameAndContents.filename);
       setValue("top-10-gecko-code-contents", filenameAndContents.contents, {shouldTouch: true});
       updateGeckoCodeUnsaved(false);
+    } else if (filenameAndContents.contents !== "") {
+      // read error occurred
+      updateTop10GeckoCodeFilename("");
+      setValue("top-10-gecko-code-contents", filenameAndContents.contents, {shouldTouch: true});
+      updateGeckoCodeUnsaved(true);
     }
   }
 
