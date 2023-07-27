@@ -81,7 +81,7 @@ async function loadYAML_formatErrorsIfErrorOrWarnings(filename: string): Promise
             autoTTRecConfig[key] = value;
           } else {
             badValueTypeErrorMessages.push(`${key} is not a string, boolean, number, or null/unspecified.\n`);
-            autoTTRecConfig[key] = undefined;
+            autoTTRecConfig[key] = "<FILLME>";
           }
         }
         if (badValueTypeErrorMessages.length !== 0) {

@@ -254,9 +254,8 @@ function deleteFromSet<T>(values: Set<T>, x: any): boolean {
   return values.delete(x);
 }
 
-export type PartialNull<T> = {
-  [P in keyof T]: T[P] | null;
-};
+//function getObjectKeysAsConst
+
 
 export type PartialFILLME<T> = {
   [P in keyof T]: T[P] | "<FILLME>";
@@ -266,41 +265,89 @@ export type ExcludeFILLME<T> = {
   [P in keyof T]: Exclude<T[P], "<FILLME>">;
 }
 
-interface AutoTTRecArgsWithoutNulls extends AutoTTRecArgsClass {}
-export type AutoTTRecArgs = PartialNull<AutoTTRecArgsWithoutNulls>;
-export type AutoTTRecArgsWithFILLME = PartialFILLME<AutoTTRecArgs>;
+export type PartialNull<T> = {
+  [P in keyof T]: T[P] | null;
+};
+
+export type DoesSomething<T> = {
+  [P in keyof T]: T[P] | null;
+}
 
 export type AutoTTRecConfigFormFieldTypesWithoutFILLME = ExcludeFILLME<AutoTTRecConfigFormFieldTypes>;
 export type PartialAutoTTRecConfigFormFieldTypesWithoutFILLME = Partial<AutoTTRecConfigFormFieldTypesWithoutFILLME>;
-
-type AutoTTRecArgName = keyof AutoTTRecArgs;
+export type AutoTTRecArgsWithFILLME = PartialFILLME<AutoTTRecArgs>;
 
 const autoTTRecArgsClassObj = new AutoTTRecArgsClass();
 
+interface AutoTTRecArgsWithoutNulls extends AutoTTRecArgsClass {}
+export type AutoTTRecArgs = PartialNull<AutoTTRecArgsWithoutNulls>;
 type AutoTTRecArgNamesType = Array<keyof AutoTTRecArgs>;
 
+type AutoTTRecArgName = keyof AutoTTRecArgs;
+/*
 interface AutoTTRecArgsExtendedTypes {
   [name: string]: "string" | "boolean" | "number" | "unsupported"
+}*/
+
+//
+
+/*
+type AutoTTRecArgExtendedOnlyValueType = "string" | "boolean" | "number" | "unsupported";
+
+class GhostAuto2Class {
+  "main-ghost-auto": AutoTTRecArgExtendedOnlyValueType = "string";
+  "comparison-ghost-auto": AutoTTRecArgExtendedOnlyValueType = "string";
 }
 
-const autoTTRecArgExtendedTypes: AutoTTRecArgsExtendedTypes = {
-  "main-ghost-auto": "string",
-  "comparison-ghost-auto": "string",
-  "no-200cc": "boolean",
-  "top-10-censors": "unsupported",
-  "ending-message": "unsupported",
-  "dolphin-volume": "unsupported",
-  "unbuffered-output": "unsupported"
-} as const;
+class AutoTTRecArgExtendedOnlyTypesClass {
+  "no-200cc": AutoTTRecArgExtendedOnlyValueType = "boolean";
+  "top-10-censors": AutoTTRecArgExtendedOnlyValueType = "unsupported";
+  "ending-message": AutoTTRecArgExtendedOnlyValueType = "unsupported";
+  "dolphin-volume": AutoTTRecArgExtendedOnlyValueType = "unsupported";
+  "unbuffered-output": AutoTTRecArgExtendedOnlyValueType = "unsupported";
+}*/
 
-const GHOST_AUTO = makeReadonlyArraySet(["main-ghost-auto", "comparison-ghost-auto"] as const);
-type GhostAuto = ValidValues<typeof GHOST_AUTO>;
+
+
+//type AutoTTRecArgExtendedOnlyValueType = string | boolean | number | null;
+
+class GhostAuto2Class {
+  "main-ghost-auto": string = "string";
+  "comparison-ghost-auto": string = "string";
+}
+
+class AutoTTRecArgExtendedOnlyTypesClass extends GhostAuto2Class {
+  "no-200cc": boolean = true;
+  // "top-10-censors": void = undefined;
+  // "ending-message": void = undefined;
+  // "dolphin-volume": void = undefined;
+  // "unbuffered-output": void = undefined;
+}
+
+
+
+interface  AutoTTRecArgExtendedTypes extends AutoTTRecArgExtendedOnlyTypesClass {}
+interface GhostAuto2 extends GhostAuto2Class {}
+
+const autoTTRecArgExtendedTypesClassObj = new AutoTTRecArgExtendedOnlyTypesClass();
+let x = autoTTRecArgExtendedTypesClassObj["no-200cc"];
+
+const ghostAuto2ClassObj = new GhostAuto2Class();
+
+type AutoTTRecArgExtendedType = Array<keyof AutoTTRecArgExtendedTypes>;
+type GhostAuto2Type = Array<keyof GhostAuto2>;
+
+const AUTO_TT_REC_ARG_NAMES_EXTENDED_ONLY = makeReadonlyArraySet(Object.keys(autoTTRecArgExtendedTypesClassObj) as AutoTTRecArgExtendedType);
+const GHOST_AUTO_NAMES = makeReadonlyArraySet(Object.keys(ghostAuto2ClassObj) as GhostAuto2Type);
+
+type AutoTTRecArgNameExtendedOnly = ValidValues<typeof AUTO_TT_REC_ARG_NAMES_EXTENDED_ONLY>;
+type GhostAuto2Name = ValidValues<typeof GHOST_AUTO_NAMES>;
 
 const AUTO_TT_REC_ARG_NAMES = makeReadonlyArraySet(Object.keys(autoTTRecArgsClassObj) as AutoTTRecArgNamesType);
+
 const AUTO_TT_REC_ARG_NAMES_EXTENDED = makeReadonlyArraySet([
     ...AUTO_TT_REC_ARG_NAMES.arr,
-    ...GHOST_AUTO.arr,
-    "no-200cc", "top-10-censors", "ending-message", "dolphin-volume", "unbuffered-output"] as const);
+    ...AUTO_TT_REC_ARG_NAMES_EXTENDED_ONLY.arr] as const);
 
 type AutoTTRecArgNameExtended = ValidValues<typeof AUTO_TT_REC_ARG_NAMES_EXTENDED>;
 
@@ -363,10 +410,12 @@ class AutoTTRecConfigImporterErrorsAndWarnings {
 
 const listFormatter = new Intl.ListFormat("en", {style: "long", type: "disjunction"});
 const ghostPageLinkRegex = /^https:\/\/(?:www\.)?chadsoft\.co\.uk\/time-trials\/rkgd\/([0-9A-Fa-f]{2}\/[0-9A-Fa-f]{2}\/[0-9A-Fa-f]{36})\.html/;
-const emptyOrNull = new Set([null, ""]);
 
 type GhostAutoType = "rkg" | "chadsoft" | "<FILLME>";
-const chadsoftGhostPageLinkRegex = /^https:\/\/(?:www\.)?chadsoft\.co\.uk\/time-trials\/rkgd\/[0-9A-Fa-f]{2}\/[0-9A-Fa-f]{2}\/[0-9A-Fa-f]{36}\.html$/;
+
+type AFS = typeof autoTTRecArgExtendedTypesClassObj[AutoTTRecArgNameExtendedOnly];
+
+let ssfss: AFS = "sfd";
 
 class AutoTTRecConfigPreprocessor {
   private autoTTRecConfig: AutoTTRecConfig;
@@ -400,7 +449,9 @@ class AutoTTRecConfigPreprocessor {
     }
 
     missingAutoTTRecArgNames.forEach((autoTTRecArgName) => {
-      this.autoTTRecConfig[autoTTRecArgName] = null;
+      if (isInSet(AUTO_TT_REC_ARG_NAMES.set, autoTTRecArgName)) {
+        this.autoTTRecConfig[autoTTRecArgName] = null;
+      }
     });
   }
 
@@ -408,13 +459,65 @@ class AutoTTRecConfigPreprocessor {
 
   }
 
-  private convertGhostAuto(ghostAutoOptionName: GhostAuto,
+  private validateExtendedArgTypes() {
+    
+  }
+
+  private expectString(autoTTRecConfig: AutoTTRecConfig, extendedArgName: AutoTTRecArgNameExtendedOnly) {
+    
+    return autoTTRecConfig[extendedArgName];
+  }
+
+  private expectStringHelper<K extends AutoTTRecArgNameExtendedOnly>(extendedArgName: K): [AutoTTRecArgExtendedTypes[K], boolean] {
+    let value = this.autoTTRecConfig[extendedArgName];
+    if (value === null || value === "") {
+      return [autoTTRecArgExtendedTypesClassObj[extendedArgName], false];
+    }
+    if (this.expectStringHelper2(extendedArgName, value)) {
+      return [value, true];
+    } else {
+      return [autoTTRecArgExtendedTypesClassObj[extendedArgName], false];
+    }
+  }
+
+  private expectStringHelper2<K extends AutoTTRecArgNameExtendedOnly>(extendedArgName: K, value: string | number | boolean): value is AutoTTRecArgExtendedTypes[K] {
+    return typeof value === typeof autoTTRecArgExtendedTypesClassObj[extendedArgName];
+  }
+
+  private testexpectStringHelper() {
+    let x = this.expectStringHelper("main-ghost-auto");
+    if (x[1]) {
+      return x[0];
+    } else {
+      return "";
+    }
+  }
+
+  private validateExtendedArg(extendedArgName: AutoTTRecArgNameExtendedOnly) {
+    let value = this.autoTTRecConfig[extendedArgName];
+    if (this.validateExtendedArgHelper(extendedArgName, value)) {
+      value.match()
+    }
+  }
+
+  private validateExtendedArgHelper(extendedArgName: AutoTTRecArgNameExtendedOnly, value: string | number | boolean | null): value is typeof expectedType {
+    let expectedType = autoTTRecArgExtendedTypesClassObj[extendedArgName];
+    //let value = this.autoTTRecConfig[extendedArgName];
+    if (expectedType === null) {
+      return false;
+    } else if (typeof expectedType === typeof value) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  private convertGhostAuto(ghostAutoOptionName: GhostAuto2Name,
     ghostFilenameOptionName: "main-ghost-filename" | "comparison-ghost-filename",
     ghostLinkOptionName: "chadsoft-ghost-page" | "chadsoft-comparison-ghost-page"
   ) {
-    const ghostAutoValue = this.autoTTRecConfig[ghostAutoOptionName];
+    let [ghostAutoValue, isCorrectTypeAndNotNullOrEmpty] = this.expectStringHelper(ghostAutoOptionName);
 
-    if (!isNullOrEmpty(ghostAutoValue)) {
+    if (isCorrectTypeAndNotNullOrEmpty) {
       let conflictsWithNonAutoOptions: boolean;
       if (this.autoTTRecConfig[ghostFilenameOptionName] === "<FILLME>" && this.autoTTRecConfig[ghostLinkOptionName] === "<FILLME>") {
         conflictsWithNonAutoOptions = false;
@@ -425,7 +528,9 @@ class AutoTTRecConfigPreprocessor {
 
       if (ghostAutoValue === "<FILLME>") {
         ghostAutoType = "<FILLME>";
-      } else if (ghostAutoVa)
+      } else if (ghostAutoValue.match(ghostPageLinkRegex)) {
+
+      }
       if (conflictsWithNonAutoOptions) {
         if ()
       }
