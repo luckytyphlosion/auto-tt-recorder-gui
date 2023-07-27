@@ -14,19 +14,26 @@ export type AudioBitrateUnit = "kbps" | "bps";
 const defaultAudioBitrates = {
   crf: {
     libopus: 128000,
-    aac: 384000
+    aac: 384000,
+    "<FILLME>": NaN
+  },
+  "<FILLME>": {
+    libopus: 128000,
+    aac: 384000,
+    "<FILLME>": NaN
   },
   size: {
     libopus: 64000,
-    aac: 128000
+    aac: 128000,
+    "<FILLME>": NaN
   }
 }
 
-function getDefaultAudioBitrate(encodeType: EncodeType, audioCodec: AudioCodec): number {
+export function getDefaultAudioBitrate(encodeType: EncodeType, audioCodec: AudioCodec): number {
   return defaultAudioBitrates[encodeType][audioCodec];
 }
 
-function getDefaultAudioBitrateDisplayed(encodeType: EncodeType, audioCodec: AudioCodec, bitrateUnit: AudioBitrateUnit): number {
+export function getDefaultAudioBitrateDisplayed(encodeType: EncodeType, audioCodec: AudioCodec, bitrateUnit: AudioBitrateUnit): number {
   let bitrate = getDefaultAudioBitrate(encodeType, audioCodec);
   if (bitrateUnit === "kbps") {
     bitrate /= 1000;

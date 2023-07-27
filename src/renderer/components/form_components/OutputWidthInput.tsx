@@ -5,16 +5,20 @@ import { Top10LocationRegionalInput } from "./Top10LocationRegionalInput";
 import { OutputWidthCustomInput } from "./OutputWidthCustomInput";
 
 import { DolphinResolution } from "./DolphinResolutionInput";
+import { makeReadonlyArraySet, ValidValues } from "../../array-set";
+
 import useRenderCounter from "../../RenderCounter";
 
-export type OutputWidthPreset = "3840" | "2560" | "1920" | "1280" | "854" | "none" | "custom";
+const OUTPUT_WIDTH_PRESETS = makeReadonlyArraySet(["3840", "2560", "1920", "1280", "854", "none", "custom"] as const);
+export type OutputWidthPreset = ValidValues<typeof OUTPUT_WIDTH_PRESETS>;
 
 export const recommendedOutputWidths: {[k in DolphinResolution]: OutputWidthPreset} = {
   "2160p": "3840",
   "1440p": "2560",
   "1080p": "1920",
   "720p": "1280",
-  "480p": "none"
+  "480p": "none",
+  "<FILLME>": "<FILLME>"
 }
 
 export function OutputWidthInput(props: {dolphinResolution: DolphinResolution, dolphinResolutionToggle: boolean}) {

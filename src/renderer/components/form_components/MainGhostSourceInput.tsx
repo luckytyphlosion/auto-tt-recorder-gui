@@ -7,7 +7,10 @@ import { MainGhostFilenameInput } from "./MainGhostFilenameInput";
 
 import { AutoTTRecConfigFormFields } from "../../AutoTTRecFormFieldsAndArgs";
 
-export type MainGhostSource = "chadsoft" | "rkg";
+import { makeReadonlyArraySet, ValidValues } from "../../array-set";
+
+export const MAIN_GHOST_SOURCES = makeReadonlyArraySet(["chadsoft", "rkg"] as const);
+export type MainGhostSource = ValidValues<typeof MAIN_GHOST_SOURCES>;
 
 export function MainGhostSourceInput() {
   const {register, getValues} = useFormContextAutoTT();

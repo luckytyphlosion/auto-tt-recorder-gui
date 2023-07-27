@@ -6,7 +6,8 @@ import { makeReadonlyArraySet, ValidValues } from "../../array-set";
 export const SPEEDOMETER_DECIMAL_PLACES_NUMERIC = makeReadonlyArraySet([0, 1, 2] as const);
 export type SpeedometerDecimalPlacesNumeric = ValidValues<typeof SPEEDOMETER_DECIMAL_PLACES_NUMERIC>;
 
-export type SpeedometerDecimalPlaces = "0" | "1" | "2";
+export const SPEEDOMETER_DECIMAL_PLACES = makeReadonlyArraySet(["0", "1", "2"] as const);
+export type SpeedometerDecimalPlaces = ValidValues<typeof SPEEDOMETER_DECIMAL_PLACES>;
 
 export function SpeedometerDecimalPlacesInput(props: {twoDecimalPlaces: boolean}) {
   const {register, getValues, setValue} = useFormContextAutoTT();

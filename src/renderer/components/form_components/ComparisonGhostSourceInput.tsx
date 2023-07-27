@@ -5,7 +5,10 @@ import useRenderCounter from "../../RenderCounter";
 import { ChadsoftComparisonGhostPageInput } from "./ChadsoftComparisonGhostPageInput";
 import { ComparisonGhostFilenameInput } from "./ComparisonGhostFilenameInput";
 
-export type ComparisonGhostSource = "chadsoft" | "rkg" | "none";
+import { makeReadonlyArraySet, ValidValues } from "../../array-set";
+
+export const COMPARISON_GHOST_SOURCES = makeReadonlyArraySet(["chadsoft", "rkg", "none"] as const);
+export type ComparisonGhostSource = ValidValues<typeof COMPARISON_GHOST_SOURCES>;
 
 export function ComparisonGhostSourceInput() {
   const {register, getValues} = useFormContextAutoTT();

@@ -23,7 +23,7 @@ import { VideoCodec, VIDEO_CODECS } from "./components/form_components/VideoCode
 
 import { DolphinResolution, DOLPHIN_RESOLUTIONS } from "./components/form_components/DolphinResolutionInput";
 import { AudioCodec, AUDIO_CODECS } from "./components/form_components/AudioCodecAndBitrateInput";
-import { AudioBitrateUnit } from "./components/form_components/AudioBitrateInput";
+import { AudioBitrateUnit, getDefaultAudioBitrate } from "./components/form_components/AudioBitrateInput";
 
 import { H26xPreset, H26X_PRESETS } from "./components/form_components/H26xPresetInput";
 import { OutputWidthPreset, recommendedOutputWidths } from "./components/form_components/OutputWidthInput";
@@ -32,7 +32,7 @@ import { Top10GeckoCodeLocationRegion } from "./components/form_components/Top10
 
 import { TimelineCategory } from "./components/layout_components/TimelineCategoryLayout";
 
-import { NoTop10Category } from "./components/layout_components/choice_layouts/NoTop10CategoryLayout";
+import { NoTop10Category, NO_TOP_10_CATEGORIES } from "./components/layout_components/choice_layouts/NoTop10CategoryLayout";
 import { AspectRatio16By9, ASPECT_RATIO_16_BY_9_VALUES } from "./components/form_components/AspectRatio16By9Input";
 import { TrackNameType } from "./components/form_components/TrackNameInput";
 
@@ -40,7 +40,7 @@ import { MusicPresentation } from "./components/form_components/MusicPresentatio
 import { FormComplexity } from "./components/layout_components/FormComplexityLayout";
 import { Top10TitleType } from "./components/form_components/Top10TitleInput";
 
-import { Set200cc } from "./components/form_components/Set200ccInput";
+import { Set200cc, SET_200CC_VALUES } from "./components/form_components/Set200ccInput";
 
 import { AutoTTRecConfig } from "../shared-types";
 
@@ -52,10 +52,6 @@ export type Timeline = ValidValues<typeof TIMELINES>;
 export type ExtendedTimeline = "noencode" | "ghostonly" | "ghostselect" | "mkchannel" | "top10chadsoft" | "top10gecko";
 
 const DEBUG_PREFILLED_DEFAULTS = false;
-
-type IfEquals<T, U, Y=unknown, N=never> =
-  (<G>() => G extends T ? 1 : 2) extends
-  (<G>() => G extends U ? 1 : 2) ? Y : N;
 
 // == types without <FILLME> ==
 // arbitrary (string) types can just be set to ""
@@ -83,7 +79,7 @@ export class AutoTTRecConfigFormFieldTypesNoFILLMEClass {
   "comparison-ghost-source": ComparisonGhostSource = "none"; // choice
   "crf-value": number = 15; // number
   "dolphin-resolution": DolphinResolution = DEBUG_PREFILLED_DEFAULTS ? "480p" : "1440p"; // choice
-  "encode-only"?: boolean = false; // checkbox
+  "encode-only": boolean = false; // checkbox
   "encode-size": number = 52428800; // number
   "encode-size-displayed": number = 50; // internal
   "encode-size-unit": EncodeSizeUnit = "mib"; // internal
@@ -144,7 +140,7 @@ export class AutoTTRecConfigFormFieldTypesNoFILLMEClass {
   "track-name-type": TrackNameType = "auto"; // choice
   "use-ffv1": boolean = false; // checkbox
   "video-codec": VideoCodec = "libx264"; // choice
-  "youtube-settings": boolean | undefined = true; // checkbox
+  "youtube-settings": boolean = true; // checkbox
 }
 
 class AutoTTRecArgsClass {
@@ -185,8 +181,11 @@ class AutoTTRecArgsClass {
   "on-200cc"?: boolean = false;
   "output-video-filename"?: string = "";
   "output-width"?: number = 2560;
+  "output-width-custom"?: never;
   "pixel-format"?: string = "yuv420p";
+  "set-200cc"?: never;
   "speedometer"?: SpeedometerStyle = "fancy";
+  "speedometer-style"?: never;
   "speedometer-decimal-places"?: SpeedometerDecimalPlacesNumeric = 1;
   "speedometer-decimal-places-str"?: never;
   "speedometer-metric"?: SpeedometerMetric = "engine";
@@ -204,33 +203,50 @@ class AutoTTRecArgsClass {
   "youtube-settings"?: boolean = true;
 }
 
-type NonNullable<T> = {[P in keyof T]: Exclude<T[P], null>};
+
+type IfEquals<T, U, Y=unknown, N=never> =
+  (<G>() => G extends T ? 1 : 2) extends
+  (<G>() => G extends U ? 1 : 2) ? Y : N;
+
+type IsChoiceType<T, U extends T = T> =
+    (Exclude<T, "<FILLME>"> extends string ?
+    (U extends Exclude<T, "<FILLME>"> ? false : true)
+        : never) extends false ? false : true
+
+//type NonNullable<T> = {[P in keyof T]: Exclude<T[P], null>};
 
 export type PartialFILLME<T> = {
-  [P in keyof T]: T[P] | "<FILLME>";
+  [P in keyof T]: IfEquals<T[P], number, number, T[P] | "<FILLME>">;
 };
 
 interface AutoTTRecConfigFormFieldTypesNoFILLME extends AutoTTRecConfigFormFieldTypesNoFILLMEClass {};
 export type AutoTTRecConfigFormFields = PartialFILLME<AutoTTRecConfigFormFieldTypesNoFILLME>;
 type AutoTTRecConfigFormFieldName = keyof AutoTTRecConfigFormFields;
 
-type AutoTTRecConfigFormPrimitiveArgNames<T> = keyof Pick<AutoTTRecConfigFormFields, {
+type AutoTTRecConfigFormPrimitiveArgs<T> = Pick<AutoTTRecConfigFormFields, {
   [K in AutoTTRecConfigFormFieldName]-?:
-    IfEquals<AutoTTRecConfigFormFields[K], T | "<FILLME>", K, never>
+    IfEquals<AutoTTRecConfigFormFields[K], T, K, never>
 }[AutoTTRecConfigFormFieldName]>;
 
-type AutoTTRecConfigFormNumberArgNames = AutoTTRecConfigFormPrimitiveArgNames<number>;
-type AutoTTRecConfigFormStringArgNames = AutoTTRecConfigFormPrimitiveArgNames<string>;
-type AutoTTRecConfigFormBooleanArgNames = AutoTTRecConfigFormPrimitiveArgNames<boolean>;
+type AutoTTRecConfigFormStringArgs = AutoTTRecConfigFormPrimitiveArgs<string | "<FILLME>">;
+type AutoTTRecConfigFormStringArgName = keyof AutoTTRecConfigFormStringArgs;
+type AutoTTRecConfigFormSharedStringArgName = AutoTTRecConfigFormStringArgName & AutoTTRecArgName;
+
+type AutoTTRecConfigFormNumberArgs = AutoTTRecConfigFormPrimitiveArgs<number>;
+type AutoTTRecConfigFormNumberArgName = keyof AutoTTRecConfigFormNumberArgs;
+type AutoTTRecConfigFormSharedNumberArgName = AutoTTRecConfigFormNumberArgName & AutoTTRecArgName;
+
+type AutoTTRecConfigFormBooleanArgs = AutoTTRecConfigFormPrimitiveArgs<boolean | "<FILLME>">;
+type AutoTTRecConfigFormBooleanArgName = keyof AutoTTRecConfigFormBooleanArgs;
+type AutoTTRecConfigFormSharedBooleanArgName = AutoTTRecConfigFormBooleanArgName & AutoTTRecArgName;
+
+type AutoTTRecConfigFormChoiceArgs = Pick<AutoTTRecConfigFormFields, {
+  [K in AutoTTRecConfigFormFieldName]-?: IsChoiceType<AutoTTRecConfigFormFields[K]> extends true ? K : never
+}[AutoTTRecConfigFormFieldName]>;
+type AutoTTRecConfigFormChoiceArgNames = keyof AutoTTRecConfigFormChoiceArgs;
+type AutoTTRecConfigFormSharedChoiceArgNames = AutoTTRecConfigFormChoiceArgNames & AutoTTRecArgName;
 
 const autoTTRecConfigFormFieldTypesClassObj = new AutoTTRecConfigFormFieldTypesNoFILLMEClass();
-
-type AutoTTRecConfigFormFieldTypesKeyofTest = AutoTTRecConfigFormFieldName;
-
-let xysedfw: AutoTTRecConfigFormFieldTypesKeyofTest = "hq-textures";
-
-//export type AutoTTRecConfigFormFields = Writable<AutoTTRecConfigFormFieldTypesReadonly>;
-
 
 type AutoTTRecConfigFormFieldNamesArray = Array<AutoTTRecConfigFormFieldName>;
 
@@ -258,12 +274,19 @@ export type ExcludeFILLME<T> = {
 }
 
 export type PartialNull<T> = {
-  [P in keyof T]: T[P] | null;
+  [P in keyof T]?: T[P] | null;
 };
+
+type AutoTTRecConfigFormFieldsPartialNull = PartialNull<AutoTTRecConfigFormFields>;
+type AutoTTRecConfigFormFieldsPartial = Partial<AutoTTRecConfigFormFields>;
+
+type NoUndefinedField<T> = { [P in keyof T]-?: NoUndefinedField<T[P]> };
 
 export type DoesSomething<T> = {
   [P in keyof T]: T[P] | null;
 }
+
+type BothGhostSource = MainGhostSource | ComparisonGhostSource;
 
 export type AutoTTRecConfigFormFieldTypesWithoutFILLME = ExcludeFILLME<AutoTTRecConfigFormFields>;
 export type PartialAutoTTRecConfigFormFieldTypesWithoutFILLME = Partial<AutoTTRecConfigFormFieldTypesWithoutFILLME>;
@@ -314,8 +337,10 @@ interface AutoTTRecConfigImporterErrorOrWarningMessage {
   message: string
 }
 
+const listFormatter = new Intl.ListFormat("en", {style: "long", type: "disjunction"});
+
 class AutoTTRecConfigErrorsAndWarnings {
-  private _errorsAndWarnings: Map<AutoTTRecArgNameExtended, AutoTTRecConfigImporterErrorOrWarningMessage[]>;
+  private _errorsAndWarnings: Map<AutoTTRecArgExtendedAndFormFieldName, AutoTTRecConfigImporterErrorOrWarningMessage[]>;
   private _errorsAndWarningsInvalidCommands: Map<string, AutoTTRecConfigImporterErrorOrWarningMessage[]>;
 
   constructor() {
@@ -336,19 +361,23 @@ class AutoTTRecConfigErrorsAndWarnings {
     });
   }
 
-  private add(name: AutoTTRecArgNameExtended, message: string, isWarning: boolean) {
+  private add(name: AutoTTRecArgExtendedAndFormFieldName, message: string, isWarning: boolean) {
     this.addToErrorsWarningMap(name, message, isWarning, this._errorsAndWarnings);
   }
 
-  public addError(name: AutoTTRecArgNameExtended, message: string) {
+  public addError(name: AutoTTRecArgExtendedAndFormFieldName, message: string) {
     this.add(name, message, false);
   }
 
-  public addErrorWrongType(name: AutoTTRecArgNameExtended, expectedTypes: string, value: string | number | boolean | null) {
+  public addErrorWrongType(name: AutoTTRecArgExtendedAndFormFieldName, expectedTypes: string, value: string | number | boolean | null) {
     this.addError(name, `${name} should be a ${expectedTypes}, but got ${typeof value} instead. Option will be left empty.`);
   }
 
-  public addWarning(name: AutoTTRecArgNameExtended, message: string) {
+  public addInvalidChoiceError(name: AutoTTRecArgExtendedAndFormFieldName, validValues: ReadonlyArraySet<string>, actualValue: string, extraMessage: string = "") {
+    this.addError(name, `${name} should be one of ${listFormatter.format(validValues.arr)}, but got ${actualValue} instead.${extraMessage}`);
+  }
+
+  public addWarning(name: AutoTTRecArgExtendedAndFormFieldName, message: string) {
     this.add(name, message, true);
   }
 
@@ -357,7 +386,6 @@ class AutoTTRecConfigErrorsAndWarnings {
   }
 }
 
-const listFormatter = new Intl.ListFormat("en", {style: "long", type: "disjunction"});
 const ghostPageLinkRegex = /^https:\/\/(?:www\.)?chadsoft\.co\.uk\/time-trials\/rkgd\/([0-9A-Fa-f]{2}\/[0-9A-Fa-f]{2}\/[0-9A-Fa-f]{36})\.html/;
 
 class AutoTTRecConfigPreprocessor {
@@ -408,6 +436,7 @@ class AutoTTRecConfigPreprocessor {
       this.fixAspectRatio16By9Type();
       this.convertStringOrNumArgToString("chadsoft-cache-expiry");
       this.convertStringOrNumArgToString("speedometer-decimal-places", "speedometer-decimal-places-str");
+      this.convertDifferingArgNames();
       for (const unsupportedArgName of UNSUPPORTED_ARG_NAMES.arr)  {
         this.warnUnsupportedArg(unsupportedArgName);
       }
@@ -480,6 +509,7 @@ class AutoTTRecConfigPreprocessor {
       } else {
         this.autoTTRecConfig["on-200cc"] = !no200cc;
       }
+      this.autoTTRecConfig["set-200cc"] = this.autoTTRecConfig["on-200cc"] ? "on-200cc" : "no-200cc";
     }
   }
 
@@ -517,6 +547,11 @@ class AutoTTRecConfigPreprocessor {
     }
   }
 
+  private convertDifferingArgNames() {
+    this.autoTTRecConfig["speedometer-style"] = this.autoTTRecConfig["speedometer"];
+    this.autoTTRecConfig["output-width-custom"] = this.autoTTRecConfig["output-width"];
+  }
+
   private warnUnsupportedArg(autoTTRecUnsupportedArgName: AutoTTRecUnsupportedArgName) {
     if (this.autoTTRecConfig[autoTTRecUnsupportedArgName] !== null) {
       this.errorsAndWarnings.addWarning(autoTTRecUnsupportedArgName, `${autoTTRecUnsupportedArgName} is not currently supported, will be ignored.`);
@@ -525,127 +560,478 @@ class AutoTTRecConfigPreprocessor {
 }
 
 class AutoTTRecConfigImporter {
-  private formData: Partial<AutoTTRecConfigFormFields>;
+  private formData: AutoTTRecConfigFormFieldsPartial;
   private autoTTRecConfig: AutoTTRecConfig;
   private errorsAndWarnings: AutoTTRecConfigErrorsAndWarnings;
+  private configArgWasNullSet: Set<AutoTTRecConfigFormStringArgName | AutoTTRecConfigFormChoiceArgNames | AutoTTRecConfigFormNumberArgName | AutoTTRecConfigFormBooleanArgName>;
 
   constructor(autoTTRecConfig: AutoTTRecConfig, errorsAndWarnings: AutoTTRecConfigErrorsAndWarnings) {
     this.formData = {};
     this.autoTTRecConfig = autoTTRecConfig;
-    this.errorsAndWarnings = new AutoTTRecConfigErrorsAndWarnings();
-  }
-
-  //public add<K extends AutoTTRecArgName>(key: K, value: AutoTTRecArgs[K]) {
-  //  this.autoTTRecArgs[key] = value;
-  //}
-
-  public addError<K extends AutoTTRecArgName>(key: K, message: string) {
-    this.errorsAndWarnings.addError(key, message);
-    this.formData[key] = undefined;
-  }
-
-  public addWarning<K extends AutoTTRecArgName>(key: K, message: string) {
-    this.errorsAndWarnings.addWarning(key, message);
-  }
-
-  public addErrorExtended<K extends AutoTTRecArgNameExtended>(key: K, message: string) {
-    this.errorsAndWarnings.addError(key, message);
-  }
-
-  public addWarningExtended<K extends AutoTTRecArgNameExtended>(key: K, message: string) {
-    this.errorsAndWarnings.addWarning(key, message);
-  }
-  public add<K extends AutoTTRecConfigFormFieldName, V extends AutoTTRecConfigFormFields[K] | null>(key: K, value: V) {
-    if (value === null) {
-      this.addDefault(key);
-    } else {
-      this.formData[key] = value;
-    }
+    this.errorsAndWarnings = errorsAndWarnings;
+    this.configArgWasNullSet = new Set();
   }
 
   public addDefault<K extends AutoTTRecConfigFormFieldName>(key: K) {
     this.formData[key] = DEFAULT_FORM_VALUES[key];
   }
 
-  private importSharedStringArg<K extends AutoTTRecConfigFormStringArgNames>(key: K) {
+  public readArgSanityCheck<K extends AutoTTRecArgName>(key: K): string | number | boolean | null | undefined {
     let configValue = this.autoTTRecConfig[key];
-    if (configValue === null) {
-      this.addDefault(key);
-    } else if (typeof configValue === "string") {
-      if (configValue === "<FILLME>") {
-        this.formData[key] = "";
+    if (configValue === undefined) {
+      this.errorsAndWarnings.addWarning(key, `${key} was not defined! (this is an error within the program itself and not your fault, please contact the developer!)`);
+    }
+    return configValue;
+  }
+
+  private validateStringErrorIfNot_handleUndefined<K extends AutoTTRecArgName>(key: K): string | null {
+    let value = this.readArgSanityCheck(key);
+    if (value === undefined) {
+      return "";
+    } else if (value === null) {
+      return null;
+    } else if (value === "<FILLME>") {
+      return "";
+    } else if (typeof value === "string") {
+      return value;
+    } else {
+      this.errorsAndWarnings.addErrorWrongType(key, "string", value);
+      return "";
+    }
+  }
+
+  private validateSharedArgString_errorIfNot_handleUndefinedNull<K extends AutoTTRecConfigFormSharedStringArgName | AutoTTRecConfigFormSharedChoiceArgNames>(key: K) {
+    let value = this.validateStringErrorIfNot_handleUndefined(key);
+    if (value === null) {
+      this.configArgWasNullSet.add(key);
+      return DEFAULT_FORM_VALUES[key];
+    } else {
+      return value;
+    }
+  }
+
+
+  private getFormDataStringOrChoiceArg_nullIfWasNull<K extends AutoTTRecConfigFormStringArgName | AutoTTRecConfigFormChoiceArgNames>(key: K): AutoTTRecConfigFormFieldsPartial[K] | null {
+    if (this.configArgWasNullSet.has(key)) {
+      return null;
+    } else {
+      let value = this.formData[key];
+      if (value === undefined) {
+        this.errorsAndWarnings.addWarning(key, `formData["${key}"] was not defined! (this is an error within the program itself and not your fault, please contact the developer!)`);
+        return null;
       } else {
+        return value;        
+      }
+    }
+  }
+
+  private getFormDataStringOrChoice_verifyNotUndefined<K extends AutoTTRecConfigFormStringArgName | AutoTTRecConfigFormChoiceArgNames>(key: K): AutoTTRecConfigFormFields[K] {
+    let value = this.formData[key];
+    if (value === undefined) {
+      this.errorsAndWarnings.addWarning(key, `formData["${key}"] was not defined! (this is an error within the program itself and not your fault, please contact the developer!)`);
+      this.formData[key] = "<FILLME>";
+      return "<FILLME>";
+    } else {
+      return value;
+    }
+  }
+
+  private getFormDataNumber_verifyNotUndefined<K extends AutoTTRecConfigFormSharedNumberArgName>(key: K): number {
+    let value = this.formData[key];
+    if (value === undefined) {
+      this.errorsAndWarnings.addWarning(key, `formData["${key}"] is undefined! (this is an error within the program itself and not your fault, please contact the developer!)`);
+      value = NaN;
+      this.formData[key] = NaN;
+    } else if (value === "<FILLME>") {
+      this.errorsAndWarnings.addWarning(key, `formData["${key}"] is <FILLME>! (this is an error within the program itself and not your fault, please contact the developer!)`);
+      value = NaN;
+      this.formData[key] = NaN;
+    }
+    return value;
+  }
+
+  private stringOrChoiceArgWasNull<K extends AutoTTRecConfigFormSharedStringArgName | AutoTTRecConfigFormSharedChoiceArgNames>(key: K) {
+    return this.configArgWasNullSet.has(key);
+  }
+
+  private importSharedStringArg<K extends AutoTTRecConfigFormSharedStringArgName>(key: K) {
+    this.formData[key] = this.validateSharedArgString_errorIfNot_handleUndefinedNull(key);
+  }
+
+  private importSharedNumberArg<K extends AutoTTRecConfigFormSharedNumberArgName>(key: K) {
+    let configValue = this.readArgSanityCheck(key);
+    if (configValue !== undefined) {
+      if (configValue === null) {
+        this.configArgWasNullSet.add(key);
+        this.addDefault(key);
+      } else if (configValue === "<FILLME>") {
+        this.formData[key] = NaN;
+      } else if (typeof configValue === "number") {
         this.formData[key] = configValue;
-      }
-    } else {
-      this.errorsAndWarnings.addErrorWrongType(key, "string", configValue);
-    }
-  }
-
-  private importStraightCopyArg<K extends keyof AutoTTRecArgs & AutoTTRecConfigFormFieldName>(key: K, validValues?: ReadonlyArraySet<AutoTTRecArgs[K]>) {
-    let abde: AutoTTRecConfigFormNumberArgNames = "encode-size";
-    
-    let expectedType = typeof autoTTRecArgsClassObj[key];
-    if (expectedType === "string" || expectedType === "boolean" || expectedType === "number") {
-      let configValue = this.autoTTRecConfig[key];
-      if (configValue === "<FILLME>") {
-        if (expectedType === "string") {
-          this.add(key, "");
-        }
-      }
-      if (configValue !== undefined && configValue !== null) {
-        if (typeof configValue === expectedType) {
-          if (validValues !== undefined) {
-            if (isInSet(validValues.set, configValue)) {
-              let y = configValue;
-              this.add(key, configValue);
-            } else {
-              this.addError(key, `${key} should be one of ${listFormatter.format(validValues.arr.map(x => String(x)))}`);
-            }
-          } else {
-            let configValueWithType = configValue as AutoTTRecArgs[K];
-            this.add(key, configValueWithType);
-          }
-        } else {
-          this.addError(key, `${key} should be a ${expectedType}, but got a ${typeof configValue} instead.`);
-        }
       } else {
-        this.add(key, configValue);
+        this.errorsAndWarnings.addErrorWrongType(key, "number", configValue);
+        this.formData[key] = NaN;
       }
-    } else {
-      this.addError(key, "Error in determining expected type (please contact the developer).");
     }
   }
 
-  public tryAddSameOption<K extends keyof AutoTTRecPrimitiveArgs>(key: K) {
-    this.tryAddSameOption_Common(key);
+  private importSharedBooleanArg<K extends AutoTTRecConfigFormSharedBooleanArgName>(key: K) {
+    let configValue = this.readArgSanityCheck(key);
+    if (configValue !== undefined) {
+      if (configValue === null) {
+        this.configArgWasNullSet.add(key);
+        this.addDefault(key);
+      } else if (configValue === "<FILLME>") {
+        this.formData[key] = "<FILLME>";
+      } else if (typeof configValue === "boolean") {
+        this.formData[key] = configValue;
+      } else {
+        this.errorsAndWarnings.addErrorWrongType(key, "boolean", configValue);
+        this.formData[key] = "<FILLME>";
+      }
+    }
   }
 
-  public tryAddSameOptionComplex<K extends AutoTTRecArgName>(key: K, validValues: ReadonlyArraySet<AutoTTRecArgs[K]>) {
-    this.tryAddSameOption_Common(key, validValues);
+  private importSharedChoiceArg<K extends AutoTTRecConfigFormSharedChoiceArgNames, V extends ReadonlyArraySet<AutoTTRecConfigFormChoiceArgs[K]>>(key: K, validValues: V) {
+    let configValue = this.readArgSanityCheck(key);
+    if (configValue !== undefined) {
+      if (configValue === null) {
+        this.addDefault(key);
+      } else if (configValue === "<FILLME>") {
+        this.formData[key] = "<FILLME>";
+      } else if (typeof configValue === "string") {
+        if (isInSet(validValues.set, configValue)) {
+          this.formData[key] = configValue;
+        } else {
+          this.errorsAndWarnings.addInvalidChoiceError(key, validValues, configValue);
+          this.formData[key] = "<FILLME>";
+        }
+      }
+    }
   }
+/*
+  class AutoTTRecArgsClass {
+    
+    ?: AudioCodec = "libopus";
+    "chadsoft-comparison-ghost-page"?: string = "";
+    "chadsoft-ghost-page"?: string = "";
+    "chadsoft-read-cache"?: boolean = true;
+    "chadsoft-write-cache"?: boolean = true;
+    "comparison-ghost-filename"?: string = "";
+    "crf-value"?: number = 15;
+    "dolphin-resolution"?: DolphinResolution = "1440p";
+    "encode-only"?: boolean = false;
+    "encode-size"?: number = 52428800;
+    "encode-type"?: EncodeType = "crf";
+    "ending-delay"?: number = 600;
+    "extra-gecko-codes-filename"?: string = "";
+    "extra-hq-textures-folder"?: string = "";
+    "fade-in-at-start"?: boolean = false;
+    "h26x-preset"?: H26xPreset = "slow";
+    "hq-textures"?: boolean = true;
+    "input-display"?: InputDisplay = "auto";
+    "input-display-dont-create"?: boolean = false;
+    "iso-filename"?: string = "";
+    "keep-window"?: boolean = true;
+    "main-ghost-filename"?: string = "";
+    "mk-channel-ghost-description"?: string = "";
+    "no-background-blur"?: boolean = true;
+    "no-bloom"?: boolean = false;
+    "no-music"?: boolean = false;
+    "on-200cc"?: boolean = false;
+    "output-width"?: number = 2560; (SPECIAL DEFAULT?)
+    "pixel-format"?: string = "yuv420p";
+    "speedometer"?: SpeedometerStyle = "fancy";
+    ??? "speedometer-decimal-places"?: SpeedometerDecimalPlacesNumeric = 1;
+    "speedometer-metric"?: SpeedometerMetric = "engine";
+    "szs-filename"?: string = "";
+    "top-10-chadsoft"?: string = "";
+    "top-10-gecko-code-filename"?: string = "";
+    "top-10-highlight"?: number = 1;
+    "use-ffv1"?: boolean = false;
+    "video-codec"?: VideoCodec = "libx264";
+    "youtube-settings"?: boolean = true;
+}*/
 
   private importStraightCopyArgs() {
-    for (const [autoTTRecStraightCopyArgName, autoTTRecStraightCopyArgValue] of Object.entries(autoTTRecStraightCopyArgs)) {
-      let autoTTRecConfigArgValue = this.autoTTRecConfig[autoTTRecStraightCopyArgName];
+    this.importSharedChoiceArg("aspect-ratio-16-by-9", ASPECT_RATIO_16_BY_9_VALUES);
+    this.importSharedChoiceArg("audio-codec", AUDIO_CODECS);
+    this.importSharedStringArg("chadsoft-ghost-page");
+    this.importSharedBooleanArg("chadsoft-read-cache");
+    this.importSharedBooleanArg("chadsoft-write-cache");
+    this.importSharedStringArg("comparison-ghost-filename");
+    this.importSharedNumberArg("crf-value");
+    this.importSharedChoiceArg("dolphin-resolution", DOLPHIN_RESOLUTIONS);
+    this.importSharedBooleanArg("encode-only");
+    this.importSharedNumberArg("encode-size");
+    this.importSharedChoiceArg("encode-type", ENCODE_TYPES);
+    this.importSharedNumberArg("ending-delay");
 
-      if (typeof autoTTRecStraightCopyArgValue === "object") {
-        if (isInSet(autoTTRecStraightCopyArgValue.set, autoTTRecConfigArgValue)) {
-          let u = autoTTRecConfigArgValue;
+    this.importSharedStringArg("extra-gecko-codes-filename");
+    this.importSharedStringArg("extra-hq-textures-folder");
+    this.importSharedStringArg("iso-filename");
+    this.importSharedStringArg("main-ghost-filename");
+    this.importSharedStringArg("mk-channel-ghost-description");
+    this.importSharedStringArg("pixel-format");
+    this.importSharedStringArg("szs-filename");
+    this.importSharedStringArg("top-10-chadsoft");
+    this.importSharedStringArg("top-10-gecko-code-filename");
+    
+    this.importSharedBooleanArg("fade-in-at-start");
+    this.importSharedBooleanArg("hq-textures");
+    this.importSharedBooleanArg("input-display-dont-create");
+    this.importSharedBooleanArg("keep-window");
+    this.importSharedBooleanArg("no-background-blur");
+    this.importSharedBooleanArg("no-bloom");
+    this.importSharedBooleanArg("no-music");
+    this.importSharedBooleanArg("use-ffv1");
+    this.importSharedBooleanArg("youtube-settings");
+    
+    this.importSharedChoiceArg("h26x-preset", H26X_PRESETS);
+    this.importSharedChoiceArg("input-display", INPUT_DISPLAYS);
+    this.importSharedChoiceArg("speedometer-style", SPEEDOMETER_STYLES);
+    this.importSharedChoiceArg("speedometer-decimal-places-str", SPEEDOMETER_DECIMAL_PLACES);
+    this.importSharedChoiceArg("speedometer-metric", SPEEDOMETER_METRICS);
+    this.importSharedChoiceArg("video-codec", VIDEO_CODECS);
+    this.importSharedChoiceArg("set-200cc", SET_200CC_VALUES);
+    
+    this.importSharedNumberArg("output-width-custom");
+    this.importSharedNumberArg("top-10-highlight");    
+  }
+
+  // if "audio-bitrate" is <FILLME>, NaN
+  // else if "audio-bitrate" is null
+  //   if "audio-codec" is "libopus"
+  //     if "encode-type" is "crf", default 128k
+  //     else if "encode-type" is "size", default 64k
+  //   else if "audio-codec" is "aac"
+  //     if "encode-type" is "crf", default 384k
+  //     else if "encode-type" is "size", default 128k
+  // then special convert
+
+  // if "audio-bitrate" has k
+  //   hasK = true
+  //   convert from "audio-bitrate" accounting for k
+  // else
+  //   hasK = false
+  //   "audio-bitrate" is "audio-bitrate"
+
+  private importAudioBitrateAll() {
+    let audioBitrate = this.autoTTRecConfig["audio-bitrate"];
+    let newAudioBitrate: number = NaN;
+
+    let hasKbps: boolean = true;
+
+    if (audioBitrate === "<FILLME>") {
+      newAudioBitrate = NaN;
+    } else if (audioBitrate === null) {
+      let encodeType = this.getFormDataStringOrChoice_verifyNotUndefined("encode-type");
+      let audioCodec = this.getFormDataStringOrChoice_verifyNotUndefined("audio-codec");
+      newAudioBitrate = getDefaultAudioBitrate(encodeType, audioCodec);
+      hasKbps = false;
+    } else {
+      let numericAudioBitrate: undefined | number;
+      if (typeof audioBitrate === "string") {
+        let kbpsMultiplier = 1;
+        if (audioBitrate.charAt(audioBitrate.length - 1) === "k") {
+          audioBitrate = audioBitrate.substring(0, audioBitrate.length - 1);
         } else {
-          this.addError(key, `${key} should be one of ${listFormatter.format(validValues.arr.map(x => String(x)))}`);
+          hasKbps = false;
         }
-      } else if (typeof autoTTRecStraightCopyArgValue === "string") {
+        numericAudioBitrate = Number(audioBitrate) * kbpsMultiplier;
+      } else if (typeof audioBitrate === "number") {
+        numericAudioBitrate = audioBitrate;
+        hasKbps = false;
+      } else {
+        this.errorsAndWarnings.addErrorWrongType("audio-bitrate", "string or number", audioBitrate);
+        numericAudioBitrate = undefined;
+        hasKbps = true;
+      }
 
-      } else if (typeof autoTTRecStraightCopyArgValue === "boolean") {
+      if (numericAudioBitrate !== undefined) {
+        if (Number.isNaN(numericAudioBitrate)) {
+          this.errorsAndWarnings.addError("audio-bitrate", `Invalid audio bitrate ${audioBitrate}!`);
+          newAudioBitrate = NaN;
+          hasKbps = true;
+        }
+      }
+    }
 
-      } else if (typeof autoTTRecStraightCopyArgValue === "number") {
+    this.formData["audio-bitrate"] = newAudioBitrate;
+    this.setAudioBitrateDisplayedAndUnit(newAudioBitrate, hasKbps);
+  }
 
+  private setAudioBitrateDisplayedAndUnit(audioBitrate: number, hasKbps: boolean) {
+    if (!Number.isNaN(audioBitrate) && hasKbps) {
+      audioBitrate = Math.floor(Math.floor(audioBitrate) / 1000)
+    }
+
+    this.formData["audio-bitrate-displayed"] = audioBitrate;
+
+    if (Number.isNaN(audioBitrate) || hasKbps) {
+      this.formData["audio-bitrate-unit"] = "kbps";
+    } else {
+      this.formData["audio-bitrate-unit"] = "bps";
+    }
+  }
+
+  private importBackgroundMusicSourceAndMusicFilename() {
+    let musicFilename = this.validateSharedArgString_errorIfNot_handleUndefinedNull("music-filename");
+    if (musicFilename === "") {
+      this.formData["background-music-source"] = "<FILLME>";
+    } else if (musicFilename === "bgm") {
+      this.formData["background-music-source"] = "game-bgm";
+      musicFilename = "";
+    } else if (musicFilename === "none") {
+      this.formData["background-music-source"] = "none";
+      musicFilename = "";
+    } else {
+      this.formData["background-music-source"] = "music-filename";
+    }
+
+    this.formData["music-filename"] = musicFilename;
+  }
+
+  /*
+      if "top-10-chadsoft" is <FILLME>, "top10chadsoft"
+    else if "top-10-gecko-code-filename" is <FILLME>, "top10gecko"
+    else if "top-10-chadsoft", "top10chadsoft"
+    else if "top-10-gecko-code-filename", "top10gecko"
+    else "top10chadsoft", throw error
+  else if "timeline" is null, "notop10" (different from record_ghost behaviour)
+  else if "timeline" in {"noencode", "ghostonly", "ghostselect", "mkchannel"}, "notop10"
+  else "notop10", throw error
+
+  */
+
+  private setTimelineCategoryAndNoTop10() {
+    let timeline = this.validateStringErrorIfNot_handleUndefined("timeline");
+    let timelineCategory: TimelineCategory;
+    let noTop10Category: NoTop10Category;
+
+    if (timeline === "top10") {
+      let top10Chadsoft = this.getFormDataStringOrChoiceArg_nullIfWasNull("top-10-chadsoft");
+      let top10GeckoCodeFilename = this.getFormDataStringOrChoiceArg_nullIfWasNull("top-10-gecko-code-filename");
+      if (top10Chadsoft === "") {
+        timelineCategory = "top10chadsoft";
+      } else if (top10GeckoCodeFilename === "") {
+        timelineCategory = "top10gecko";
+      } else if (top10Chadsoft !== null) {
+        timelineCategory = "top10chadsoft";
+      } else if (top10GeckoCodeFilename !== null) {
+        timelineCategory = "top10gecko";
+      } else {
+        timelineCategory = "top10chadsoft";
+        this.errorsAndWarnings.addError("timeline", "timeline was specified as top10 but neither top-10-chadsoft nor top-10-gecko-code-filename were specified! Defaulting to top10chadsoft.");
+      }
+      noTop10Category = "mkchannel";
+    } else {
+      timelineCategory = "notop10";
+      if (timeline !== null) {
+        if (isInSet(NO_TOP_10_CATEGORIES.set, timeline)) {
+          noTop10Category = timeline;
+        } else {
+          noTop10Category = "mkchannel";
+          if (timeline === "") {
+            this.errorsAndWarnings.addError("timeline", "Timeline cannot be empty or <FILLME>! Defaulting to mkchannel.");
+          }
+          this.errorsAndWarnings.addInvalidChoiceError("timeline", TIMELINES, timeline, " Defaulting to mkchannel.");
+        }
+      } else {
+        this.errorsAndWarnings.addWarning("timeline", "timeline was unspecified/null, defaulting to mkchannel.");
+        noTop10Category = "mkchannel";
+      }
+    }
+    this.formData["timeline-category"] = timelineCategory;
+    this.formData["no-top-10-category"] = noTop10Category;
+  }
+
+  private setTop10HighlightEnable() {
+    let top10Highlight = this.getFormDataNumber_verifyNotUndefined("top-10-highlight");
+    let top10HighlightEnable: boolean | "<FILLME>";
+
+    if (Number.isNaN(top10Highlight)) {
+      top10HighlightEnable = "<FILLME>";
+    } else if (top10Highlight === -1) {
+      top10HighlightEnable = false;
+    } else {
+      top10HighlightEnable = true;
+    }
+
+    this.formData["top-10-highlight-enable"] = top10HighlightEnable;
+  }
+
+  private importGhostSource(isMainGhost: boolean) {
+    let [ghostPageArgName, ghostFilenameArgName, ghostSourceArgName]: ["chadsoft-ghost-page", "main-ghost-filename", "main-ghost-source"] | ["chadsoft-comparison-ghost-page", "comparison-ghost-filename", "comparison-ghost-source"] = isMainGhost ? ["chadsoft-ghost-page", "main-ghost-filename", "main-ghost-source"] : ["chadsoft-comparison-ghost-page", "comparison-ghost-filename", "comparison-ghost-source"];
+
+    let ghostPageValue = this.getFormDataStringOrChoiceArg_nullIfWasNull(ghostPageArgName);
+    let ghostFilenameValue = this.getFormDataStringOrChoiceArg_nullIfWasNull(ghostFilenameArgName);
+    let ghostSourceValue: BothGhostSource | null;
+
+    if (ghostPageValue === "" && ghostFilenameValue === "") {
+      ghostSourceValue = "<FILLME>";
+    } else if (ghostPageValue === "") {
+      ghostSourceValue = "chadsoft";
+    } else if (ghostFilenameValue === "") {
+      ghostSourceValue = "rkg";
+    } else if (ghostPageValue !== null) {
+      ghostSourceValue = "chadsoft";
+    } else if (ghostFilenameValue !== null) {
+      ghostSourceValue = "rkg";
+    } else {
+      ghostSourceValue = null;
+    }
+
+    if (ghostSourceValue !== null) {
+      this.formData[ghostSourceArgName] = ghostSourceValue;
+    } else {
+      if (ghostSourceArgName === "main-ghost-source") {
+        let timelineCategory = this.getFormDataStringOrChoiceArg_nullIfWasNull("timeline-category");
+        if (timelineCategory === "top10chadsoft" && this.formData["top-10-highlight-enable"]) {
+          ghostSourceValue = "chadsoft";
+        } else {
+          ghostSourceValue = "<FILLME>";
+          this.errorsAndWarnings.addError("main-ghost-source", "Neither chadsoft-ghost-page nor main-ghost-filename were specified and timeline isn't top10 with top-10-highlight enabled (not -1).");
+        }
+        this.formData[ghostSourceArgName] = ghostSourceValue
+      } else {
+        this.formData[ghostSourceArgName] = "none";
       }
     }
   }
-  public import() {
 
+  private setEncodeSizeDisplayedAndUnit() {
+    let isMiB: boolean = false;
+    let encodeSize = this.getFormDataNumber_verifyNotUndefined("encode-size");
+    let encodeSizeDisplayed: number;
+
+    if (Number.isNaN(encodeSize)) {
+      encodeSizeDisplayed = NaN;
+      isMiB = true;
+    } else if (encodeSize % 1048576 === 0) {
+      encodeSizeDisplayed = Math.floor(encodeSize / 1048576);
+      isMiB = true;
+    } else {
+      encodeSizeDisplayed = encodeSize;
+    }
+    this.formData["encode-size-displayed"] = encodeSizeDisplayed;
+
+    let encodeSizeUnit: EncodeSizeUnit;
+
+    if (isMiB) {
+      encodeSizeUnit = "mib";
+    } else {
+      encodeSizeUnit = "bytes";
+    }
+
+    this.formData["encode-size-unit"] = encodeSizeUnit;
+  }
+
+  public import() {
+    this.importStraightCopyArgs();
+
+    
+    
     // add in main ghost
     this.tryAddSameOption("chadsoft-ghost-page");
     this.tryAddSameOption("main-ghost-filename");
