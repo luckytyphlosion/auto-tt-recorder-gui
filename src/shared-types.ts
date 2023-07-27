@@ -1,6 +1,6 @@
 
 export interface AutoTTRecConfig {
-  [key: string]: string | number | boolean | null | undefined;
+  [key: string]: string | number | boolean | null;
 }
 
 export interface FilenameAndContents {

@@ -166,6 +166,7 @@ class AutoTTRecArgsClass {
   "extra-gecko-codes-filename"?: string = "";
   "extra-hq-textures-folder"?: string = "";
   "fade-in-at-start"?: boolean = false;
+  "form-complexity"?: FormComplexity = FormComplexity.ALL;
   "game-volume"?: number = 1.0;
   "h26x-preset"?: H26xPreset = "slow";
   "hq-textures"?: boolean = true;
@@ -236,13 +237,17 @@ export type AutoTTRecConfigFormInternalFieldTypes = Pick<AutoTTRecConfigFormFiel
     null extends AutoTTRecConfigFormFieldTypes[K] ? K : never
 }[keyof AutoTTRecConfigFormFieldTypes]>;
 
-type GhostAuto = "main-ghost-auto" | "comparison-ghost-auto";
-
 const AUTO_TT_REC_TOP_10_LOCATIONS = makeReadonlyArraySet(["ww", "worldwide", ...countryLocations, ...regionalLocations] as const);
 type Top10LocationFull = ValidValues<typeof AUTO_TT_REC_TOP_10_LOCATIONS>;
 
 function isInSet<T>(values: ReadonlySet<T>, x: any): x is T {
   return values.has(x);
+}
+
+type NullOrEmpty = null | "";
+
+function isNullOrEmpty(x: any): x is NullOrEmpty {
+  return x === null && x === "";
 }
 
 function deleteFromSet<T>(values: Set<T>, x: any): boolean {
@@ -274,9 +279,30 @@ const autoTTRecArgsClassObj = new AutoTTRecArgsClass();
 
 type AutoTTRecArgNamesType = Array<keyof AutoTTRecArgs>;
 
-const AUTO_TT_REC_ARG_NAMES = makeReadonlyArraySet(Object.keys(autoTTRecArgsClassObj) as AutoTTRecArgNamesType);
+interface AutoTTRecArgsExtendedTypes {
+  [name: string]: "string" | "boolean" | "number" | "unsupported"
+}
 
-type AutoTTRecArgNameExtended = AutoTTRecArgName | GhostAuto | "no-200cc" | "top-10-censors" | "ending-message" | "dolphin-volume";
+const autoTTRecArgExtendedTypes: AutoTTRecArgsExtendedTypes = {
+  "main-ghost-auto": "string",
+  "comparison-ghost-auto": "string",
+  "no-200cc": "boolean",
+  "top-10-censors": "unsupported",
+  "ending-message": "unsupported",
+  "dolphin-volume": "unsupported",
+  "unbuffered-output": "unsupported"
+} as const;
+
+const GHOST_AUTO = makeReadonlyArraySet(["main-ghost-auto", "comparison-ghost-auto"] as const);
+type GhostAuto = ValidValues<typeof GHOST_AUTO>;
+
+const AUTO_TT_REC_ARG_NAMES = makeReadonlyArraySet(Object.keys(autoTTRecArgsClassObj) as AutoTTRecArgNamesType);
+const AUTO_TT_REC_ARG_NAMES_EXTENDED = makeReadonlyArraySet([
+    ...AUTO_TT_REC_ARG_NAMES.arr,
+    ...GHOST_AUTO.arr,
+    "no-200cc", "top-10-censors", "ending-message", "dolphin-volume", "unbuffered-output"] as const);
+
+type AutoTTRecArgNameExtended = ValidValues<typeof AUTO_TT_REC_ARG_NAMES_EXTENDED>;
 
 export interface AutoTTRecConfigImporterError {
   option: AutoTTRecArgName,
@@ -299,16 +325,18 @@ interface AutoTTRecConfigImporterErrorOrWarningMessage {
 
 class AutoTTRecConfigImporterErrorsAndWarnings {
   private _errorsAndWarnings: Map<AutoTTRecArgNameExtended, AutoTTRecConfigImporterErrorOrWarningMessage[]>;
+  private _errorsAndWarningsInvalidCommands: Map<string, AutoTTRecConfigImporterErrorOrWarningMessage[]>;
 
   constructor() {
     this._errorsAndWarnings = new Map();
+    this._errorsAndWarningsInvalidCommands = new Map();
   }
 
-  private add(name: AutoTTRecArgNameExtended, message: string, isWarning: boolean) {
-    let errorsAndWarningsForName = this._errorsAndWarnings.get(name);
+  private addToErrorsWarningMap<K extends string, M extends Map<K, AutoTTRecConfigImporterErrorOrWarningMessage[]>>(name: K, message: string, isWarning: boolean, errorsAndWarnings: M) {
+    let errorsAndWarningsForName = errorsAndWarnings.get(name);
     if (errorsAndWarningsForName === undefined) {
       errorsAndWarningsForName = [];
-      this._errorsAndWarnings.set(name, errorsAndWarningsForName);
+      errorsAndWarnings.set(name, errorsAndWarningsForName);
     }
 
     errorsAndWarningsForName.push({
@@ -317,16 +345,113 @@ class AutoTTRecConfigImporterErrorsAndWarnings {
     });
   }
 
+  private add(name: AutoTTRecArgNameExtended, message: string, isWarning: boolean) {
+    this.addToErrorsWarningMap(name, message, isWarning, this._errorsAndWarnings);
+  }
+
   public addError(name: AutoTTRecArgNameExtended, message: string) {
     this.add(name, message, false);
   }
   public addWarning(name: AutoTTRecArgNameExtended, message: string) {
     this.add(name, message, true);
   }
+
+  public addErrorInvalidCommand(name: string) {
+    this.addToErrorsWarningMap(name, "Not a valid auto-tt-recorder command.", false, this._errorsAndWarningsInvalidCommands);
+  }
 }
 
 const listFormatter = new Intl.ListFormat("en", {style: "long", type: "disjunction"});
 const ghostPageLinkRegex = /^https:\/\/(?:www\.)?chadsoft\.co\.uk\/time-trials\/rkgd\/([0-9A-Fa-f]{2}\/[0-9A-Fa-f]{2}\/[0-9A-Fa-f]{36})\.html/;
+const emptyOrNull = new Set([null, ""]);
+
+type GhostAutoType = "rkg" | "chadsoft" | "<FILLME>";
+const chadsoftGhostPageLinkRegex = /^https:\/\/(?:www\.)?chadsoft\.co\.uk\/time-trials\/rkgd\/[0-9A-Fa-f]{2}\/[0-9A-Fa-f]{2}\/[0-9A-Fa-f]{36}\.html$/;
+
+class AutoTTRecConfigPreprocessor {
+  private autoTTRecConfig: AutoTTRecConfig;
+  private errorsAndWarnings: AutoTTRecConfigImporterErrorsAndWarnings;
+
+  constructor(autoTTRecConfig: AutoTTRecConfig, errorsAndWarnings: AutoTTRecConfigImporterErrorsAndWarnings) {
+    this.autoTTRecConfig = shallowCopy(autoTTRecConfig);
+    this.errorsAndWarnings = errorsAndWarnings;
+  }
+
+  
+  private preprocess() {
+    this.findInvalidNamesAndFillInMissing();
+
+  }
+  
+  private findInvalidNamesAndFillInMissing() {
+    let missingAutoTTRecArgNames = new Set([...AUTO_TT_REC_ARG_NAMES_EXTENDED.arr]);
+
+    for (const [name, value] of Object.entries(this.autoTTRecConfig)) {
+      let isAutoTTRecArgName = deleteFromSet(missingAutoTTRecArgNames, name);
+      if (isAutoTTRecArgName) {
+        if (typeof value === "string" && value.startsWith("<FILLME") && value.charAt(value.length - 1) == ">") {
+          this.autoTTRecConfig[name] = "<FILLME>";
+        } else {
+          this.autoTTRecConfig[name] = value;
+        }  
+      } else {
+        this.errorsAndWarnings.addErrorInvalidCommand(name);
+      }
+    }
+
+    missingAutoTTRecArgNames.forEach((autoTTRecArgName) => {
+      this.autoTTRecConfig[autoTTRecArgName] = null;
+    });
+  }
+
+  private convertExtendedArgs() {
+
+  }
+
+  private convertGhostAuto(ghostAutoOptionName: GhostAuto,
+    ghostFilenameOptionName: "main-ghost-filename" | "comparison-ghost-filename",
+    ghostLinkOptionName: "chadsoft-ghost-page" | "chadsoft-comparison-ghost-page"
+  ) {
+    const ghostAutoValue = this.autoTTRecConfig[ghostAutoOptionName];
+
+    if (!isNullOrEmpty(ghostAutoValue)) {
+      let conflictsWithNonAutoOptions: boolean;
+      if (this.autoTTRecConfig[ghostFilenameOptionName] === "<FILLME>" && this.autoTTRecConfig[ghostLinkOptionName] === "<FILLME>") {
+        conflictsWithNonAutoOptions = false;
+      } else {
+        conflictsWithNonAutoOptions = true;
+      }
+      let ghostAutoType: GhostAutoType;
+
+      if (ghostAutoValue === "<FILLME>") {
+        ghostAutoType = "<FILLME>";
+      } else if (ghostAutoVa)
+      if (conflictsWithNonAutoOptions) {
+        if ()
+      }
+      
+        this.autoTTRecConfig[ghostFilenameOptionName] = "<FILLME>";
+        this.autoTTRecConfig[ghostLinkOptionName] = "<FILLME>";
+      }
+      if (ghostAutoValue !== null && ghostAutoValue !== undefined) {
+        if (typeof ghostAutoValue === "string") {
+          if (ghostAutoValue.match(ghostPageLinkRegex)) {
+            this.add(ghostLinkOptionName, ghostAutoValue);
+          } else {
+            this.add(ghostFilenameOptionName, ghostAutoValue);
+          }
+        } else {
+          this.addErrorExtended(ghostAutoOptionName, `${ghostAutoOptionName} should be a string, but got ${typeof ghostAutoValue} instead.`);
+        }
+      } else {
+        this.add(ghostFilenameOptionName, ghostAutoValue as AnyFIXME);
+        this.add(ghostLinkOptionName, ghostAutoValue as AnyFIXME);
+      }
+  }
+  }
+
+
+}
 
 class AutoTTRecConfigImporter {
   private autoTTRecArgs: AutoTTRecArgs;
@@ -337,50 +462,8 @@ class AutoTTRecConfigImporter {
   constructor(autoTTRecConfig: AutoTTRecConfig) {
     this.autoTTRecArgs = {};
     this.formData = {};
-
-    this.autoTTRecConfig = {};
-
-    
+    this.autoTTRecConfig = shallowCopy(autoTTRecConfig);
     this.errorsAndWarnings = new AutoTTRecConfigImporterErrorsAndWarnings();
-  }
-
-
-  private static preprocessConfig(inputAutoTTRecConfig: AutoTTRecConfig) {
-    let autoTTRecConfig = shallowCopy(inputAutoTTRecConfig);
-    let missingAutoTTRecArgs = new Set([...AUTO_TT_REC_ARG_NAMES.arr]);
-
-    for (const [name, value] of Object.entries(autoTTRecConfig)) {
-      let isAutoTTRecArgName = deleteFromSet(missingAutoTTRecArgs, name);
-      if (isAutoTTRecArgName) {
-        if (typeof value === "string" && value.startsWith("<FILLME") && value.charAt(value.length - 1) == ">") {
-          autoTTRecConfig[name] = undefined;
-        } else {
-          autoTTRecConfig[name] = value;
-        }  
-      }
-    }
-  }
-  
-  private tryAddGhostAuto(ghostAutoOptionName: GhostAuto,
-    ghostFilenameOptionName: "main-ghost-filename" | "comparison-ghost-filename",
-    ghostLinkOptionName: "chadsoft-ghost-page" | "chadsoft-comparison-ghost-page"
-  ) {
-    let ghostAutoValue = this.autoTTRecConfig[ghostAutoOptionName];
-
-    if (ghostAutoValue !== null && ghostAutoValue !== undefined) {
-      if (typeof ghostAutoValue === "string") {
-        if (ghostAutoValue.match(ghostPageLinkRegex)) {
-          this.add(ghostLinkOptionName, ghostAutoValue);
-        } else {
-          this.add(ghostFilenameOptionName, ghostAutoValue);
-        }
-      } else {
-        this.addErrorExtended(ghostAutoOptionName, `${ghostAutoOptionName} should be a string, but got ${typeof ghostAutoValue} instead.`);
-      }
-    } else {
-      this.add(ghostFilenameOptionName, ghostAutoValue as AnyFIXME);
-      this.add(ghostLinkOptionName, ghostAutoValue as AnyFIXME);
-    }
   }
 
   //public add<K extends AutoTTRecArgName>(key: K, value: AutoTTRecArgs[K]) {
