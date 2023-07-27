@@ -203,6 +203,7 @@ class AutoTTRecArgsClass {
   "youtube-settings"?: boolean = true;
 }
 
+type BooleanFILLME = boolean | "<FILLME>";
 
 type IfEquals<T, U, Y=unknown, N=never> =
   (<G>() => G extends T ? 1 : 2) extends
@@ -1027,6 +1028,17 @@ class AutoTTRecConfigImporter {
     this.formData["encode-size-unit"] = encodeSizeUnit;
   }
 
+  public importAllExtraGeckoCodeArgs() {
+    let extraGeckoCodesFilename = this.getFormDataStringOrChoiceArg_nullIfWasNull("extra-gecko-codes-filename");
+    let extraGeckoCodesEnable: BooleanFILLME;
+    if (extraGeckoCodesFilename === "") {
+      extraGeckoCodesEnable = "<FILLME>";
+    } else if (extraGeckoCodesFilename !== null) {
+      extraGeckoCodesEnable = true;
+    } else {
+      extraGeckoCodesEnable = false;
+    }
+  }
   public import() {
     this.importStraightCopyArgs();
 

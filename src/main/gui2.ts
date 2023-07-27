@@ -16,6 +16,15 @@ function retrieveLastPathname(lastPathname: string | undefined, dialogId: Dialog
   }
   return lastPathname;
 }
+
+export async function readFileEnforceUTF8(filename: string, badEncodingErrorMessage: string): Promise<string> {
+  const buffer = await fsPromises.readFile(filename);
+  if (!Buffer.from(buffer.toString(), "utf8").equals(buffer)) {
+    throw new Error(badEncodingErrorMessage);
+  }
+  return buffer.toString();
+}
+
 export async function openFileDialog(event: IpcMainInvokeEvent, fileFilters: FileFilter[],
     lastFilename: string | undefined, dialogId: DialogId): Promise<string> {
   console.log("open-file-dialog fileFilters:", fileFilters);
@@ -67,7 +76,15 @@ export async function openFileDialogAndRead(event: IpcMainInvokeEvent, fileFilte
   });
   if (!response.canceled) {
     let filename = response.filePaths[0];
-    const contents = await fsPromises.readFile(filename, "utf8");
+    let contents: string;
+
+    try {
+      contents = await readFileEnforceUTF8(filename, "Provided template file is not a text file!");
+    } catch (e) {
+      contents = "Error: Provided template file is not a text file!";
+    }
+
+    //const contents = await fsPromises.readFile(filename, "utf8");
     globalConfig.setNewDialogPathnameAndSave(dialogId, filename);
     return {
       filename: filename,
