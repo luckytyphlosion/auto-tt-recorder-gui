@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, MouseEventHandler } from "react";
 
 import Modal from "react-modal";
 import { FormProvider, UseFormReturn } from "react-hook-form";
-import { AutoTTRecConfigFormFieldTypes, AUTO_TT_REC_CONFIG_FORM_FIELD_NAMES, DEFAULT_FORM_VALUES } from "../AutoTTRecFormFieldsAndArgs";
+import { AutoTTRecConfigFormFields, AUTO_TT_REC_CONFIG_FORM_FIELD_NAMES, DEFAULT_FORM_VALUES } from "../AutoTTRecFormFieldsAndArgs";
 
 import { ImportTemplateResult, ImportTemplateStatus, AutoTTRecConfig } from "../../shared-types";
 

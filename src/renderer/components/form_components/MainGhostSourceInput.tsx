@@ -5,7 +5,7 @@ import useRenderCounter from "../../RenderCounter";
 import { ChadsoftGhostPageInput } from "./ChadsoftGhostPageInput";
 import { MainGhostFilenameInput } from "./MainGhostFilenameInput";
 
-import { AutoTTRecConfigFormFieldTypes } from "../../AutoTTRecFormFieldsAndArgs";
+import { AutoTTRecConfigFormFields } from "../../AutoTTRecFormFieldsAndArgs";
 
 export type MainGhostSource = "chadsoft" | "rkg";
 

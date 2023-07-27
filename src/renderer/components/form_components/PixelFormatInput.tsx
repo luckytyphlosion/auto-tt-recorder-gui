@@ -3,11 +3,11 @@ import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
 import { UseFormRegister } from "react-hook-form";
 
-import { AutoTTRecConfigFormFieldTypes } from "../../AutoTTRecFormFieldsAndArgs";
+import { AutoTTRecConfigFormFields } from "../../AutoTTRecFormFieldsAndArgs";
 
 import useRenderCounter from "../../RenderCounter";
 
-//props: {register: UseFormRegister<AutoTTRecConfigFormFieldTypes>}
+//props: {register: UseFormRegister<AutoTTRecConfigFormFields>}
 export function PixelFormatInput() {
   const {register} = useFormContextAutoTT();
 

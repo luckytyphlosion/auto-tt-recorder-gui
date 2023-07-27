@@ -53,7 +53,7 @@ import { FormComplexity } from "./layout_components/FormComplexityLayout";
 import { ClearAllFields } from "./ClearAllFields";
 import { ImportTemplate } from "./ImportTemplate";
 
-import { AutoTTRecConfigFormFieldTypes, AutoTTRecArgs, Timeline, DEFAULT_FORM_VALUES, convertFormDataToAutoTTRecArgs } from "../AutoTTRecFormFieldsAndArgs";
+import { AutoTTRecConfigFormFields, AutoTTRecArgs, Timeline, DEFAULT_FORM_VALUES, convertFormDataToAutoTTRecArgs } from "../AutoTTRecFormFieldsAndArgs";
 
 import useRenderCounter from "../RenderCounter";
 
@@ -65,12 +65,12 @@ export function AutoTTRecConfigForm(
     whichUI: boolean, onSubmitCallback: (autoTTRecArgs: AutoTTRecArgs, setSubmittedToggle: React.Dispatch<React.SetStateAction<boolean>>) => any,
     onAbortCallback: (event: React.MouseEvent<HTMLButtonElement>) => void,
     isAutoTTRecRunning: boolean,
-    formDefaultValues: AutoTTRecConfigFormFieldTypes,
-    setFormDefaultValues: React.Dispatch<React.SetStateAction<AutoTTRecConfigFormFieldTypes>>
+    formDefaultValues: AutoTTRecConfigFormFields,
+    setFormDefaultValues: React.Dispatch<React.SetStateAction<AutoTTRecConfigFormFields>>
   }
 ) {  
   const renderCounter = useRenderCounter(false, "AutoTTRecConfigForm");
-  const formMethods = useForm<AutoTTRecConfigFormFieldTypes>({
+  const formMethods = useForm<AutoTTRecConfigFormFields>({
     criteriaMode: "all",
     defaultValues: props.formDefaultValues
   });
@@ -85,7 +85,7 @@ export function AutoTTRecConfigForm(
   const [stateTest, setStateTest] = useState(false);
   const [submittedToggle, setSubmittedToggle] = useState(false);
 
-  async function onSubmit(formData: AutoTTRecConfigFormFieldTypes) {
+  async function onSubmit(formData: AutoTTRecConfigFormFields) {
     //setSubmittedToggle((submittedToggle) => !submittedToggle);
     console.log("onSubmit");
     formMethods.reset(undefined, {keepValues: true});

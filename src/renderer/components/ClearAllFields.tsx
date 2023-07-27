@@ -2,13 +2,13 @@ import React, { useState, useEffect, MouseEventHandler } from "react";
 
 import Modal from "react-modal";
 import { FormProvider, UseFormReturn } from "react-hook-form";
-import { AutoTTRecConfigFormFieldTypes, AUTO_TT_REC_CONFIG_FORM_FIELD_NAMES, DEFAULT_FORM_VALUES } from "../AutoTTRecFormFieldsAndArgs";
+import { AutoTTRecConfigFormFields, AUTO_TT_REC_CONFIG_FORM_FIELD_NAMES, DEFAULT_FORM_VALUES } from "../AutoTTRecFormFieldsAndArgs";
 
 export function ClearAllFields(props: {
-  formMethods: UseFormReturn<AutoTTRecConfigFormFieldTypes, any, undefined>,
+  formMethods: UseFormReturn<AutoTTRecConfigFormFields, any, undefined>,
   submittedToggle: boolean,
   setSubmittedToggle: React.Dispatch<React.SetStateAction<boolean>>,
-  setFormDefaultValues: React.Dispatch<React.SetStateAction<AutoTTRecConfigFormFieldTypes>>}) {
+  setFormDefaultValues: React.Dispatch<React.SetStateAction<AutoTTRecConfigFormFields>>}) {
   const [isModalOpen, setModalOpen] = useState(false);
   const [allFieldsCleared, setAllFieldsCleared] = useState(false);
   const [afterAllFieldsCleared, setAfterAllFieldsCleared] = useState(false);
@@ -33,7 +33,7 @@ export function ClearAllFields(props: {
     let timelineCategory = getValues("timeline-category");
     let noTop10Category = getValues("no-top-10-category");
 
-    /*const barebonesValues: AutoTTRecConfigFormFieldTypes = {
+    /*const barebonesValues: AutoTTRecConfigFormFields = {
       "form-complexity": formComplexity,
       "timeline-category": timelineCategory,
       "no-top-10-category": noTop10Category

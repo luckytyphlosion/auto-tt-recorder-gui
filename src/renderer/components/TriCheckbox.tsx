@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Control, Controller, RefCallBack, UseFormSetValue, UseFormGetValues } from 'react-hook-form';
 import { useFormContextAutoTT } from "../use-form-context-auto-tt";
-import { AutoTTRecConfigFormFieldTypes, AutoTTRecConfigFormTriCheckboxFieldTypes } from "../AutoTTRecFormFieldsAndArgs";
+import { AutoTTRecConfigFormFields, AutoTTRecConfigFormTriCheckboxFieldTypes } from "../AutoTTRecFormFieldsAndArgs";
 
 import useRenderCounter from "../RenderCounter";
 
@@ -17,8 +17,8 @@ function TriCheckboxInternal(props: {
   value: boolean | undefined,
   refCallback: RefCallBack,
   onChange: (...event: any[]) => void,
-  setValue: UseFormSetValue<AutoTTRecConfigFormFieldTypes>,
-  getValues: UseFormGetValues<AutoTTRecConfigFormFieldTypes>
+  setValue: UseFormSetValue<AutoTTRecConfigFormFields>,
+  getValues: UseFormGetValues<AutoTTRecConfigFormFields>
 }) {
   const checkboxRef = useRef<HTMLInputElement | null>(null);
   const renderCounter = useRenderCounter(false, "TriCheckboxInternal");

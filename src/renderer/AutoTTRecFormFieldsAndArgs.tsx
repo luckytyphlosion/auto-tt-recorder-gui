@@ -204,51 +204,6 @@ class AutoTTRecArgsClass {
   "youtube-settings"?: boolean = true;
 }
 
-type AutoTTRecStraightCopyArgs = Partial<Record<AutoTTRecArgName, ReadonlyArraySet<any> | string | boolean | number>>;
-
-const autoTTRecStraightCopyArgs: AutoTTRecStraightCopyArgs = {
-  "aspect-ratio-16-by-9": ASPECT_RATIO_16_BY_9_VALUES,
-  "audio-codec": AUDIO_CODECS,
-  "chadsoft-comparison-ghost-page": "",
-  "chadsoft-ghost-page": "",
-  "chadsoft-read-cache": true,
-  "chadsoft-write-cache": true,
-  "comparison-ghost-filename": "",
-  "crf-value": 15,
-  "dolphin-resolution": DOLPHIN_RESOLUTIONS,
-  "encode-only": true,
-  "encode-size": 52428800,
-  "encode-type": ENCODE_TYPES,
-  "ending-delay": 600,
-  "extra-gecko-codes-filename": "",
-  "extra-hq-textures-folder": "",
-  "fade-in-at-start": false,
-  "h26x-preset": H26X_PRESETS,
-  "hq-textures": true,
-  "input-display": INPUT_DISPLAYS,
-  "input-display-dont-create": false,
-  "iso-filename": "",
-  "keep-window": true,
-  "main-ghost-filename": "",
-  "mk-channel-ghost-description": "",
-  "no-background-blur": true,
-  "no-bloom": false,
-  "no-music": false,
-  "on-200cc": false,
-  "output-width": 2560,
-  "pixel-format": "yuv420p",
-  "speedometer": SPEEDOMETER_STYLES,
-  "speedometer-decimal-places": SPEEDOMETER_DECIMAL_PLACES,
-  "speedometer-metric": SPEEDOMETER_METRICS,
-  "szs-filename": "",
-  "top-10-chadsoft": "",
-  "top-10-gecko-code-filename": "",
-  "top-10-highlight": 1,
-  "use-ffv1": false,
-  "video-codec": VIDEO_CODECS,
-  "youtube-settings": true,
-}
-
 type NonNullable<T> = {[P in keyof T]: Exclude<T[P], null>};
 
 export type PartialFILLME<T> = {
@@ -256,12 +211,13 @@ export type PartialFILLME<T> = {
 };
 
 interface AutoTTRecConfigFormFieldTypesNoFILLME extends AutoTTRecConfigFormFieldTypesNoFILLMEClass {};
-export type AutoTTRecConfigFormFieldTypes = PartialFILLME<AutoTTRecConfigFormFieldTypesNoFILLME>;
+export type AutoTTRecConfigFormFields = PartialFILLME<AutoTTRecConfigFormFieldTypesNoFILLME>;
+type AutoTTRecConfigFormFieldName = keyof AutoTTRecConfigFormFields;
 
-type AutoTTRecConfigFormPrimitiveArgNames<T> = keyof Pick<AutoTTRecConfigFormFieldTypes, {
-  [K in keyof AutoTTRecConfigFormFieldTypes]-?:
-    IfEquals<AutoTTRecConfigFormFieldTypes[K], T | "<FILLME>", K, never>
-}[keyof AutoTTRecConfigFormFieldTypes]>;
+type AutoTTRecConfigFormPrimitiveArgNames<T> = keyof Pick<AutoTTRecConfigFormFields, {
+  [K in AutoTTRecConfigFormFieldName]-?:
+    IfEquals<AutoTTRecConfigFormFields[K], T | "<FILLME>", K, never>
+}[AutoTTRecConfigFormFieldName]>;
 
 type AutoTTRecConfigFormNumberArgNames = AutoTTRecConfigFormPrimitiveArgNames<number>;
 type AutoTTRecConfigFormStringArgNames = AutoTTRecConfigFormPrimitiveArgNames<string>;
@@ -269,17 +225,18 @@ type AutoTTRecConfigFormBooleanArgNames = AutoTTRecConfigFormPrimitiveArgNames<b
 
 const autoTTRecConfigFormFieldTypesClassObj = new AutoTTRecConfigFormFieldTypesNoFILLMEClass();
 
-type AutoTTRecConfigFormFieldTypesKeyofTest = keyof AutoTTRecConfigFormFieldTypes;
+type AutoTTRecConfigFormFieldTypesKeyofTest = AutoTTRecConfigFormFieldName;
 
 let xysedfw: AutoTTRecConfigFormFieldTypesKeyofTest = "hq-textures";
 
-//export type AutoTTRecConfigFormFieldTypes = Writable<AutoTTRecConfigFormFieldTypesReadonly>;
+//export type AutoTTRecConfigFormFields = Writable<AutoTTRecConfigFormFieldTypesReadonly>;
 
-type AutoTTRecConfigFormFieldNames = Array<keyof AutoTTRecConfigFormFieldTypes>;
+
+type AutoTTRecConfigFormFieldNamesArray = Array<AutoTTRecConfigFormFieldName>;
 
 export const DEFAULT_FORM_VALUES: AutoTTRecConfigFormFieldTypesNoFILLME = autoTTRecConfigFormFieldTypesClassObj as AutoTTRecConfigFormFieldTypesNoFILLME;
 
-export const AUTO_TT_REC_CONFIG_FORM_FIELD_NAMES = Object.keys(autoTTRecConfigFormFieldTypesClassObj) as AutoTTRecConfigFormFieldNames;
+export const AUTO_TT_REC_CONFIG_FORM_FIELD_NAMES = Object.keys(autoTTRecConfigFormFieldTypesClassObj) as AutoTTRecConfigFormFieldNamesArray;
 
 const AUTO_TT_REC_TOP_10_LOCATIONS = makeReadonlyArraySet(["ww", "worldwide", ...countryLocations, ...regionalLocations] as const);
 type Top10LocationFull = ValidValues<typeof AUTO_TT_REC_TOP_10_LOCATIONS>;
@@ -308,7 +265,7 @@ export type DoesSomething<T> = {
   [P in keyof T]: T[P] | null;
 }
 
-export type AutoTTRecConfigFormFieldTypesWithoutFILLME = ExcludeFILLME<AutoTTRecConfigFormFieldTypes>;
+export type AutoTTRecConfigFormFieldTypesWithoutFILLME = ExcludeFILLME<AutoTTRecConfigFormFields>;
 export type PartialAutoTTRecConfigFormFieldTypesWithoutFILLME = Partial<AutoTTRecConfigFormFieldTypesWithoutFILLME>;
 export type AutoTTRecArgsWithFILLME = PartialFILLME<AutoTTRecArgs>;
 
@@ -336,6 +293,7 @@ const AUTO_TT_REC_ARG_NAMES_EXTENDED = makeReadonlyArraySet([
     ...AUTO_TT_REC_ARG_NAMES_EXTENDED_ONLY.arr] as const);
 
 type AutoTTRecArgNameExtended = ValidValues<typeof AUTO_TT_REC_ARG_NAMES_EXTENDED>;
+type AutoTTRecArgExtendedAndFormFieldName = AutoTTRecArgNameExtended | AutoTTRecConfigFormFieldName;
 
 export interface AutoTTRecConfigImporterError {
   option: AutoTTRecArgName,
@@ -567,7 +525,7 @@ class AutoTTRecConfigPreprocessor {
 }
 
 class AutoTTRecConfigImporter {
-  private formData: Partial<AutoTTRecConfigFormFieldTypes>;
+  private formData: Partial<AutoTTRecConfigFormFields>;
   private autoTTRecConfig: AutoTTRecConfig;
   private errorsAndWarnings: AutoTTRecConfigErrorsAndWarnings;
 
@@ -597,7 +555,7 @@ class AutoTTRecConfigImporter {
   public addWarningExtended<K extends AutoTTRecArgNameExtended>(key: K, message: string) {
     this.errorsAndWarnings.addWarning(key, message);
   }
-  public add<K extends keyof AutoTTRecConfigFormFieldTypes, V extends AutoTTRecConfigFormFieldTypes[K] | null>(key: K, value: V) {
+  public add<K extends AutoTTRecConfigFormFieldName, V extends AutoTTRecConfigFormFields[K] | null>(key: K, value: V) {
     if (value === null) {
       this.addDefault(key);
     } else {
@@ -605,7 +563,7 @@ class AutoTTRecConfigImporter {
     }
   }
 
-  public addDefault<K extends keyof AutoTTRecConfigFormFieldTypes>(key: K) {
+  public addDefault<K extends AutoTTRecConfigFormFieldName>(key: K) {
     this.formData[key] = DEFAULT_FORM_VALUES[key];
   }
 
@@ -624,7 +582,7 @@ class AutoTTRecConfigImporter {
     }
   }
 
-  private importStraightCopyArg<K extends keyof AutoTTRecArgs & keyof AutoTTRecConfigFormFieldTypes>(key: K, validValues?: ReadonlyArraySet<AutoTTRecArgs[K]>) {
+  private importStraightCopyArg<K extends keyof AutoTTRecArgs & AutoTTRecConfigFormFieldName>(key: K, validValues?: ReadonlyArraySet<AutoTTRecArgs[K]>) {
     let abde: AutoTTRecConfigFormNumberArgNames = "encode-size";
     
     let expectedType = typeof autoTTRecArgsClassObj[key];
@@ -818,7 +776,7 @@ class AutoTTRecConfigImporter {
 
 class AutoTTRecConfigToFormData {
   private autoTTRecArgs: AutoTTRecArgs;
-  private formData: AutoTTRecConfigFormFieldTypes;
+  private formData: AutoTTRecConfigFormFields;
 
   constructor(autoTTRecArgs: AutoTTRecArgs) {
     this.autoTTRecArgs = autoTTRecArgs;
@@ -827,7 +785,7 @@ class AutoTTRecConfigToFormData {
 
     // add an argument with the same name and type from the submitted formData
   // to the resulting auto-tt-rec arguments
-  public add<K extends keyof AutoTTRecConfigFormFieldTypes & keyof AutoTTRecArgs, V extends AutoTTRecArgs[K] & AutoTTRecConfigFormFieldTypes[K]>(key: K) {
+  public add<K extends AutoTTRecConfigFormFieldName & keyof AutoTTRecArgs, V extends AutoTTRecArgs[K] & AutoTTRecConfigFormFields[K]>(key: K) {
     let value = this.autoTTRecArgs[key];
     if (value !== null && value !== undefined) {
       //let value2 = value;
@@ -837,8 +795,8 @@ class AutoTTRecConfigToFormData {
   }
 
   // simple key value argument add, not taking data from formData
-  public addManual<K extends keyof AutoTTRecConfigFormFieldTypes>(key: K, value: AutoTTRecConfigFormFieldTypes[K] | null | undefined) {
-    let nonNullValue: AutoTTRecConfigFormFieldTypes[K];
+  public addManual<K extends AutoTTRecConfigFormFieldName>(key: K, value: AutoTTRecConfigFormFields[K] | null | undefined) {
+    let nonNullValue: AutoTTRecConfigFormFields[K];
     if (value === null) {
       nonNullValue = DEFAULT_FORM_VALUES[key];
     } else if (value === undefined) {
@@ -875,16 +833,16 @@ function shallowCopy<T>(obj: T): T {
 
 class AutoTTRecArgsBuilder {
   private _autoTTRecArgs: AutoTTRecArgs;
-  private formData: AutoTTRecConfigFormFieldTypes;
+  private formData: AutoTTRecConfigFormFields;
 
-  constructor(formData: AutoTTRecConfigFormFieldTypes) {
+  constructor(formData: AutoTTRecConfigFormFields) {
     this._autoTTRecArgs = {};
     this.formData = formData;
   }
 
   // add an argument with the same name and type from the submitted formData
   // to the resulting auto-tt-rec arguments
-  public add<K extends keyof AutoTTRecConfigFormFieldTypes & AutoTTRecArgName>(key: K) {
+  public add<K extends AutoTTRecConfigFormFieldName & AutoTTRecArgName>(key: K) {
     this._autoTTRecArgs[key] = this.formData[key];
   }
 
@@ -899,12 +857,12 @@ class AutoTTRecArgsBuilder {
 }
 
 class AutoTTRecFormData {
-  private _formData: AutoTTRecConfigFormFieldTypes;
+  private _formData: AutoTTRecConfigFormFields;
   private _extendedTimeline: ExtendedTimeline;
   private _formComplexity: FormComplexity;
   private _isOnMKChannel: boolean;
 
-  constructor(formData: AutoTTRecConfigFormFieldTypes) {
+  constructor(formData: AutoTTRecConfigFormFields) {
     this._formData = shallowCopy(formData);
     this._extendedTimeline = this.determineExtendedTimeline();
     this._formComplexity = this.formData["form-complexity"];
@@ -1017,7 +975,7 @@ class AutoTTRecFormData {
   }
 }
 
-function addMainGhostSourceToAutoTTRecArgs(formData: AutoTTRecConfigFormFieldTypes, argsBuilder: AutoTTRecArgsBuilder) {
+function addMainGhostSourceToAutoTTRecArgs(formData: AutoTTRecConfigFormFields, argsBuilder: AutoTTRecArgsBuilder) {
   if (formData["main-ghost-source"] === "chadsoft") {
     argsBuilder.add("chadsoft-ghost-page");
   } else if (formData["main-ghost-source"] === "rkg") {
@@ -1028,7 +986,7 @@ function addMainGhostSourceToAutoTTRecArgs(formData: AutoTTRecConfigFormFieldTyp
   }
 }
 
-function addMusicPresentationToAutoTTRecArgs(formData: AutoTTRecConfigFormFieldTypes, argsBuilder: AutoTTRecArgsBuilder) {
+function addMusicPresentationToAutoTTRecArgs(formData: AutoTTRecConfigFormFields, argsBuilder: AutoTTRecArgsBuilder) {
   if (formData["music-presentation"] === "start-music-at-beginning") {
     argsBuilder.addManual("start-music-at-beginning", true);
   } else if (formData["music-presentation"] === "no-music-mkchannel") {
@@ -1036,15 +994,15 @@ function addMusicPresentationToAutoTTRecArgs(formData: AutoTTRecConfigFormFieldT
   }
 }
 
-function excludeFILLMEFromAutoTTRecConfigFormData(formData: AutoTTRecConfigFormFieldTypes) {
+function excludeFILLMEFromAutoTTRecConfigFormData(formData: AutoTTRecConfigFormFields) {
   let formDataNoFILLMEPartial: PartialAutoTTRecConfigFormFieldTypesWithoutFILLME = {};
 
-  //export type AutoTTRecConfigFormFieldTypesWithoutFILLME = ExcludeFILLME<AutoTTRecConfigFormFieldTypes>;
+  //export type AutoTTRecConfigFormFieldTypesWithoutFILLME = ExcludeFILLME<AutoTTRecConfigFormFields>;
   //export type PartialAutoTTRecConfigFormFieldTypesWithoutFILLME = Partial<AutoTTRecConfigFormFieldTypesWithoutFILLME>;
   
 }
 
-export function convertFormDataToAutoTTRecArgs(formData: AutoTTRecConfigFormFieldTypes) {
+export function convertFormDataToAutoTTRecArgs(formData: AutoTTRecConfigFormFields) {
   if (formData["form-complexity"] !== FormComplexity.ALL) {
     let formDataManager = new AutoTTRecFormData(formData);
     formData = formDataManager.formData  

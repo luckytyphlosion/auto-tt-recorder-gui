@@ -10,7 +10,7 @@ import { ISOWBFSFileInput } from "./form_components/ISOWBFSFileInput";
 import { FormComplexityLayout } from "./layout_components/FormComplexityLayout";
 
 import { FormProvider, UseFormReturn } from "react-hook-form";
-import { AutoTTRecConfigFormFieldTypes } from "../AutoTTRecFormFieldsAndArgs";
+import { AutoTTRecConfigFormFields } from "../AutoTTRecFormFieldsAndArgs";
 
 import useRenderCounter from "../RenderCounter";
 
@@ -18,7 +18,7 @@ const ISOWBFSFileInput_Memo = memo(ISOWBFSFileInput);
 
 
 export function AutoTTRecConfigFormComponents(props: {
-    formMethods: UseFormReturn<AutoTTRecConfigFormFieldTypes, any, undefined>,
+    formMethods: UseFormReturn<AutoTTRecConfigFormFields, any, undefined>,
     forceUpdate: boolean,
     isAutoTTRecRunning: boolean}) {  
   const renderCounter = useRenderCounter(false, "AutoTTRecConfigFormComponents");
