@@ -15,7 +15,7 @@ import { BackgroundMusicSource } from "./components/form_components/BackgroundMu
 import { InputDisplay, INPUT_DISPLAYS } from "./components/form_components/InputDisplayInput";
 import { SpeedometerStyle, SPEEDOMETER_STYLES, SPEEDOMETER_STYLES2 } from "./components/form_components/SpeedometerInput";
 import { SpeedometerMetric, SPEEDOMETER_METRICS } from "./components/form_components/SpeedometerMetricInput";
-import { SpeedometerDecimalPlaces, SpeedometerDecimalPlacesNumeric, SPEEDOMETER_DECIMAL_PLACES_NUMERIC } from "./components/form_components/SpeedometerDecimalPlacesInput";
+import { SpeedometerDecimalPlaces, SpeedometerDecimalPlacesNumeric, SPEEDOMETER_DECIMAL_PLACES_NUMERIC, SPEEDOMETER_DECIMAL_PLACES } from "./components/form_components/SpeedometerDecimalPlacesInput";
 
 import { EncodeType, ENCODE_TYPES } from "./components/layout_components/choice_layouts/EncodeSettingsLayout";
 import { OutputVideoFileFormat } from "./components/form_components/OutputVideoFileFormatInput";
@@ -67,7 +67,7 @@ type IfEquals<T, U, Y=unknown, N=never> =
 
 type AnyFIXME = any;
 
-export class AutoTTRecConfigFormFieldTypesClass {
+export class AutoTTRecConfigFormFieldTypesNoFILLMEClass {
   "aspect-ratio-16-by-9": AspectRatio16By9 = "auto"; // choice
   "audio-bitrate": number = 128000; // number
   "audio-bitrate-displayed": number = 128; // internal
@@ -188,6 +188,7 @@ class AutoTTRecArgsClass {
   "pixel-format"?: string = "yuv420p";
   "speedometer"?: SpeedometerStyle = "fancy";
   "speedometer-decimal-places"?: SpeedometerDecimalPlacesNumeric = 1;
+  "speedometer-decimal-places-str"?: never;
   "speedometer-metric"?: SpeedometerMetric = "engine";
   "start-music-at-beginning"?: boolean = false;
   "szs-filename"?: string = "";
@@ -203,39 +204,82 @@ class AutoTTRecArgsClass {
   "youtube-settings"?: boolean = true;
 }
 
+type AutoTTRecStraightCopyArgs = Partial<Record<AutoTTRecArgName, ReadonlyArraySet<any> | string | boolean | number>>;
+
+const autoTTRecStraightCopyArgs: AutoTTRecStraightCopyArgs = {
+  "aspect-ratio-16-by-9": ASPECT_RATIO_16_BY_9_VALUES,
+  "audio-codec": AUDIO_CODECS,
+  "chadsoft-comparison-ghost-page": "",
+  "chadsoft-ghost-page": "",
+  "chadsoft-read-cache": true,
+  "chadsoft-write-cache": true,
+  "comparison-ghost-filename": "",
+  "crf-value": 15,
+  "dolphin-resolution": DOLPHIN_RESOLUTIONS,
+  "encode-only": true,
+  "encode-size": 52428800,
+  "encode-type": ENCODE_TYPES,
+  "ending-delay": 600,
+  "extra-gecko-codes-filename": "",
+  "extra-hq-textures-folder": "",
+  "fade-in-at-start": false,
+  "h26x-preset": H26X_PRESETS,
+  "hq-textures": true,
+  "input-display": INPUT_DISPLAYS,
+  "input-display-dont-create": false,
+  "iso-filename": "",
+  "keep-window": true,
+  "main-ghost-filename": "",
+  "mk-channel-ghost-description": "",
+  "no-background-blur": true,
+  "no-bloom": false,
+  "no-music": false,
+  "on-200cc": false,
+  "output-width": 2560,
+  "pixel-format": "yuv420p",
+  "speedometer": SPEEDOMETER_STYLES,
+  "speedometer-decimal-places": SPEEDOMETER_DECIMAL_PLACES,
+  "speedometer-metric": SPEEDOMETER_METRICS,
+  "szs-filename": "",
+  "top-10-chadsoft": "",
+  "top-10-gecko-code-filename": "",
+  "top-10-highlight": 1,
+  "use-ffv1": false,
+  "video-codec": VIDEO_CODECS,
+  "youtube-settings": true,
+}
+
 type NonNullable<T> = {[P in keyof T]: Exclude<T[P], null>};
 
-export interface AutoTTRecConfigFormFieldTypes extends AutoTTRecConfigFormFieldTypesClass {};
+export type PartialFILLME<T> = {
+  [P in keyof T]: T[P] | "<FILLME>";
+};
 
-const autoTTRecConfigFormFieldTypesClassObj = new AutoTTRecConfigFormFieldTypesClass();
+interface AutoTTRecConfigFormFieldTypesNoFILLME extends AutoTTRecConfigFormFieldTypesNoFILLMEClass {};
+export type AutoTTRecConfigFormFieldTypes = PartialFILLME<AutoTTRecConfigFormFieldTypesNoFILLME>;
+
+type AutoTTRecConfigFormPrimitiveArgNames<T> = keyof Pick<AutoTTRecConfigFormFieldTypes, {
+  [K in keyof AutoTTRecConfigFormFieldTypes]-?:
+    IfEquals<AutoTTRecConfigFormFieldTypes[K], T | "<FILLME>", K, never>
+}[keyof AutoTTRecConfigFormFieldTypes]>;
+
+type AutoTTRecConfigFormNumberArgNames = AutoTTRecConfigFormPrimitiveArgNames<number>;
+type AutoTTRecConfigFormStringArgNames = AutoTTRecConfigFormPrimitiveArgNames<string>;
+type AutoTTRecConfigFormBooleanArgNames = AutoTTRecConfigFormPrimitiveArgNames<boolean>;
+
+const autoTTRecConfigFormFieldTypesClassObj = new AutoTTRecConfigFormFieldTypesNoFILLMEClass();
+
+type AutoTTRecConfigFormFieldTypesKeyofTest = keyof AutoTTRecConfigFormFieldTypes;
+
+let xysedfw: AutoTTRecConfigFormFieldTypesKeyofTest = "hq-textures";
 
 //export type AutoTTRecConfigFormFieldTypes = Writable<AutoTTRecConfigFormFieldTypesReadonly>;
 
 type AutoTTRecConfigFormFieldNames = Array<keyof AutoTTRecConfigFormFieldTypes>;
 
-export const DEFAULT_FORM_VALUES: AutoTTRecConfigFormFieldTypes = autoTTRecConfigFormFieldTypesClassObj as AutoTTRecConfigFormFieldTypes;
+export const DEFAULT_FORM_VALUES: AutoTTRecConfigFormFieldTypesNoFILLME = autoTTRecConfigFormFieldTypesClassObj as AutoTTRecConfigFormFieldTypesNoFILLME;
 
 export const AUTO_TT_REC_CONFIG_FORM_FIELD_NAMES = Object.keys(autoTTRecConfigFormFieldTypesClassObj) as AutoTTRecConfigFormFieldNames;
-
-export type AutoTTRecConfigFormStringFieldTypes = Pick<AutoTTRecConfigFormFieldTypes, {
-  [K in keyof AutoTTRecConfigFormFieldTypes]-?:
-    IfEquals<AutoTTRecConfigFormFieldTypes[K], string, K, never>
-}[keyof AutoTTRecConfigFormFieldTypes]>;
-
-export type AutoTTRecConfigFormNumberFieldTypes = Pick<AutoTTRecConfigFormFieldTypes, {
-  [K in keyof AutoTTRecConfigFormFieldTypes]-?:
-    IfEquals<AutoTTRecConfigFormFieldTypes[K], number, K, never>
-}[keyof AutoTTRecConfigFormFieldTypes]>;
-
-export type AutoTTRecConfigFormTriCheckboxFieldTypes = Pick<AutoTTRecConfigFormFieldTypes, {
-  [K in keyof AutoTTRecConfigFormFieldTypes]-?:
-    IfEquals<AutoTTRecConfigFormFieldTypes[K], boolean | undefined, K, never>
-}[keyof AutoTTRecConfigFormFieldTypes]>;
-
-export type AutoTTRecConfigFormInternalFieldTypes = Pick<AutoTTRecConfigFormFieldTypes, {
-  [K in keyof AutoTTRecConfigFormFieldTypes]-?:
-    null extends AutoTTRecConfigFormFieldTypes[K] ? K : never
-}[keyof AutoTTRecConfigFormFieldTypes]>;
 
 const AUTO_TT_REC_TOP_10_LOCATIONS = makeReadonlyArraySet(["ww", "worldwide", ...countryLocations, ...regionalLocations] as const);
 type Top10LocationFull = ValidValues<typeof AUTO_TT_REC_TOP_10_LOCATIONS>;
@@ -244,22 +288,13 @@ function isInSet<T>(values: ReadonlySet<T>, x: any): x is T {
   return values.has(x);
 }
 
-type NullOrEmpty = null | "";
-
-function isNullOrEmpty(x: any): x is NullOrEmpty {
-  return x === null && x === "";
+function isFILLMEOrEmptyOrNull(x: any): x is "<FILLME>" | "" | null {
+  return x === null || x === "" || x === "<FILLME>";
 }
 
 function deleteFromSet<T>(values: Set<T>, x: any): boolean {
   return values.delete(x);
 }
-
-//function getObjectKeysAsConst
-
-
-export type PartialFILLME<T> = {
-  [P in keyof T]: T[P] | "<FILLME>";
-};
 
 export type ExcludeFILLME<T> = {
   [P in keyof T]: Exclude<T[P], "<FILLME>">;
@@ -284,64 +319,15 @@ export type AutoTTRecArgs = PartialNull<AutoTTRecArgsWithoutNulls>;
 type AutoTTRecArgNamesType = Array<keyof AutoTTRecArgs>;
 
 type AutoTTRecArgName = keyof AutoTTRecArgs;
-/*
-interface AutoTTRecArgsExtendedTypes {
-  [name: string]: "string" | "boolean" | "number" | "unsupported"
-}*/
 
-//
+const GHOST_AUTO_ARG_NAMES = makeReadonlyArraySet(["main-ghost-auto", "comparison-ghost-auto"] as const);
+const UNSUPPORTED_ARG_NAMES = makeReadonlyArraySet(["top-10-censors", "ending-message", "dolphin-volume", "unbuffered-output"] as const);
+const OTHER_EXTENDED_ONLY_ARG_NAMES = makeReadonlyArraySet(["no-200cc"] as const);
+const AUTO_TT_REC_ARG_NAMES_EXTENDED_ONLY = makeReadonlyArraySet([...GHOST_AUTO_ARG_NAMES.arr, ...UNSUPPORTED_ARG_NAMES.arr, ...OTHER_EXTENDED_ONLY_ARG_NAMES.arr] as const);
 
-/*
-type AutoTTRecArgExtendedOnlyValueType = "string" | "boolean" | "number" | "unsupported";
-
-class GhostAuto2Class {
-  "main-ghost-auto": AutoTTRecArgExtendedOnlyValueType = "string";
-  "comparison-ghost-auto": AutoTTRecArgExtendedOnlyValueType = "string";
-}
-
-class AutoTTRecArgExtendedOnlyTypesClass {
-  "no-200cc": AutoTTRecArgExtendedOnlyValueType = "boolean";
-  "top-10-censors": AutoTTRecArgExtendedOnlyValueType = "unsupported";
-  "ending-message": AutoTTRecArgExtendedOnlyValueType = "unsupported";
-  "dolphin-volume": AutoTTRecArgExtendedOnlyValueType = "unsupported";
-  "unbuffered-output": AutoTTRecArgExtendedOnlyValueType = "unsupported";
-}*/
-
-
-
-//type AutoTTRecArgExtendedOnlyValueType = string | boolean | number | null;
-
-class GhostAuto2Class {
-  "main-ghost-auto": string = "string";
-  "comparison-ghost-auto": string = "string";
-}
-
-class AutoTTRecArgExtendedOnlyTypesClass extends GhostAuto2Class {
-  "no-200cc": boolean = true;
-  // "top-10-censors": void = undefined;
-  // "ending-message": void = undefined;
-  // "dolphin-volume": void = undefined;
-  // "unbuffered-output": void = undefined;
-}
-
-
-
-interface  AutoTTRecArgExtendedTypes extends AutoTTRecArgExtendedOnlyTypesClass {}
-interface GhostAuto2 extends GhostAuto2Class {}
-
-const autoTTRecArgExtendedTypesClassObj = new AutoTTRecArgExtendedOnlyTypesClass();
-let x = autoTTRecArgExtendedTypesClassObj["no-200cc"];
-
-const ghostAuto2ClassObj = new GhostAuto2Class();
-
-type AutoTTRecArgExtendedType = Array<keyof AutoTTRecArgExtendedTypes>;
-type GhostAuto2Type = Array<keyof GhostAuto2>;
-
-const AUTO_TT_REC_ARG_NAMES_EXTENDED_ONLY = makeReadonlyArraySet(Object.keys(autoTTRecArgExtendedTypesClassObj) as AutoTTRecArgExtendedType);
-const GHOST_AUTO_NAMES = makeReadonlyArraySet(Object.keys(ghostAuto2ClassObj) as GhostAuto2Type);
-
-type AutoTTRecArgNameExtendedOnly = ValidValues<typeof AUTO_TT_REC_ARG_NAMES_EXTENDED_ONLY>;
-type GhostAuto2Name = ValidValues<typeof GHOST_AUTO_NAMES>;
+type AutoTTRecExtendedOnlyArgName = ValidValues<typeof AUTO_TT_REC_ARG_NAMES_EXTENDED_ONLY>;
+type AutoTTRecUnsupportedArgName = ValidValues<typeof UNSUPPORTED_ARG_NAMES>;
+type GhostAutoArgName = ValidValues<typeof GHOST_AUTO_ARG_NAMES>;
 
 const AUTO_TT_REC_ARG_NAMES = makeReadonlyArraySet(Object.keys(autoTTRecArgsClassObj) as AutoTTRecArgNamesType);
 
@@ -370,7 +356,7 @@ interface AutoTTRecConfigImporterErrorOrWarningMessage {
   message: string
 }
 
-class AutoTTRecConfigImporterErrorsAndWarnings {
+class AutoTTRecConfigErrorsAndWarnings {
   private _errorsAndWarnings: Map<AutoTTRecArgNameExtended, AutoTTRecConfigImporterErrorOrWarningMessage[]>;
   private _errorsAndWarningsInvalidCommands: Map<string, AutoTTRecConfigImporterErrorOrWarningMessage[]>;
 
@@ -399,6 +385,11 @@ class AutoTTRecConfigImporterErrorsAndWarnings {
   public addError(name: AutoTTRecArgNameExtended, message: string) {
     this.add(name, message, false);
   }
+
+  public addErrorWrongType(name: AutoTTRecArgNameExtended, expectedTypes: string, value: string | number | boolean | null) {
+    this.addError(name, `${name} should be a ${expectedTypes}, but got ${typeof value} instead. Option will be left empty.`);
+  }
+
   public addWarning(name: AutoTTRecArgNameExtended, message: string) {
     this.add(name, message, true);
   }
@@ -411,25 +402,61 @@ class AutoTTRecConfigImporterErrorsAndWarnings {
 const listFormatter = new Intl.ListFormat("en", {style: "long", type: "disjunction"});
 const ghostPageLinkRegex = /^https:\/\/(?:www\.)?chadsoft\.co\.uk\/time-trials\/rkgd\/([0-9A-Fa-f]{2}\/[0-9A-Fa-f]{2}\/[0-9A-Fa-f]{36})\.html/;
 
-type GhostAutoType = "rkg" | "chadsoft" | "<FILLME>";
-
-type AFS = typeof autoTTRecArgExtendedTypesClassObj[AutoTTRecArgNameExtendedOnly];
-
-let ssfss: AFS = "sfd";
-
 class AutoTTRecConfigPreprocessor {
   private autoTTRecConfig: AutoTTRecConfig;
-  private errorsAndWarnings: AutoTTRecConfigImporterErrorsAndWarnings;
+  private errorsAndWarnings: AutoTTRecConfigErrorsAndWarnings;
+  private autoTTRecConfigImporter: AutoTTRecConfigImporter | null;
 
-  constructor(autoTTRecConfig: AutoTTRecConfig, errorsAndWarnings: AutoTTRecConfigImporterErrorsAndWarnings) {
+  constructor(autoTTRecConfig: AutoTTRecConfig, errorsAndWarnings: AutoTTRecConfigErrorsAndWarnings) {
+    this.autoTTRecConfigImporter = null;
     this.autoTTRecConfig = shallowCopy(autoTTRecConfig);
     this.errorsAndWarnings = errorsAndWarnings;
   }
 
-  
-  private preprocess() {
-    this.findInvalidNamesAndFillInMissing();
+  private isAutoTTRecArgValueString_ignoreOnNullOrEmpty<K extends AutoTTRecArgNameExtended>(argName: K): string {
+    let value = this.autoTTRecConfig[argName];
+    if (value === null || value === "") {
+      return "";
+    } else {
+      if (typeof value === "string") {
+        return value;
+      } else {
+        this.errorsAndWarnings.addError(argName, `${argName} should be a string, but got ${typeof value} instead.`);
+        return "";
+      }
+    }
+  }
 
+  private isAutoTTRecArgValueBoolean_ignoreNull<K extends AutoTTRecArgNameExtended>(argName: K): (boolean | null) {
+    let value = this.autoTTRecConfig[argName];
+    if (value === null) {
+      return null;
+    } else {
+      if (typeof value === "boolean") {
+        return value;
+      } else {
+        this.errorsAndWarnings.addError(argName, `${argName} should be a boolean, but got ${typeof value} instead.`);
+        return null;
+      }
+    }
+  }
+  
+  public preprocess() {
+    if (this.autoTTRecConfigImporter === null) {
+      this.findInvalidNamesAndFillInMissing();
+      this.convertGhostAuto("main-ghost-auto", "main-ghost-filename", "chadsoft-ghost-page");
+      this.convertGhostAuto("comparison-ghost-auto", "comparison-ghost-filename", "chadsoft-comparison-ghost-page");
+      this.convertNo200cc();
+      this.fixAspectRatio16By9Type();
+      this.convertStringOrNumArgToString("chadsoft-cache-expiry");
+      this.convertStringOrNumArgToString("speedometer-decimal-places", "speedometer-decimal-places-str");
+      for (const unsupportedArgName of UNSUPPORTED_ARG_NAMES.arr)  {
+        this.warnUnsupportedArg(unsupportedArgName);
+      }
+      this.autoTTRecConfigImporter = new AutoTTRecConfigImporter(this.autoTTRecConfig, this.errorsAndWarnings);
+    }
+
+    return this.autoTTRecConfigImporter;
   }
   
   private findInvalidNamesAndFillInMissing() {
@@ -449,126 +476,105 @@ class AutoTTRecConfigPreprocessor {
     }
 
     missingAutoTTRecArgNames.forEach((autoTTRecArgName) => {
-      if (isInSet(AUTO_TT_REC_ARG_NAMES.set, autoTTRecArgName)) {
-        this.autoTTRecConfig[autoTTRecArgName] = null;
-      }
+      this.autoTTRecConfig[autoTTRecArgName] = null;
     });
   }
 
-  private convertExtendedArgs() {
-
-  }
-
-  private validateExtendedArgTypes() {
-    
-  }
-
-  private expectString(autoTTRecConfig: AutoTTRecConfig, extendedArgName: AutoTTRecArgNameExtendedOnly) {
-    
-    return autoTTRecConfig[extendedArgName];
-  }
-
-  private expectStringHelper<K extends AutoTTRecArgNameExtendedOnly>(extendedArgName: K): [AutoTTRecArgExtendedTypes[K], boolean] {
-    let value = this.autoTTRecConfig[extendedArgName];
-    if (value === null || value === "") {
-      return [autoTTRecArgExtendedTypesClassObj[extendedArgName], false];
-    }
-    if (this.expectStringHelper2(extendedArgName, value)) {
-      return [value, true];
-    } else {
-      return [autoTTRecArgExtendedTypesClassObj[extendedArgName], false];
-    }
-  }
-
-  private expectStringHelper2<K extends AutoTTRecArgNameExtendedOnly>(extendedArgName: K, value: string | number | boolean): value is AutoTTRecArgExtendedTypes[K] {
-    return typeof value === typeof autoTTRecArgExtendedTypesClassObj[extendedArgName];
-  }
-
-  private testexpectStringHelper() {
-    let x = this.expectStringHelper("main-ghost-auto");
-    if (x[1]) {
-      return x[0];
-    } else {
-      return "";
-    }
-  }
-
-  private validateExtendedArg(extendedArgName: AutoTTRecArgNameExtendedOnly) {
-    let value = this.autoTTRecConfig[extendedArgName];
-    if (this.validateExtendedArgHelper(extendedArgName, value)) {
-      value.match()
-    }
-  }
-
-  private validateExtendedArgHelper(extendedArgName: AutoTTRecArgNameExtendedOnly, value: string | number | boolean | null): value is typeof expectedType {
-    let expectedType = autoTTRecArgExtendedTypesClassObj[extendedArgName];
-    //let value = this.autoTTRecConfig[extendedArgName];
-    if (expectedType === null) {
-      return false;
-    } else if (typeof expectedType === typeof value) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-  private convertGhostAuto(ghostAutoOptionName: GhostAuto2Name,
+  private convertGhostAuto(ghostAutoOptionName: GhostAutoArgName,
     ghostFilenameOptionName: "main-ghost-filename" | "comparison-ghost-filename",
     ghostLinkOptionName: "chadsoft-ghost-page" | "chadsoft-comparison-ghost-page"
   ) {
-    let [ghostAutoValue, isCorrectTypeAndNotNullOrEmpty] = this.expectStringHelper(ghostAutoOptionName);
+    let ghostAutoValue = this.isAutoTTRecArgValueString_ignoreOnNullOrEmpty(ghostAutoOptionName);
+    
+    if (ghostAutoValue !== "") {
+      let isGhostFilenameOptionValueOverridable = isFILLMEOrEmptyOrNull(this.autoTTRecConfig[ghostFilenameOptionName]);
+      let isGhostLinkOptionValueOverridable = isFILLMEOrEmptyOrNull(this.autoTTRecConfig[ghostLinkOptionName]);
 
-    if (isCorrectTypeAndNotNullOrEmpty) {
-      let conflictsWithNonAutoOptions: boolean;
-      if (this.autoTTRecConfig[ghostFilenameOptionName] === "<FILLME>" && this.autoTTRecConfig[ghostLinkOptionName] === "<FILLME>") {
-        conflictsWithNonAutoOptions = false;
+      if (!isGhostFilenameOptionValueOverridable && !isGhostLinkOptionValueOverridable) {
+        this.errorsAndWarnings.addError(ghostAutoOptionName, `${ghostAutoOptionName} cannot be specified if ${ghostFilenameOptionName} and ${ghostLinkOptionName} are not <FILLME>, "", or null/unspecified. Option will be ignored.`);
       } else {
-        conflictsWithNonAutoOptions = true;
+        if (ghostAutoValue === "<FILLME>") {
+          this.autoTTRecConfig[ghostFilenameOptionName] = "<FILLME>";
+          this.autoTTRecConfig[ghostLinkOptionName] = "<FILLME>";
+        } else if (ghostAutoValue.match(ghostPageLinkRegex)) {
+          this.autoTTRecConfig[ghostLinkOptionName] = ghostAutoValue;
+        } else {
+          this.autoTTRecConfig[ghostFilenameOptionName] = ghostAutoValue;
+        }
       }
-      let ghostAutoType: GhostAutoType;
+    }
+  }
 
-      if (ghostAutoValue === "<FILLME>") {
-        ghostAutoType = "<FILLME>";
-      } else if (ghostAutoValue.match(ghostPageLinkRegex)) {
-
-      }
-      if (conflictsWithNonAutoOptions) {
-        if ()
-      }
-      
-        this.autoTTRecConfig[ghostFilenameOptionName] = "<FILLME>";
-        this.autoTTRecConfig[ghostLinkOptionName] = "<FILLME>";
-      }
-      if (ghostAutoValue !== null && ghostAutoValue !== undefined) {
-        if (typeof ghostAutoValue === "string") {
-          if (ghostAutoValue.match(ghostPageLinkRegex)) {
-            this.add(ghostLinkOptionName, ghostAutoValue);
+  private convertNo200cc() {
+    let no200cc = this.isAutoTTRecArgValueBoolean_ignoreNull("no-200cc");
+    if (no200cc !== null) {
+      let on200cc = this.autoTTRecConfig["on-200cc"];
+      if (on200cc !== null) {
+        if (typeof on200cc === "boolean") {
+          if (on200cc && no200cc) {
+            this.errorsAndWarnings.addError("no-200cc", "no-200cc cannot be true if on-200cc is true. Option will be ignored.");
           } else {
-            this.add(ghostFilenameOptionName, ghostAutoValue);
+            this.autoTTRecConfig["on-200cc"] = !no200cc;
           }
         } else {
-          this.addErrorExtended(ghostAutoOptionName, `${ghostAutoOptionName} should be a string, but got ${typeof ghostAutoValue} instead.`);
+          this.errorsAndWarnings.addError("no-200cc", "no-200cc cannot be specified if on-200cc is not a boolean (true/false). Option will be ignored.");
         }
       } else {
-        this.add(ghostFilenameOptionName, ghostAutoValue as AnyFIXME);
-        this.add(ghostLinkOptionName, ghostAutoValue as AnyFIXME);
+        this.autoTTRecConfig["on-200cc"] = !no200cc;
       }
-  }
+    }
   }
 
+  private fixAspectRatio16By9Type() {
+    let aspectRatio16By9 = this.autoTTRecConfig["aspect-ratio-16-by-9"];
+    if (aspectRatio16By9 !== null && aspectRatio16By9 !== "<FILLME>") {
+      if (typeof aspectRatio16By9 === "string") {
+        this.autoTTRecConfig["aspect-ratio-16-by-9"] = aspectRatio16By9.toLowerCase();
+      } else if (typeof aspectRatio16By9 === "boolean") {
+        this.autoTTRecConfig["aspect-ratio-16-by-9"] = aspectRatio16By9.toString().toLowerCase();
+      } else {
+        this.errorsAndWarnings.addErrorWrongType("aspect-ratio-16-by-9", "string or boolean", aspectRatio16By9);
+        this.autoTTRecConfig["aspect-ratio-16-by-9"] = "<FILLME>";
+      }
+    }
+  }
 
+  private convertStringOrNumArgToString(stringOrNumArgName: "chadsoft-cache-expiry" | "speedometer-decimal-places", newArgName?: "speedometer-decimal-places-str") {
+    let stringOrNumArgValue = this.autoTTRecConfig[stringOrNumArgName];
+    if (stringOrNumArgValue !== null && stringOrNumArgValue !== "<FILLME>") {
+      if (typeof stringOrNumArgValue !== "string") {
+        let destArgName: typeof stringOrNumArgName | Exclude<typeof newArgName, undefined>
+        if (newArgName === undefined) {
+          destArgName = stringOrNumArgName;
+        } else {
+          destArgName = stringOrNumArgName;
+        }
+        if (typeof stringOrNumArgValue === "number") {
+          this.autoTTRecConfig[destArgName] = stringOrNumArgValue.toString();
+        } else {
+          this.errorsAndWarnings.addErrorWrongType(stringOrNumArgName, "string or number", stringOrNumArgValue);
+          this.autoTTRecConfig[destArgName] = "<FILLME>";
+        }
+      }
+    }
+  }
+
+  private warnUnsupportedArg(autoTTRecUnsupportedArgName: AutoTTRecUnsupportedArgName) {
+    if (this.autoTTRecConfig[autoTTRecUnsupportedArgName] !== null) {
+      this.errorsAndWarnings.addWarning(autoTTRecUnsupportedArgName, `${autoTTRecUnsupportedArgName} is not currently supported, will be ignored.`);
+    }
+  }
 }
 
 class AutoTTRecConfigImporter {
-  private autoTTRecArgs: AutoTTRecArgs;
   private formData: Partial<AutoTTRecConfigFormFieldTypes>;
   private autoTTRecConfig: AutoTTRecConfig;
-  private errorsAndWarnings: AutoTTRecConfigImporterErrorsAndWarnings;
+  private errorsAndWarnings: AutoTTRecConfigErrorsAndWarnings;
 
-  constructor(autoTTRecConfig: AutoTTRecConfig) {
-    this.autoTTRecArgs = {};
+  constructor(autoTTRecConfig: AutoTTRecConfig, errorsAndWarnings: AutoTTRecConfigErrorsAndWarnings) {
     this.formData = {};
-    this.autoTTRecConfig = shallowCopy(autoTTRecConfig);
-    this.errorsAndWarnings = new AutoTTRecConfigImporterErrorsAndWarnings();
+    this.autoTTRecConfig = autoTTRecConfig;
+    this.errorsAndWarnings = new AutoTTRecConfigErrorsAndWarnings();
   }
 
   //public add<K extends AutoTTRecArgName>(key: K, value: AutoTTRecArgs[K]) {
@@ -577,7 +583,7 @@ class AutoTTRecConfigImporter {
 
   public addError<K extends AutoTTRecArgName>(key: K, message: string) {
     this.errorsAndWarnings.addError(key, message);
-    this.autoTTRecArgs[key] = undefined;
+    this.formData[key] = undefined;
   }
 
   public addWarning<K extends AutoTTRecArgName>(key: K, message: string) {
@@ -591,40 +597,62 @@ class AutoTTRecConfigImporter {
   public addWarningExtended<K extends AutoTTRecArgNameExtended>(key: K, message: string) {
     this.errorsAndWarnings.addWarning(key, message);
   }
-  public add<K extends AutoTTRecArgName & keyof AutoTTRecConfigFormFieldTypes, V extends AutoTTRecArgs[K] & AutoTTRecConfigFormFieldTypes[K]>(key: K, value: V) {
-    if (key in this.formData) {
-      let message = `Option ${key} was already defined. Was originally ${this.autoTTRecArgs[key]}, but is now being defined to ${value}.`
-      this.addWarning(key, message);
-    }
+  public add<K extends keyof AutoTTRecConfigFormFieldTypes, V extends AutoTTRecConfigFormFieldTypes[K] | null>(key: K, value: V) {
     if (value === null) {
-      this.formData[key] = DEFAULT_FORM_VALUES[key];
+      this.addDefault(key);
     } else {
       this.formData[key] = value;
-
     }
   }
 
-  private tryAddSameOption_Common<K extends keyof AutoTTRecArgs>(key: K, validValues?: ReadonlyArraySet<AutoTTRecArgs[K]>) {
+  public addDefault<K extends keyof AutoTTRecConfigFormFieldTypes>(key: K) {
+    this.formData[key] = DEFAULT_FORM_VALUES[key];
+  }
+
+  private importSharedStringArg<K extends AutoTTRecConfigFormStringArgNames>(key: K) {
+    let configValue = this.autoTTRecConfig[key];
+    if (configValue === null) {
+      this.addDefault(key);
+    } else if (typeof configValue === "string") {
+      if (configValue === "<FILLME>") {
+        this.formData[key] = "";
+      } else {
+        this.formData[key] = configValue;
+      }
+    } else {
+      this.errorsAndWarnings.addErrorWrongType(key, "string", configValue);
+    }
+  }
+
+  private importStraightCopyArg<K extends keyof AutoTTRecArgs & keyof AutoTTRecConfigFormFieldTypes>(key: K, validValues?: ReadonlyArraySet<AutoTTRecArgs[K]>) {
+    let abde: AutoTTRecConfigFormNumberArgNames = "encode-size";
+    
     let expectedType = typeof autoTTRecArgsClassObj[key];
     if (expectedType === "string" || expectedType === "boolean" || expectedType === "number") {
       let configValue = this.autoTTRecConfig[key];
+      if (configValue === "<FILLME>") {
+        if (expectedType === "string") {
+          this.add(key, "");
+        }
+      }
       if (configValue !== undefined && configValue !== null) {
         if (typeof configValue === expectedType) {
           if (validValues !== undefined) {
             if (isInSet(validValues.set, configValue)) {
-              this.add(key as AnyFIXME, configValue);
+              let y = configValue;
+              this.add(key, configValue);
             } else {
               this.addError(key, `${key} should be one of ${listFormatter.format(validValues.arr.map(x => String(x)))}`);
             }
           } else {
             let configValueWithType = configValue as AutoTTRecArgs[K];
-            this.add(key as AnyFIXME, configValueWithType);
+            this.add(key, configValueWithType);
           }
         } else {
           this.addError(key, `${key} should be a ${expectedType}, but got a ${typeof configValue} instead.`);
         }
       } else {
-        this.add(key as AnyFIXME, configValue);
+        this.add(key, configValue);
       }
     } else {
       this.addError(key, "Error in determining expected type (please contact the developer).");
@@ -639,7 +667,27 @@ class AutoTTRecConfigImporter {
     this.tryAddSameOption_Common(key, validValues);
   }
 
+  private importStraightCopyArgs() {
+    for (const [autoTTRecStraightCopyArgName, autoTTRecStraightCopyArgValue] of Object.entries(autoTTRecStraightCopyArgs)) {
+      let autoTTRecConfigArgValue = this.autoTTRecConfig[autoTTRecStraightCopyArgName];
+
+      if (typeof autoTTRecStraightCopyArgValue === "object") {
+        if (isInSet(autoTTRecStraightCopyArgValue.set, autoTTRecConfigArgValue)) {
+          let u = autoTTRecConfigArgValue;
+        } else {
+          this.addError(key, `${key} should be one of ${listFormatter.format(validValues.arr.map(x => String(x)))}`);
+        }
+      } else if (typeof autoTTRecStraightCopyArgValue === "string") {
+
+      } else if (typeof autoTTRecStraightCopyArgValue === "boolean") {
+
+      } else if (typeof autoTTRecStraightCopyArgValue === "number") {
+
+      }
+    }
+  }
   public import() {
+
     // add in main ghost
     this.tryAddSameOption("chadsoft-ghost-page");
     this.tryAddSameOption("main-ghost-filename");
@@ -808,7 +856,9 @@ class AutoTTRecConfigToFormData {
 }
 
 export function importAutoTTRecConfig(autoTTRecConfig: AutoTTRecConfig) {
-  let autoTTRecConfigImporter = new AutoTTRecConfigImporter(autoTTRecConfig);
+  let errorsAndWarnings = new AutoTTRecConfigErrorsAndWarnings();
+  let autoTTRecConfigPreprocessor = new AutoTTRecConfigPreprocessor(autoTTRecConfig, errorsAndWarnings);
+  let autoTTRecConfigImporter = autoTTRecConfigPreprocessor.preprocess();
   autoTTRecConfigImporter.import();
 
   //let toFormDataConverter: AutoTTRecConfigToFormData = autoTTRecConfigImporter.createFormDataConverter();
