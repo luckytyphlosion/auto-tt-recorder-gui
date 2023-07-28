@@ -592,7 +592,7 @@ class AutoTTRecConfigImporter {
     return configValue;
   }
 
-  private validateStringErrorIfNot_handleUndefined<K extends AutoTTRecArgName>(key: K): string | null {
+  private validateString_errorIfNot_handleUndefined<K extends AutoTTRecArgName>(key: K): string | null {
     let value = this.readArgSanityCheck(key);
     if (value === undefined) {
       return "";
@@ -608,8 +608,24 @@ class AutoTTRecConfigImporter {
     }
   }
 
+  private validateNumber_errorIfNot_handleUndefined<K extends AutoTTRecArgName>(key: K): number | null {
+    let value = this.readArgSanityCheck(key);
+    if (value === undefined) {
+      return NaN;
+    } else if (value === null) {
+      return null;
+    } else if (value === "<FILLME>") {
+      return NaN;
+    } else if (typeof value === "number") {
+      return value;
+    } else {
+      this.errorsAndWarnings.addErrorWrongType(key, "number", value);
+      return NaN;
+    }
+  }
+
   private validateSharedArgString_errorIfNot_handleUndefinedNull<K extends AutoTTRecConfigFormSharedStringArgName | AutoTTRecConfigFormSharedChoiceArgNames>(key: K) {
-    let value = this.validateStringErrorIfNot_handleUndefined(key);
+    let value = this.validateString_errorIfNot_handleUndefined(key);
     if (value === null) {
       this.configArgWasNullSet.add(key);
       return DEFAULT_FORM_VALUES[key];
@@ -940,7 +956,7 @@ class AutoTTRecConfigImporter {
   */
 
   private setTimelineCategoryAndNoTop10() {
-    let timeline = this.validateStringErrorIfNot_handleUndefined("timeline");
+    let timeline = this.validateString_errorIfNot_handleUndefined("timeline");
     let timelineCategory: TimelineCategory;
     let noTop10Category: NoTop10Category;
 
@@ -1092,6 +1108,34 @@ class AutoTTRecConfigImporter {
     if (extraHQTexturesAbsoluteFolder !== "") {
       this.formData["extra-hq-textures-folder"] = extraHQTexturesAbsoluteFolder;
     }
+  }
+
+  private importVolume(
+    volumeArgName: "game-volume" | "music-volume",
+    volumeNumberInputArgName: "game-volume-numberinput" | "music-volume-numberinput",
+    volumeSliderArgName: "game-volume-slider" | "music-volume-slider"
+  ) {
+    let volumeArgValue = this.validateNumber_errorIfNot_handleUndefined(volumeArgName);
+    let volumeNumberInputArgValue: number;
+
+    if (volumeArgValue === NaN) {
+      volumeNumberInputArgValue = NaN;
+    } else if (volumeArgValue === null) {
+      volumeNumberInputArgValue = DEFAULT_FORM_VALUES[volumeNumberInputArgName];
+    } else {
+      volumeNumberInputArgValue = volumeArgValue * 100;
+    }
+
+    this.formData[volumeNumberInputArgName] = volumeNumberInputArgValue;
+    let volumeSliderArgValue: number;
+
+    if (Number.isNaN(volumeNumberInputArgValue)) {
+      volumeSliderArgValue = NaN;
+    } else {
+      volumeSliderArgValue = Math.min(volumeNumberInputArgValue, 125);
+    }
+
+    this.formData[volumeSliderArgName] = volumeSliderArgValue;
   }
 
   public import() {
