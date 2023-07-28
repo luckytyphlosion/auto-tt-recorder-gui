@@ -717,6 +717,33 @@ class AutoTTRecConfigImporter {
       }
     }
   }
+
+  private setPathnameArgEnableAndResolvePathname<K extends AutoTTRecConfigFormSharedStringArgName, L extends AutoTTRecConfigFormBooleanArgName>(pathnameArgName: K, enableArgName: L): string {
+    let pathnameArgValue = this.getFormDataStringOrChoiceArg_nullIfWasNull(pathnameArgName);
+    let pathnameAbsoluteArgValue: string;
+    let enableArgValue: BooleanFILLME;
+    if (pathnameArgValue === "") {
+      enableArgValue = "<FILLME>";
+    } else if (pathnameArgValue !== null) {
+      enableArgValue = true;
+    } else {
+      enableArgValue = false;
+    }
+
+    this.formData[enableArgName] = enableArgValue;
+
+    if (enableArgValue && typeof pathnameArgValue === "string") {
+      if (path.isAbsolute(pathnameArgValue)) {
+        pathnameAbsoluteArgValue = pathnameArgValue;
+      } else {
+        pathnameAbsoluteArgValue = path.resolve(path.dirname(this.autoTTRecConfigFilename), pathnameArgValue);
+      }
+    } else {
+      pathnameAbsoluteArgValue = "";
+    }
+
+    return pathnameAbsoluteArgValue;
+  }
 /*
   class AutoTTRecArgsClass {
     
@@ -1035,26 +1062,10 @@ class AutoTTRecConfigImporter {
     this.formData["encode-size-unit"] = encodeSizeUnit;
   }
 
-   public async importAllExtraGeckoCodeArgs() {
-    let extraGeckoCodesFilename = this.getFormDataStringOrChoiceArg_nullIfWasNull("extra-gecko-codes-filename");
-    let extraGeckoCodesEnable: BooleanFILLME;
-    if (extraGeckoCodesFilename === "") {
-      extraGeckoCodesEnable = "<FILLME>";
-    } else if (extraGeckoCodesFilename !== null) {
-      extraGeckoCodesEnable = true;
-    } else {
-      extraGeckoCodesEnable = false;
-    }
-    
-    this.formData["extra-gecko-codes-enable"] = extraGeckoCodesEnable;
+   private async importAllExtraGeckoCodeArgs() {
+    let extraGeckoCodesAbsoluteFilename: string = this.setPathnameArgEnableAndResolvePathname("extra-gecko-codes-filename", "extra-gecko-codes-enable");
 
-    if (typeof extraGeckoCodesFilename === "string") {
-      let extraGeckoCodesAbsoluteFilename: string;
-      if (path.isAbsolute(extraGeckoCodesFilename)) {
-        extraGeckoCodesAbsoluteFilename = extraGeckoCodesFilename;
-      } else {
-        extraGeckoCodesAbsoluteFilename = path.resolve(path.dirname(this.autoTTRecConfigFilename), extraGeckoCodesFilename);
-      }
+    if (extraGeckoCodesAbsoluteFilename !== "") {
       let extraGeckoCodesContents: string = "";
       try {
         extraGeckoCodesContents = await readFileEnforceUTF8(extraGeckoCodesAbsoluteFilename, "Not a valid text file!");
@@ -1073,6 +1084,13 @@ class AutoTTRecConfigImporter {
       }
       this.formData["extra-gecko-codes-contents"] = extraGeckoCodesContents;
       this.formData["extra-gecko-codes-filename"] = extraGeckoCodesAbsoluteFilename;
+    }
+  }
+
+  private resolveHQTexturesFolderAndSetHQTexturesFolderEnable() {
+    let extraHQTexturesAbsoluteFolder: string = this.setPathnameArgEnableAndResolvePathname("extra-hq-textures-folder", "extra-hq-textures-folder-enable");
+    if (extraHQTexturesAbsoluteFolder !== "") {
+      this.formData["extra-hq-textures-folder"] = extraHQTexturesAbsoluteFolder;
     }
   }
 

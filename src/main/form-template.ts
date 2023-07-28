@@ -1,19 +1,12 @@
 import { IpcMainInvokeEvent } from "electron";
 
 import { AutoTTRecConfig, ImportTemplateStatus, ImportTemplateResult } from "../shared-types";
+import { readFileEnforceUTF8 } from "./gui2";
 
 import fsPromises from "fs/promises";
 import path from "path";
 import JSYAML, { YAMLException, JSON_SCHEMA } from "js-yaml";
 import YAML from "yaml";
-
-async function readFileEnforceUTF8(filename: string, badEncodingErrorMessage: string): Promise<string> {
-  const buffer = await fsPromises.readFile(filename);
-  if (!Buffer.from(buffer.toString(), "utf8").equals(buffer)) {
-    throw new Error(badEncodingErrorMessage);
-  }
-  return buffer.toString();
-}
 
 function appendWarning(warnings: string[], warning: string) {
   let warningNum: number = warnings.length + 1;
