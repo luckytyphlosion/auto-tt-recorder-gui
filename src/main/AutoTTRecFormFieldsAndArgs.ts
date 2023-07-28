@@ -1,4 +1,3 @@
-import React from "react";
 
 import { EncodeSizeUnit } from "../renderer/components/form_components/EncodeSizeInput";
 
@@ -45,6 +44,10 @@ import { Set200cc, SET_200CC_VALUES } from "../renderer/components/form_componen
 import { AutoTTRecConfig } from "../shared-types";
 
 import { ValidValues, ReadonlyArraySet, makeReadonlyArraySet } from "../renderer/array-set";
+
+import { readFileEnforceUTF8 } from "./gui2";
+
+import path from "path";
 
 const TIMELINES = makeReadonlyArraySet(["noencode", "ghostonly", "ghostselect", "mkchannel", "top10"] as const);
 export type Timeline = ValidValues<typeof TIMELINES>;
@@ -393,11 +396,13 @@ class AutoTTRecConfigPreprocessor {
   private autoTTRecConfig: AutoTTRecConfig;
   private errorsAndWarnings: AutoTTRecConfigErrorsAndWarnings;
   private autoTTRecConfigImporter: AutoTTRecConfigImporter | null;
+  private autoTTRecConfigFilename: string;
 
-  constructor(autoTTRecConfig: AutoTTRecConfig, errorsAndWarnings: AutoTTRecConfigErrorsAndWarnings) {
+  constructor(autoTTRecConfig: AutoTTRecConfig, errorsAndWarnings: AutoTTRecConfigErrorsAndWarnings, autoTTRecConfigFilename: string) {
     this.autoTTRecConfigImporter = null;
     this.autoTTRecConfig = shallowCopy(autoTTRecConfig);
     this.errorsAndWarnings = errorsAndWarnings;
+    this.autoTTRecConfigFilename = autoTTRecConfigFilename;
   }
 
   private isAutoTTRecArgValueString_ignoreOnNullOrEmpty<K extends AutoTTRecArgNameExtended>(argName: K): string {
@@ -441,7 +446,7 @@ class AutoTTRecConfigPreprocessor {
       for (const unsupportedArgName of UNSUPPORTED_ARG_NAMES.arr)  {
         this.warnUnsupportedArg(unsupportedArgName);
       }
-      this.autoTTRecConfigImporter = new AutoTTRecConfigImporter(this.autoTTRecConfig, this.errorsAndWarnings);
+      this.autoTTRecConfigImporter = new AutoTTRecConfigImporter(this.autoTTRecConfig, this.errorsAndWarnings, this.autoTTRecConfigFilename);
     }
 
     return this.autoTTRecConfigImporter;
@@ -565,12 +570,14 @@ class AutoTTRecConfigImporter {
   private autoTTRecConfig: AutoTTRecConfig;
   private errorsAndWarnings: AutoTTRecConfigErrorsAndWarnings;
   private configArgWasNullSet: Set<AutoTTRecConfigFormStringArgName | AutoTTRecConfigFormChoiceArgNames | AutoTTRecConfigFormNumberArgName | AutoTTRecConfigFormBooleanArgName>;
+  private autoTTRecConfigFilename: string;
 
-  constructor(autoTTRecConfig: AutoTTRecConfig, errorsAndWarnings: AutoTTRecConfigErrorsAndWarnings) {
+  constructor(autoTTRecConfig: AutoTTRecConfig, errorsAndWarnings: AutoTTRecConfigErrorsAndWarnings, autoTTRecConfigFilename: string) {
     this.formData = {};
     this.autoTTRecConfig = autoTTRecConfig;
     this.errorsAndWarnings = errorsAndWarnings;
     this.configArgWasNullSet = new Set();
+    this.autoTTRecConfigFilename = autoTTRecConfigFilename;
   }
 
   public addDefault<K extends AutoTTRecConfigFormFieldName>(key: K) {
@@ -1028,7 +1035,7 @@ class AutoTTRecConfigImporter {
     this.formData["encode-size-unit"] = encodeSizeUnit;
   }
 
-  public importAllExtraGeckoCodeArgs() {
+   public async importAllExtraGeckoCodeArgs() {
     let extraGeckoCodesFilename = this.getFormDataStringOrChoiceArg_nullIfWasNull("extra-gecko-codes-filename");
     let extraGeckoCodesEnable: BooleanFILLME;
     if (extraGeckoCodesFilename === "") {
@@ -1038,7 +1045,37 @@ class AutoTTRecConfigImporter {
     } else {
       extraGeckoCodesEnable = false;
     }
+    
+    this.formData["extra-gecko-codes-enable"] = extraGeckoCodesEnable;
+
+    if (typeof extraGeckoCodesFilename === "string") {
+      let extraGeckoCodesAbsoluteFilename: string;
+      if (path.isAbsolute(extraGeckoCodesFilename)) {
+        extraGeckoCodesAbsoluteFilename = extraGeckoCodesFilename;
+      } else {
+        extraGeckoCodesAbsoluteFilename = path.resolve(path.dirname(this.autoTTRecConfigFilename), extraGeckoCodesFilename);
+      }
+      let extraGeckoCodesContents: string = "";
+      try {
+        extraGeckoCodesContents = await readFileEnforceUTF8(extraGeckoCodesAbsoluteFilename, "Not a valid text file!");
+      } catch (eAsAny) {
+        let e: NodeJS.ErrnoException  = (eAsAny as NodeJS.ErrnoException);
+        let errorMessageReason: string;
+        if (e.code === "ENOENT") {
+          errorMessageReason = "File does not exist!";
+        } else {
+          errorMessageReason = e.message;
+        }
+
+        let errorMessage: string = `Error occurred when reading extra-gecko-codes-filename ${extraGeckoCodesFilename}: ${errorMessageReason}`;
+        this.errorsAndWarnings.addError("extra-gecko-codes-filename", errorMessage);
+        extraGeckoCodesAbsoluteFilename = "";
+      }
+      this.formData["extra-gecko-codes-contents"] = extraGeckoCodesContents;
+      this.formData["extra-gecko-codes-filename"] = extraGeckoCodesAbsoluteFilename;
+    }
   }
+
   public import() {
     this.importStraightCopyArgs();
 
@@ -1213,7 +1250,7 @@ class AutoTTRecConfigToFormData {
 
 export function importAutoTTRecConfig(autoTTRecConfig: AutoTTRecConfig) {
   let errorsAndWarnings = new AutoTTRecConfigErrorsAndWarnings();
-  let autoTTRecConfigPreprocessor = new AutoTTRecConfigPreprocessor(autoTTRecConfig, errorsAndWarnings);
+  let autoTTRecConfigPreprocessor = new AutoTTRecConfigPreprocessor(autoTTRecConfig, errorsAndWarnings, "");
   let autoTTRecConfigImporter = autoTTRecConfigPreprocessor.preprocess();
   autoTTRecConfigImporter.import();
 

@@ -83,9 +83,9 @@ export async function openFileDialogAndRead(event: IpcMainInvokeEvent, fileFilte
     let contents: string;
 
     try {
-      contents = await readFileEnforceUTF8(filename, "Provided file is not a text file!");
+      contents = await readFileEnforceUTF8(filename, `Provided file ${filename} is not a text file!`);
     } catch (e) {
-      contents = `Error: Provided file ${filename} is not a text file!`;
+      contents = `Error: ${(e as Error).message}`;
       filename = "";
     }
 
