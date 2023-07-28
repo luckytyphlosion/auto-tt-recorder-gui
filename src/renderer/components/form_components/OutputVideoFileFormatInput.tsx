@@ -8,7 +8,10 @@ import { VideoCodec } from "./VideoCodecInput";
 
 import useRenderCounter from "../../RenderCounter";
 
-export type OutputVideoFileFormat = "mp4" | "webm" | "mkv";
+import { makeReadonlyArraySet, ValidValues } from "../../array-set";
+
+export const OUTPUT_VIDEO_FILE_FORMATS = makeReadonlyArraySet(["mp4", "webm", "mkv"] as const);
+export type OutputVideoFileFormat = ValidValues<typeof OUTPUT_VIDEO_FILE_FORMATS>;
 
 export function OutputVideoFileFormatInput(props: {videoCodec: VideoCodec, formComplexity: FormComplexity}) {
   const {register, getValues, setValue} = useFormContextAutoTT();

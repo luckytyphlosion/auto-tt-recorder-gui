@@ -17,7 +17,7 @@ import { SpeedometerMetric, SPEEDOMETER_METRICS } from "../renderer/components/f
 import { SpeedometerDecimalPlaces, SpeedometerDecimalPlacesNumeric, SPEEDOMETER_DECIMAL_PLACES_NUMERIC, SPEEDOMETER_DECIMAL_PLACES } from "../renderer/components/form_components/SpeedometerDecimalPlacesInput";
 
 import { EncodeType, ENCODE_TYPES } from "../renderer/components/layout_components/choice_layouts/EncodeSettingsLayout";
-import { OutputVideoFileFormat } from "../renderer/components/form_components/OutputVideoFileFormatInput";
+import { OutputVideoFileFormat, OUTPUT_VIDEO_FILE_FORMATS } from "../renderer/components/form_components/OutputVideoFileFormatInput";
 import { VideoCodec, VIDEO_CODECS } from "../renderer/components/form_components/VideoCodecInput";
 
 import { DolphinResolution, DOLPHIN_RESOLUTIONS } from "../renderer/components/form_components/DolphinResolutionInput";
@@ -650,7 +650,7 @@ class AutoTTRecConfigImporter {
     }
   }
 
-  private getFormDataStringOrChoiceArg_nullIfWasNull<K extends AutoTTRecConfigFormStringArgName | AutoTTRecConfigFormChoiceArgNames>(key: K): AutoTTRecConfigFormFieldsPartial[K] | null {
+  private getFormDataStringOrChoiceArg_nullIfWasNull<K extends AutoTTRecConfigFormStringArgName | AutoTTRecConfigFormChoiceArgNames>(key: K): AutoTTRecConfigFormFields[K] | null {
     if (this.configArgWasNullSet.has(key)) {
       return null;
     } else {
@@ -1186,6 +1186,63 @@ class AutoTTRecConfigImporter {
     }
 
     this.formData["music-presentation"] = musicPresentation;
+  }
+
+//   if "output-video-filename" is "mp4", "mp4"
+//   else if "output-video-filename" is "webm", "webm"
+//   else if "output-video-filename" is "mkv", "mkv"
+//   else if "output-video-filename" suffix is ".mkv", "mkv"
+//   else if "output-video-filename" suffix is ".mp4", "mp4"
+//   else if "output-video-filename" suffix is ".webm", "webm"
+//   else <FILLME>
+
+// special case for handling "encode-type", "video-codec", and "output-video-file-format"
+
+
+  private importOutputVideoFilename_setOutputVideoFileFormat_validateAllowedVideoCodec() {
+    let outputVideoFilename = this.validateString_errorIfNot_handleUndefined("output-video-filename");
+    let outputVideoFileFormat: OutputVideoFileFormat;
+
+    if (outputVideoFilename === "" || outputVideoFilename === null) {
+      outputVideoFileFormat = "<FILLME>";
+      outputVideoFilename = "";
+    } else if (isInSet(OUTPUT_VIDEO_FILE_FORMATS.set, outputVideoFilename)) {
+      outputVideoFileFormat = outputVideoFilename;
+    } else if (outputVideoFilename.endsWith(".mkv")) {
+      outputVideoFileFormat = "mkv";
+    } else if (outputVideoFilename.endsWith(".mp4")) {
+      outputVideoFileFormat = "mp4"
+    } else if (outputVideoFilename.endsWith(".webm")) {
+      outputVideoFileFormat = "webm";
+    } else {
+      this.errorsAndWarnings.addError("output-video-filename", `output-video-filename ${outputVideoFilename} is not an mkv, mp4, or webm, and is not mkv, mp4, or webm itself!`);
+      outputVideoFileFormat = "<FILLME>";
+      outputVideoFilename = "";
+    }
+
+    let encodeType = this.getFormDataStringOrChoice_verifyNotUndefined("encode-type");
+    let videoCodec = this.getFormDataStringOrChoice_verifyNotUndefined("video-codec");
+
+    if (encodeType === "crf") {
+      if (videoCodec === "libvpx-vp9") {
+        videoCodec = "<FILLME>";
+        this.errorsAndWarnings.addError("video-codec", "video-codec cannot be libvpx-vp9 if encode-type is crf!");
+      } if (outputVideoFileFormat === "webm") {
+        outputVideoFileFormat = "<FILLME>";
+        this.errorsAndWarnings.addError("output-video-filename", "output-video-filename cannot be a webm if encode-type is crf!");
+      }
+    } else if (encodeType === "size") {
+      if (videoCodec === "libx265") {
+        videoCodec = "<FILLME>";
+        this.errorsAndWarnings.addError("video-codec", "video-codec cannot be libx265 if encode-type is size!");
+      } if (outputVideoFileFormat === "webm" && videoCodec !== "libvpx-vp9") {
+        this.errorsAndWarnings.addError("video-codec", `video-codec must be libvpx-vp9 if output-video-filename is a webm! (got: ${videoCodec}`);
+        videoCodec = "libvpx-vp9";
+      }
+    }
+
+    this.formData["output-video-file-format"] = outputVideoFileFormat;
+    this.formData["video-codec"] = videoCodec;
   }
 
   public import() {
