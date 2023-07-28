@@ -624,6 +624,22 @@ class AutoTTRecConfigImporter {
     }
   }
 
+  private validateBoolean_errorIfNot_handleUndefined<K extends AutoTTRecArgName>(key: K): BooleanFILLME | null {
+    let value = this.readArgSanityCheck(key);
+    if (value === undefined) {
+      return "<FILLME>";
+    } else if (value === null) {
+      return null;
+    } else if (value === "<FILLME>") {
+      return "<FILLME>";
+    } else if (typeof value === "boolean") {
+      return value;
+    } else {
+      this.errorsAndWarnings.addErrorWrongType(key, "boolean", value);
+      return "<FILLME>";
+    }
+  }
+
   private validateSharedArgString_errorIfNot_handleUndefinedNull<K extends AutoTTRecConfigFormSharedStringArgName | AutoTTRecConfigFormSharedChoiceArgNames>(key: K) {
     let value = this.validateString_errorIfNot_handleUndefined(key);
     if (value === null) {
@@ -633,7 +649,6 @@ class AutoTTRecConfigImporter {
       return value;
     }
   }
-
 
   private getFormDataStringOrChoiceArg_nullIfWasNull<K extends AutoTTRecConfigFormStringArgName | AutoTTRecConfigFormChoiceArgNames>(key: K): AutoTTRecConfigFormFieldsPartial[K] | null {
     if (this.configArgWasNullSet.has(key)) {
@@ -734,7 +749,7 @@ class AutoTTRecConfigImporter {
     }
   }
 
-  private setPathnameArgEnableAndResolvePathname<K extends AutoTTRecConfigFormSharedStringArgName, L extends AutoTTRecConfigFormBooleanArgName>(pathnameArgName: K, enableArgName: L): string {
+  private setPathnameArgEnable_resolvePathname_returnOriginalFilename<K extends AutoTTRecConfigFormSharedStringArgName, L extends AutoTTRecConfigFormBooleanArgName>(pathnameArgName: K, enableArgName: L): [string, string] {
     let pathnameArgValue = this.getFormDataStringOrChoiceArg_nullIfWasNull(pathnameArgName);
     let pathnameAbsoluteArgValue: string;
     let enableArgValue: BooleanFILLME;
@@ -756,9 +771,10 @@ class AutoTTRecConfigImporter {
       }
     } else {
       pathnameAbsoluteArgValue = "";
+      pathnameArgValue = "";
     }
 
-    return pathnameAbsoluteArgValue;
+    return [pathnameAbsoluteArgValue, pathnameArgValue];
   }
 /*
   class AutoTTRecArgsClass {
@@ -1079,7 +1095,7 @@ class AutoTTRecConfigImporter {
   }
 
    private async importAllExtraGeckoCodeArgs() {
-    let extraGeckoCodesAbsoluteFilename: string = this.setPathnameArgEnableAndResolvePathname("extra-gecko-codes-filename", "extra-gecko-codes-enable");
+    let [extraGeckoCodesAbsoluteFilename, extraGeckoCodesFilename] = this.setPathnameArgEnable_resolvePathname_returnOriginalFilename("extra-gecko-codes-filename", "extra-gecko-codes-enable");
 
     if (extraGeckoCodesAbsoluteFilename !== "") {
       let extraGeckoCodesContents: string = "";
@@ -1104,7 +1120,7 @@ class AutoTTRecConfigImporter {
   }
 
   private resolveHQTexturesFolderAndSetHQTexturesFolderEnable() {
-    let extraHQTexturesAbsoluteFolder: string = this.setPathnameArgEnableAndResolvePathname("extra-hq-textures-folder", "extra-hq-textures-folder-enable");
+    let [extraHQTexturesAbsoluteFolder, extraHQTexturesFolder] = this.setPathnameArgEnable_resolvePathname_returnOriginalFilename("extra-hq-textures-folder", "extra-hq-textures-folder-enable");
     if (extraHQTexturesAbsoluteFolder !== "") {
       this.formData["extra-hq-textures-folder"] = extraHQTexturesAbsoluteFolder;
     }
@@ -1136,6 +1152,40 @@ class AutoTTRecConfigImporter {
     }
 
     this.formData[volumeSliderArgName] = volumeSliderArgValue;
+  }
+
+  // if "no-music-mkchannel" and not "start-music-at-beginning", "no-music-mkchannel"
+  // else if "no-music-mkchannel" and "start-music-at-beginning"
+  //   if "no-top-10-category" is mkchannel, "no-music-mkchannel"
+  //   else "start-music-at-beginning"
+  // else if "start-music-at-beginning", "start-music-at-beginning"
+  // else "normal"
+
+  private setMusicPresentation() {
+    let noMusicMKChannel = this.validateBoolean_errorIfNot_handleUndefined("no-music-mkchannel");
+    let startMusicAtBeginning = this.validateBoolean_errorIfNot_handleUndefined("start-music-at-beginning");
+    let musicPresentation: MusicPresentation;
+    
+    if (noMusicMKChannel === "<FILLME>" || startMusicAtBeginning === "<FILLME>") {
+      musicPresentation = "<FILLME>";
+    } else {
+      if (noMusicMKChannel && !startMusicAtBeginning) {
+        musicPresentation = "no-music-mkchannel";
+      } else if (noMusicMKChannel && startMusicAtBeginning) {
+        let noTop10Category = this.getFormDataStringOrChoiceArg_nullIfWasNull("no-top-10-category");
+        if (noTop10Category === "mkchannel") {
+          musicPresentation = "no-music-mkchannel";
+        } else {
+          musicPresentation = "start-music-at-beginning";
+        }
+      } else if (startMusicAtBeginning) {
+        musicPresentation = "start-music-at-beginning";
+      } else {
+        musicPresentation = "normal";
+      }
+    }
+
+    this.formData["music-presentation"] = musicPresentation;
   }
 
   public import() {
