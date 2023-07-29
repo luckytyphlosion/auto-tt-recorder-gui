@@ -4,7 +4,10 @@ import { SimpleErrorMessage } from "../SimpleErrorMessage";
 import { FormComplexity } from "../layout_components/FormComplexityLayout";
 import useRenderCounter from "../../RenderCounter";
 
-export type TrackNameType = "auto" | "manual" | "rkg-slot";
+import { makeReadonlyArraySet, ValidValues } from "../../array-set";
+
+export const TRACK_NAME_TYPES = makeReadonlyArraySet(["auto", "manual", "rkg-slot"] as const);
+export type TrackNameType = ValidValues<typeof TRACK_NAME_TYPES>;
 
 export function TrackNameInput(props: {formComplexity: FormComplexity}) {
   const {register, getValues, setValue} = useFormContextAutoTT();
