@@ -6,12 +6,12 @@ import YAML from "yaml";
 import path from "path";
 import events from "events";
 
-import * as versions from "../versions";
+import * as versions from "../shared/versions";
 import { mainWindow } from "./electron";
-import { AutoTTRecResponse } from "../enums";
+import { AutoTTRecResponse } from "../shared/enums";
 import { globalConfig } from "./confighandler";
 
-import { AutoTTRecConfig } from "../shared-types";
+import { AutoTTRecConfig } from "../shared/shared-types";
 
 interface ReadStreamResponse {
   hasData: boolean;

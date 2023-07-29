@@ -41,13 +41,13 @@ import { Top10TitleType } from "../renderer/components/form_components/Top10Titl
 
 import { Set200cc, SET_200CC_VALUES } from "../renderer/components/form_components/Set200ccInput";
 
-import { AutoTTRecConfig } from "../shared-types";
+import { AutoTTRecConfig } from "../shared/shared-types";
 
 import { ValidValues, ReadonlyArraySet, makeReadonlyArraySet } from "../shared/array-set";
 
 import { readFileEnforceUTF8 } from "./gui2";
 
-import { shallowCopy } from "../util-shared";
+import { shallowCopy } from "../shared/util-shared";
 
 import path from "path";
 import { IpcMainInvokeEvent } from "electron";

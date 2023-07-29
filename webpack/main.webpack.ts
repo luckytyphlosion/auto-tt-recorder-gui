@@ -23,10 +23,14 @@ const config: Configuration = {
           /node_modules/,
           /auto-tt-recorder-gui-v[^-]+-win32-x64/,
           /auto-tt-recorder_v[^-]+_for_gui/,
-          path.resolve(rootPath, "./src/renderer")
         ],
         include: [
-          path.resolve(rootPath, "./src")
+          path.resolve(rootPath, "./src/renderer/RenderCounter.tsx"),
+          path.resolve(rootPath, "./src/renderer/components/SimpleErrorMessage.tsx"),
+          path.resolve(rootPath, "./src/renderer/components/form_components"),
+          path.resolve(rootPath, "./src/renderer/components/layout_components"),
+          path.resolve(rootPath, "./src/main"),
+          path.resolve(rootPath, "./src/shared")
         ],
         use: {
           loader: "ts-loader",

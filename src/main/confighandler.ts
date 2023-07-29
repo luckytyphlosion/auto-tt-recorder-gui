@@ -5,7 +5,7 @@ import fsPromises from "fs/promises";
 import { Mutex } from "async-mutex";
 import { App } from "electron/main";
 
-import * as versions from "../versions";
+import * as versions from "../shared/versions";
 
 //import documentsFolder from "./documents-folder";
 

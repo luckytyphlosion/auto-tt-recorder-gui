@@ -1,6 +1,6 @@
 import { IpcMainInvokeEvent } from "electron";
 
-import { AutoTTRecConfig, ImportTemplateStatus, ImportTemplateResult } from "../shared-types";
+import { AutoTTRecConfig, ImportTemplateStatus, ImportTemplateResult } from "../shared/shared-types";
 import { readFileEnforceUTF8 } from "./gui2";
 
 import fsPromises from "fs/promises";

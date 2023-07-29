@@ -31,7 +31,8 @@ const config: Configuration = {
           path.resolve(rootPath, "./src/main")
         ],
         include: [
-          path.resolve(rootPath, "./src")
+          path.resolve(rootPath, "./src/renderer"),
+          path.resolve(rootPath, "./src/shared")
         ],
         use: {
           loader: "ts-loader",

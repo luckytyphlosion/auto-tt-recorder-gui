@@ -28,7 +28,7 @@ import { IpcMainInvokeEvent, FileFilter } from "electron";
 import { Readable, Transform, TransformCallback } from "stream";
 
 import { Config, loadGlobalConfig, globalConfig } from "./confighandler";
-import * as versions from "../versions";
+import * as versions from "../shared/versions";
 import * as autoTTRecBridge from "./auto-tt-rec-bridge";
 import * as gui2 from "./gui2";
 import * as confighandler from "./confighandler";
