@@ -1,8 +1,7 @@
 import { FileFilter, IpcRendererEvent } from "electron";
 import { AutoTTRecResponse } from "../shared/enums";
 import { AutoTTRecArgs } from "./AutoTTRecFormFieldsAndArgs";
-import { FilenameAndContents, ImportTemplateResult } from "../shared/shared-types";
-import { DialogId } from "../shared/shared-types";
+import { FilenameAndContents, ImportTemplateResult, ExpectedExtensionAndErrorMessage, DialogId, StringOrError } from "../shared/shared-types";
 
 import { AutoTTRecConfig } from "../shared/shared-types";
 import { AutoTTRecConfigFormFields } from "./AutoTTRecFormFieldsAndArgs";
@@ -22,8 +21,8 @@ declare global {
       // separately from the component file
       // I mean some of the other ipc calls I have are possibly not secure either
       // ugh
-      readFileEnforceUTF8: (filename: string, badEncodingErrorMessage: string) => Promise<string>;
-      getAbsolutePathRelativeToFilename: (pathname: string, filenameRelativeFrom: string) => string;
+      ipcReadFileEnforceUTF8: (filename: string, badEncodingErrorMessage: string, expectedExtensionAndErrorMessage?: ExpectedExtensionAndErrorMessage) => Promise<StringOrError>;
+      getAbsolutePathRelativeToFilename: (pathname: string, filenameRelativeFrom: string) => Promise<string>;
       spawnAutoTTRec: (templateFilename: string, autoTTRecArgs: AutoTTRecArgs) => Promise<boolean>;
       waitAutoTTRec: () => Promise<AutoTTRecResponse>;
       handleSendStdout: (callable: (event: IpcRendererEvent, stdoutData: string) => void) => void;

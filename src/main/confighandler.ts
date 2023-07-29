@@ -66,7 +66,8 @@ export class Config {
         "extra-hq-textures": "",
         "output-video": "",
         "szs": "",
-        "top-10-gecko-code": ""
+        "top-10-gecko-code": "",
+        "template": ""
       }
     };
   }

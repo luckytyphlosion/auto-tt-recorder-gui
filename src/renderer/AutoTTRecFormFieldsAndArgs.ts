@@ -41,7 +41,7 @@ import { Top10TitleType } from "./components/form_components/Top10TitleInput";
 
 import { Set200cc, SET_200CC_VALUES } from "./components/form_components/Set200ccInput";
 
-import { AutoTTRecConfig } from "../shared/shared-types";
+import { AutoTTRecConfig, StringOrError } from "../shared/shared-types";
 
 import { ValidValues, ReadonlyArraySet, makeReadonlyArraySet } from "../shared/array-set";
 
@@ -327,7 +327,7 @@ type AutoTTRecArgName = keyof AutoTTRecArgs;
 
 const GHOST_AUTO_ARG_NAMES = makeReadonlyArraySet(["main-ghost-auto", "comparison-ghost-auto"] as const);
 const UNSUPPORTED_ARG_NAMES = makeReadonlyArraySet(["top-10-censors", "ending-message", "dolphin-volume", "unbuffered-output"] as const);
-const OTHER_EXTENDED_ONLY_ARG_NAMES = makeReadonlyArraySet(["no-200cc"] as const);
+const OTHER_EXTENDED_ONLY_ARG_NAMES = makeReadonlyArraySet(["no-200cc", "ffmpeg-filename", "ffprobe-filename"] as const);
 const AUTO_TT_REC_ARG_NAMES_EXTENDED_ONLY = makeReadonlyArraySet([...GHOST_AUTO_ARG_NAMES.arr, ...UNSUPPORTED_ARG_NAMES.arr, ...OTHER_EXTENDED_ONLY_ARG_NAMES.arr] as const);
 
 type AutoTTRecExtendedOnlyArgName = ValidValues<typeof AUTO_TT_REC_ARG_NAMES_EXTENDED_ONLY>;
@@ -391,6 +391,9 @@ class AutoTTRecConfigErrorsAndWarnings {
   }
 
   public addError(name: AutoTTRecArgExtendedAndFormFieldName, message: string) {
+    if (name === "extra-gecko-codes-filename") {
+      console.log("extra-gecko-codes-filename error message:", message);
+    }
     this.add(name, message, false);
   }
 
@@ -411,7 +414,51 @@ class AutoTTRecConfigErrorsAndWarnings {
   }
 
   public addErrorInvalidCommand(name: string) {
-    this.addToErrorsWarningMap(name, "Not a valid auto-tt-recorder command.", false, this._errorsAndWarningsInvalidCommands);
+    this.addToErrorsWarningMap(name, `${name} is not a valid auto-tt-recorder command.`, false, this._errorsAndWarningsInvalidCommands);
+  }
+
+  public debug_get_errorsAndWarnings() {
+    return this._errorsAndWarnings;
+  }
+
+  public compile() {
+    let output: string[] = [];
+
+    for (const [invalidCommandName, invalidCommandMessages] of this._errorsAndWarningsInvalidCommands.entries()) {
+      output.push(`Error with ${invalidCommandName}:`);
+      for (const invalidCommandMessage of invalidCommandMessages) {
+        let curErrorOrWarningMessage: string;
+  
+        if (invalidCommandMessage.isWarning) {
+          curErrorOrWarningMessage = "  Warning: ";
+        } else {
+          curErrorOrWarningMessage = "  Error: ";
+        }
+
+        curErrorOrWarningMessage += invalidCommandMessage.message;
+        output.push(curErrorOrWarningMessage);
+      }
+    }
+
+    output.push("\n");
+
+    for (const [commandName, commandMessages] of this._errorsAndWarnings.entries()) {
+      output.push(`Error with ${commandName}:`);
+      for (const commandMessage of commandMessages) {
+        let curErrorOrWarningMessage: string;
+  
+        if (commandMessage.isWarning) {
+          curErrorOrWarningMessage = "  Warning: ";
+        } else {
+          curErrorOrWarningMessage = "  Error: ";
+        }
+
+        curErrorOrWarningMessage += commandMessage.message;
+        output.push(curErrorOrWarningMessage);
+      }
+    }
+
+    return output.join("\n");
   }
 }
 
@@ -456,26 +503,6 @@ class AutoTTRecConfigPreprocessor {
         return null;
       }
     }
-  }
-  
-  public preprocess() {
-    if (this.autoTTRecConfigImporter === null) {
-      this.findInvalidNamesAndFillInMissing();
-      this.convertGhostAuto("main-ghost-auto", "main-ghost-filename", "chadsoft-ghost-page");
-      this.convertGhostAuto("comparison-ghost-auto", "comparison-ghost-filename", "chadsoft-comparison-ghost-page");
-      this.convertNo200cc();
-      this.fixAspectRatio16By9Type();
-      this.convertStringOrNumArgToString("chadsoft-cache-expiry");
-      this.convertStringOrNumArgToString("speedometer-decimal-places", "speedometer-decimal-places-str");
-      this.convertStringOrNumArgToString("form-complexity");
-      this.convertDifferingArgNames();
-      for (const unsupportedArgName of UNSUPPORTED_ARG_NAMES.arr)  {
-        this.warnUnsupportedArg(unsupportedArgName);
-      }
-      this.autoTTRecConfigImporter = new AutoTTRecConfigImporter(this.autoTTRecConfig, this.errorsAndWarnings, this.autoTTRecConfigFilename);
-    }
-
-    return this.autoTTRecConfigImporter;
   }
   
   private findInvalidNamesAndFillInMissing() {
@@ -541,8 +568,11 @@ class AutoTTRecConfigPreprocessor {
       } else {
         this.autoTTRecConfig["on-200cc"] = !no200cc;
       }
-      this.autoTTRecConfig["set-200cc"] = this.autoTTRecConfig["on-200cc"] ? "on-200cc" : "no-200cc";
+    } else {
+      this.autoTTRecConfig["on-200cc"] = false;
     }
+
+    this.autoTTRecConfig["set-200cc"] = this.autoTTRecConfig["on-200cc"] ? "on-200cc" : "no-200cc";
   }
 
   private fixAspectRatio16By9Type() {
@@ -561,22 +591,32 @@ class AutoTTRecConfigPreprocessor {
 
   private convertStringOrNumArgToString(stringOrNumArgName: "chadsoft-cache-expiry" | "speedometer-decimal-places" | "form-complexity", newArgName?: "speedometer-decimal-places-str") {
     let stringOrNumArgValue = this.autoTTRecConfig[stringOrNumArgName];
-    if (stringOrNumArgValue !== null && stringOrNumArgValue !== "<FILLME>") {
+    let destValue: string | null;
+    let destArgName: typeof stringOrNumArgName | Exclude<typeof newArgName, undefined>
+    if (newArgName === undefined) {
+      destArgName = stringOrNumArgName;
+    } else {
+      destArgName = newArgName;
+    }
+
+    if (stringOrNumArgValue === null) {
+      destValue = null;
+    } else if (stringOrNumArgValue === "<FILLME>") {
+      destValue = "<FILLME>";
+    } else {
       if (typeof stringOrNumArgValue !== "string") {
-        let destArgName: typeof stringOrNumArgName | Exclude<typeof newArgName, undefined>
-        if (newArgName === undefined) {
-          destArgName = stringOrNumArgName;
-        } else {
-          destArgName = stringOrNumArgName;
-        }
         if (typeof stringOrNumArgValue === "number") {
-          this.autoTTRecConfig[destArgName] = stringOrNumArgValue.toString();
+          destValue = stringOrNumArgValue.toString();
         } else {
           this.errorsAndWarnings.addErrorWrongType(stringOrNumArgName, "string or number", stringOrNumArgValue);
-          this.autoTTRecConfig[destArgName] = "<FILLME>";
+          destValue = "<FILLME>";
         }
+      } else {
+        destValue = stringOrNumArgValue;
       }
     }
+
+    this.autoTTRecConfig[destArgName] = destValue;
   }
 
   private convertDifferingArgNames() {
@@ -584,10 +624,36 @@ class AutoTTRecConfigPreprocessor {
     this.autoTTRecConfig["output-width-custom"] = this.autoTTRecConfig["output-width"];
   }
 
+  private removeFFmpegFFprobeArgs() {
+    delete this.autoTTRecConfig["ffmpeg-filename"];
+    delete this.autoTTRecConfig["ffprobe-filename"];
+  }
+
   private warnUnsupportedArg(autoTTRecUnsupportedArgName: AutoTTRecUnsupportedArgName) {
     if (this.autoTTRecConfig[autoTTRecUnsupportedArgName] !== null) {
       this.errorsAndWarnings.addWarning(autoTTRecUnsupportedArgName, `${autoTTRecUnsupportedArgName} is not currently supported, will be ignored.`);
     }
+  }
+
+  public preprocess() {
+    if (this.autoTTRecConfigImporter === null) {
+      this.findInvalidNamesAndFillInMissing();
+      this.convertGhostAuto("main-ghost-auto", "main-ghost-filename", "chadsoft-ghost-page");
+      this.convertGhostAuto("comparison-ghost-auto", "comparison-ghost-filename", "chadsoft-comparison-ghost-page");
+      this.convertNo200cc();
+      this.fixAspectRatio16By9Type();
+      this.convertStringOrNumArgToString("chadsoft-cache-expiry");
+      this.convertStringOrNumArgToString("speedometer-decimal-places", "speedometer-decimal-places-str");
+      this.convertStringOrNumArgToString("form-complexity");
+      this.convertDifferingArgNames();
+      this.removeFFmpegFFprobeArgs();
+      for (const unsupportedArgName of UNSUPPORTED_ARG_NAMES.arr)  {
+        this.warnUnsupportedArg(unsupportedArgName);
+      }
+      this.autoTTRecConfigImporter = new AutoTTRecConfigImporter(this.autoTTRecConfig, this.errorsAndWarnings, this.autoTTRecConfigFilename);
+    }
+
+    return this.autoTTRecConfigImporter;
   }
 }
 
@@ -805,7 +871,7 @@ class AutoTTRecConfigImporter {
   private setPathnameArgEnable_resolvePathname_returnOriginalFilenameAndPathnameArgs(pathnameArgName: "top-10-gecko-code-filename"): [string, string];
 */
 
-  private setPathnameArgEnable_resolvePathname_returnOriginalAndResolvedFilename(
+  private async setPathnameArgEnable_resolvePathname_returnOriginalAndResolvedFilename(
     {pathnameArgName, enableArgName}: ({
       pathnameArgName: "extra-gecko-codes-filename",
       enableArgName: "extra-gecko-codes-enable"
@@ -819,12 +885,13 @@ class AutoTTRecConfigImporter {
       pathnameArgName: ("extra-gecko-codes-filename" | "top-10-gecko-code-filename" | "extra-hq-textures-folder") & AutoTTRecConfigFormSharedStringArgName,
       enableArgName: (("extra-gecko-codes-enable" | "extra-hq-textures-folder-enable") & AutoTTRecConfigFormBooleanArgName) | undefined
     }
-  ): [string, string] {
+  ): Promise<[string, string]> {
     let enableArgValue: BooleanFILLME;
     let pathnameArgValue = this.getFormDataStringOrChoiceArg_verifyNotUndefined_nullIfWasNull(pathnameArgName);
     let pathnameAbsoluteArgValue: string;
 
     if (enableArgName !== undefined) {
+      console.log("setPathnameArgEnable_resolvePathname_returnOriginalAndResolvedFilename enableArgName:", enableArgName, ", pathnameArgValue: ", pathnameArgValue);
       if (pathnameArgValue === "") {
         enableArgValue = "<FILLME>";
       } else if (pathnameArgValue !== null) {
@@ -838,14 +905,17 @@ class AutoTTRecConfigImporter {
       enableArgValue = true;
     }
 
-    if (enableArgValue && typeof pathnameArgValue === "string") {
-      pathnameAbsoluteArgValue = window.api.getAbsolutePathRelativeToFilename(pathnameArgValue, this.autoTTRecConfigFilename);
+    console.log("enableArgValue: ", enableArgValue, ", pathnameArgName:", pathnameArgName);
+  
+    if (enableArgValue === true && typeof pathnameArgValue === "string" && pathnameArgValue !== "") {
+      console.log("setPathnameArgEnable_resolvePathname_returnOriginalAndResolvedFilename pathnameArgValue: ", pathnameArgValue);
+      pathnameAbsoluteArgValue = await window.api.getAbsolutePathRelativeToFilename(pathnameArgValue, this.autoTTRecConfigFilename);
     } else {
       pathnameAbsoluteArgValue = "";
       pathnameArgValue = "";
     }
 
-    return [pathnameAbsoluteArgValue, pathnameArgValue];
+    return [pathnameArgValue, pathnameAbsoluteArgValue];
   }
 
   private async importTextFileArgsAll(
@@ -864,30 +934,40 @@ class AutoTTRecConfigImporter {
       }
     )
   ) {
-    let [textFilename, absoluteTextFilename] = this.setPathnameArgEnable_resolvePathname_returnOriginalAndResolvedFilename(textFileArgs);
+    let [textFilename, absoluteTextFilename] = await this.setPathnameArgEnable_resolvePathname_returnOriginalAndResolvedFilename(textFileArgs);
+    //console.log("importTextFileArgsAll textFilename:", textFilename, ", absoluteTextFilename:", absoluteTextFilename);
     let {pathnameArgName, contentsArgName} = textFileArgs;
-    
+    let contentsArgValue: string = "";
     if (absoluteTextFilename !== "") {
-      let textFilenameContents: string = "";
+      console.log(`absoluteTextFilename ${pathnameArgName}: `, absoluteTextFilename);
+      let textFilenameContentsOrError: StringOrError;
+      textFilenameContentsOrError = await window.api.ipcReadFileEnforceUTF8(absoluteTextFilename, "Not a valid text file!");
       try {
-        textFilenameContents = await window.api.readFileEnforceUTF8(absoluteTextFilename, "Not a valid text file!");
-      } catch (eAsAny) {
-        let e: NodeJS.ErrnoException  = (eAsAny as NodeJS.ErrnoException);
-        let errorMessageReason: string;
-        if (e.code === "ENOENT") {
-          errorMessageReason = "File does not exist!";
-        } else {
-          errorMessageReason = e.message;
+        if (textFilenameContentsOrError.hasError) {
+          console.log("Error not undefined in importTextFileArgsAll: error:");
+          //console.log(textFilenameContentsOrError.errorCode);
+          //let e = textFilenameContentsOrError.error;
+          let errorMessageReason: string;
+          if (textFilenameContentsOrError.errorCode === "ENOENT") {
+            errorMessageReason = "File does not exist!";
+          } else {
+            //console.log("e.code:", e.code, "e.message:", e.message);
+            errorMessageReason = textFilenameContentsOrError.errorMessage;
+          }
+  
+          let errorMessage: string = `Error occurred when reading ${pathnameArgName} "${textFilename}": ${errorMessageReason}`;
+          //console.log("importTextFileArgsAll errorMessage:", errorMessage);
+          this.errorsAndWarnings.addError(pathnameArgName, errorMessage);
+          //console.log("after import errorsAndWarnings:", this.errorsAndWarnings.debug_get_errorsAndWarnings());
+          absoluteTextFilename = "";
         }
-
-        let errorMessage: string = `Error occurred when reading ${pathnameArgName} "${textFilename}": ${errorMessageReason}`;
-        this.errorsAndWarnings.addError(pathnameArgName, errorMessage);
-        absoluteTextFilename = "";
+      } catch (e) {
+        console.log("Something went wrong in importTextFileArgsAll:", e);
       }
-
-      this.formData[contentsArgName] = textFilenameContents;
-      this.formData[pathnameArgName] = absoluteTextFilename;
+      contentsArgValue = textFilenameContentsOrError.result;
     }
+    this.formData[pathnameArgName] = absoluteTextFilename;
+    this.formData[contentsArgName] = contentsArgValue;
   }
 
 
@@ -939,6 +1019,7 @@ class AutoTTRecConfigImporter {
     this.importSharedChoiceArg("aspect-ratio-16-by-9", ASPECT_RATIO_16_BY_9_VALUES);
     this.importSharedChoiceArg("audio-codec", AUDIO_CODECS);
     this.importSharedStringArg("chadsoft-ghost-page");
+    this.importSharedStringArg("chadsoft-comparison-ghost-page");
     this.importSharedBooleanArg("chadsoft-read-cache");
     this.importSharedBooleanArg("chadsoft-write-cache");
     this.importSharedStringArg("comparison-ghost-filename");
@@ -979,6 +1060,9 @@ class AutoTTRecConfigImporter {
     
     this.importSharedNumberArg("output-width-custom");
     this.importSharedNumberArg("top-10-highlight");    
+
+    this.importSharedStringArg("chadsoft-cache-expiry");
+
   }
 
   // if "audio-bitrate" is <FILLME>, NaN
@@ -1014,6 +1098,7 @@ class AutoTTRecConfigImporter {
       this.errorsAndWarnings.addError("form-complexity", `form-complexity is not one of 0, 1, or 2 (simple, advanced, and all respectively) (got: ${formComplexityArgValue}). Defaulting to advanced.`);
       formComplexity = FormComplexity.ADVANCED;
     }
+    this.formData["form-complexity"] = formComplexity;
   }
 
   private importAudioBitrateAll() {
@@ -1235,6 +1320,7 @@ class AutoTTRecConfigImporter {
       enableArgName: "extra-gecko-codes-enable",
       contentsArgName: "extra-gecko-codes-contents"
     });
+    this.formData["extra-gecko-codes-unsaved"] = false;
   }
 
   private async importAllTop10GeckoCodeArgs() {
@@ -1243,10 +1329,11 @@ class AutoTTRecConfigImporter {
       enableArgName: undefined,
       contentsArgName: "top-10-gecko-code-contents"
     });
+    this.formData["top-10-gecko-code-unsaved"] = false;
   }
 
-  private resolveHQTexturesFolderAndSetHQTexturesFolderEnable() {
-    let [extraHQTexturesAbsoluteFolder, extraHQTexturesFolder] = this.setPathnameArgEnable_resolvePathname_returnOriginalAndResolvedFilename({
+  private async resolveHQTexturesFolderAndSetHQTexturesFolderEnable() {
+    let [extraHQTexturesAbsoluteFolder, extraHQTexturesFolder] = await this.setPathnameArgEnable_resolvePathname_returnOriginalAndResolvedFilename({
       pathnameArgName: "extra-hq-textures-folder",
       enableArgName: "extra-hq-textures-folder-enable"
     });
@@ -1371,6 +1458,7 @@ class AutoTTRecConfigImporter {
       }
     }
 
+    this.formData["output-video-filename"] = outputVideoFilename;
     this.formData["output-video-file-format"] = outputVideoFileFormat;
     this.formData["video-codec"] = videoCodec;
   }
@@ -1394,6 +1482,7 @@ class AutoTTRecConfigImporter {
         outputWidthPreset = "custom";
       }
     }
+    this.formData["output-width-preset"] = outputWidthPreset;
   }
 
 // if "timeline-category" is "notop10"
@@ -1603,6 +1692,7 @@ class AutoTTRecConfigImporter {
   public async import(): Promise<AutoTTRecConfigFormFields> {
     if (!this.hasImported) {
       this.importStraightCopyArgs();
+      this.importFormComplexity();
       this.importAudioBitrateAll();
       this.importBackgroundMusicSourceAndMusicFilename();
       this.setTimelineCategoryAndNoTop10();
@@ -1610,9 +1700,11 @@ class AutoTTRecConfigImporter {
       this.importGhostSource(true);
       this.importGhostSource(false);
       this.setEncodeSizeDisplayedAndUnit();
-      await this.importAllExtraGeckoCodeArgs();
-      await this.importAllTop10GeckoCodeArgs();
-      this.resolveHQTexturesFolderAndSetHQTexturesFolderEnable();
+      //Promise.allSettled([
+        await this.importAllExtraGeckoCodeArgs();
+        await this.importAllTop10GeckoCodeArgs();
+        await this.resolveHQTexturesFolderAndSetHQTexturesFolderEnable();
+      //])
       this.importVolume("game-volume", "game-volume-numberinput", "game-volume-slider");
       this.importVolume("music-volume", "music-volume-numberinput","music-volume-slider");
       this.setMusicPresentation();
@@ -1631,11 +1723,13 @@ class AutoTTRecConfigImporter {
   }
 }
 
-export async function convertAutoTTRecConfigToFormData(autoTTRecConfig: AutoTTRecConfig) {
+export async function convertAutoTTRecConfigToFormData(autoTTRecConfig: AutoTTRecConfig, autoTTRecConfigFilename: string) {
   let errorsAndWarnings = new AutoTTRecConfigErrorsAndWarnings();
-  let autoTTRecConfigPreprocessor = new AutoTTRecConfigPreprocessor(autoTTRecConfig, errorsAndWarnings, "");
+  let autoTTRecConfigPreprocessor = new AutoTTRecConfigPreprocessor(autoTTRecConfig, errorsAndWarnings, autoTTRecConfigFilename);
   let autoTTRecConfigImporter = autoTTRecConfigPreprocessor.preprocess();
   let autoTTRecConfigFormFields = await autoTTRecConfigImporter.import();
+  console.log(errorsAndWarnings.compile());
+  console.log("after import errorsAndWarnings: ", errorsAndWarnings.debug_get_errorsAndWarnings());
 
   return autoTTRecConfigFormFields;
 }

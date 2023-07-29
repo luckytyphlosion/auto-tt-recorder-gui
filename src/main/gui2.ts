@@ -1,15 +1,13 @@
 import { dialog, IpcMainInvokeEvent, FileFilter, OpenDialogOptions, SaveDialogOptions} from "electron";
 
 import { mainWindow } from "./electron";
-import { FilenameAndContents } from "../shared/shared-types";
+import { FilenameAndContents, StringOrError, DialogId, ExpectedExtensionAndErrorMessage } from "../shared/shared-types";
 import fsPromises from "fs/promises";
 import fs from "fs";
 
 import path from "path";
 
 import { globalConfig } from "./confighandler";
-
-import { DialogId } from "../shared/shared-types";
 
 function retrieveLastPathname(lastPathname: string | undefined, dialogId: DialogId) {
   if (lastPathname === "") {
@@ -21,7 +19,7 @@ function retrieveLastPathname(lastPathname: string | undefined, dialogId: Dialog
   return lastPathname;
 }
 
-export function getAbsolutePathRelativeToFilename(event: IpcMainInvokeEvent, pathname: string, filenameRelativeFrom: string): string {
+export async function getAbsolutePathRelativeToFilename(event: IpcMainInvokeEvent, pathname: string, filenameRelativeFrom: string): Promise<string> {
   let absolutePathname: string;
 
   if (path.isAbsolute(pathname)) {
@@ -33,14 +31,9 @@ export function getAbsolutePathRelativeToFilename(event: IpcMainInvokeEvent, pat
   return absolutePathname;
 }
 
-type BadExtensionAndErrorMessage = {
-  extension: string,
-  errorMessage: string
-}
-
-export async function readFileEnforceUTF8(filename: string, badEncodingErrorMessage: string, badExtensionAndErrorMessage?: BadExtensionAndErrorMessage): Promise<string> {
-  if (badExtensionAndErrorMessage !== undefined && path.extname(filename) !== badExtensionAndErrorMessage.extension) {
-    throw new Error(badExtensionAndErrorMessage.errorMessage);
+export async function readFileEnforceUTF8(filename: string, badEncodingErrorMessage: string, expectedExtensionAndErrorMessage?: ExpectedExtensionAndErrorMessage): Promise<string> {
+  if (expectedExtensionAndErrorMessage !== undefined && path.extname(filename) !== expectedExtensionAndErrorMessage.extension) {
+    throw new Error(expectedExtensionAndErrorMessage.errorMessage);
   
   }
   const buffer = await fsPromises.readFile(filename);
@@ -50,8 +43,66 @@ export async function readFileEnforceUTF8(filename: string, badEncodingErrorMess
   return buffer.toString();
 }
 
-export async function ipcReadFileEnforceUTF8(event: IpcMainInvokeEvent, filename: string, badEncodingErrorMessage: string): Promise<string> {
-  return await readFileEnforceUTF8(filename, badEncodingErrorMessage);
+function cloneError(oldError: NodeJS.ErrnoException): NodeJS.ErrnoException {
+  let newError: NodeJS.ErrnoException;
+  newError = oldError.constructor(oldError.message);
+  if (oldError.errno) {
+    newError.errno = oldError.errno;
+  } if (oldError.code) {
+    newError.code = oldError.code
+  } if (oldError.path) {
+    newError.path = oldError.path;
+  } if (oldError.syscall) {
+    newError.syscall = oldError.syscall;
+  }
+
+  return newError;
+}
+
+function setStringOrErrorFromUnknown(eAsUnknown: unknown, stringOrError: StringOrError) {
+  stringOrError.hasError = true;
+
+  if (eAsUnknown instanceof Error) {
+    let e: NodeJS.ErrnoException = (eAsUnknown as NodeJS.ErrnoException);
+    stringOrError.errorCode = e.code !== undefined ? e.code : "";
+    stringOrError.errorMessage = e.message;
+  } else {
+    stringOrError.errorCode = "UNKNOWN";
+    stringOrError.errorMessage = `Unknown error occured (error object: ${eAsUnknown})`;
+  }
+}
+
+export async function ipcReadFileEnforceUTF8(event: IpcMainInvokeEvent, filename: string, badEncodingErrorMessage: string, expectedExtensionAndErrorMessage?: ExpectedExtensionAndErrorMessage): Promise<StringOrError> {
+  let stringOrError: StringOrError = {
+    result: "",
+    hasError: false,
+    errorCode: "",
+    errorMessage: ""
+  };
+
+  let fileSize: number = Infinity;
+
+  try {
+    fileSize = (await fsPromises.stat(filename)).size;
+  } catch (eAsUnknown: unknown) {
+    setStringOrErrorFromUnknown(eAsUnknown, stringOrError);
+  }
+
+  if (!stringOrError.hasError) {
+    if (fileSize > 10485760) {
+      stringOrError.hasError = true;
+      stringOrError.errorCode = "SIZE";
+      stringOrError.errorMessage = "File is greater than 10MiB (should not require a file greater than that).";
+    } else {
+      try {
+        stringOrError.result = await readFileEnforceUTF8(filename, badEncodingErrorMessage);
+      } catch (eAsUnknown: unknown) {
+        setStringOrErrorFromUnknown(eAsUnknown, stringOrError);
+      }
+    }
+  }
+
+  return stringOrError;
 }
 
 export async function openFileDialog(event: IpcMainInvokeEvent, fileFilters: FileFilter[],

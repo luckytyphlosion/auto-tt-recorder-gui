@@ -33,6 +33,20 @@ export interface SavedDialogPathnames {
   "output-video": string,
   "szs": string,
   "top-10-gecko-code": string,
+  "template": string
 }
 
 export type DialogId = keyof SavedDialogPathnames;
+
+export interface StringOrError {
+  result: string,
+  hasError: boolean,
+  errorCode: string,
+  errorMessage: string
+}
+
+export interface ExpectedExtensionAndErrorMessage {
+  extension: string,
+  errorMessage: string
+}
+

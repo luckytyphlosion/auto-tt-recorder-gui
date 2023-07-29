@@ -51,6 +51,7 @@ async function loadYAML_formatErrorsIfErrorOrWarnings(filename: string): Promise
       errors.push((e as Error).message);
     }
   
+    console.log("form-template template:", template);
     if (template === undefined) {
       if (errors.length === 1) {
         errorWarningData += `=== Error ===\n${errors[0]}\n`;
@@ -104,6 +105,5 @@ async function loadYAML_formatErrorsIfErrorOrWarnings(filename: string): Promise
 }
 
 export async function importFormTemplate(event: IpcMainInvokeEvent, filename: string): Promise<ImportTemplateResult> {
-  filename = path.resolve(__dirname, "../../test_template.yml");
   return await loadYAML_formatErrorsIfErrorOrWarnings(filename);
 }

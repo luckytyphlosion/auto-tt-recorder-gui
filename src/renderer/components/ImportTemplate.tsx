@@ -27,17 +27,23 @@ export function ImportTemplate() {
   const [hasWarnings, setHasWarnings] = useState(false);
   const [errorWarningData, setErrorWarningData] = useState("");
 
+  const [autoTTRecTemplateFilename, setAutoTTRecTemplateFilename] = useState("");
+
   const autoTTRecConfigRef = useRef<AutoTTRecConfig | null>(null);
 
   async function onClickImportTemplate(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
-    let importTemplateResult: ImportTemplateResult = await window.api.importFormTemplate("../../../test_import.yml");
-    setImportStatus(importTemplateResult.status);
-    setHasWarnings(importTemplateResult.hasWarnings);
-    setErrorWarningData(importTemplateResult.errorWarningData);
-    autoTTRecConfigRef.current = importTemplateResult.data;
-    if (importTemplateResult.status === ImportTemplateStatus.SUCCESS) {
-
+    let newAutoTTRecTemplateFilename = await window.api.openFileDialog([{name: "YAML files", extensions: ["yml"]}], autoTTRecTemplateFilename, "szs");
+    if (newAutoTTRecTemplateFilename !== "") {
+      setAutoTTRecTemplateFilename(newAutoTTRecTemplateFilename);
+      let importTemplateResult: ImportTemplateResult = await window.api.importFormTemplate(newAutoTTRecTemplateFilename);
+      setImportStatus(importTemplateResult.status);
+      setHasWarnings(importTemplateResult.hasWarnings);
+      setErrorWarningData(importTemplateResult.errorWarningData);
+      if (importTemplateResult.status === ImportTemplateStatus.SUCCESS) {
+        let newFormData = await convertAutoTTRecConfigToFormData(importTemplateResult.data, newAutoTTRecTemplateFilename);
+        console.log("newFormData:", newFormData);
+      }
     }
     setModalOpen(true);
   }
@@ -57,7 +63,7 @@ export function ImportTemplate() {
         contentLabel="Save Gecko Code Dialog"
       >
         <h3>Errors occurred on import</h3>
-        <textarea rows={20} cols={16} value={"ok"} readOnly/>
+        <textarea rows={20} cols={16} value={errorWarningData} readOnly/>
         <button onClick={importTemplateModal_cancel}>Ok</button>
       </Modal>
 
