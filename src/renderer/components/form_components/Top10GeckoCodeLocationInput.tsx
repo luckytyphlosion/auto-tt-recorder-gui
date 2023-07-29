@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import useRenderCounter from "../../RenderCounter";
 
-export type Top10GeckoCodeLocationRegion = "worldwide" | "regional";
+import { makeReadonlyArraySet, ValidValues } from "../../array-set";
+
+export const TOP_10_GECKO_CODE_LOCATION_REGIONS = makeReadonlyArraySet(["worldwide", "regional"] as const);
+export type Top10GeckoCodeLocationRegion = ValidValues<typeof TOP_10_GECKO_CODE_LOCATION_REGIONS>;
 
 export function Top10GeckoCodeLocationInput() {
   const {register} = useFormContextAutoTT();

@@ -6,8 +6,8 @@ import { ComparisonGhostSource } from "../renderer/components/form_components/Co
 import { SZSSource } from "../renderer/components/form_components/SZSSourceInput";
 import { Top10LocationRegion } from "../renderer/components/form_components/Top10LocationInput";
 
-import { Top10LocationCountry, countryLocations } from "../renderer/components/form_components/Top10LocationCountryInput";
-import { Top10LocationRegional, regionalLocations } from "../renderer/components/form_components/Top10LocationRegionalInput";
+import { Top10LocationCountry, COUNTRY_LOCATIONS, COUNTRY_LOCATION_NAMES_BY_FLAG_ID, COUNTRY_FLAG_IDS } from "../renderer/components/form_components/Top10LocationCountryInput";
+import { Top10LocationRegional, REGIONAL_LOCATIONS, TOP_10_LOCATION_REGIONAL_TO_FULL_NAME } from "../renderer/components/form_components/Top10LocationRegionalInput";
 
 import { BackgroundMusicSource } from "../renderer/components/form_components/BackgroundMusicSourceInput";
 
@@ -248,7 +248,12 @@ type AutoTTRecConfigFormChoiceArgs = Pick<AutoTTRecConfigFormFields, {
   [K in AutoTTRecConfigFormFieldName]-?: IsChoiceType<AutoTTRecConfigFormFields[K]> extends true ? K : never
 }[AutoTTRecConfigFormFieldName]>;
 type AutoTTRecConfigFormChoiceArgNames = keyof AutoTTRecConfigFormChoiceArgs;
-type AutoTTRecConfigFormSharedChoiceArgNames = AutoTTRecConfigFormChoiceArgNames & AutoTTRecArgName;
+type AutoTTRecConfigFormSharedChoiceArgName = AutoTTRecConfigFormChoiceArgNames & AutoTTRecArgName;
+
+// type AutoTTRecStringOrChoiceArgName = Pick<AutoTTRecArgs, {
+//   [K in AutoTTRecArgName]-?:
+//     (AutoTTRecArgs[K] extends string | null | undefined) extends true ? K : never
+// }[AutoTTRecArgName]>;
 
 const autoTTRecConfigFormFieldTypesClassObj = new AutoTTRecConfigFormFieldTypesNoFILLMEClass();
 
@@ -258,7 +263,7 @@ export const DEFAULT_FORM_VALUES: AutoTTRecConfigFormFieldTypesNoFILLME = autoTT
 
 export const AUTO_TT_REC_CONFIG_FORM_FIELD_NAMES = Object.keys(autoTTRecConfigFormFieldTypesClassObj) as AutoTTRecConfigFormFieldNamesArray;
 
-const AUTO_TT_REC_TOP_10_LOCATIONS = makeReadonlyArraySet(["ww", "worldwide", ...countryLocations, ...regionalLocations] as const);
+const AUTO_TT_REC_TOP_10_LOCATIONS = makeReadonlyArraySet(["ww", "worldwide", ...COUNTRY_LOCATIONS.arr, ...REGIONAL_LOCATIONS] as const);
 type Top10LocationFull = ValidValues<typeof AUTO_TT_REC_TOP_10_LOCATIONS>;
 
 function isInSet<T>(values: ReadonlySet<T>, x: any): x is T {
@@ -662,7 +667,7 @@ class AutoTTRecConfigImporter {
     }
   }
 
-  private validateSharedStringOrChoiceArg_errorIfNot_handleUndefinedNull<K extends AutoTTRecConfigFormSharedStringArgName | AutoTTRecConfigFormSharedChoiceArgNames>(key: K) {
+  private validateSharedStringOrChoiceArg_errorIfNot_handleUndefinedNull<K extends AutoTTRecConfigFormSharedStringArgName | AutoTTRecConfigFormSharedChoiceArgName>(key: K) {
     let value = this.validateString_errorIfNot_handleUndefined(key);
     if (value === null) {
       this.configArgWasNullOrDisallowedFILLMESet.add(key);
@@ -746,7 +751,7 @@ class AutoTTRecConfigImporter {
     }
   }
 
-  private importSharedChoiceArg<K extends AutoTTRecConfigFormSharedChoiceArgNames, V extends ReadonlyArraySet<AutoTTRecConfigFormChoiceArgs[K]>>(key: K, validValues: V) {
+  private importSharedChoiceArg<K extends AutoTTRecConfigFormSharedChoiceArgName, V extends ReadonlyArraySet<AutoTTRecConfigFormChoiceArgs[K]>>(key: K, validValues: V) {
     let configValue = this.readArgSanityCheck(key);
     if (configValue !== undefined) {
       if (!this.isArgValueNull_addDefaultIfNull(key, configValue)) {
@@ -1398,6 +1403,119 @@ class AutoTTRecConfigImporter {
     }
 
     this.formData["szs-source"] = szsSource;
+  }
+
+  public importTop10Location_setTop10GeckoCodeLocationRegion(): [string | null, boolean] {
+    let top10Location = this.validateString_errorIfNot_handleUndefined("top-10-location");
+    let top10GeckoCodeLocationRegion: Top10GeckoCodeLocationRegion;
+    let isDefinitivelyWorldwide: boolean;
+
+    if (top10Location === "") {
+      top10GeckoCodeLocationRegion = "<FILLME>";
+      isDefinitivelyWorldwide = false;
+    } else if (top10Location === null) {
+      top10GeckoCodeLocationRegion = DEFAULT_FORM_VALUES["top-10-gecko-code-location-region"];
+      isDefinitivelyWorldwide = false;
+    } else {
+      let top10LocationLower = top10Location.toLowerCase();
+      if (top10LocationLower === "ww" || top10LocationLower === "worldwide") {
+        top10GeckoCodeLocationRegion = "worldwide";
+        isDefinitivelyWorldwide = true;
+      } else {
+        top10GeckoCodeLocationRegion = "regional";
+        isDefinitivelyWorldwide = false;
+      }
+    }
+
+    this.formData["top-10-gecko-code-location-region"] = top10GeckoCodeLocationRegion;
+    return [top10Location, isDefinitivelyWorldwide];
+  }
+
+  // special code for handling all top 10 non-gecko code
+
+  // "top-10-location-regional-location" = default
+  // "top-10-location-country-location" = default
+  // "top-10-location-region" = <FILLME>
+
+  // if "top-10-location" is <FILLME>
+  //   "top-10-location-regional-location" is <FILLME>
+  //   "top-10-location-country-location" is <FILLME>
+  //   "top-10-location-region" is <FILLME>
+  // else if "top-10-location" is null
+  //   default
+  // else if "top-10-location" in {ww, worldwide}
+  //   "worldwide"
+  // else
+  //   "top-10-location-regional-location":
+  //     if "top-10-location" is regional
+  //       <FILLME>
+  //       "top-10-location-region" is regional
+  //     else if "top-10-location" in regionalLocations
+  //       "top-10-location"
+  //       "top-10-location-region" is regional
+  //     else
+  //       "top-10-location-country-location":
+  //         if "top-10-location" is country
+  //           <FILLME>
+  //           "top-10-location-region" is country
+  //         else if "top-10-location" in countryLocations
+  //           "top-10-location"
+  //           "top-10-location-region" is country
+
+  //     if "top-10-location-region" is <FILLME>, <FILLME>, throw error
+
+  public importTop10Location() {
+    let [top10Location, isDefinitivelyWorldwide] = this.importTop10Location_setTop10GeckoCodeLocationRegion();
+    let top10LocationRegionalLocation: Top10LocationRegional = DEFAULT_FORM_VALUES["top-10-location-regional-location"];
+    let top10LocationCountryLocation: Top10LocationCountry = DEFAULT_FORM_VALUES["top-10-location-country-location"];
+    let top10LocationRegion: Top10LocationRegion = "<FILLME>";
+
+    if (top10Location === "") {
+      top10LocationRegionalLocation = "<FILLME>";
+      top10LocationCountryLocation = "<FILLME>";
+      top10LocationRegion = "<FILLME>";
+    } else if (top10Location === null) {
+      top10LocationRegion = DEFAULT_FORM_VALUES["top-10-location-region"];
+    } else if (isDefinitivelyWorldwide) {
+      top10LocationRegion = "worldwide";
+    } else {
+      if (top10Location === "regional") {
+        top10LocationRegionalLocation = "<FILLME>";
+        top10LocationRegion = "regional";
+      } else if (isInSet(REGIONAL_LOCATIONS.set, top10Location)) {
+        top10LocationRegionalLocation = top10Location;
+        top10LocationRegion = "regional";
+      } else {
+        let potentialTop10LocationRegionalLocation: Top10LocationRegional | undefined;
+        potentialTop10LocationRegionalLocation = TOP_10_LOCATION_REGIONAL_TO_FULL_NAME[top10LocationRegion.toLowerCase()];
+        if (potentialTop10LocationRegionalLocation !== undefined) {
+          top10LocationRegionalLocation = potentialTop10LocationRegionalLocation;
+          top10LocationRegion = "regional";
+        } else {
+          if (top10Location === "country") {
+            top10LocationCountryLocation = "<FILLME>";
+            top10LocationRegion = "country";
+          } else if (isInSet(COUNTRY_LOCATIONS.set, top10Location)) {
+            top10LocationCountryLocation = top10Location;
+            top10LocationRegion = "country";
+          } else if (isInSet(COUNTRY_FLAG_IDS.set, top10Location)) {
+            // top10Location should never be <FILLME> or "" at this point
+            let potentialTop10CountryLocationDerivedFromFlagId = COUNTRY_LOCATION_NAMES_BY_FLAG_ID[top10Location];
+            if (potentialTop10CountryLocationDerivedFromFlagId !== undefined) {
+              top10LocationCountryLocation = potentialTop10CountryLocationDerivedFromFlagId;
+              top10LocationRegion = "country";
+            }
+          }
+        }
+      }
+      if (top10LocationRegion === "<FILLME>") {
+        this.errorsAndWarnings.addError("top-10-location", `top-10-location was not "ww", "worldwide", "country", "regional", or a country or region allowed by auto-tt-recorder (got ${top10Location})`);
+      }
+    }
+
+    this.formData["top-10-location-regional-location"] = top10LocationRegionalLocation;
+    this.formData["top-10-location-country-location"] = top10LocationCountryLocation;
+    this.formData["top-10-location-region"] = top10LocationRegion;
   }
 
   public import() {
