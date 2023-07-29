@@ -3,7 +3,7 @@ import { FileFilter } from "electron";
 
 import { useFormContextAutoTT, useWatchAutoTT } from "../../use-form-context-auto-tt";
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
-import { isFileWritable } from "../../util"
+import { isFileWritable } from "../../util-renderer"
 
 import useRenderCounter from "../../RenderCounter";
 

@@ -7,7 +7,7 @@ import { UseFormRegister, UseFormSetValue } from "react-hook-form";
 
 import { AutoTTRecConfigFormFields } from "../../../main/AutoTTRecFormFieldsAndArgs";
 
-import { isFileReadable } from "../../util";
+import { isFileReadable } from "../../util-renderer";
 
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
 

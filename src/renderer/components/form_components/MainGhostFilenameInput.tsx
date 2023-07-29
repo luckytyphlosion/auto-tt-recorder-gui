@@ -5,7 +5,7 @@ import { FileFilter } from "electron";
 import { Set200ccInput } from "./Set200ccInput";
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
 
-import { isFileReadable } from "../../util"
+import { isFileReadable } from "../../util-renderer"
 
 export function MainGhostFilenameInput() {
   const {register, setValue, getValues} = useFormContextAutoTT();

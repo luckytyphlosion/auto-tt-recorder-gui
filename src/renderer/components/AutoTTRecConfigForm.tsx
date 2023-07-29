@@ -53,7 +53,7 @@ import { FormComplexity } from "./layout_components/FormComplexityLayout";
 import { ClearAllFields } from "./ClearAllFields";
 import { ImportTemplate } from "./ImportTemplate";
 
-import { shallowCopy } from "../util";
+import { shallowCopy } from "../util-renderer";
 
 import { AutoTTRecConfigFormFields, AutoTTRecConfigFormFieldName, AutoTTRecConfigFormFieldsNoFILLME, AutoTTRecArgs, Timeline, DEFAULT_FORM_VALUES, convertFormDataToAutoTTRecArgs } from "../../main/AutoTTRecFormFieldsAndArgs";
 
