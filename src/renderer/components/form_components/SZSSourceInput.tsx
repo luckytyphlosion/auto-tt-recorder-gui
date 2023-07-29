@@ -3,8 +3,10 @@ import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import useRenderCounter from "../../RenderCounter";
 
 import { SZSFilenameInput } from "./SZSFilenameInput";
+import { makeReadonlyArraySet, ValidValues } from "../../array-set";
 
-export type SZSSource = "automatic" | "fromfile";
+export const SZS_SOURCES = makeReadonlyArraySet(["automatic", "fromfile"] as const);
+export type SZSSource = ValidValues<typeof SZS_SOURCES>;
 
 export function SZSSourceInput() {
   const {register, getValues} = useFormContextAutoTT();

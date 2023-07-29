@@ -573,19 +573,29 @@ class AutoTTRecConfigImporter {
   private formData: AutoTTRecConfigFormFieldsPartial;
   private autoTTRecConfig: AutoTTRecConfig;
   private errorsAndWarnings: AutoTTRecConfigErrorsAndWarnings;
-  private configArgWasNullSet: Set<AutoTTRecConfigFormStringArgName | AutoTTRecConfigFormChoiceArgNames | AutoTTRecConfigFormNumberArgName | AutoTTRecConfigFormBooleanArgName>;
+  private configArgWasNullOrDisallowedFILLMESet: Set<AutoTTRecConfigFormStringArgName | AutoTTRecConfigFormChoiceArgNames | AutoTTRecConfigFormNumberArgName | AutoTTRecConfigFormBooleanArgName>;
   private autoTTRecConfigFilename: string;
 
   constructor(autoTTRecConfig: AutoTTRecConfig, errorsAndWarnings: AutoTTRecConfigErrorsAndWarnings, autoTTRecConfigFilename: string) {
     this.formData = {};
     this.autoTTRecConfig = autoTTRecConfig;
     this.errorsAndWarnings = errorsAndWarnings;
-    this.configArgWasNullSet = new Set();
+    this.configArgWasNullOrDisallowedFILLMESet = new Set();
     this.autoTTRecConfigFilename = autoTTRecConfigFilename;
   }
 
   public addDefault<K extends AutoTTRecConfigFormFieldName>(key: K) {
     this.formData[key] = DEFAULT_FORM_VALUES[key];
+  }
+
+  public isArgValueNull_addDefaultIfNull<K extends AutoTTRecConfigFormFieldName>(key: K, value: string | number | boolean | null): value is null {
+    if (value === null) {
+      this.addDefault(key);
+      this.configArgWasNullOrDisallowedFILLMESet.add(key);
+      return true;
+    } else {
+      return false;
+    }
   }
 
   public readArgSanityCheck<K extends AutoTTRecArgName>(key: K): string | number | boolean | null | undefined {
@@ -655,7 +665,7 @@ class AutoTTRecConfigImporter {
   private validateSharedStringOrChoiceArg_errorIfNot_handleUndefinedNull<K extends AutoTTRecConfigFormSharedStringArgName | AutoTTRecConfigFormSharedChoiceArgNames>(key: K) {
     let value = this.validateString_errorIfNot_handleUndefined(key);
     if (value === null) {
-      this.configArgWasNullSet.add(key);
+      this.configArgWasNullOrDisallowedFILLMESet.add(key);
       return DEFAULT_FORM_VALUES[key];
     } else {
       return value;
@@ -664,7 +674,7 @@ class AutoTTRecConfigImporter {
   private validateSharedNumArg_errorIfNot_handleUndefinedString<K extends AutoTTRecConfigFormSharedNumberArgName>(key: K) {
     let value = this.validateNumber_errorIfNot_handleUndefinedString(key);
     if (value === null) {
-      this.configArgWasNullSet.add(key);
+      this.configArgWasNullOrDisallowedFILLMESet.add(key);
       return DEFAULT_FORM_VALUES[key];
     } else {
       return value;
@@ -672,7 +682,7 @@ class AutoTTRecConfigImporter {
   }
 
   private getFormDataStringOrChoiceArg_verifyNotUndefined_nullIfWasNull<K extends AutoTTRecConfigFormStringArgName | AutoTTRecConfigFormChoiceArgNames>(key: K): AutoTTRecConfigFormFields[K] | null {
-    if (this.configArgWasNullSet.has(key)) {
+    if (this.configArgWasNullOrDisallowedFILLMESet.has(key)) {
       return null;
     } else {
       return this.getFormDataStringOrChoice_verifyNotUndefined(key);
@@ -680,7 +690,7 @@ class AutoTTRecConfigImporter {
   }
 
   private getFormDataNumberArg_verifyNotUndefinedOrFILLME_nullIfWasNull<K extends AutoTTRecConfigFormNumberArgName>(key: K) {
-    if (this.configArgWasNullSet.has(key)) {
+    if (this.configArgWasNullOrDisallowedFILLMESet.has(key)) {
       return null;
     } else {
       return this.getFormDataNumber_verifyNotUndefinedOrFILLME(key);
@@ -723,16 +733,15 @@ class AutoTTRecConfigImporter {
   private importSharedBooleanArg<K extends AutoTTRecConfigFormSharedBooleanArgName>(key: K) {
     let configValue = this.readArgSanityCheck(key);
     if (configValue !== undefined) {
-      if (configValue === null) {
-        this.configArgWasNullSet.add(key);
-        this.addDefault(key);
-      } else if (configValue === "<FILLME>") {
-        this.formData[key] = "<FILLME>";
-      } else if (typeof configValue === "boolean") {
-        this.formData[key] = configValue;
-      } else {
-        this.errorsAndWarnings.addErrorWrongType(key, "boolean", configValue);
-        this.formData[key] = "<FILLME>";
+      if (!this.isArgValueNull_addDefaultIfNull(key, configValue)) {
+        if (configValue === "<FILLME>") {
+          this.formData[key] = "<FILLME>";
+        } else if (typeof configValue === "boolean") {
+          this.formData[key] = configValue;
+        } else {
+          this.errorsAndWarnings.addErrorWrongType(key, "boolean", configValue);
+          this.formData[key] = "<FILLME>";
+        }
       }
     }
   }
@@ -740,18 +749,30 @@ class AutoTTRecConfigImporter {
   private importSharedChoiceArg<K extends AutoTTRecConfigFormSharedChoiceArgNames, V extends ReadonlyArraySet<AutoTTRecConfigFormChoiceArgs[K]>>(key: K, validValues: V) {
     let configValue = this.readArgSanityCheck(key);
     if (configValue !== undefined) {
-      if (configValue === null) {
-        this.addDefault(key);
-      } else if (configValue === "<FILLME>") {
-        this.formData[key] = "<FILLME>";
-      } else if (typeof configValue === "string") {
-        if (isInSet(validValues.set, configValue)) {
-          this.formData[key] = configValue;
-        } else {
-          this.errorsAndWarnings.addInvalidChoiceError(key, validValues, configValue);
+      if (!this.isArgValueNull_addDefaultIfNull(key, configValue)) {
+        if (configValue === "<FILLME>") {
           this.formData[key] = "<FILLME>";
+        } else if (typeof configValue === "string") {
+          if (isInSet(validValues.set, configValue)) {
+            this.formData[key] = configValue;
+          } else {
+            this.errorsAndWarnings.addInvalidChoiceError(key, validValues, configValue);
+            this.formData[key] = "<FILLME>";
+          }
         }
       }
+    }
+  }
+
+  private setStringOrChoiceArg_handleNullOrDisallowedFILLME<K extends AutoTTRecConfigFormStringArgName | AutoTTRecConfigFormChoiceArgNames, V extends AutoTTRecConfigFormFields[K]>(key: K, value: V | null) {
+    let valueNullable: V | null;
+    if (value === "<FILLME>") {
+      valueNullable = null;
+    } else {
+      valueNullable = value;
+    }
+    if (!this.isArgValueNull_addDefaultIfNull(key, value)) {
+      this.formData[key] = value;
     }
   }
 
@@ -979,8 +1000,8 @@ class AutoTTRecConfigImporter {
 
   private setTimelineCategoryAndNoTop10() {
     let timeline = this.validateString_errorIfNot_handleUndefined("timeline");
-    let timelineCategory: TimelineCategory;
-    let noTop10Category: NoTop10Category;
+    let timelineCategory: TimelineCategory | null;
+    let noTop10Category: NoTop10Category | null;
 
     if (timeline === "top10") {
       let top10Chadsoft = this.getFormDataStringOrChoiceArg_verifyNotUndefined_nullIfWasNull("top-10-chadsoft");
@@ -994,7 +1015,7 @@ class AutoTTRecConfigImporter {
       } else if (top10GeckoCodeFilename !== null) {
         timelineCategory = "top10gecko";
       } else {
-        timelineCategory = "top10chadsoft";
+        timelineCategory = "<FILLME>";
         this.errorsAndWarnings.addError("timeline", "timeline was specified as top10 but neither top-10-chadsoft nor top-10-gecko-code-filename were specified! Defaulting to top10chadsoft.");
       }
       noTop10Category = "mkchannel";
@@ -1004,19 +1025,20 @@ class AutoTTRecConfigImporter {
         if (isInSet(NO_TOP_10_CATEGORIES.set, timeline)) {
           noTop10Category = timeline;
         } else {
-          noTop10Category = "mkchannel";
+          noTop10Category = "<FILLME>";          
           if (timeline === "") {
             this.errorsAndWarnings.addError("timeline", "Timeline cannot be empty or <FILLME>! Defaulting to mkchannel.");
+          } else {
+            this.errorsAndWarnings.addInvalidChoiceError("timeline", TIMELINES, timeline, " Defaulting to mkchannel.");
           }
-          this.errorsAndWarnings.addInvalidChoiceError("timeline", TIMELINES, timeline, " Defaulting to mkchannel.");
         }
       } else {
         this.errorsAndWarnings.addWarning("timeline", "timeline was unspecified/null, defaulting to mkchannel.");
-        noTop10Category = "mkchannel";
+        noTop10Category = null;
       }
     }
-    this.formData["timeline-category"] = timelineCategory;
-    this.formData["no-top-10-category"] = noTop10Category;
+    this.setStringOrChoiceArg_handleNullOrDisallowedFILLME("timeline-category", timelineCategory);
+    this.setStringOrChoiceArg_handleNullOrDisallowedFILLME("no-top-10-category", noTop10Category);
   }
 
   private setTop10HighlightEnable() {
@@ -1270,6 +1292,49 @@ class AutoTTRecConfigImporter {
         outputWidthPreset = "custom";
       }
     }
+  }
+
+// if "timeline-category" is "notop10"
+//   if "main-ghost-source" is "rkg", "fromfile"
+//   else <FILLME>
+// else if "timeline-category" is "top10chadsoft"
+//   if "top-10-highlight" is -1, "fromfile"
+//   else <FILLME>
+// else if "timeline-category" is "top10gecko"
+//   if "main-ghost-source" is "rkg", "fromfile"
+//   else <FILLME>
+// else <FILLME>, throw error
+
+  private setSzsSource() {
+    let szsFilename = this.getFormDataStringOrChoiceArg_verifyNotUndefined_nullIfWasNull("szs-filename");
+    let szsSource: SZSSource;
+    if (szsFilename === null) {
+      szsSource = "automatic";
+    } else if (szsFilename === "") {
+      let timelineCategory = this.getFormDataStringOrChoiceArg_verifyNotUndefined_nullIfWasNull("timeline-category");
+      let mainGhostSource = this.getFormDataStringOrChoiceArg_verifyNotUndefined_nullIfWasNull("main-ghost-source");
+      if (timelineCategory === "notop10" || timelineCategory === "top10gecko") {
+        if (mainGhostSource === "rkg") {
+          szsSource = "fromfile";
+        } else {
+          szsSource = "<FILLME>";
+        }
+      } else if (timelineCategory === "top10chadsoft") {
+        let top10Highlight = this.getFormDataNumberArg_verifyNotUndefinedOrFILLME_nullIfWasNull("top-10-highlight");
+        if (top10Highlight === -1) {
+          szsSource = "fromfile";
+        } else {
+          szsSource = "<FILLME>";
+        }
+      } else {
+        this.errorsAndWarnings.addError("szs-filename", "Because szs-filename is <FILLME> and the program couldn't determine the timeline-category (No Top 10 vs Top 10 from Chadsoft vs Top 10 from Gecko Code), it is impossible to determine whether szs-filename: <FILLME> means to download automatically/vanilla track or to supply from SZS!");
+        szsSource = "<FILLME>";
+      }
+    } else {
+      szsSource = "fromfile";
+    }
+
+    this.formData["szs-source"] = szsSource;
   }
 
   public import() {
