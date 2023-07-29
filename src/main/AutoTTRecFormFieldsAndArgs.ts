@@ -1536,6 +1536,24 @@ class AutoTTRecConfigImporter {
     this.formData["top-10-title-type"] = top10TitleType;
   }
 
+  private importTrackNameAndSetTrackNameType() {
+    let trackName = this.validateString_errorIfNot_handleUndefined("track-name");
+    let trackNameType: TrackNameType;
+
+    if (trackName === null) {
+      trackName = DEFAULT_FORM_VALUES["track-name"];
+      trackNameType = "rkg-slot";
+    } else if (trackName === "auto") {
+      trackName = DEFAULT_FORM_VALUES["track-name"];
+      trackNameType = "auto";
+    } else {
+      trackNameType = "manual";
+    }
+
+    this.formData["track-name"] = trackName;
+    this.formData["track-name-type"] = trackNameType;
+  }
+
   public import() {
     this.importStraightCopyArgs();
 
