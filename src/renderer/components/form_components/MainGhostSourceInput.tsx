@@ -7,7 +7,7 @@ import { MainGhostFilenameInput } from "./MainGhostFilenameInput";
 
 import { AutoTTRecConfigFormFields } from "../../../main/AutoTTRecFormFieldsAndArgs";
 
-import { makeReadonlyArraySet, ValidValues } from "../../array-set";
+import { makeReadonlyArraySet, ValidValues } from "../../../array-set";
 
 export const MAIN_GHOST_SOURCES = makeReadonlyArraySet(["chadsoft", "rkg"] as const);
 export type MainGhostSource = ValidValues<typeof MAIN_GHOST_SOURCES>;

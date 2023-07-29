@@ -8,7 +8,7 @@ import { VideoCodec } from "./VideoCodecInput";
 
 import useRenderCounter from "../../RenderCounter";
 
-import { makeReadonlyArraySet, ValidValues } from "../../array-set";
+import { makeReadonlyArraySet, ValidValues } from "../../../array-set";
 
 export const OUTPUT_VIDEO_FILE_FORMATS = makeReadonlyArraySet(["mp4", "webm", "mkv"] as const);
 export type OutputVideoFileFormat = ValidValues<typeof OUTPUT_VIDEO_FILE_FORMATS>;

@@ -1,6 +1,6 @@
 import React from "react";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
-import { makeReadonlyArraySet, ValidValues } from "../../array-set";
+import { makeReadonlyArraySet, ValidValues } from "../../../array-set";
 
 export const INPUT_DISPLAYS = makeReadonlyArraySet(["auto", "gcn", "nunchuck", "none"] as const);
 export type InputDisplay = ValidValues<typeof INPUT_DISPLAYS>;

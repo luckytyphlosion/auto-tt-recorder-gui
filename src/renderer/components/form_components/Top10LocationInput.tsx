@@ -4,7 +4,7 @@ import { MusicFilenameInput } from "./MusicFilenameInput";
 import { Top10LocationRegionalInput } from "./Top10LocationRegionalInput";
 import { Top10LocationCountryInput } from "./Top10LocationCountryInput";
 
-import { makeReadonlyArraySet, ValidValues } from "../../array-set";
+import { makeReadonlyArraySet, ValidValues } from "../../../array-set";
 
 export const TOP_10_LOCATION_REGIONS = makeReadonlyArraySet(["worldwide", "regional", "country"] as const);
 export type Top10LocationRegion = ValidValues<typeof TOP_10_LOCATION_REGIONS>;

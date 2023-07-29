@@ -9,7 +9,7 @@ import { NoEncodeLayout } from "../main_layouts/NoEncodeLayout";
 import { OutputVideoFilenameInput } from "../../form_components/OutputVideoFilenameInput";
 import { FormComplexity } from "../FormComplexityLayout";
 
-import { makeReadonlyArraySet, ValidValues } from "../../../array-set";
+import { makeReadonlyArraySet, ValidValues } from "../../../../array-set";
 
 export const NO_TOP_10_CATEGORIES = makeReadonlyArraySet(["mkchannel", "ghostselect", "ghostonly", "noencode"] as const);
 export type NoTop10Category = ValidValues<typeof NO_TOP_10_CATEGORIES>;

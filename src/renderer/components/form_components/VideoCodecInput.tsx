@@ -8,7 +8,7 @@ import useRenderCounter from "../../RenderCounter";
 import { EncodeType } from "../layout_components/choice_layouts/EncodeSettingsLayout";
 import { AutoTTRecConfigFormFields } from "../../../main/AutoTTRecFormFieldsAndArgs";
 
-import { makeReadonlyArraySet, ValidValues } from "../../array-set";
+import { makeReadonlyArraySet, ValidValues } from "../../../array-set";
 
 export const VIDEO_CODECS = makeReadonlyArraySet(["libx264", "libx265", "libvpx-vp9"] as const);
 export type VideoCodec = ValidValues<typeof VIDEO_CODECS>;

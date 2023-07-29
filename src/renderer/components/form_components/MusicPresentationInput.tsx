@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import useRenderCounter from "../../RenderCounter";
 
-import { makeReadonlyArraySet, ValidValues } from "../../array-set";
+import { makeReadonlyArraySet, ValidValues } from "../../../array-set";
 
 export const MUSIC_PRESENTATIONS = makeReadonlyArraySet(["start-music-at-beginning", "no-music-mkchannel", "normal"]);
 export type MusicPresentation = ValidValues<typeof MUSIC_PRESENTATIONS>;

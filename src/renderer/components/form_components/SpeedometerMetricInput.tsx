@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import useRenderCounter from "../../RenderCounter";
-import { makeReadonlyArraySet, ValidValues } from "../../array-set";
+import { makeReadonlyArraySet, ValidValues } from "../../../array-set";
 
 export const SPEEDOMETER_METRICS = makeReadonlyArraySet(["engine", "xz", "xyz"] as const);
 export type SpeedometerMetric = ValidValues<typeof SPEEDOMETER_METRICS>;

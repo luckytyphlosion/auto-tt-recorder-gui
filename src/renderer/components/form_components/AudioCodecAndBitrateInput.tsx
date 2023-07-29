@@ -6,7 +6,7 @@ import { Top10LocationRegionalInput } from "./Top10LocationRegionalInput";
 import { AudioBitrateInput } from "./AudioBitrateInput";
 import useRenderCounter from "../../RenderCounter";
 
-import { makeReadonlyArraySet, ValidValues } from "../../array-set";
+import { makeReadonlyArraySet, ValidValues } from "../../../array-set";
 
 import { EncodeType } from "../layout_components/choice_layouts/EncodeSettingsLayout";
 

@@ -43,7 +43,7 @@ import { Set200cc, SET_200CC_VALUES } from "../renderer/components/form_componen
 
 import { AutoTTRecConfig } from "../shared-types";
 
-import { ValidValues, ReadonlyArraySet, makeReadonlyArraySet } from "../renderer/array-set";
+import { ValidValues, ReadonlyArraySet, makeReadonlyArraySet } from "../array-set";
 
 import { readFileEnforceUTF8 } from "./gui2";
 
