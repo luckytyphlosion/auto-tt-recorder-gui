@@ -576,6 +576,7 @@ class AutoTTRecConfigPreprocessor {
 
 class AutoTTRecConfigImporter {
   private formData: AutoTTRecConfigFormFieldsPartial;
+  private formDataNoPartial: AutoTTRecConfigFormFields | null;
   private autoTTRecConfig: AutoTTRecConfig;
   private errorsAndWarnings: AutoTTRecConfigErrorsAndWarnings;
   private configArgWasNullOrDisallowedFILLMESet: Set<AutoTTRecConfigFormStringArgName | AutoTTRecConfigFormChoiceArgNames | AutoTTRecConfigFormNumberArgName | AutoTTRecConfigFormBooleanArgName>;
@@ -587,6 +588,7 @@ class AutoTTRecConfigImporter {
     this.errorsAndWarnings = errorsAndWarnings;
     this.configArgWasNullOrDisallowedFILLMESet = new Set();
     this.autoTTRecConfigFilename = autoTTRecConfigFilename;
+    this.formDataNoPartial = null;
   }
 
   public addDefault<K extends AutoTTRecConfigFormFieldName>(key: K) {
@@ -1028,6 +1030,7 @@ class AutoTTRecConfigImporter {
     this.setAudioBitrateDisplayedAndUnit(newAudioBitrate, hasKbps);
   }
 
+  // DO NOT CALL
   private setAudioBitrateDisplayedAndUnit(audioBitrate: number, hasKbps: boolean) {
     if (!Number.isNaN(audioBitrate) && hasKbps) {
       audioBitrate = Math.floor(Math.floor(audioBitrate) / 1000)
@@ -1556,134 +1559,26 @@ class AutoTTRecConfigImporter {
 
   public import() {
     this.importStraightCopyArgs();
-
-    
-    
-    // add in main ghost
-    this.tryAddSameOption("chadsoft-ghost-page");
-    this.tryAddSameOption("main-ghost-filename");
-    this.tryAddGhostAuto("main-ghost-auto", "main-ghost-filename", "chadsoft-ghost-page");
-
-    // add in comparison ghost
-    this.tryAddSameOption("chadsoft-comparison-ghost-page");
-    this.tryAddSameOption("comparison-ghost-filename");
-    this.tryAddGhostAuto("comparison-ghost-auto", "comparison-ghost-filename", "chadsoft-comparison-ghost-page");
-
-    this.tryAddSameOption("iso-filename");
-    this.tryAddSameOption("szs-filename");
-    this.tryAddSameOption("output-video-filename");
-
-    this.tryAddSameOption("on-200cc");
-    let no200cc = this.autoTTRecConfig["no-200cc"];
-
-    if (no200cc !== null && no200cc !== undefined) {
-      if (typeof no200cc === "boolean") {
-        this.add("on-200cc" as AnyFIXME, !no200cc);
-      } else {
-        this.addErrorExtended("no-200cc", `no-200cc should be a boolean, but got ${typeof no200cc} instead.`);
-      }
-    } else if (no200cc === undefined) {
-      this.add("on-200cc" as AnyFIXME, undefined);
-    }
-
-    this.tryAddSameOptionComplex("timeline", TIMELINES);
-    this.tryAddSameOption("mk-channel-ghost-description");
-    this.tryAddSameOption("track-name");
-    this.tryAddSameOption("top-10-chadsoft");
-    this.tryAddSameOptionComplex("top-10-location", AUTO_TT_REC_TOP_10_LOCATIONS);
-    this.tryAddSameOption("top-10-highlight");
-    if (this.autoTTRecConfig["top-10-censors"] !== null) {
-      this.addWarningExtended("top-10-censors", "top-10-censors currently not supported!");
-    }
-
-    this.tryAddSameOption("top-10-gecko-code-filename");
-    this.tryAddSameOption("no-music");
-    this.tryAddSameOption("music-filename");
-    this.tryAddSameOption("game-volume");
-    this.tryAddSameOption("music-volume");
-    this.tryAddSameOption("start-music-at-beginning");
-    this.tryAddSameOption("no-music-mkchannel");
-    this.tryAddSameOptionComplex("input-display", INPUT_DISPLAYS);
-    this.tryAddSameOptionComplex("speedometer", SPEEDOMETER_STYLES2);
-    this.tryAddSameOptionComplex("speedometer-metric", SPEEDOMETER_METRICS)
-    this.tryAddSameOptionComplex("speedometer-decimal-places", SPEEDOMETER_DECIMAL_PLACES_NUMERIC);
-    if (this.autoTTRecConfig["ending-message"] !== null) {
-      this.addWarningExtended("ending-message", "ending-message currently not supported!");
-    }
-    this.tryAddSameOption("fade-in-at-start");
-    this.tryAddSameOption("ending-delay");
-    this.tryAddSameOptionComplex("dolphin-resolution", DOLPHIN_RESOLUTIONS);
-    this.tryAddSameOption("no-background-blur");
-    this.tryAddSameOption("no-bloom");
-    this.tryAddSameOption("hq-textures");
-    this.tryAddSameOption("extra-hq-textures-folder");
-    this.tryAddSameOption("use-ffv1");
-    this.tryAddSameOptionComplex("encode-type", ENCODE_TYPES);
-    this.tryAddSameOption("crf-value");
-    this.tryAddSameOptionComplex("h26x-preset", H26X_PRESETS);
-    this.tryAddSameOptionComplex("video-codec", VIDEO_CODECS);
-    this.tryAddSameOptionComplex("audio-codec", AUDIO_CODECS);
-    this.tryAddSameOption("encode-size");
-
-    let audioBitrate = this.autoTTRecConfig["audio-bitrate"];
-    if (audioBitrate !== null && audioBitrate !== undefined) {
-      if (typeof audioBitrate === "string" || typeof audioBitrate === "number") {
-        this.add("audio-bitrate", audioBitrate as AnyFIXME);
-        //if (audioBitrate.charAt(audioBitrate.length - 1) == "k") {
-        //  audioBitrateAsNum = Number(audioBitrate.substring(0, audioBitrate.length - 1));
-        //  if (!Number.isNaN(audioBitrateAsNum)) {
-        //    this.add("audio-bitrate", )
-        //   } else {
-        //    this.addError("audio-bitrate", `audio-bitrate has invalid kbps ("k") format.`);
-        //  }
-        //} else {
-        //  this.addError("audio-bitrate", `audio-bitrate is a string but not in kbps ("k") format.`);
-        //}
-      } else {
-        this.addError("audio-bitrate", `audio-bitrate should be a string or number, but got a ${typeof audioBitrate} instead.`);
-      }
-    } else {
-      this.add("audio-bitrate", audioBitrate as AnyFIXME);
-    }
-
-    this.tryAddSameOption("pixel-format");
-    this.tryAddSameOption("output-width");
-
-    let aspectRatio16By9 = this.autoTTRecConfig["aspect-ratio-16-by-9"];
-    if (aspectRatio16By9 !== null && aspectRatio16By9 !== undefined) {
-      if (typeof aspectRatio16By9 === "boolean" || typeof aspectRatio16By9 === "string") {
-        let aspectRatio16By9AsStr: string;
-        if (typeof aspectRatio16By9 === "boolean") {
-          aspectRatio16By9AsStr = aspectRatio16By9.toString();
-        } else {
-          aspectRatio16By9AsStr = aspectRatio16By9;
-        }
-        aspectRatio16By9AsStr = aspectRatio16By9AsStr.toLowerCase();
-        if (isInSet(ASPECT_RATIO_16_BY_9_VALUES.set, aspectRatio16By9AsStr)) {
-          this.add("aspect-ratio-16-by-9", aspectRatio16By9AsStr);
-        } else {
-          this.addError("aspect-ratio-16-by-9", "aspect-ratio-16-by-9 should be one of true, false, or auto");
-        }
-      } else {
-        this.addError("aspect-ratio-16-by-9", `aspect-ratio-16-by-9 should be a string or number, but got a ${typeof aspectRatio16By9} instead.`);
-      }
-    } else {
-      this.add("aspect-ratio-16-by-9", aspectRatio16By9 as AnyFIXME);
-    }
-
-    this.tryAddSameOption("youtube-settings");
-    this.tryAddSameOption("extra-gecko-codes-filename");
-
-    this.tryAddSameOption("keep-window");
-    this.tryAddSameOption("encode-only");
-    if (this.autoTTRecConfig["dolphin-volume"] !== null) {
-      this.addWarningExtended("dolphin-volume", "dolphin-volume currently not supported!");
-    }
-    this.tryAddSameOption("input-display-dont-create");
-  }
-
-  public createFormDataConverter() {
-    return new AutoTTRecConfigToFormData(this.autoTTRecArgs);
+    this.importAudioBitrateAll();
+    this.importBackgroundMusicSourceAndMusicFilename();
+    this.setTimelineCategoryAndNoTop10();
+    this.setTop10HighlightEnable();
+    this.importGhostSource(true);
+    this.importGhostSource(false);
+    this.setEncodeSizeDisplayedAndUnit();
+    this.importAllExtraGeckoCodeArgs();
+    this.importAllTop10GeckoCodeArgs();
+    this.resolveHQTexturesFolderAndSetHQTexturesFolderEnable();
+    this.importVolume("game-volume", "game-volume-numberinput", "game-volume-slider");
+    this.importVolume("music-volume", "music-volume-numberinput","music-volume-slider");
+    this.setMusicPresentation();
+    this.importOutputVideoFilename_setOutputVideoFileFormat_validateAllowedVideoCodec();
+    this.setOutputWidthPreset();
+    this.setSzsSource();
+    this.importTop10Location_setTop10GeckoCodeLocationRegion();
+    this.importTop10Location();
+    this.importTop10TitleAndSetTop10TitleType();
+    this.importTrackNameAndSetTrackNameType();
   }
 }
 
