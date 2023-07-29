@@ -18,5 +18,6 @@ contextBridge.exposeInMainWorld("api", {
   removeHandleSendStderr: (callable) => ipcRenderer.removeAllListeners("send-stderr"),
   terminateAutoTTRec: () => ipcRenderer.invoke("terminate-auto-tt-rec"),
   getGlobalConfig: () => ipcRenderer.invoke("get-global-config"),
-  importFormTemplate: (filename) => ipcRenderer.invoke("import-form-template", filename)
+  importFormTemplate: (filename) => ipcRenderer.invoke("import-form-template", filename),
+  convertAutoTTRecConfigToFormData: (autoTTRecConfig) => ipcRenderer.invoke("convert-auto-tt-rec-config-to-form-data", autoTTRecConfig)
 });

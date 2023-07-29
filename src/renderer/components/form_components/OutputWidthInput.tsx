@@ -19,7 +19,7 @@ export const recommendedOutputWidths: {[k in DolphinResolution]: OutputWidthPres
   "720p": "1280",
   "480p": "none",
   "<FILLME>": "<FILLME>"
-}
+} as const;
 
 export function OutputWidthInput(props: {dolphinResolution: DolphinResolution, dolphinResolutionToggle: boolean}) {
   const {register, setValue, getValues} = useFormContextAutoTT();

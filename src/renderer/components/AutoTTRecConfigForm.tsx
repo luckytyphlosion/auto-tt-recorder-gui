@@ -53,12 +53,32 @@ import { FormComplexity } from "./layout_components/FormComplexityLayout";
 import { ClearAllFields } from "./ClearAllFields";
 import { ImportTemplate } from "./ImportTemplate";
 
-import { AutoTTRecConfigFormFields, AutoTTRecArgs, Timeline, DEFAULT_FORM_VALUES, convertFormDataToAutoTTRecArgs } from "../../main/AutoTTRecFormFieldsAndArgs";
+import { shallowCopy } from "../util";
+
+import { AutoTTRecConfigFormFields, AutoTTRecConfigFormFieldName, AutoTTRecConfigFormFieldsNoFILLME, AutoTTRecArgs, Timeline, DEFAULT_FORM_VALUES, convertFormDataToAutoTTRecArgs } from "../../main/AutoTTRecFormFieldsAndArgs";
 
 import useRenderCounter from "../RenderCounter";
 
 const AutoTTRecConfigFormComponents_Memo = memo(AutoTTRecConfigFormComponents);
 const AutoTTRecSubmitAbortButtons_Memo = memo(AutoTTRecSubmitAbortButtons);
+
+type Entries<T> = {
+  [K in keyof T]: [K, T[K]];
+}[keyof T][];
+
+function createUnFILLMEFormData(formData: Readonly<AutoTTRecConfigFormFields>) {
+  let warningMessages: string[] = [];
+  let formDataUnFILLME: AutoTTRecConfigFormFields = shallowCopy(formData);
+
+  for (const [argName, argValue] of (Object.entries(formDataUnFILLME) as Entries<AutoTTRecConfigFormFields>)) {
+    if (argValue === "<FILLME>") {
+      warningMessages.push(`formData["${argName}"] was somehow <FILLME>! Defaulting to ${DEFAULT_FORM_VALUES[argName]} (this is an error within the program itself and not your fault, please contact the developer!)`);
+      let x = argName;
+      formDataUnFILLME[argName] = DEFAULT_FORM_VALUES[argName] as any;
+    }
+  }
+  return formDataUnFILLME as AutoTTRecConfigFormFieldsNoFILLME;
+}
 
 export function AutoTTRecConfigForm(
   props: {
@@ -92,7 +112,8 @@ export function AutoTTRecConfigForm(
     console.log(formData);
     console.log("formState.dirtyFields:", formState.dirtyFields);
     console.log("formState.touchedFields:", formState.touchedFields);
-    let autoTTRecArgs = convertFormDataToAutoTTRecArgs(formData);
+    let unFILLMEformData = createUnFILLMEFormData(formData);
+    let autoTTRecArgs = convertFormDataToAutoTTRecArgs(unFILLMEformData);
     console.log("autoTTRecArgs:", autoTTRecArgs);
     console.log("formState.isSubmitSuccessful:", formState.isSubmitSuccessful);
     console.log("formState.isSubmitted:", formState.isSubmitted);

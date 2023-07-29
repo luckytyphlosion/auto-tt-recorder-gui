@@ -4,6 +4,9 @@ import { AutoTTRecArgs } from "../main/AutoTTRecFormFieldsAndArgs";
 import { FilenameAndContents, ImportTemplateResult } from "../shared-types";
 import { DialogId } from "../main/confighandler";
 
+import { AutoTTRecConfig } from "../shared-types";
+import { AutoTTRecConfigFormFields } from "../main/AutoTTRecFormFieldsAndArgs";
+
 declare global {
   interface Window {
     api: {
@@ -23,6 +26,7 @@ declare global {
       removeHandleSendStderr: (callable: (event: IpcRendererEvent, stderrData: string) => void) => void;
       terminateAutoTTRec: () => Promise<void>;
       importFormTemplate: (filename: string) => Promise<ImportTemplateResult>;
+      convertAutoTTRecConfigToFormData: (autoTTRecConfig: AutoTTRecConfig) => Promise<AutoTTRecConfigFormFields>;
     }
   }
 }
