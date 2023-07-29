@@ -1517,6 +1517,24 @@ class AutoTTRecConfigImporter {
     this.formData["top-10-location-country-location"] = top10LocationCountryLocation;
     this.formData["top-10-location-region"] = top10LocationRegion;
   }
+  // {trackName} {cc} {vehicle} {category} {continent} Top 10
+  private importTop10TitleAndSetTop10TitleType() {
+    let top10Title = this.validateString_errorIfNot_handleUndefined("top-10-title");
+    let top10TitleType: Top10TitleType;
+
+    if (top10Title === null) {
+      top10TitleType = DEFAULT_FORM_VALUES["top-10-title-type"];
+      top10Title = DEFAULT_FORM_VALUES["top-10-title"];
+    } else if (top10Title === "auto") {
+      top10TitleType = "auto";
+      top10Title = "{trackName} {cc} {vehicle} {category} {continent} Top 10";
+    } else /* if (top10Title === "" or top10Title !== "") */ {
+      top10TitleType = "manual";
+    }
+
+    this.formData["top-10-title"] = top10Title;
+    this.formData["top-10-title-type"] = top10TitleType;
+  }
 
   public import() {
     this.importStraightCopyArgs();

@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
 
-export type Top10TitleType = "auto" | "manual";
+import { makeReadonlyArraySet, ValidValues } from "../../array-set";
+
+export const TOP_10_TITLE_TYPES = makeReadonlyArraySet(["auto", "manual"] as const);
+export type Top10TitleType = ValidValues<typeof TOP_10_TITLE_TYPES>;
 
 export function Top10TitleInput() {
   const {register, getValues} = useFormContextAutoTT();
