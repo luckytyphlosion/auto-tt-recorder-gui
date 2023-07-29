@@ -5,6 +5,8 @@ import { FilenameAndContents } from "../shared-types";
 import fsPromises from "fs/promises";
 import fs from "fs";
 
+import path from "path";
+
 import { DialogId, globalConfig } from "./confighandler";
 
 function retrieveLastPathname(lastPathname: string | undefined, dialogId: DialogId) {
@@ -17,7 +19,16 @@ function retrieveLastPathname(lastPathname: string | undefined, dialogId: Dialog
   return lastPathname;
 }
 
-export async function readFileEnforceUTF8(filename: string, badEncodingErrorMessage: string): Promise<string> {
+type BadExtensionAndErrorMessage = {
+  extension: string,
+  errorMessage: string
+}
+
+export async function readFileEnforceUTF8(filename: string, badEncodingErrorMessage: string, badExtensionAndErrorMessage?: BadExtensionAndErrorMessage): Promise<string> {
+  if (badExtensionAndErrorMessage !== undefined && path.extname(filename) !== badExtensionAndErrorMessage.extension) {
+    throw new Error(badExtensionAndErrorMessage.errorMessage);
+  
+  }
   const buffer = await fsPromises.readFile(filename);
   if (!Buffer.from(buffer.toString(), "utf8").equals(buffer)) {
     throw new Error(badEncodingErrorMessage);

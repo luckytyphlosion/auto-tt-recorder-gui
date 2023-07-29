@@ -775,20 +775,44 @@ class AutoTTRecConfigImporter {
       this.formData[key] = value;
     }
   }
+/*
+  private setPathnameArgEnable_resolvePathname_returnOriginalFilenameAndPathnameArgs(pathnameArgName: "extra-gecko-codes-filename", enableArgName: "extra-gecko-codes-enable"): [string, string];
+  private setPathnameArgEnable_resolvePathname_returnOriginalFilenameAndPathnameArgs(pathnameArgName: "top-10-gecko-code-filename"): [string, string];
+  private setPathnameArgEnable_resolvePathname_returnOriginalFilenameAndPathnameArgs(pathnameArgName: "top-10-gecko-code-filename"): [string, string];
+*/
 
-  private setPathnameArgEnable_resolvePathname_returnOriginalFilename<K extends AutoTTRecConfigFormSharedStringArgName, L extends AutoTTRecConfigFormBooleanArgName>(pathnameArgName: K, enableArgName: L): [string, string] {
+  private setPathnameArgEnable_resolvePathname_returnOriginalAndResolvedFilename(
+    {pathnameArgName, enableArgName}: ({
+      pathnameArgName: "extra-gecko-codes-filename",
+      enableArgName: "extra-gecko-codes-enable"
+    } | {
+      pathnameArgName: "top-10-gecko-code-filename",
+      enableArgName: undefined
+    } | {
+      pathnameArgName: "extra-hq-textures-folder",
+      enableArgName: "extra-hq-textures-folder-enable"
+    }) & {
+      pathnameArgName: ("extra-gecko-codes-filename" | "top-10-gecko-code-filename" | "extra-hq-textures-folder") & AutoTTRecConfigFormSharedStringArgName,
+      enableArgName: (("extra-gecko-codes-enable" | "extra-hq-textures-folder-enable") & AutoTTRecConfigFormBooleanArgName) | undefined
+    }
+  ): [string, string] {
+    let enableArgValue: BooleanFILLME;
     let pathnameArgValue = this.getFormDataStringOrChoiceArg_verifyNotUndefined_nullIfWasNull(pathnameArgName);
     let pathnameAbsoluteArgValue: string;
-    let enableArgValue: BooleanFILLME;
-    if (pathnameArgValue === "") {
-      enableArgValue = "<FILLME>";
-    } else if (pathnameArgValue !== null) {
-      enableArgValue = true;
-    } else {
-      enableArgValue = false;
-    }
 
-    this.formData[enableArgName] = enableArgValue;
+    if (enableArgName !== undefined) {
+      if (pathnameArgValue === "") {
+        enableArgValue = "<FILLME>";
+      } else if (pathnameArgValue !== null) {
+        enableArgValue = true;
+      } else {
+        enableArgValue = false;
+      }
+  
+      this.formData[enableArgName] = enableArgValue;
+    } else {
+      enableArgValue = true;
+    }
 
     if (enableArgValue && typeof pathnameArgValue === "string") {
       if (path.isAbsolute(pathnameArgValue)) {
@@ -803,6 +827,50 @@ class AutoTTRecConfigImporter {
 
     return [pathnameAbsoluteArgValue, pathnameArgValue];
   }
+
+  private async importTextFileArgsAll(
+    textFileArgs: (
+      ({
+        pathnameArgName: "extra-gecko-codes-filename",
+        enableArgName: "extra-gecko-codes-enable",
+        contentsArgName: "extra-gecko-codes-contents"
+      } | {
+        pathnameArgName: "top-10-gecko-code-filename",
+        enableArgName: undefined
+        contentsArgName: "top-10-gecko-code-contents"
+      }) & {
+        pathnameArgName: ("extra-gecko-codes-filename" | "top-10-gecko-code-filename") & AutoTTRecConfigFormSharedStringArgName,
+        enableArgName: (("extra-gecko-codes-enable") & AutoTTRecConfigFormBooleanArgName) | undefined
+      }
+    )
+  ) {
+    let [textFilename, absoluteTextFilename] = this.setPathnameArgEnable_resolvePathname_returnOriginalAndResolvedFilename(textFileArgs);
+    let {pathnameArgName, contentsArgName} = textFileArgs;
+    
+    if (absoluteTextFilename !== "") {
+      let textFilenameContents: string = "";
+      try {
+        textFilenameContents = await readFileEnforceUTF8(absoluteTextFilename, "Not a valid text file!");
+      } catch (eAsAny) {
+        let e: NodeJS.ErrnoException  = (eAsAny as NodeJS.ErrnoException);
+        let errorMessageReason: string;
+        if (e.code === "ENOENT") {
+          errorMessageReason = "File does not exist!";
+        } else {
+          errorMessageReason = e.message;
+        }
+
+        let errorMessage: string = `Error occurred when reading ${pathnameArgName} "${textFilename}": ${errorMessageReason}`;
+        this.errorsAndWarnings.addError(pathnameArgName, errorMessage);
+        absoluteTextFilename = "";
+      }
+
+      this.formData[contentsArgName] = textFilenameContents;
+      this.formData[pathnameArgName] = absoluteTextFilename;
+    }
+  }
+
+
 /*
   class AutoTTRecArgsClass {
     
@@ -1122,33 +1190,28 @@ class AutoTTRecConfigImporter {
     this.formData["encode-size-unit"] = encodeSizeUnit;
   }
 
-   private async importAllExtraGeckoCodeArgs() {
-    let [extraGeckoCodesAbsoluteFilename, extraGeckoCodesFilename] = this.setPathnameArgEnable_resolvePathname_returnOriginalFilename("extra-gecko-codes-filename", "extra-gecko-codes-enable");
+  private async importAllExtraGeckoCodeArgs() {
+    this.importTextFileArgsAll({
+      pathnameArgName: "extra-gecko-codes-filename",
+      enableArgName: "extra-gecko-codes-enable",
+      contentsArgName: "extra-gecko-codes-contents"
+    });
+  }
 
-    if (extraGeckoCodesAbsoluteFilename !== "") {
-      let extraGeckoCodesContents: string = "";
-      try {
-        extraGeckoCodesContents = await readFileEnforceUTF8(extraGeckoCodesAbsoluteFilename, "Not a valid text file!");
-      } catch (eAsAny) {
-        let e: NodeJS.ErrnoException  = (eAsAny as NodeJS.ErrnoException);
-        let errorMessageReason: string;
-        if (e.code === "ENOENT") {
-          errorMessageReason = "File does not exist!";
-        } else {
-          errorMessageReason = e.message;
-        }
-
-        let errorMessage: string = `Error occurred when reading extra-gecko-codes-filename ${extraGeckoCodesFilename}: ${errorMessageReason}`;
-        this.errorsAndWarnings.addError("extra-gecko-codes-filename", errorMessage);
-        extraGeckoCodesAbsoluteFilename = "";
-      }
-      this.formData["extra-gecko-codes-contents"] = extraGeckoCodesContents;
-      this.formData["extra-gecko-codes-filename"] = extraGeckoCodesAbsoluteFilename;
-    }
+  private async importAllTop10GeckoCodeArgs() {
+    this.importTextFileArgsAll({
+      pathnameArgName: "top-10-gecko-code-filename",
+      enableArgName: undefined,
+      contentsArgName: "top-10-gecko-code-contents"
+    });
   }
 
   private resolveHQTexturesFolderAndSetHQTexturesFolderEnable() {
-    let [extraHQTexturesAbsoluteFolder, extraHQTexturesFolder] = this.setPathnameArgEnable_resolvePathname_returnOriginalFilename("extra-hq-textures-folder", "extra-hq-textures-folder-enable");
+    let [extraHQTexturesAbsoluteFolder, extraHQTexturesFolder] = this.setPathnameArgEnable_resolvePathname_returnOriginalAndResolvedFilename({
+      pathnameArgName: "extra-hq-textures-folder",
+      enableArgName: "extra-hq-textures-folder-enable"
+    });
+  
     if (extraHQTexturesAbsoluteFolder !== "") {
       this.formData["extra-hq-textures-folder"] = extraHQTexturesAbsoluteFolder;
     }
