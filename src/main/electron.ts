@@ -33,7 +33,7 @@ import * as autoTTRecBridge from "./auto-tt-rec-bridge";
 import * as gui2 from "./gui2";
 import * as confighandler from "./confighandler";
 import * as formTemplate from "./form-template";
-import { convertAutoTTRecConfigToFormData } from "./AutoTTRecFormFieldsAndArgs";
+import { convertAutoTTRecConfigToFormData } from "../renderer/AutoTTRecFormFieldsAndArgs";
 
 import fs from "fs";
 

@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Control, Controller, RefCallBack, UseFormSetValue, UseFormGetValues } from 'react-hook-form';
 import { useFormContextAutoTT } from "../use-form-context-auto-tt";
-import { AutoTTRecConfigFormFields, AutoTTRecConfigFormTriCheckboxFieldTypes } from "../../main/AutoTTRecFormFieldsAndArgs";
+import { AutoTTRecConfigFormFields, AutoTTRecConfigFormTriCheckboxFieldTypes } from "../AutoTTRecFormFieldsAndArgs";
 
 import useRenderCounter from "../RenderCounter";
 

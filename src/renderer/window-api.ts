@@ -1,11 +1,11 @@
 import { FileFilter, IpcRendererEvent } from "electron";
 import { AutoTTRecResponse } from "../enums";
-import { AutoTTRecArgs } from "../main/AutoTTRecFormFieldsAndArgs";
+import { AutoTTRecArgs } from "./AutoTTRecFormFieldsAndArgs";
 import { FilenameAndContents, ImportTemplateResult } from "../shared-types";
 import { DialogId } from "../main/confighandler";
 
 import { AutoTTRecConfig } from "../shared-types";
-import { AutoTTRecConfigFormFields } from "../main/AutoTTRecFormFieldsAndArgs";
+import { AutoTTRecConfigFormFields } from "./AutoTTRecFormFieldsAndArgs";
 
 declare global {
   interface Window {

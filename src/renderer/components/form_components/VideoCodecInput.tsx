@@ -6,7 +6,7 @@ import { FormComplexity } from "../layout_components/FormComplexityLayout";
 import useRenderCounter from "../../RenderCounter";
 
 import { EncodeType } from "../layout_components/choice_layouts/EncodeSettingsLayout";
-import { AutoTTRecConfigFormFields } from "../../../main/AutoTTRecFormFieldsAndArgs";
+import { AutoTTRecConfigFormFields } from "../../AutoTTRecFormFieldsAndArgs";
 
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
 

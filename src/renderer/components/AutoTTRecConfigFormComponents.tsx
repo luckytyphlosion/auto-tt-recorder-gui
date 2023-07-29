@@ -10,7 +10,7 @@ import { ISOWBFSFileInput } from "./form_components/ISOWBFSFileInput";
 import { FormComplexityLayout } from "./layout_components/FormComplexityLayout";
 
 import { FormProvider, UseFormReturn } from "react-hook-form";
-import { AutoTTRecConfigFormFields } from "../../main/AutoTTRecFormFieldsAndArgs";
+import { AutoTTRecConfigFormFields } from "../AutoTTRecFormFieldsAndArgs";
 
 import useRenderCounter from "../RenderCounter";
 

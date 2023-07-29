@@ -55,7 +55,7 @@ import { ImportTemplate } from "./ImportTemplate";
 
 import { shallowCopy } from "../../shared/util-shared";
 
-import { AutoTTRecConfigFormFields, AutoTTRecConfigFormFieldName, AutoTTRecConfigFormFieldsNoFILLME, AutoTTRecArgs, Timeline, DEFAULT_FORM_VALUES, convertFormDataToAutoTTRecArgs } from "../../main/AutoTTRecFormFieldsAndArgs";
+import { AutoTTRecConfigFormFields, AutoTTRecConfigFormFieldName, AutoTTRecConfigFormFieldsNoFILLME, AutoTTRecArgs, Timeline, DEFAULT_FORM_VALUES, convertFormDataToAutoTTRecArgs } from "../AutoTTRecFormFieldsAndArgs";
 
 import useRenderCounter from "../RenderCounter";
 
