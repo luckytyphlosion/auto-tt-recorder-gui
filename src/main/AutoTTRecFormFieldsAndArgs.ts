@@ -1569,7 +1569,7 @@ class AutoTTRecConfigImporter {
     }
   }
 
-  private import(): AutoTTRecConfigFormFields {
+  public import(): AutoTTRecConfigFormFields {
     if (!this.hasImported) {
       this.importStraightCopyArgs();
       this.importAudioBitrateAll();
@@ -1600,56 +1600,12 @@ class AutoTTRecConfigImporter {
   }
 }
 
-class AutoTTRecConfigToFormData {
-  private autoTTRecArgs: AutoTTRecArgs;
-  private formData: AutoTTRecConfigFormFields;
-
-  constructor(autoTTRecArgs: AutoTTRecArgs) {
-    this.autoTTRecArgs = autoTTRecArgs;
-    this.formData = {...autoTTRecConfigFormFieldTypesClassObj} as AnyFIXME;
-  }
-
-    // add an argument with the same name and type from the submitted formData
-  // to the resulting auto-tt-rec arguments
-  public add<K extends AutoTTRecConfigFormFieldName & keyof AutoTTRecArgs, V extends AutoTTRecArgs[K] & AutoTTRecConfigFormFields[K]>(key: K) {
-    let value = this.autoTTRecArgs[key];
-    if (value !== null && value !== undefined) {
-      //let value2 = value;
-      //let oldFormData = this.formData[key];
-      this.formData[key] = value as AnyFIXME;
-    }
-  }
-
-  // simple key value argument add, not taking data from formData
-  public addManual<K extends AutoTTRecConfigFormFieldName>(key: K, value: AutoTTRecConfigFormFields[K] | null | undefined) {
-    let nonNullValue: AutoTTRecConfigFormFields[K];
-    if (value === null) {
-      nonNullValue = DEFAULT_FORM_VALUES[key];
-    } else if (value === undefined) {
-      nonNullValue = "<FILLME>" as AnyFIXME;
-    } else {
-      nonNullValue = value;
-    }
-    this.formData[key] = nonNullValue;
-  }
-
-  public convert() {
-    this.addManual("aspect-ratio-16-by-9", this.autoTTRecArgs["aspect-ratio-16-by-9"]);
-    //this.formData["aspect-ratio-16-by-9"] = ;
-  }
-}
-
 export function importAutoTTRecConfig(autoTTRecConfig: AutoTTRecConfig) {
   let errorsAndWarnings = new AutoTTRecConfigErrorsAndWarnings();
   let autoTTRecConfigPreprocessor = new AutoTTRecConfigPreprocessor(autoTTRecConfig, errorsAndWarnings, "");
   let autoTTRecConfigImporter = autoTTRecConfigPreprocessor.preprocess();
-  autoTTRecConfigImporter.import();
+  let autoTTRecConfigFormFields = autoTTRecConfigImporter.import();
 
-  //let toFormDataConverter: AutoTTRecConfigToFormData = autoTTRecConfigImporter.createFormDataConverter();
-  
-
-    //autoTTRecArgs["chadsoft-ghost-page"] = 
-  
 }
 
 
