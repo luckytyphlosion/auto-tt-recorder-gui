@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import useRenderCounter from "../../RenderCounter";
-import { makeReadonlyArraySet, ValidValues } from "../../../array-set";
+import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
 
 export const ASPECT_RATIO_16_BY_9_VALUES = makeReadonlyArraySet(["auto", "true", "false"] as const);
 export type AspectRatio16By9 = ValidValues<typeof ASPECT_RATIO_16_BY_9_VALUES>;

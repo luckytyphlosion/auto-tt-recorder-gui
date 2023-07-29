@@ -8,7 +8,7 @@ import { Top10GeckoCodeLayout } from "./main_layouts/Top10GeckoCodeLayout";
 import useRenderCounter from "../../RenderCounter";
 import { FormComplexity } from "./FormComplexityLayout";
 
-import { makeReadonlyArraySet, ValidValues } from "../../../array-set";
+import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
 
 export const TIMELINE_CATEGORIES = makeReadonlyArraySet(["notop10", "top10chadsoft", "top10gecko"] as const);
 export type TimelineCategory = ValidValues<typeof TIMELINE_CATEGORIES>;

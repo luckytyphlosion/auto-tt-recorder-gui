@@ -4,7 +4,7 @@ import useRenderCounter from "../../RenderCounter";
 import { OutputWidthInput } from "./OutputWidthInput";
 import { FormComplexity } from "../layout_components/FormComplexityLayout";
 import { HQTexturesInput } from "./HQTexturesInput";
-import { makeReadonlyArraySet, ValidValues } from "../../../array-set";
+import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
 
 export const DOLPHIN_RESOLUTIONS = makeReadonlyArraySet(["2160p", "1440p", "1080p", "720p", "480p"] as const);
 export type DolphinResolution = ValidValues<typeof DOLPHIN_RESOLUTIONS>;

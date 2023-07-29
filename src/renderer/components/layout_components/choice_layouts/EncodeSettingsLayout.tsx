@@ -4,7 +4,7 @@ import { PixelFormatInput } from "../../form_components/PixelFormatInput";
 import { SizeBasedEncodeSettingsLayout } from "../sub_layouts/SizeBasedEncodeSettingsLayout";
 import { CRFEncodeSettingsLayout } from "../sub_layouts/CRFEncodeSettingsLayout";
 import { FormComplexity } from "../FormComplexityLayout";
-import { makeReadonlyArraySet, ValidValues } from "../../../../array-set";
+import { makeReadonlyArraySet, ValidValues } from "../../../../shared/array-set";
 
 import useRenderCounter from "../../../RenderCounter";
 

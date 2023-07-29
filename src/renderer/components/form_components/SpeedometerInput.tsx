@@ -4,7 +4,7 @@ import useRenderCounter from "../../RenderCounter";
 
 import { SpeedometerMetricInput } from "./SpeedometerMetricInput";
 import { SpeedometerDecimalPlacesInput } from "./SpeedometerDecimalPlacesInput";
-import { makeReadonlyArraySet, ValidValues } from "../../../array-set";
+import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
 
 const SpeedometerMetricInput_Memo = memo(SpeedometerMetricInput);
 

@@ -5,7 +5,7 @@ import { Top10LocationRegionalInput } from "./Top10LocationRegionalInput";
 import { OutputWidthCustomInput } from "./OutputWidthCustomInput";
 
 import { DolphinResolution } from "./DolphinResolutionInput";
-import { makeReadonlyArraySet, ValidValues } from "../../../array-set";
+import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
 
 import useRenderCounter from "../../RenderCounter";
 

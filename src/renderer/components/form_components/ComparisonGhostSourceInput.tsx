@@ -5,7 +5,7 @@ import useRenderCounter from "../../RenderCounter";
 import { ChadsoftComparisonGhostPageInput } from "./ChadsoftComparisonGhostPageInput";
 import { ComparisonGhostFilenameInput } from "./ComparisonGhostFilenameInput";
 
-import { makeReadonlyArraySet, ValidValues } from "../../../array-set";
+import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
 
 export const COMPARISON_GHOST_SOURCES = makeReadonlyArraySet(["chadsoft", "rkg", "none"] as const);
 export type ComparisonGhostSource = ValidValues<typeof COMPARISON_GHOST_SOURCES>;
