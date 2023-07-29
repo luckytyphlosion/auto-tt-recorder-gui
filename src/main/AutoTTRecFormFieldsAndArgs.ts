@@ -576,7 +576,7 @@ class AutoTTRecConfigPreprocessor {
 
 class AutoTTRecConfigImporter {
   private formData: AutoTTRecConfigFormFieldsPartial;
-  private formDataNoPartial: AutoTTRecConfigFormFields | null;
+  private hasImported: boolean;
   private autoTTRecConfig: AutoTTRecConfig;
   private errorsAndWarnings: AutoTTRecConfigErrorsAndWarnings;
   private configArgWasNullOrDisallowedFILLMESet: Set<AutoTTRecConfigFormStringArgName | AutoTTRecConfigFormChoiceArgNames | AutoTTRecConfigFormNumberArgName | AutoTTRecConfigFormBooleanArgName>;
@@ -584,11 +584,11 @@ class AutoTTRecConfigImporter {
 
   constructor(autoTTRecConfig: AutoTTRecConfig, errorsAndWarnings: AutoTTRecConfigErrorsAndWarnings, autoTTRecConfigFilename: string) {
     this.formData = {};
+    this.hasImported = false;
     this.autoTTRecConfig = autoTTRecConfig;
     this.errorsAndWarnings = errorsAndWarnings;
     this.configArgWasNullOrDisallowedFILLMESet = new Set();
     this.autoTTRecConfigFilename = autoTTRecConfigFilename;
-    this.formDataNoPartial = null;
   }
 
   public addDefault<K extends AutoTTRecConfigFormFieldName>(key: K) {
@@ -1557,28 +1557,46 @@ class AutoTTRecConfigImporter {
     this.formData["track-name-type"] = trackNameType;
   }
 
-  public import() {
-    this.importStraightCopyArgs();
-    this.importAudioBitrateAll();
-    this.importBackgroundMusicSourceAndMusicFilename();
-    this.setTimelineCategoryAndNoTop10();
-    this.setTop10HighlightEnable();
-    this.importGhostSource(true);
-    this.importGhostSource(false);
-    this.setEncodeSizeDisplayedAndUnit();
-    this.importAllExtraGeckoCodeArgs();
-    this.importAllTop10GeckoCodeArgs();
-    this.resolveHQTexturesFolderAndSetHQTexturesFolderEnable();
-    this.importVolume("game-volume", "game-volume-numberinput", "game-volume-slider");
-    this.importVolume("music-volume", "music-volume-numberinput","music-volume-slider");
-    this.setMusicPresentation();
-    this.importOutputVideoFilename_setOutputVideoFileFormat_validateAllowedVideoCodec();
-    this.setOutputWidthPreset();
-    this.setSzsSource();
-    this.importTop10Location_setTop10GeckoCodeLocationRegion();
-    this.importTop10Location();
-    this.importTop10TitleAndSetTop10TitleType();
-    this.importTrackNameAndSetTrackNameType();
+  private validateFormDataNonPartial() {
+    for (const argName of AUTO_TT_REC_CONFIG_FORM_FIELD_NAMES) {
+      if (this.formData[argName] === undefined) {
+        this.errorsAndWarnings.addKeyUndefinedWarning(argName, "formData");
+        this.formData[argName] = DEFAULT_FORM_VALUES[argName] as any;
+      } else if (this.formData[argName] === null) {
+        this.errorsAndWarnings.addWarning(argName, `formData[${argName}] was somehow null! (this is an error within the program itself and not your fault, please contact the developer!)`);
+        this.formData[argName] = DEFAULT_FORM_VALUES[argName] as any;
+      }
+    }
+  }
+
+  private import(): AutoTTRecConfigFormFields {
+    if (!this.hasImported) {
+      this.importStraightCopyArgs();
+      this.importAudioBitrateAll();
+      this.importBackgroundMusicSourceAndMusicFilename();
+      this.setTimelineCategoryAndNoTop10();
+      this.setTop10HighlightEnable();
+      this.importGhostSource(true);
+      this.importGhostSource(false);
+      this.setEncodeSizeDisplayedAndUnit();
+      this.importAllExtraGeckoCodeArgs();
+      this.importAllTop10GeckoCodeArgs();
+      this.resolveHQTexturesFolderAndSetHQTexturesFolderEnable();
+      this.importVolume("game-volume", "game-volume-numberinput", "game-volume-slider");
+      this.importVolume("music-volume", "music-volume-numberinput","music-volume-slider");
+      this.setMusicPresentation();
+      this.importOutputVideoFilename_setOutputVideoFileFormat_validateAllowedVideoCodec();
+      this.setOutputWidthPreset();
+      this.setSzsSource();
+      this.importTop10Location_setTop10GeckoCodeLocationRegion();
+      this.importTop10Location();
+      this.importTop10TitleAndSetTop10TitleType();
+      this.importTrackNameAndSetTrackNameType();
+      this.validateFormDataNonPartial();
+      this.hasImported = true;
+    }
+
+    return this.formData as AutoTTRecConfigFormFields;
   }
 }
 
