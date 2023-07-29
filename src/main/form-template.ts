@@ -103,7 +103,7 @@ async function loadYAML_formatErrorsIfErrorOrWarnings(filename: string): Promise
   }
 }
 
-export async function importTemplate(event: IpcMainInvokeEvent, filename: string): Promise<ImportTemplateResult> {
+export async function importFormTemplate(event: IpcMainInvokeEvent, filename: string): Promise<ImportTemplateResult> {
   filename = path.resolve(__dirname, "../../test_template.yml");
   return await loadYAML_formatErrorsIfErrorOrWarnings(filename);
 }

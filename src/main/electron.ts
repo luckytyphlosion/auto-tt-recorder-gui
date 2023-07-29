@@ -142,7 +142,7 @@ async function createWindow() {
 
   ipcMain.handle("get-global-config", confighandler.getGlobalConfig);
 
-  ipcMain.handle("import-form-template", formTemplate.importTemplate);
+  ipcMain.handle("import-form-template", formTemplate.importFormTemplate);
 
   // and load the index.html of the app.
   // win.loadFile("index.html");

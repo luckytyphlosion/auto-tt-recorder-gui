@@ -1199,7 +1199,7 @@ class AutoTTRecConfigImporter {
   }
 
   private async importAllExtraGeckoCodeArgs() {
-    this.importTextFileArgsAll({
+    await this.importTextFileArgsAll({
       pathnameArgName: "extra-gecko-codes-filename",
       enableArgName: "extra-gecko-codes-enable",
       contentsArgName: "extra-gecko-codes-contents"
@@ -1207,7 +1207,7 @@ class AutoTTRecConfigImporter {
   }
 
   private async importAllTop10GeckoCodeArgs() {
-    this.importTextFileArgsAll({
+    await this.importTextFileArgsAll({
       pathnameArgName: "top-10-gecko-code-filename",
       enableArgName: undefined,
       contentsArgName: "top-10-gecko-code-contents"
@@ -1569,7 +1569,7 @@ class AutoTTRecConfigImporter {
     }
   }
 
-  public import(): AutoTTRecConfigFormFields {
+  public async import(): Promise<AutoTTRecConfigFormFields> {
     if (!this.hasImported) {
       this.importStraightCopyArgs();
       this.importAudioBitrateAll();
@@ -1579,8 +1579,8 @@ class AutoTTRecConfigImporter {
       this.importGhostSource(true);
       this.importGhostSource(false);
       this.setEncodeSizeDisplayedAndUnit();
-      this.importAllExtraGeckoCodeArgs();
-      this.importAllTop10GeckoCodeArgs();
+      await this.importAllExtraGeckoCodeArgs();
+      await this.importAllTop10GeckoCodeArgs();
       this.resolveHQTexturesFolderAndSetHQTexturesFolderEnable();
       this.importVolume("game-volume", "game-volume-numberinput", "game-volume-slider");
       this.importVolume("music-volume", "music-volume-numberinput","music-volume-slider");
@@ -1600,14 +1600,14 @@ class AutoTTRecConfigImporter {
   }
 }
 
-export function importAutoTTRecConfig(autoTTRecConfig: AutoTTRecConfig) {
+export async function importAutoTTRecConfig(autoTTRecConfig: AutoTTRecConfig) {
   let errorsAndWarnings = new AutoTTRecConfigErrorsAndWarnings();
   let autoTTRecConfigPreprocessor = new AutoTTRecConfigPreprocessor(autoTTRecConfig, errorsAndWarnings, "");
   let autoTTRecConfigImporter = autoTTRecConfigPreprocessor.preprocess();
-  let autoTTRecConfigFormFields = autoTTRecConfigImporter.import();
+  let autoTTRecConfigFormFields = await autoTTRecConfigImporter.import();
 
+  return autoTTRecConfigFormFields;
 }
-
 
 function shallowCopy<T>(obj: T): T {
   return Object.assign({}, obj);
