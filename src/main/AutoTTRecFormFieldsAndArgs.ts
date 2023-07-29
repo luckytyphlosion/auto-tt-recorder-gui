@@ -47,6 +47,8 @@ import { ValidValues, ReadonlyArraySet, makeReadonlyArraySet } from "../array-se
 
 import { readFileEnforceUTF8 } from "./gui2";
 
+import { shallowCopy } from "../util-shared";
+
 import path from "path";
 import { IpcMainInvokeEvent } from "electron";
 
@@ -1619,10 +1621,6 @@ export async function convertAutoTTRecConfigToFormData(event: IpcMainInvokeEvent
   let autoTTRecConfigFormFields = await autoTTRecConfigImporter.import();
 
   return autoTTRecConfigFormFields;
-}
-
-function shallowCopy<T>(obj: T): T {
-  return Object.assign({}, obj);
 }
 
 class AutoTTRecArgsBuilder {
