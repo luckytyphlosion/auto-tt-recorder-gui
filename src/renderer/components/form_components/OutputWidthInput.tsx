@@ -9,7 +9,7 @@ import { makeReadonlyArraySet, ValidValues } from "../../array-set";
 
 import useRenderCounter from "../../RenderCounter";
 
-const OUTPUT_WIDTH_PRESETS = makeReadonlyArraySet(["3840", "2560", "1920", "1280", "854", "none", "custom"] as const);
+export const OUTPUT_WIDTH_PRESETS = makeReadonlyArraySet(["3840", "2560", "1920", "1280", "854", "none", "custom"] as const);
 export type OutputWidthPreset = ValidValues<typeof OUTPUT_WIDTH_PRESETS>;
 
 export const recommendedOutputWidths: {[k in DolphinResolution]: OutputWidthPreset} = {

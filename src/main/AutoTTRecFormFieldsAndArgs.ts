@@ -25,7 +25,7 @@ import { AudioCodec, AUDIO_CODECS } from "../renderer/components/form_components
 import { AudioBitrateUnit, getDefaultAudioBitrate } from "../renderer/components/form_components/AudioBitrateInput";
 
 import { H26xPreset, H26X_PRESETS } from "../renderer/components/form_components/H26xPresetInput";
-import { OutputWidthPreset, recommendedOutputWidths } from "../renderer/components/form_components/OutputWidthInput";
+import { OutputWidthPreset, OUTPUT_WIDTH_PRESETS, recommendedOutputWidths } from "../renderer/components/form_components/OutputWidthInput";
 
 import { Top10GeckoCodeLocationRegion } from "../renderer/components/form_components/Top10GeckoCodeLocationInput";
 
@@ -381,6 +381,10 @@ class AutoTTRecConfigErrorsAndWarnings {
     this.addError(name, `${name} should be one of ${listFormatter.format(validValues.arr)}, but got ${actualValue} instead.${extraMessage}`);
   }
 
+  public addKeyUndefinedWarning(name: AutoTTRecArgExtendedAndFormFieldName, objVariableName: string) {
+    this.addWarning(name, `${objVariableName}["${name}"] was not defined! (this is an error within the program itself and not your fault, please contact the developer!)`);
+  }
+
   public addWarning(name: AutoTTRecArgExtendedAndFormFieldName, message: string) {
     this.add(name, message, true);
   }
@@ -587,7 +591,7 @@ class AutoTTRecConfigImporter {
   public readArgSanityCheck<K extends AutoTTRecArgName>(key: K): string | number | boolean | null | undefined {
     let configValue = this.autoTTRecConfig[key];
     if (configValue === undefined) {
-      this.errorsAndWarnings.addWarning(key, `${key} was not defined! (this is an error within the program itself and not your fault, please contact the developer!)`);
+      this.errorsAndWarnings.addKeyUndefinedWarning(key, "autoTTRecConfig");
     }
     return configValue;
   }
@@ -608,7 +612,7 @@ class AutoTTRecConfigImporter {
     }
   }
 
-  private validateNumber_errorIfNot_handleUndefined<K extends AutoTTRecArgName>(key: K): number | null {
+  private validateNumber_errorIfNot_handleUndefinedString<K extends AutoTTRecArgName>(key: K): number | null {
     let value = this.readArgSanityCheck(key);
     if (value === undefined) {
       return NaN;
@@ -619,8 +623,16 @@ class AutoTTRecConfigImporter {
     } else if (typeof value === "number") {
       return value;
     } else {
-      this.errorsAndWarnings.addErrorWrongType(key, "number", value);
-      return NaN;
+      let valueAsNum: number;
+      if (typeof value === "string") {
+        valueAsNum = Number(value);
+      } else {
+        valueAsNum = NaN;
+      }
+      if (Number.isNaN(valueAsNum)) {
+        this.errorsAndWarnings.addErrorWrongType(key, "number", value);
+      }
+      return valueAsNum;
     }
   }
 
@@ -640,7 +652,7 @@ class AutoTTRecConfigImporter {
     }
   }
 
-  private validateSharedArgString_errorIfNot_handleUndefinedNull<K extends AutoTTRecConfigFormSharedStringArgName | AutoTTRecConfigFormSharedChoiceArgNames>(key: K) {
+  private validateSharedStringOrChoiceArg_errorIfNot_handleUndefinedNull<K extends AutoTTRecConfigFormSharedStringArgName | AutoTTRecConfigFormSharedChoiceArgNames>(key: K) {
     let value = this.validateString_errorIfNot_handleUndefined(key);
     if (value === null) {
       this.configArgWasNullSet.add(key);
@@ -649,25 +661,36 @@ class AutoTTRecConfigImporter {
       return value;
     }
   }
+  private validateSharedNumArg_errorIfNot_handleUndefinedString<K extends AutoTTRecConfigFormSharedNumberArgName>(key: K) {
+    let value = this.validateNumber_errorIfNot_handleUndefinedString(key);
+    if (value === null) {
+      this.configArgWasNullSet.add(key);
+      return DEFAULT_FORM_VALUES[key];
+    } else {
+      return value;
+    }
+  }
 
-  private getFormDataStringOrChoiceArg_nullIfWasNull<K extends AutoTTRecConfigFormStringArgName | AutoTTRecConfigFormChoiceArgNames>(key: K): AutoTTRecConfigFormFields[K] | null {
+  private getFormDataStringOrChoiceArg_verifyNotUndefined_nullIfWasNull<K extends AutoTTRecConfigFormStringArgName | AutoTTRecConfigFormChoiceArgNames>(key: K): AutoTTRecConfigFormFields[K] | null {
     if (this.configArgWasNullSet.has(key)) {
       return null;
     } else {
-      let value = this.formData[key];
-      if (value === undefined) {
-        this.errorsAndWarnings.addWarning(key, `formData["${key}"] was not defined! (this is an error within the program itself and not your fault, please contact the developer!)`);
-        return null;
-      } else {
-        return value;        
-      }
+      return this.getFormDataStringOrChoice_verifyNotUndefined(key);
+    }
+  }
+
+  private getFormDataNumberArg_verifyNotUndefinedOrFILLME_nullIfWasNull<K extends AutoTTRecConfigFormNumberArgName>(key: K) {
+    if (this.configArgWasNullSet.has(key)) {
+      return null;
+    } else {
+      return this.getFormDataNumber_verifyNotUndefinedOrFILLME(key);
     }
   }
 
   private getFormDataStringOrChoice_verifyNotUndefined<K extends AutoTTRecConfigFormStringArgName | AutoTTRecConfigFormChoiceArgNames>(key: K): AutoTTRecConfigFormFields[K] {
     let value = this.formData[key];
     if (value === undefined) {
-      this.errorsAndWarnings.addWarning(key, `formData["${key}"] was not defined! (this is an error within the program itself and not your fault, please contact the developer!)`);
+      this.errorsAndWarnings.addKeyUndefinedWarning(key, "formData");
       this.formData[key] = "<FILLME>";
       return "<FILLME>";
     } else {
@@ -675,10 +698,10 @@ class AutoTTRecConfigImporter {
     }
   }
 
-  private getFormDataNumber_verifyNotUndefined<K extends AutoTTRecConfigFormSharedNumberArgName>(key: K): number {
+  private getFormDataNumber_verifyNotUndefinedOrFILLME<K extends AutoTTRecConfigFormNumberArgName>(key: K): number {
     let value = this.formData[key];
     if (value === undefined) {
-      this.errorsAndWarnings.addWarning(key, `formData["${key}"] is undefined! (this is an error within the program itself and not your fault, please contact the developer!)`);
+      this.errorsAndWarnings.addKeyUndefinedWarning(key, "formData");
       value = NaN;
       this.formData[key] = NaN;
     } else if (value === "<FILLME>") {
@@ -689,29 +712,12 @@ class AutoTTRecConfigImporter {
     return value;
   }
 
-  private stringOrChoiceArgWasNull<K extends AutoTTRecConfigFormSharedStringArgName | AutoTTRecConfigFormSharedChoiceArgNames>(key: K) {
-    return this.configArgWasNullSet.has(key);
-  }
-
   private importSharedStringArg<K extends AutoTTRecConfigFormSharedStringArgName>(key: K) {
-    this.formData[key] = this.validateSharedArgString_errorIfNot_handleUndefinedNull(key);
+    this.formData[key] = this.validateSharedStringOrChoiceArg_errorIfNot_handleUndefinedNull(key);
   }
 
   private importSharedNumberArg<K extends AutoTTRecConfigFormSharedNumberArgName>(key: K) {
-    let configValue = this.readArgSanityCheck(key);
-    if (configValue !== undefined) {
-      if (configValue === null) {
-        this.configArgWasNullSet.add(key);
-        this.addDefault(key);
-      } else if (configValue === "<FILLME>") {
-        this.formData[key] = NaN;
-      } else if (typeof configValue === "number") {
-        this.formData[key] = configValue;
-      } else {
-        this.errorsAndWarnings.addErrorWrongType(key, "number", configValue);
-        this.formData[key] = NaN;
-      }
-    }
+    this.formData[key] = this.validateSharedNumArg_errorIfNot_handleUndefinedString(key);
   }
 
   private importSharedBooleanArg<K extends AutoTTRecConfigFormSharedBooleanArgName>(key: K) {
@@ -750,7 +756,7 @@ class AutoTTRecConfigImporter {
   }
 
   private setPathnameArgEnable_resolvePathname_returnOriginalFilename<K extends AutoTTRecConfigFormSharedStringArgName, L extends AutoTTRecConfigFormBooleanArgName>(pathnameArgName: K, enableArgName: L): [string, string] {
-    let pathnameArgValue = this.getFormDataStringOrChoiceArg_nullIfWasNull(pathnameArgName);
+    let pathnameArgValue = this.getFormDataStringOrChoiceArg_verifyNotUndefined_nullIfWasNull(pathnameArgName);
     let pathnameAbsoluteArgValue: string;
     let enableArgValue: BooleanFILLME;
     if (pathnameArgValue === "") {
@@ -943,7 +949,7 @@ class AutoTTRecConfigImporter {
   }
 
   private importBackgroundMusicSourceAndMusicFilename() {
-    let musicFilename = this.validateSharedArgString_errorIfNot_handleUndefinedNull("music-filename");
+    let musicFilename = this.validateSharedStringOrChoiceArg_errorIfNot_handleUndefinedNull("music-filename");
     if (musicFilename === "") {
       this.formData["background-music-source"] = "<FILLME>";
     } else if (musicFilename === "bgm") {
@@ -977,8 +983,8 @@ class AutoTTRecConfigImporter {
     let noTop10Category: NoTop10Category;
 
     if (timeline === "top10") {
-      let top10Chadsoft = this.getFormDataStringOrChoiceArg_nullIfWasNull("top-10-chadsoft");
-      let top10GeckoCodeFilename = this.getFormDataStringOrChoiceArg_nullIfWasNull("top-10-gecko-code-filename");
+      let top10Chadsoft = this.getFormDataStringOrChoiceArg_verifyNotUndefined_nullIfWasNull("top-10-chadsoft");
+      let top10GeckoCodeFilename = this.getFormDataStringOrChoiceArg_verifyNotUndefined_nullIfWasNull("top-10-gecko-code-filename");
       if (top10Chadsoft === "") {
         timelineCategory = "top10chadsoft";
       } else if (top10GeckoCodeFilename === "") {
@@ -1014,7 +1020,7 @@ class AutoTTRecConfigImporter {
   }
 
   private setTop10HighlightEnable() {
-    let top10Highlight = this.getFormDataNumber_verifyNotUndefined("top-10-highlight");
+    let top10Highlight = this.getFormDataNumber_verifyNotUndefinedOrFILLME("top-10-highlight");
     let top10HighlightEnable: boolean | "<FILLME>";
 
     if (Number.isNaN(top10Highlight)) {
@@ -1031,8 +1037,8 @@ class AutoTTRecConfigImporter {
   private importGhostSource(isMainGhost: boolean) {
     let [ghostPageArgName, ghostFilenameArgName, ghostSourceArgName]: ["chadsoft-ghost-page", "main-ghost-filename", "main-ghost-source"] | ["chadsoft-comparison-ghost-page", "comparison-ghost-filename", "comparison-ghost-source"] = isMainGhost ? ["chadsoft-ghost-page", "main-ghost-filename", "main-ghost-source"] : ["chadsoft-comparison-ghost-page", "comparison-ghost-filename", "comparison-ghost-source"];
 
-    let ghostPageValue = this.getFormDataStringOrChoiceArg_nullIfWasNull(ghostPageArgName);
-    let ghostFilenameValue = this.getFormDataStringOrChoiceArg_nullIfWasNull(ghostFilenameArgName);
+    let ghostPageValue = this.getFormDataStringOrChoiceArg_verifyNotUndefined_nullIfWasNull(ghostPageArgName);
+    let ghostFilenameValue = this.getFormDataStringOrChoiceArg_verifyNotUndefined_nullIfWasNull(ghostFilenameArgName);
     let ghostSourceValue: BothGhostSource | null;
 
     if (ghostPageValue === "" && ghostFilenameValue === "") {
@@ -1053,7 +1059,7 @@ class AutoTTRecConfigImporter {
       this.formData[ghostSourceArgName] = ghostSourceValue;
     } else {
       if (ghostSourceArgName === "main-ghost-source") {
-        let timelineCategory = this.getFormDataStringOrChoiceArg_nullIfWasNull("timeline-category");
+        let timelineCategory = this.getFormDataStringOrChoiceArg_verifyNotUndefined_nullIfWasNull("timeline-category");
         if (timelineCategory === "top10chadsoft" && this.formData["top-10-highlight-enable"]) {
           ghostSourceValue = "chadsoft";
         } else {
@@ -1069,7 +1075,7 @@ class AutoTTRecConfigImporter {
 
   private setEncodeSizeDisplayedAndUnit() {
     let isMiB: boolean = false;
-    let encodeSize = this.getFormDataNumber_verifyNotUndefined("encode-size");
+    let encodeSize = this.getFormDataNumber_verifyNotUndefinedOrFILLME("encode-size");
     let encodeSizeDisplayed: number;
 
     if (Number.isNaN(encodeSize)) {
@@ -1131,7 +1137,7 @@ class AutoTTRecConfigImporter {
     volumeNumberInputArgName: "game-volume-numberinput" | "music-volume-numberinput",
     volumeSliderArgName: "game-volume-slider" | "music-volume-slider"
   ) {
-    let volumeArgValue = this.validateNumber_errorIfNot_handleUndefined(volumeArgName);
+    let volumeArgValue = this.validateNumber_errorIfNot_handleUndefinedString(volumeArgName);
     let volumeNumberInputArgValue: number;
 
     if (volumeArgValue === NaN) {
@@ -1172,7 +1178,7 @@ class AutoTTRecConfigImporter {
       if (noMusicMKChannel && !startMusicAtBeginning) {
         musicPresentation = "no-music-mkchannel";
       } else if (noMusicMKChannel && startMusicAtBeginning) {
-        let noTop10Category = this.getFormDataStringOrChoiceArg_nullIfWasNull("no-top-10-category");
+        let noTop10Category = this.getFormDataStringOrChoiceArg_verifyNotUndefined_nullIfWasNull("no-top-10-category");
         if (noTop10Category === "mkchannel") {
           musicPresentation = "no-music-mkchannel";
         } else {
@@ -1243,6 +1249,27 @@ class AutoTTRecConfigImporter {
 
     this.formData["output-video-file-format"] = outputVideoFileFormat;
     this.formData["video-codec"] = videoCodec;
+  }
+
+  private setOutputWidthPreset() {
+    let outputWidthCustom = this.getFormDataNumberArg_verifyNotUndefinedOrFILLME_nullIfWasNull("output-width-custom");
+    let outputWidthPreset: OutputWidthPreset;
+
+    if (outputWidthCustom === null) {
+      outputWidthPreset = "none";
+    } else {
+      let outputWidthCustomStr: string;
+      if (Number.isNaN(outputWidthCustom)) {
+        outputWidthCustomStr = "<FILLME>";
+      } else {
+        outputWidthCustomStr = outputWidthCustom.toString();
+      }
+      if (isInSet(OUTPUT_WIDTH_PRESETS.set, outputWidthCustomStr)) {
+        outputWidthPreset = outputWidthCustomStr;
+      } else {
+        outputWidthPreset = "custom";
+      }
+    }
   }
 
   public import() {
