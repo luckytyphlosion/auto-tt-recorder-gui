@@ -1,10 +1,10 @@
 import { FileFilter, IpcRendererEvent } from "electron";
-import { AutoTTRecResponse } from "../enums";
+import { AutoTTRecResponse } from "../shared/enums";
 import { AutoTTRecArgs } from "./AutoTTRecFormFieldsAndArgs";
-import { FilenameAndContents, ImportTemplateResult } from "../shared-types";
-import { DialogId } from "../main/confighandler";
+import { FilenameAndContents, ImportTemplateResult } from "../shared/shared-types";
+import { DialogId } from "../shared/shared-types";
 
-import { AutoTTRecConfig } from "../shared-types";
+import { AutoTTRecConfig } from "../shared/shared-types";
 import { AutoTTRecConfigFormFields } from "./AutoTTRecFormFieldsAndArgs";
 
 declare global {
@@ -18,6 +18,12 @@ declare global {
       overwriteTextFile: (outputFilename: string, output: string) => Promise<void>;
       isFileReadable: (filename: string) => Promise<boolean>;
       isFileWritable: (filename: string) => Promise<boolean>;
+      // this is insecure as hell but making this secure would require every single constant and type from form/layout_components
+      // separately from the component file
+      // I mean some of the other ipc calls I have are possibly not secure either
+      // ugh
+      readFileEnforceUTF8: (filename: string, badEncodingErrorMessage: string) => Promise<string>;
+      getAbsolutePathRelativeToFilename: (pathname: string, filenameRelativeFrom: string) => string;
       spawnAutoTTRec: (templateFilename: string, autoTTRecArgs: AutoTTRecArgs) => Promise<boolean>;
       waitAutoTTRec: () => Promise<AutoTTRecResponse>;
       handleSendStdout: (callable: (event: IpcRendererEvent, stdoutData: string) => void) => void;
@@ -26,7 +32,6 @@ declare global {
       removeHandleSendStderr: (callable: (event: IpcRendererEvent, stderrData: string) => void) => void;
       terminateAutoTTRec: () => Promise<void>;
       importFormTemplate: (filename: string) => Promise<ImportTemplateResult>;
-      convertAutoTTRecConfigToFormData: (autoTTRecConfig: AutoTTRecConfig) => Promise<AutoTTRecConfigFormFields>;
     }
   }
 }

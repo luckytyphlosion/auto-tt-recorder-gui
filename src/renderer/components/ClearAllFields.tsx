@@ -8,7 +8,8 @@ export function ClearAllFields(props: {
   formMethods: UseFormReturn<AutoTTRecConfigFormFields, any, undefined>,
   submittedToggle: boolean,
   setSubmittedToggle: React.Dispatch<React.SetStateAction<boolean>>,
-  setFormDefaultValues: React.Dispatch<React.SetStateAction<AutoTTRecConfigFormFields>>}) {
+  //setFormDefaultValues: React.Dispatch<React.SetStateAction<AutoTTRecConfigFormFields>>
+}) {
   const [isModalOpen, setModalOpen] = useState(false);
   const [allFieldsCleared, setAllFieldsCleared] = useState(false);
   const [afterAllFieldsCleared, setAfterAllFieldsCleared] = useState(false);

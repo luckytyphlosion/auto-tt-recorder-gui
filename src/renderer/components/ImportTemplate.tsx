@@ -2,9 +2,8 @@ import React, { useState, useRef, useEffect, MouseEventHandler } from "react";
 
 import Modal from "react-modal";
 import { FormProvider, UseFormReturn } from "react-hook-form";
-import { AutoTTRecConfigFormFields, AUTO_TT_REC_CONFIG_FORM_FIELD_NAMES, DEFAULT_FORM_VALUES } from "../AutoTTRecFormFieldsAndArgs";
-
-import { ImportTemplateResult, ImportTemplateStatus, AutoTTRecConfig } from "../../shared-types";
+import { convertAutoTTRecConfigToFormData, AutoTTRecConfigFormFields, AUTO_TT_REC_CONFIG_FORM_FIELD_NAMES, DEFAULT_FORM_VALUES } from "../AutoTTRecFormFieldsAndArgs";
+import { ImportTemplateResult, ImportTemplateStatus, AutoTTRecConfig } from "../../shared/shared-types";
 
 export enum ImportTemplateStatu2s {
   INDETERMINATE = -1,

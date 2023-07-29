@@ -39,7 +39,7 @@ export function Top10LocationRegionalInput() {
     <>
       <label htmlFor="top-10-location-regional-location">Location: </label>
       <select {...register("top-10-location-regional-location")}>
-        {REGIONAL_LOCATIONS.map((regionalLocation) => (
+        {REGIONAL_LOCATIONS.arr.map((regionalLocation) => (
           <option value={regionalLocation} key={regionalLocation}>{regionalLocation}</option>
         ))}
       </select>

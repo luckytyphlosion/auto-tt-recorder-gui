@@ -9,7 +9,10 @@ import { SimpleErrorMessage } from "../SimpleErrorMessage";
 
 import { EncodeType } from "../layout_components/choice_layouts/EncodeSettingsLayout";
 
-export type AudioBitrateUnit = "kbps" | "bps";
+import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
+
+export const AUDIO_BITRATE_UNITS = makeReadonlyArraySet(["kbps", "bps"] as const);
+export type AudioBitrateUnit = ValidValues<typeof AUDIO_BITRATE_UNITS>;
 
 const defaultAudioBitrates = {
   crf: {

@@ -3,7 +3,7 @@ import useRenderCounter from "../../RenderCounter";
 import { Controller, ValidateResult } from "react-hook-form";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { FileFilter } from "electron";
-import { FilenameAndContents } from "../../../shared-types"
+import { FilenameAndContents } from "../../../shared/shared-types"
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
 import { EditorView } from "@codemirror/view";
 

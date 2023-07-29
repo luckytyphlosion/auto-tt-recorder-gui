@@ -33,7 +33,6 @@ import * as autoTTRecBridge from "./auto-tt-rec-bridge";
 import * as gui2 from "./gui2";
 import * as confighandler from "./confighandler";
 import * as formTemplate from "./form-template";
-import { convertAutoTTRecConfigToFormData } from "../renderer/AutoTTRecFormFieldsAndArgs";
 
 import fs from "fs";
 
@@ -127,7 +126,8 @@ async function createWindow() {
       devTools: true
     },
   });
-  //ipcMain.handle("read-file-enforce-utf8", gui2.ipcReadFileEnforceUTF8);
+  ipcMain.handle("read-file-enforce-utf8", gui2.ipcReadFileEnforceUTF8);
+  ipcMain.handle("get-absolute-path-relative-to-filename", gui2.getAbsolutePathRelativeToFilename);
   ipcMain.handle("open-file-dialog", gui2.openFileDialog);
   ipcMain.handle("open-folder-dialog", gui2.openFolderDialog);
   ipcMain.handle("open-file-dialog-and-read", gui2.openFileDialogAndRead);
@@ -144,7 +144,6 @@ async function createWindow() {
   ipcMain.handle("get-global-config", confighandler.getGlobalConfig);
 
   ipcMain.handle("import-form-template", formTemplate.importFormTemplate);
-  ipcMain.handle("convert-auto-tt-rec-config-to-form-data", convertAutoTTRecConfigToFormData);
 
   // and load the index.html of the app.
   // win.loadFile("index.html");

@@ -1,5 +1,5 @@
 import React from "react";
-import * as versions from "../../versions";
+import * as versions from "../../shared/versions";
 
 export function GUIHeader() {
   return (

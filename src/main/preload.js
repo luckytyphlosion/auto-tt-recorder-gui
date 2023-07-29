@@ -8,6 +8,10 @@ contextBridge.exposeInMainWorld("api", {
   saveFileDialog: (fileFilters, lastFilename, dialogId) => ipcRenderer.invoke("save-file-dialog", fileFilters, lastFilename, dialogId),
   saveFileDialogAndWriteText: (fileFilters, output, lastFilename, dialogId) => ipcRenderer.invoke("save-file-dialog-and-write-text", fileFilters, output, lastFilename, dialogId),
   overwriteTextFile: (outputFilename, output) => ipcRenderer.invoke("overwrite-text-file", outputFilename, output),
+  // this is insecure as hell but making this secure would require every single constant and type from form/layout_components
+  // separately from the component file
+  ipcReadFileEnforceUTF8: (filename, badEncodingErrorMessage) => ipcRenderer.invoke("read-file-enforce-utf8", filename, badEncodingErrorMessage),
+  getAbsolutePathRelativeToFilename: (pathname, filenameRelativeFrom) => ipcRenderer.invoke("get-absolute-path-relative-to-filename", pathname, filenameRelativeFrom),
   isFileReadable: (filename) => ipcRenderer.invoke("is-file-readable", filename),
   isFileWritable: (filename) => ipcRenderer.invoke("is-file-writable", filename),
   spawnAutoTTRec: (templateFilename, autoTTRecArgs) => ipcRenderer.invoke("spawn-auto-tt-rec", templateFilename, autoTTRecArgs),

@@ -24,3 +24,15 @@ export interface ImportTemplateResult {
   hasWarnings: boolean
 }
 
+export interface SavedDialogPathnames {
+  "iso-wbfs": string,
+  "music": string,
+  "rkgs": string,
+  "extra-gecko-codes": string,
+  "extra-hq-textures": string,
+  "output-video": string,
+  "szs": string,
+  "top-10-gecko-code": string,
+}
+
+export type DialogId = keyof SavedDialogPathnames;

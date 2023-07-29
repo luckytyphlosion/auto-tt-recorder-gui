@@ -5,24 +5,13 @@ import fsPromises from "fs/promises";
 import { Mutex } from "async-mutex";
 import { App } from "electron/main";
 
+import { SavedDialogPathnames, DialogId } from "../shared/shared-types";
+
 import * as versions from "../shared/versions";
 
 //import documentsFolder from "./documents-folder";
 
 export let globalConfig: Config;
-
-export interface SavedDialogPathnames {
-  "iso-wbfs": string,
-  "music": string,
-  "rkgs": string,
-  "extra-gecko-codes": string,
-  "extra-hq-textures": string,
-  "output-video": string,
-  "szs": string,
-  "top-10-gecko-code": string,
-}
-
-export type DialogId = keyof SavedDialogPathnames;
 
 interface ConfigOptions {
   autoTTRecorderVersion: string,

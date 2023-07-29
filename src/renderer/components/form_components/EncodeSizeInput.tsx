@@ -7,7 +7,10 @@ import { AudioCodec } from "./AudioCodecAndBitrateInput";
 
 import { EncodeType } from "../layout_components/choice_layouts/EncodeSettingsLayout";
 
-export type EncodeSizeUnit = "mib" | "bytes";
+import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
+
+export const ENCODE_SIZE_UNITS = makeReadonlyArraySet(["mib", "bytes"] as const);
+export type EncodeSizeUnit = ValidValues<typeof ENCODE_SIZE_UNITS>;
 
 /*
 const defaultEncodeSizes = {

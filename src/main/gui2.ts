@@ -1,13 +1,15 @@
 import { dialog, IpcMainInvokeEvent, FileFilter, OpenDialogOptions, SaveDialogOptions} from "electron";
 
 import { mainWindow } from "./electron";
-import { FilenameAndContents } from "../shared-types";
+import { FilenameAndContents } from "../shared/shared-types";
 import fsPromises from "fs/promises";
 import fs from "fs";
 
 import path from "path";
 
-import { DialogId, globalConfig } from "./confighandler";
+import { globalConfig } from "./confighandler";
+
+import { DialogId } from "../shared/shared-types";
 
 function retrieveLastPathname(lastPathname: string | undefined, dialogId: DialogId) {
   if (lastPathname === "") {
@@ -17,6 +19,18 @@ function retrieveLastPathname(lastPathname: string | undefined, dialogId: Dialog
     }
   }
   return lastPathname;
+}
+
+export function getAbsolutePathRelativeToFilename(event: IpcMainInvokeEvent, pathname: string, filenameRelativeFrom: string): string {
+  let absolutePathname: string;
+
+  if (path.isAbsolute(pathname)) {
+    absolutePathname = pathname;
+  } else {
+    absolutePathname = path.resolve(path.dirname(filenameRelativeFrom), pathname);
+  }
+
+  return absolutePathname;
 }
 
 type BadExtensionAndErrorMessage = {
@@ -35,10 +49,10 @@ export async function readFileEnforceUTF8(filename: string, badEncodingErrorMess
   }
   return buffer.toString();
 }
-/*
+
 export async function ipcReadFileEnforceUTF8(event: IpcMainInvokeEvent, filename: string, badEncodingErrorMessage: string): Promise<string> {
   return await readFileEnforceUTF8(filename, badEncodingErrorMessage);
-}*/
+}
 
 export async function openFileDialog(event: IpcMainInvokeEvent, fileFilters: FileFilter[],
     lastFilename: string | undefined, dialogId: DialogId): Promise<string> {

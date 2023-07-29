@@ -5,7 +5,7 @@ import { AutoTTRecStatus } from "./AutoTTRecStatus";
 import { IpcRendererEvent } from "electron";
 import { DEFAULT_FORM_VALUES } from "../AutoTTRecFormFieldsAndArgs";
 
-import { AutoTTRecResponse } from "../../enums";
+import { AutoTTRecResponse } from "../../shared/enums";
 
 import useRenderCounter from "../RenderCounter";
 
@@ -96,7 +96,7 @@ export function AutoTTRecManager() {
   return (
     <div>
       <AutoTTRecConfigForm_Memo whichUI={true} onSubmitCallback={runAutoTTRec}
-        onAbortCallback={abortAutoTTRec} isAutoTTRecRunning={isAutoTTRecRunning} formDefaultValues={formDefaultValues} setFormDefaultValues={setFormDefaultValues}/>
+        onAbortCallback={abortAutoTTRec} isAutoTTRecRunning={isAutoTTRecRunning} formDefaultValues={formDefaultValues}/>
       {renderCounter}
       <AutoTTRecStatus programStatusHeader={programStatusHeader}
         programStatusDetails={programStatusDetails}/>

@@ -45,12 +45,7 @@ import { AutoTTRecConfig } from "../shared/shared-types";
 
 import { ValidValues, ReadonlyArraySet, makeReadonlyArraySet } from "../shared/array-set";
 
-import { readFileEnforceUTF8 } from "../main/gui2";
-
 import { shallowCopy } from "../shared/util-shared";
-
-import path from "path";
-import { IpcMainInvokeEvent } from "electron";
 
 const TIMELINES = makeReadonlyArraySet(["noencode", "ghostonly", "ghostselect", "mkchannel", "top10"] as const);
 export type Timeline = ValidValues<typeof TIMELINES>;
@@ -222,8 +217,9 @@ type IsChoiceType<T, U extends T = T> =
 
 //type NonNullable<T> = {[P in keyof T]: Exclude<T[P], null>};
 
-export type PartialFILLME<T> = {
-  [P in keyof T]: IfEquals<T[P], number, number, T[P] | "<FILLME>">;
+export type PartialFILLME_FormComplexityNoFILLME<T> = {
+  [P in keyof T]: IfEquals<T[P], number, number, 
+    P extends "form-complexity" ? FormComplexity : T[P] | "<FILLME>">;
 };
 
 export type ExcludeFILLME<T> = {
@@ -231,8 +227,9 @@ export type ExcludeFILLME<T> = {
 }
 
 export interface AutoTTRecConfigFormFieldsSomeFILLME extends AutoTTRecConfigFormFieldsSomeFILLMEClass {};
-export type AutoTTRecConfigFormFields = PartialFILLME<AutoTTRecConfigFormFieldsSomeFILLME>;
+export type AutoTTRecConfigFormFields = PartialFILLME_FormComplexityNoFILLME<AutoTTRecConfigFormFieldsSomeFILLME>;
 export type AutoTTRecConfigFormFieldName = keyof AutoTTRecConfigFormFields;
+export type AutoTTRecConfigFormFieldNameExceptFormComplexity = Exclude<AutoTTRecConfigFormFieldName, "form-complexity">;
 
 export type AutoTTRecConfigFormFieldsNoFILLME = ExcludeFILLME<AutoTTRecConfigFormFieldsSomeFILLME>;
 
@@ -290,6 +287,11 @@ function deleteFromSet<T>(values: Set<T>, x: any): boolean {
 export type PartialNull<T> = {
   [P in keyof T]?: T[P] | null;
 };
+
+export type AutoTTRecConfigFormTriCheckboxFields = Pick<AutoTTRecConfigFormFields, {
+  [K in AutoTTRecConfigFormFieldName]-?:
+    IfEquals<AutoTTRecConfigFormFields[K], boolean | "<FILLME>", K, never>
+}[AutoTTRecConfigFormFieldName]>;
 
 //type AutoTTRecConfigFormFieldsPartialNull = PartialNull<AutoTTRecConfigFormFields>;
 type AutoTTRecConfigFormFieldsPartial = Partial<AutoTTRecConfigFormFields>;
@@ -465,6 +467,7 @@ class AutoTTRecConfigPreprocessor {
       this.fixAspectRatio16By9Type();
       this.convertStringOrNumArgToString("chadsoft-cache-expiry");
       this.convertStringOrNumArgToString("speedometer-decimal-places", "speedometer-decimal-places-str");
+      this.convertStringOrNumArgToString("form-complexity");
       this.convertDifferingArgNames();
       for (const unsupportedArgName of UNSUPPORTED_ARG_NAMES.arr)  {
         this.warnUnsupportedArg(unsupportedArgName);
@@ -556,7 +559,7 @@ class AutoTTRecConfigPreprocessor {
     }
   }
 
-  private convertStringOrNumArgToString(stringOrNumArgName: "chadsoft-cache-expiry" | "speedometer-decimal-places", newArgName?: "speedometer-decimal-places-str") {
+  private convertStringOrNumArgToString(stringOrNumArgName: "chadsoft-cache-expiry" | "speedometer-decimal-places" | "form-complexity", newArgName?: "speedometer-decimal-places-str") {
     let stringOrNumArgValue = this.autoTTRecConfig[stringOrNumArgName];
     if (stringOrNumArgValue !== null && stringOrNumArgValue !== "<FILLME>") {
       if (typeof stringOrNumArgValue !== "string") {
@@ -609,7 +612,7 @@ class AutoTTRecConfigImporter {
     this.formData[key] = DEFAULT_FORM_VALUES[key];
   }
 
-  public isArgValueNull_addDefaultIfNull<K extends AutoTTRecConfigFormFieldName>(key: K, value: string | number | boolean | null): value is null {
+  public isArgValueNull_addDefaultIfNull<K extends AutoTTRecConfigFormFieldNameExceptFormComplexity>(key: K, value: string | number | boolean | null): value is null {
     if (value === null) {
       this.addDefault(key);
       this.configArgWasNullOrDisallowedFILLMESet.add(key);
@@ -836,11 +839,7 @@ class AutoTTRecConfigImporter {
     }
 
     if (enableArgValue && typeof pathnameArgValue === "string") {
-      if (path.isAbsolute(pathnameArgValue)) {
-        pathnameAbsoluteArgValue = pathnameArgValue;
-      } else {
-        pathnameAbsoluteArgValue = path.resolve(path.dirname(this.autoTTRecConfigFilename), pathnameArgValue);
-      }
+      pathnameAbsoluteArgValue = window.api.getAbsolutePathRelativeToFilename(pathnameArgValue, this.autoTTRecConfigFilename);
     } else {
       pathnameAbsoluteArgValue = "";
       pathnameArgValue = "";
@@ -871,7 +870,7 @@ class AutoTTRecConfigImporter {
     if (absoluteTextFilename !== "") {
       let textFilenameContents: string = "";
       try {
-        textFilenameContents = await readFileEnforceUTF8(absoluteTextFilename, "Not a valid text file!");
+        textFilenameContents = await window.api.readFileEnforceUTF8(absoluteTextFilename, "Not a valid text file!");
       } catch (eAsAny) {
         let e: NodeJS.ErrnoException  = (eAsAny as NodeJS.ErrnoException);
         let errorMessageReason: string;
@@ -998,6 +997,24 @@ class AutoTTRecConfigImporter {
   // else
   //   hasK = false
   //   "audio-bitrate" is "audio-bitrate"
+
+  private importFormComplexity() {
+    let formComplexityArgValue = this.validateString_errorIfNot_handleUndefined("form-complexity");
+    let formComplexity: FormComplexity;
+
+    if (formComplexityArgValue === null) {
+      this.errorsAndWarnings.addWarning("form-complexity", `form-complexity is unspecified or null, defaulting to advanced. (Specify 0 for simple, 1 for advanced, and 2 for all)`);
+      formComplexity = FormComplexity.ADVANCED;
+    } else if (formComplexityArgValue === "") {
+      this.errorsAndWarnings.addError("form-complexity", "form-complexity MUST be specified (0 for simple, 1 for advanced, and 2 for all). Defaulting to advanced.");
+      formComplexity = FormComplexity.ADVANCED;
+    } else if (formComplexityArgValue === FormComplexity.SIMPLE || formComplexityArgValue === FormComplexity.ADVANCED || formComplexityArgValue === FormComplexity.ALL) {
+      formComplexity = formComplexityArgValue;
+    } else {
+      this.errorsAndWarnings.addError("form-complexity", `form-complexity is not one of 0, 1, or 2 (simple, advanced, and all respectively) (got: ${formComplexityArgValue}). Defaulting to advanced.`);
+      formComplexity = FormComplexity.ADVANCED;
+    }
+  }
 
   private importAudioBitrateAll() {
     let audioBitrate = this.autoTTRecConfig["audio-bitrate"];
@@ -1614,7 +1631,7 @@ class AutoTTRecConfigImporter {
   }
 }
 
-export async function convertAutoTTRecConfigToFormData(event: IpcMainInvokeEvent, autoTTRecConfig: AutoTTRecConfig) {
+export async function convertAutoTTRecConfigToFormData(autoTTRecConfig: AutoTTRecConfig) {
   let errorsAndWarnings = new AutoTTRecConfigErrorsAndWarnings();
   let autoTTRecConfigPreprocessor = new AutoTTRecConfigPreprocessor(autoTTRecConfig, errorsAndWarnings, "");
   let autoTTRecConfigImporter = autoTTRecConfigPreprocessor.preprocess();

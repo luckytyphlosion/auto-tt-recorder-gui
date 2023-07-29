@@ -86,7 +86,7 @@ export function AutoTTRecConfigForm(
     onAbortCallback: (event: React.MouseEvent<HTMLButtonElement>) => void,
     isAutoTTRecRunning: boolean,
     formDefaultValues: AutoTTRecConfigFormFields,
-    setFormDefaultValues: React.Dispatch<React.SetStateAction<AutoTTRecConfigFormFields>>
+    //setFormDefaultValues: React.Dispatch<React.SetStateAction<AutoTTRecConfigFormFields>>
   }
 ) {  
   const renderCounter = useRenderCounter(false, "AutoTTRecConfigForm");
@@ -132,12 +132,12 @@ export function AutoTTRecConfigForm(
   function onCheckChange(event: React.ChangeEvent<HTMLInputElement>) {
     setStateTest((stateTest) => !stateTest);
   }
-
+  // setFormDefaultValues={props.setFormDefaultValues}
   return (
     <div>
       <form onSubmit={formMethods.handleSubmit(onSubmit, onError)}>
         <ImportTemplate/>
-        <ClearAllFields formMethods={formMethods} submittedToggle={submittedToggle} setSubmittedToggle={setSubmittedToggle} setFormDefaultValues={props.setFormDefaultValues}/>
+        <ClearAllFields formMethods={formMethods} submittedToggle={submittedToggle} setSubmittedToggle={setSubmittedToggle} />
         <fieldset disabled={props.isAutoTTRecRunning}>
           {/*<AutoTTRecConfigFormComponents_Memo formMethods={formMethods} forceUpdate={submittedToggle} isAutoTTRecRunning={props.isAutoTTRecRunning}/>*/}
           <AutoTTRecConfigFormComponents_Memo formMethods={formMethods} forceUpdate={submittedToggle} isAutoTTRecRunning={props.isAutoTTRecRunning}/>
