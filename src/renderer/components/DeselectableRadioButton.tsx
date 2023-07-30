@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useRef, createContext, useContext, useMemo } from 'react';
+import React, { memo, useState, useEffect, useRef, createContext, useContext, useMemo } from 'react';
 import { ValidateResult, Control, Controller, RefCallBack, UseFormSetValue, UseFormGetValues, useFormContext } from 'react-hook-form';
 import { useFormContextAutoTT } from "../use-form-context-auto-tt";
 import { AutoTTRecConfigFormChoiceArgName, AutoTTRecConfigFormChoiceArgs } from "../AutoTTRecFormFieldsAndArgs";
@@ -40,7 +40,7 @@ function useDeselectableRadioButtonsGroupContext() {
 
 export function DeselectableRadioButtonGroup<K extends AutoTTRecConfigFormChoiceArgName>(props: {name: K, noErrorMessage?: boolean, notDeselectable?: boolean, children?: React.ReactNode}) {
   const {register} = useFormContextAutoTT();
-  const renderCounter = useRenderCounter(false, `DeselectableRadioButtonGroup ${props.name}`);
+  const renderCounter = useRenderCounter(true, `DeselectableRadioButtonGroup ${props.name}`);
   function validateDeselectableRadioButton(value: AutoTTRecConfigFormChoiceArgs[AutoTTRecConfigFormChoiceArgName]): ValidateResult {
     if (value === "<FILLME>") {
       return "This input is required.";
@@ -71,7 +71,7 @@ export function DeselectableRadioButtonGroup<K extends AutoTTRecConfigFormChoice
 export function DeselectableRadioButton<K extends AutoTTRecConfigFormChoiceArgName, V extends AutoTTRecConfigFormChoiceArgs[K]>(props: {labelValue: string, id: string, value: V, onChange?: ((event?: Event) => void) | (() => void), isLast?: boolean}) {
   const {register, setValue, getValues} = useFormContextAutoTT();
   const context = useDeselectableRadioButtonsGroupContext();
-  const renderCounter = useRenderCounter(false, `DeselectableRadioButton ${props.value}`);
+  const renderCounter = useRenderCounter(true, `DeselectableRadioButton ${props.value}`);
 
   return (
     <>
@@ -82,7 +82,12 @@ export function DeselectableRadioButton<K extends AutoTTRecConfigFormChoiceArgNa
         })}
         {...!context.notDeselectable ? {
             onContextMenu: (e: React.MouseEvent<HTMLInputElement>) => {
-              setValue<AutoTTRecConfigFormChoiceArgName>(context.name, "<FILLME>", {shouldTouch: true});
+              let curValue = getValues(context.name);
+              if (curValue === "<FILLME>") {
+                setValue<AutoTTRecConfigFormChoiceArgName>(context.name, props.value as V, {shouldTouch: true});
+              } else {
+                setValue<AutoTTRecConfigFormChoiceArgName>(context.name, "<FILLME>", {shouldTouch: true});
+              }
               if (props.onChange !== undefined) {
                 if (e instanceof Event) {
                   props.onChange(e);
