@@ -4,6 +4,7 @@ import { Control, Controller, RefCallBack, UseFormSetValue, UseFormGetValues } f
 import { useFormContextAutoTT } from "../use-form-context-auto-tt";
 import { AutoTTRecConfigFormFields, AutoTTRecConfigFormTriCheckboxFields } from "../AutoTTRecFormFieldsAndArgs";
 import { SimpleErrorMessage } from "./SimpleErrorMessage";
+import { BooleanFILLME } from "../../shared/shared-types";
 
 import useRenderCounter from "../RenderCounter";
 
@@ -15,7 +16,7 @@ interface CustomCheckboxProps {
 }
 
 function TriCheckboxInternal(props: {
-  value: boolean | "<FILLME>",
+  value: BooleanFILLME,
   refCallback: RefCallBack,
   onChange: (...event: any[]) => void,
   userOnChange?: ((event?: React.ChangeEvent<HTMLInputElement>) => void) | (() => void),
@@ -49,15 +50,17 @@ function TriCheckboxInternal(props: {
         }
         props.onChange(e);
       }} onContextMenu={(e: React.MouseEvent<HTMLInputElement>) => {
+        let newValue: BooleanFILLME = false;
         if (checkboxRef !== null && checkboxRef.current !== null) {
-          checkboxRef.current.indeterminate = true;
-          checkboxRef.current.checked = false;  
+          checkboxRef.current.indeterminate = !checkboxRef.current.indeterminate;
+          newValue = checkboxRef.current.indeterminate ? "<FILLME>" : false;
           //console.log("checkboxRef.current.value:", checkboxRef.current.value);
         }
+
         if (props.userOnChange !== undefined) {
           props.userOnChange();
         }
-        props.onChange("<FILLME>");
+        props.onChange(newValue);
         e.preventDefault();
         return false;
       }}
@@ -99,7 +102,6 @@ export function TriCheckbox<K extends keyof AutoTTRecConfigFormTriCheckboxFields
       )}
       rules={{
         validate: (value) => {
-          let value2 = getValues(props.name);
           //console.log(`TriCheckbox validate ${props.name} value:`, value, ", value2:", value2);
           if (value === true || value === false) {
             return true;

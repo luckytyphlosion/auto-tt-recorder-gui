@@ -17,7 +17,7 @@ export function ChadsoftReadCacheAndSettingsInput() {
       <TriCheckbox name="chadsoft-read-cache"/>
       <ChadsoftWriteCacheInput/>
       {
-        chadsoftReadCache ? <ChadsoftCacheExpiryInput/> : ""
+        chadsoftReadCache === true || chadsoftReadCache === "<FILLME>" ? <ChadsoftCacheExpiryInput/> : ""
       }
     </div>
   );
