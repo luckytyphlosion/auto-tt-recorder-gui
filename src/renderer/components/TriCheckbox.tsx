@@ -17,6 +17,7 @@ function TriCheckboxInternal(props: {
   value: boolean | "<FILLME>",
   refCallback: RefCallBack,
   onChange: (...event: any[]) => void,
+  userOnChange?: (event?: React.ChangeEvent<HTMLInputElement>) => void,
   setValue: UseFormSetValue<AutoTTRecConfigFormFields>,
   getValues: UseFormGetValues<AutoTTRecConfigFormFields>
 }) {
@@ -45,6 +46,9 @@ function TriCheckboxInternal(props: {
         props.refCallback(inputRef);
       }} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
         console.log("e.target.checked:", e.target.checked);
+        if (props.userOnChange !== undefined) {
+          props.userOnChange(e);
+        }
         props.onChange(e);
       }}/>
       {renderCounter}
@@ -52,7 +56,7 @@ function TriCheckboxInternal(props: {
   );
 }
 
-export function TriCheckbox<K extends keyof AutoTTRecConfigFormTriCheckboxFields>(props: {name: K}) {
+export function TriCheckbox<K extends keyof AutoTTRecConfigFormTriCheckboxFields>(props: {name: K, onChange?: (event?: React.ChangeEvent<HTMLInputElement>) => void}) {
   const {control, setValue, getValues} = useFormContextAutoTT();
   const renderCounter = useRenderCounter(false, "TriCheckbox");
   //const checkboxRef = useRef<HTMLInputElement | null>(null);
@@ -70,6 +74,7 @@ export function TriCheckbox<K extends keyof AutoTTRecConfigFormTriCheckboxFields
         <TriCheckboxInternal
           value={value}
           onChange={onChange}
+          userOnChange={props.onChange}
           refCallback={ref}
           setValue={setValue}
           getValues={getValues}

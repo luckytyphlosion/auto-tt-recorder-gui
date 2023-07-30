@@ -144,7 +144,6 @@ export function AutoTTRecConfigForm(
         </fieldset>
         <AutoTTRecSubmitAbortButtons_Memo isAutoTTRecRunning={props.isAutoTTRecRunning} onAbortCallback={props.onAbortCallback}/>
       </form>
-      {/*<input type="checkbox" id="state-test" checked={stateTest} onChange={onCheckChange}/>*/}
       {renderCounter}
     </div>
   );
