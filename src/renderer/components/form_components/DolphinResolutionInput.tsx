@@ -27,8 +27,11 @@ export function DolphinResolutionInput(props: {enableOutputWidth: boolean, formC
   const [dolphinResolutionToggle, setDolphinResolutionToggle] = useState(false);
 
   function updateDolphinResolution(event?: Event) {
-    setDolphinResolution(getValues("dolphin-resolution"));
-    setDolphinResolutionToggle(!dolphinResolutionToggle);
+    let dolphinResolutionFormValue = getValues("dolphin-resolution");
+    setDolphinResolution(dolphinResolutionFormValue);
+    if (dolphinResolutionFormValue !== "<FILLME>") {
+      setDolphinResolutionToggle((dolphinResolutionToggle) => !dolphinResolutionToggle);
+    }
   }
 
   return (
