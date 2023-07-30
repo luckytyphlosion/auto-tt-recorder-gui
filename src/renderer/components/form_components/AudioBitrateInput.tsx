@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { UseFormRegister, FieldValues, UseFormRegisterReturn, Controller, ValidateResult } from "react-hook-form";
-import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
+import { useFormContextAutoTT, useWatchAutoTT } from "../../use-form-context-auto-tt";
 import useRenderCounter from "../../RenderCounter";
 
 import { AudioCodec } from "./AudioCodecAndBitrateInput";
@@ -52,7 +52,7 @@ const MAX_AUDIO_BITRATE_KBPS = Math.floor(MAX_AUDIO_BITRATE / 1000);
 
 const MAX_AUDIO_BITRATE_LENGTH = MAX_AUDIO_BITRATE.toString().length;
 
-export function AudioBitrateInput(props: {encodeType: EncodeType, audioCodec: AudioCodec, resetToDefaultAudioBitrate: boolean}) {
+export function AudioBitrateInput(props: {encodeType: EncodeType, audioCodec: AudioCodec}) {
   const {register, setValue, getValues} = useFormContextAutoTT();
   const renderCounter = useRenderCounter(true);
 
@@ -108,13 +108,18 @@ export function AudioBitrateInput(props: {encodeType: EncodeType, audioCodec: Au
   //console.log("audioCodec:", props.audioCodec);
 
   useEffect(() => {
-    if (props.resetToDefaultAudioBitrate) {
+    let lastEncodeType = getValues("audio-bitrate-last-encode-type");
+    let lastAudioCodec = getValues("audio-bitrate-last-audio-codec");
+    console.log("lastEncodeType:", lastEncodeType, ", props.encodeType:", props.encodeType, ", lastAudioCodec:", lastAudioCodec, ", props.audioCodec:", props.audioCodec);
+    if (lastEncodeType !== props.encodeType || lastAudioCodec !== props.audioCodec) {
       let audioBitrate = getDefaultAudioBitrate(props.encodeType, props.audioCodec);
-      let audioBitrateDisplayed = getDefaultAudioBitrateDisplayed(props.encodeType, props.audioCodec, getValues("audio-bitrate-unit")); 
+      let audioBitrateDisplayed = getDefaultAudioBitrateDisplayed(props.encodeType, props.audioCodec, getValues("audio-bitrate-unit"));
       setValue("audio-bitrate", audioBitrate, {shouldTouch: true});
       setValue("audio-bitrate-displayed", audioBitrateDisplayed, {shouldTouch: true});
-    }  
-  }, [props.resetToDefaultAudioBitrate]);
+      setValue("audio-bitrate-last-encode-type", props.encodeType);
+      setValue("audio-bitrate-last-audio-codec", props.audioCodec);
+    }
+  }, [props.encodeType, props.audioCodec]);
 
   function validateAudioBitrate(value: number) : ValidateResult {
     if (Number.isNaN(value)) {
@@ -139,6 +144,8 @@ export function AudioBitrateInput(props: {encodeType: EncodeType, audioCodec: Au
           value: true,
           message: "This input is required."
         }, validate: validateAudioBitrate})}/>
+      <input type="hidden" {...register("audio-bitrate-last-encode-type")}/>
+      <input type="hidden" {...register("audio-bitrate-last-audio-codec")}/>
       <input type="number" onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
         //console.log("e.key:", e.key);
         //if (e.key.match(/\D/g)) {

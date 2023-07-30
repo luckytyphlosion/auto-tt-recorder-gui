@@ -41,9 +41,10 @@ import { Top10TitleType } from "./components/form_components/Top10TitleInput";
 
 import { Set200cc, SET_200CC_VALUES } from "./components/form_components/Set200ccInput";
 
-import { AutoTTRecConfig, StringOrError } from "../shared/shared-types";
+import { AutoTTRecConfig, StringOrError, BooleanFILLME } from "../shared/shared-types";
 
 import { ValidValues, ReadonlyArraySet, makeReadonlyArraySet } from "../shared/array-set";
+import { ResetAudioBitrateState } from "./reset-audio-bitrate-state";
 
 import { shallowCopy } from "../shared/util-shared";
 
@@ -67,6 +68,8 @@ type AnyFIXME = any;
 class AutoTTRecConfigFormFieldsSomeFILLMEClass {
   "aspect-ratio-16-by-9": AspectRatio16By9 = "auto"; // choice
   "audio-bitrate": number = 128000; // number
+  "audio-bitrate-last-encode-type": EncodeType = "crf"; // choice but internal
+  "audio-bitrate-last-audio-codec": AudioCodec = "libopus"; // choice but internal
   "audio-bitrate-displayed": number = 128; // internal
   "audio-bitrate-unit": AudioBitrateUnit = "kbps"; // internal
   "audio-codec": AudioCodec = "libopus"; // choice
@@ -204,8 +207,6 @@ class AutoTTRecArgsClass {
   "youtube-settings"?: boolean = true;
 }
 
-type BooleanFILLME = boolean | "<FILLME>";
-
 type IfEquals<T, U, Y=unknown, N=never> =
   (<G>() => G extends T ? 1 : 2) extends
   (<G>() => G extends U ? 1 : 2) ? Y : N;
@@ -229,7 +230,7 @@ export type ExcludeFILLME<T> = {
 export interface AutoTTRecConfigFormFieldsSomeFILLME extends AutoTTRecConfigFormFieldsSomeFILLMEClass {};
 export type AutoTTRecConfigFormFields = PartialFILLME_FormComplexityNoFILLME<AutoTTRecConfigFormFieldsSomeFILLME>;
 export type AutoTTRecConfigFormFieldName = keyof AutoTTRecConfigFormFields;
-export type AutoTTRecConfigFormFieldNameExceptFormComplexity = Exclude<AutoTTRecConfigFormFieldName, "form-complexity">;
+export type AutoTTRecConfigFormNonSpecialFieldName = Exclude<AutoTTRecConfigFormFieldName, "form-complexity">;
 
 
 
@@ -272,6 +273,8 @@ export const MINIMAL_FORM_VALUES: AutoTTRecConfigFormMinimalFields = {
   "aspect-ratio-16-by-9": "<FILLME>",
   "audio-bitrate": NaN,
   "audio-bitrate-displayed": NaN,
+  "audio-bitrate-last-encode-type": "<FILLME>",
+  "audio-bitrate-last-audio-codec": "<FILLME>",
   "audio-bitrate-unit": "<FILLME>",
   "audio-codec": "<FILLME>",
   "background-music-source": "<FILLME>",
@@ -801,7 +804,7 @@ class AutoTTRecConfigImporter {
     this.formData[key] = DEFAULT_FORM_VALUES[key];
   }
 
-  public isArgValueNull_addDefaultIfNull<K extends AutoTTRecConfigFormFieldNameExceptFormComplexity>(key: K, value: string | number | boolean | null): value is null {
+  public isArgValueNull_addDefaultIfNull<K extends AutoTTRecConfigFormNonSpecialFieldName>(key: K, value: string | number | boolean | null): value is null {
     if (value === null) {
       this.addDefault(key);
       this.configArgWasNullOrDisallowedFILLMESet.add(key);
@@ -1800,6 +1803,14 @@ class AutoTTRecConfigImporter {
     this.formData["track-name-type"] = trackNameType;
   }
 
+  private clearAudioBitrateAndCodecState() {
+    let encodeType = this.getFormDataStringOrChoice_verifyNotUndefined("encode-type");
+    let audioCodec = this.getFormDataStringOrChoice_verifyNotUndefined("audio-codec");
+
+    this.formData["audio-bitrate-last-encode-type"] = encodeType;
+    this.formData["audio-bitrate-last-audio-codec"] = audioCodec;
+  }
+
   public async import(): Promise<AutoTTRecConfigFormFields> {
     if (!this.hasImported) {
       this.importStraightCopyArgs();
@@ -1826,6 +1837,7 @@ class AutoTTRecConfigImporter {
       this.importTop10Location();
       this.importTop10TitleAndSetTop10TitleType();
       this.importTrackNameAndSetTrackNameType();
+      this.clearAudioBitrateAndCodecState();
       validateFormDataNonPartial(this.formData, this.errorsAndWarnings);
       this.hasImported = true;
     }

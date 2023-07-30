@@ -50,3 +50,4 @@ export interface ExpectedExtensionAndErrorMessage {
   errorMessage: string
 }
 
+export type BooleanFILLME = boolean | "<FILLME>";

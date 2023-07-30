@@ -24,9 +24,6 @@ export function AutoTTRecConfigFormComponents(props: {
     isAutoTTRecRunning: boolean}) {  
   const renderCounter = useRenderCounter(false, "AutoTTRecConfigFormComponents");
   console.log("Rendering AutoTTRecConfigFormComponents. forceUpdate: ", props.forceUpdate);
-  const [thisForceUpdate, setForceUpdate] = useState(props.forceUpdate);
-
-  console.log("thisForceUpdate:", thisForceUpdate, ", props.forceUpdate:", props.forceUpdate);
 
   return (
     <div className="auto-tt-rec-config-form">

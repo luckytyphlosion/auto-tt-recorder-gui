@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 
-const SHOW_RENDER_COUNTERS = true;
+const SHOW_RENDER_COUNTERS = false;
 const isDev = process.env.NODE_ENV === 'development';
 
 const useRenderCounter = (disabled?: boolean, name?: string) => {

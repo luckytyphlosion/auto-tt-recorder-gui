@@ -15,15 +15,13 @@ import { EncodeType } from "../layout_components/choice_layouts/EncodeSettingsLa
 export const AUDIO_CODECS = makeReadonlyArraySet(["libopus", "aac"] as const);
 export type AudioCodec = ValidValues<typeof AUDIO_CODECS>;
 
-export function AudioCodecAndBitrateInput(props: {encodeType: EncodeType, encodeTypeChanged: boolean}) {
-  const {register, getValues} = useFormContextAutoTT();
+export function AudioCodecAndBitrateInput(props: {encodeType: EncodeType}) {
+  const {register, getValues, setValue} = useFormContextAutoTT();
   const [audioCodec, setAudioCodec] = useState(getValues("audio-codec"));
-  const [encodeTypeOrAudioCodecChanged, setEncodeTypeOrAudioCodecChanged] = useState(props.encodeTypeChanged);
   const renderCounter = useRenderCounter(true);
 
   function updateAudioCodec(event?: Event) {
     setAudioCodec(getValues("audio-codec"));
-    setEncodeTypeOrAudioCodecChanged((oldEncodeTypeOrAudioCodecChanged) => (!oldEncodeTypeOrAudioCodecChanged));
   }
 
   return (
@@ -34,7 +32,7 @@ export function AudioCodecAndBitrateInput(props: {encodeType: EncodeType, encode
         <option value="aac">aac</option>
       </DeselectableDropdown>
       {renderCounter}
-      <AudioBitrateInput encodeType={props.encodeType} audioCodec={audioCodec} resetToDefaultAudioBitrate={encodeTypeOrAudioCodecChanged}/>
+      <AudioBitrateInput encodeType={props.encodeType} audioCodec={audioCodec}/>
     </div>
   );
 }

@@ -7,7 +7,7 @@ import { AudioCodecAndBitrateInput } from "../../form_components/AudioCodecAndBi
 import { YoutubeSettingsInput } from "../../form_components/YoutubeSettingsInput";
 import { FormComplexity } from "../FormComplexityLayout";
 
-export function CRFEncodeSettingsLayout(props: {encodeTypeChanged: boolean, formComplexity: FormComplexity}) {
+export function CRFEncodeSettingsLayout(props: {formComplexity: FormComplexity}) {
   return (
     <div>
       {
@@ -16,7 +16,7 @@ export function CRFEncodeSettingsLayout(props: {encodeTypeChanged: boolean, form
           <CRFValueInput/>
           <H26xPresetInput/>
           <YoutubeSettingsInput/>
-          <AudioCodecAndBitrateInput encodeType="crf" encodeTypeChanged={props.encodeTypeChanged}/>
+          <AudioCodecAndBitrateInput encodeType="crf"/>
         </> : <CRFValueInput/>
       }
     </div>

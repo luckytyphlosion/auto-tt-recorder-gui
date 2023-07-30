@@ -7,7 +7,7 @@ import { AudioCodecAndBitrateInput } from "../../form_components/AudioCodecAndBi
 import { EncodeSizeInput } from "../../form_components/EncodeSizeInput";
 import { FormComplexity } from "../FormComplexityLayout";
 
-export function SizeBasedEncodeSettingsLayout(props: {encodeTypeChanged: boolean, formComplexity: FormComplexity}) {
+export function SizeBasedEncodeSettingsLayout(props: {formComplexity: FormComplexity}) {
   const {getValues} = useFormContextAutoTT();
 
   return (
@@ -20,7 +20,7 @@ export function SizeBasedEncodeSettingsLayout(props: {encodeTypeChanged: boolean
       <EncodeSizeInput/>
       {
         props.formComplexity === FormComplexity.ALL ? 
-          <AudioCodecAndBitrateInput encodeType="size" encodeTypeChanged={props.encodeTypeChanged}/>
+          <AudioCodecAndBitrateInput encodeType="size"/>
           : ""
       }
     </div>

@@ -20,10 +20,6 @@ export function TimelineCategoryLayout(props: {isAutoTTRecRunning: boolean, form
   const timelineCategory = useWatchAutoTT({name: "timeline-category"});
   const renderCounter = useRenderCounter(false, "TimelineCategoryInput");
 
-  console.log("TimelineCategoryLayout importToggle:", props.importToggle);
-
-  console.log("timelineCategory:", timelineCategory, `, getValues("timeline-category"):`, getValues("timeline-category"));
-
   return (
     <div>
       <DeselectableRadioButtonGroup name="timeline-category" notDeselectable={true}>

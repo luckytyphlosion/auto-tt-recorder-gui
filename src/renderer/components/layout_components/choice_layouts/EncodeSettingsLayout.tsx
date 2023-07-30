@@ -17,14 +17,12 @@ export type EncodeType = ValidValues<typeof ENCODE_TYPES>;
 const PixelFormatInput_Memo = memo(PixelFormatInput);
 
 export function EncodeSettingsLayout(props: {formComplexity: FormComplexity}) {
-  const {register, getValues} = useFormContextAutoTT();
+  const {register, getValues, setValue} = useFormContextAutoTT();
   const [encodeType, setEncodeType] = useState(getValues("encode-type"));
-  const [encodeTypeChanged, setEncodeTypeChanged] = useState(false);
   const renderCounter = useRenderCounter(false, "EncodeTypeInput");
 
   function updateEncodeType(event?: Event) {
     setEncodeType(getValues("encode-type"));
-    setEncodeTypeChanged(true);
   }
 
   return (
@@ -37,8 +35,8 @@ export function EncodeSettingsLayout(props: {formComplexity: FormComplexity}) {
       </DeselectableRadioButtonGroup>
       {renderCounter}
       {
-        encodeType === "crf" ? <CRFEncodeSettingsLayout encodeTypeChanged={encodeTypeChanged} formComplexity={props.formComplexity}/> :
-        encodeType === "size" ? <SizeBasedEncodeSettingsLayout encodeTypeChanged={encodeTypeChanged} formComplexity={props.formComplexity}/> :
+        encodeType === "crf" ? <CRFEncodeSettingsLayout formComplexity={props.formComplexity}/> :
+        encodeType === "size" ? <SizeBasedEncodeSettingsLayout formComplexity={props.formComplexity}/> :
         ''
       }
       {

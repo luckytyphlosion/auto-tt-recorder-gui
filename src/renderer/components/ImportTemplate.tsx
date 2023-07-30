@@ -5,6 +5,8 @@ import { FormProvider, UseFormReturn } from "react-hook-form";
 import { convertAutoTTRecConfigToFormData, AutoTTRecConfigFormFields, AUTO_TT_REC_CONFIG_FORM_FIELD_NAMES, DEFAULT_FORM_VALUES } from "../AutoTTRecFormFieldsAndArgs";
 import { ImportTemplateResult, ImportTemplateStatus, AutoTTRecConfig } from "../../shared/shared-types";
 
+import { BooleanFILLME } from "../../shared/shared-types";
+
 export enum ImportTemplateStatu2s {
   INDETERMINATE = -1,
   SUCCESS = 0,
@@ -30,7 +32,7 @@ export function ImportTemplate(props: {
   const [importStatus, setImportStatus] = useState(ImportTemplateStatus.SUCCESS);
   const [hasWarnings, setHasWarnings] = useState(false);
   const [errorWarningData, setErrorWarningData] = useState("");
-  const [formDataToggle, setNewFormDataToggle] = useState(false);
+  const [formDataToggle, setNewFormDataToggle] = useState<BooleanFILLME>("<FILLME>");
 
   const [autoTTRecTemplateFilename, setAutoTTRecTemplateFilename] = useState("");
 
@@ -58,15 +60,17 @@ export function ImportTemplate(props: {
     setModalOpen(true);
   }
 
-  useEffect(() => {
-    props.formMethods.handleSubmit(() => {}, props.onError)();
-  }, [formDataToggle]);
-
   function importTemplateModal_cancel(event: React.MouseEvent<HTMLButtonElement>) {
     props.setImportToggle(false);
     setNewFormDataToggle((formDataToggle) => !formDataToggle);
     setModalOpen(false);
   }
+
+  useEffect(() => {
+    if (formDataToggle !== "<FILLME>") {
+      props.formMethods.handleSubmit(() => {}, props.onError)();
+    }
+  }, [formDataToggle]);
 
   return (
     <div>
