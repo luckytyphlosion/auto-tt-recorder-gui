@@ -33,9 +33,10 @@ export function ComparisonGhostSourceInput() {
 
       {renderCounter}
       {
-        comparisonGhostSource === "chadsoft" ? <ChadsoftComparisonGhostPageInput/>
-        : comparisonGhostSource === "rkg" ? <ComparisonGhostFilenameInput/>
-        : ''
+        comparisonGhostSource === "chadsoft" || comparisonGhostSource === "<FILLME>" ? <ChadsoftComparisonGhostPageInput/> : ""
+      }
+      {
+        comparisonGhostSource === "rkg" || comparisonGhostSource === "<FILLME>" ? <ComparisonGhostFilenameInput/> : ""
       }
     </div>
   );
