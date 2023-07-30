@@ -6,10 +6,12 @@ import { MusicVolumeInput } from "./MusicVolumeInput";
 import { MusicPresentationInput } from "./MusicPresentationInput";
 import { FormComplexity } from "../layout_components/FormComplexityLayout";
 import { Timeline } from "../../AutoTTRecFormFieldsAndArgs";
+import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
 
 import useRenderCounter from "../../RenderCounter";
 
-export type BackgroundMusicSource = "music-filename" | "game-bgm" | "none";
+export const BACKGROUND_MUSIC_SOURCES = makeReadonlyArraySet(["music-filename", "game-bgm", "none"] as const);
+export type BackgroundMusicSource = ValidValues<typeof BACKGROUND_MUSIC_SOURCES>;
 
 export function BackgroundMusicSourceInput(props: {timeline: Timeline, formComplexity: FormComplexity}) {
   const {register, getValues} = useFormContextAutoTT();

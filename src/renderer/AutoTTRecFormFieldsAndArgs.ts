@@ -231,6 +231,8 @@ export type AutoTTRecConfigFormFields = PartialFILLME_FormComplexityNoFILLME<Aut
 export type AutoTTRecConfigFormFieldName = keyof AutoTTRecConfigFormFields;
 export type AutoTTRecConfigFormFieldNameExceptFormComplexity = Exclude<AutoTTRecConfigFormFieldName, "form-complexity">;
 
+
+
 export type AutoTTRecConfigFormFieldsNoFILLME = ExcludeFILLME<AutoTTRecConfigFormFieldsSomeFILLME>;
 
 type AutoTTRecConfigFormPrimitiveArgs<T> = Pick<AutoTTRecConfigFormFields, {
@@ -253,8 +255,98 @@ type AutoTTRecConfigFormSharedBooleanArgName = AutoTTRecConfigFormBooleanArgName
 type AutoTTRecConfigFormChoiceArgs = Pick<AutoTTRecConfigFormFields, {
   [K in AutoTTRecConfigFormFieldName]-?: IsChoiceType<AutoTTRecConfigFormFields[K]> extends true ? K : never
 }[AutoTTRecConfigFormFieldName]>;
-type AutoTTRecConfigFormChoiceArgNames = keyof AutoTTRecConfigFormChoiceArgs;
-type AutoTTRecConfigFormSharedChoiceArgName = AutoTTRecConfigFormChoiceArgNames & AutoTTRecArgName;
+type AutoTTRecConfigFormChoiceArgName = keyof AutoTTRecConfigFormChoiceArgs;
+type AutoTTRecConfigFormSharedChoiceArgName = AutoTTRecConfigFormChoiceArgName & AutoTTRecArgName;
+
+//type NaNCheck = 
+
+type AutoTTRecConfigFormMinimalFields = (
+  {[K in AutoTTRecConfigFormStringArgName]: ""}
+  | {[K in AutoTTRecConfigFormNumberArgName]: number}
+  | {[K in AutoTTRecConfigFormBooleanArgName]: "<FILLME>"}
+  | {[K in AutoTTRecConfigFormChoiceArgName]: "<FILLME>"}
+  | {"form-complexity": FormComplexity}
+) & AutoTTRecConfigFormFields;
+
+export const MINIMAL_FORM_VALUES: AutoTTRecConfigFormMinimalFields = {
+  "aspect-ratio-16-by-9": "<FILLME>",
+  "audio-bitrate": NaN,
+  "audio-bitrate-displayed": NaN,
+  "audio-bitrate-unit": "<FILLME>",
+  "audio-codec": "<FILLME>",
+  "background-music-source": "<FILLME>",
+  "chadsoft-comparison-ghost-page": "",
+  "chadsoft-ghost-page": "",
+  "chadsoft-read-cache": "<FILLME>",
+  "chadsoft-write-cache": "<FILLME>",
+  "chadsoft-cache-expiry": "",
+  "comparison-ghost-filename": "",
+  "comparison-ghost-source": "<FILLME>",
+  "crf-value": NaN,
+  "dolphin-resolution": "<FILLME>",
+  "encode-only": "<FILLME>",
+  "encode-size": NaN,
+  "encode-size-displayed": NaN,
+  "encode-size-unit": "<FILLME>",
+  "encode-type": "<FILLME>",
+  "ending-delay": NaN,
+  "extra-gecko-codes-enable": "<FILLME>",
+  "extra-gecko-codes-contents": "",
+  "extra-gecko-codes-filename": "",
+  "extra-gecko-codes-unsaved": "<FILLME>",
+  "extra-hq-textures-folder-enable": "<FILLME>",
+  "extra-hq-textures-folder": "",
+  "fade-in-at-start": "<FILLME>",
+  "form-complexity": FormComplexity.ADVANCED,
+  "game-volume-slider": NaN,
+  "game-volume-numberinput": NaN,
+  "h26x-preset": "<FILLME>",
+  "hq-textures": "<FILLME>",
+  "input-display": "<FILLME>",
+  "input-display-dont-create": "<FILLME>",
+  "iso-filename": "",
+  "keep-window": "<FILLME>",
+  "main-ghost-filename": "",
+  "main-ghost-source": "<FILLME>",
+  "mk-channel-ghost-description": "",
+  "music-filename": "",
+  "music-presentation": "<FILLME>",
+  "music-volume-numberinput": NaN,
+  "music-volume-slider": NaN,
+  "no-background-blur": "<FILLME>",
+  "no-bloom": "<FILLME>",
+  "no-music": "<FILLME>",
+  "no-top-10-category": "<FILLME>",
+  "output-video-filename": "",
+  "output-video-file-format": "<FILLME>",
+  "output-width-custom": NaN,
+  "output-width-preset": "<FILLME>",
+  "pixel-format": "",
+  "set-200cc": "<FILLME>",
+  "speedometer-decimal-places-str": "<FILLME>",
+  "speedometer-style": "<FILLME>",
+  "speedometer-metric": "<FILLME>",
+  "szs-filename": "",
+  "szs-source": "<FILLME>",
+  "timeline-category": "<FILLME>",
+  "top-10-chadsoft": "",
+  "top-10-gecko-code-location-region": "<FILLME>",
+  "top-10-gecko-code-contents": "",
+  "top-10-gecko-code-filename": "",
+  "top-10-gecko-code-unsaved": "<FILLME>",
+  "top-10-highlight-enable": "<FILLME>",
+  "top-10-highlight": NaN,
+  "top-10-location-country-location": "<FILLME>",
+  "top-10-location-region": "<FILLME>",
+  "top-10-location-regional-location": "<FILLME>",
+  "top-10-title": "",
+  "top-10-title-type": "<FILLME>",
+  "track-name": "",
+  "track-name-type": "<FILLME>",
+  "use-ffv1": "<FILLME>",
+  "video-codec": "<FILLME>",
+  "youtube-settings": "<FILLME>"
+};
 
 // type AutoTTRecStringOrChoiceArgName = Pick<AutoTTRecArgs, {
 //   [K in AutoTTRecArgName]-?:
@@ -360,6 +452,37 @@ export interface AutoTTRecConfigImporterError {
 interface AutoTTRecConfigImporterErrorOrWarningMessage {
   isWarning: boolean,
   message: string
+}
+
+function validateFormDataNonPartial(formData: AutoTTRecConfigFormFieldsPartial, errorsAndWarnings: AutoTTRecConfigErrorsAndWarnings) {
+  for (const argName of AUTO_TT_REC_CONFIG_FORM_FIELD_NAMES) {
+    if (formData[argName] === undefined) {
+      errorsAndWarnings.addKeyUndefinedWarning(argName, "formData");
+      formData[argName] = DEFAULT_FORM_VALUES[argName] as any;
+    } else if (formData[argName] === null) {
+      errorsAndWarnings.addWarning(argName, `formData[${argName}] was somehow null! (this is an error within the program itself and not your fault, please contact the developer!)`);
+      formData[argName] = DEFAULT_FORM_VALUES[argName] as any;
+    }
+  }
+}
+
+export function makeMinimalFormData(formComplexity: FormComplexity, timelineCategory: TimelineCategory, noTop10Category: NoTop10Category) {
+  let formData: AutoTTRecConfigFormFields = shallowCopy(MINIMAL_FORM_VALUES);
+  formData["form-complexity"] = formComplexity;
+  formData["timeline-category"] = timelineCategory;
+  formData["no-top-10-category"] = noTop10Category;
+  let errorsAndWarnings = new AutoTTRecConfigErrorsAndWarnings();
+
+  for (const argName of AUTO_TT_REC_CONFIG_FORM_FIELD_NAMES) {
+    if (typeof formData[argName] === "number") {
+      if (!Number.isNaN(formData[argName])) {
+        errorsAndWarnings.addWarning(argName, `minimal formData[${argName}] should be NaN! (this is an error within the program itself and not your fault, please contact the developer!)`);
+      }
+    }
+  }
+
+  console.log(errorsAndWarnings.compile());
+  return formData;
 }
 
 const listFormatter = new Intl.ListFormat("en", {style: "long", type: "disjunction"});
@@ -662,7 +785,7 @@ class AutoTTRecConfigImporter {
   private hasImported: boolean;
   private autoTTRecConfig: AutoTTRecConfig;
   private errorsAndWarnings: AutoTTRecConfigErrorsAndWarnings;
-  private configArgWasNullOrDisallowedFILLMESet: Set<AutoTTRecConfigFormStringArgName | AutoTTRecConfigFormChoiceArgNames | AutoTTRecConfigFormNumberArgName | AutoTTRecConfigFormBooleanArgName>;
+  private configArgWasNullOrDisallowedFILLMESet: Set<AutoTTRecConfigFormStringArgName | AutoTTRecConfigFormChoiceArgName | AutoTTRecConfigFormNumberArgName | AutoTTRecConfigFormBooleanArgName>;
   private autoTTRecConfigFilename: string;
 
   constructor(autoTTRecConfig: AutoTTRecConfig, errorsAndWarnings: AutoTTRecConfigErrorsAndWarnings, autoTTRecConfigFilename: string) {
@@ -771,7 +894,7 @@ class AutoTTRecConfigImporter {
     }
   }
 
-  private getFormDataStringOrChoiceArg_verifyNotUndefined_nullIfWasNull<K extends AutoTTRecConfigFormStringArgName | AutoTTRecConfigFormChoiceArgNames>(key: K): AutoTTRecConfigFormFields[K] | null {
+  private getFormDataStringOrChoiceArg_verifyNotUndefined_nullIfWasNull<K extends AutoTTRecConfigFormStringArgName | AutoTTRecConfigFormChoiceArgName>(key: K): AutoTTRecConfigFormFields[K] | null {
     if (this.configArgWasNullOrDisallowedFILLMESet.has(key)) {
       return null;
     } else {
@@ -787,7 +910,7 @@ class AutoTTRecConfigImporter {
     }
   }
 
-  private getFormDataStringOrChoice_verifyNotUndefined<K extends AutoTTRecConfigFormStringArgName | AutoTTRecConfigFormChoiceArgNames>(key: K): AutoTTRecConfigFormFields[K] {
+  private getFormDataStringOrChoice_verifyNotUndefined<K extends AutoTTRecConfigFormStringArgName | AutoTTRecConfigFormChoiceArgName>(key: K): AutoTTRecConfigFormFields[K] {
     let value = this.formData[key];
     if (value === undefined) {
       this.errorsAndWarnings.addKeyUndefinedWarning(key, "formData");
@@ -854,7 +977,7 @@ class AutoTTRecConfigImporter {
     }
   }
 
-  private setStringOrChoiceArg_handleNullOrDisallowedFILLME<K extends AutoTTRecConfigFormStringArgName | AutoTTRecConfigFormChoiceArgNames, V extends AutoTTRecConfigFormFields[K]>(key: K, value: V | null) {
+  private setStringOrChoiceArg_handleNullOrDisallowedFILLME<K extends AutoTTRecConfigFormStringArgName | AutoTTRecConfigFormChoiceArgName, V extends AutoTTRecConfigFormFields[K]>(key: K, value: V | null) {
     let valueNullable: V | null;
     if (value === "<FILLME>") {
       valueNullable = null;
@@ -1677,18 +1800,6 @@ class AutoTTRecConfigImporter {
     this.formData["track-name-type"] = trackNameType;
   }
 
-  private validateFormDataNonPartial() {
-    for (const argName of AUTO_TT_REC_CONFIG_FORM_FIELD_NAMES) {
-      if (this.formData[argName] === undefined) {
-        this.errorsAndWarnings.addKeyUndefinedWarning(argName, "formData");
-        this.formData[argName] = DEFAULT_FORM_VALUES[argName] as any;
-      } else if (this.formData[argName] === null) {
-        this.errorsAndWarnings.addWarning(argName, `formData[${argName}] was somehow null! (this is an error within the program itself and not your fault, please contact the developer!)`);
-        this.formData[argName] = DEFAULT_FORM_VALUES[argName] as any;
-      }
-    }
-  }
-
   public async import(): Promise<AutoTTRecConfigFormFields> {
     if (!this.hasImported) {
       this.importStraightCopyArgs();
@@ -1715,7 +1826,7 @@ class AutoTTRecConfigImporter {
       this.importTop10Location();
       this.importTop10TitleAndSetTop10TitleType();
       this.importTrackNameAndSetTrackNameType();
-      this.validateFormDataNonPartial();
+      validateFormDataNonPartial(this.formData, this.errorsAndWarnings);
       this.hasImported = true;
     }
 
