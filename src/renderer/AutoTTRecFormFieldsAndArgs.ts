@@ -1456,7 +1456,7 @@ class AutoTTRecConfigImporter {
   }
 
   private async resolveHQTexturesFolderAndSetHQTexturesFolderEnable() {
-    let [extraHQTexturesAbsoluteFolder, extraHQTexturesFolder] = await this.setPathnameArgEnable_resolvePathname_returnOriginalAndResolvedFilename({
+    let [extraHQTexturesFolder, extraHQTexturesAbsoluteFolder] = await this.setPathnameArgEnable_resolvePathname_returnOriginalAndResolvedFilename({
       pathnameArgName: "extra-hq-textures-folder",
       enableArgName: "extra-hq-textures-folder-enable"
     });

@@ -103,11 +103,11 @@ export function AutoTTRecConfigForm(
 ) {  
   const renderCounter = useRenderCounter(false, "AutoTTRecConfigForm");
   const formMethods = useForm<AutoTTRecConfigFormFields>({
-    criteriaMode: "firstError",
+    criteriaMode: "all",
     reValidateMode: "onSubmit",
     defaultValues: DEFAULT_FORM_VALUES
   });
-  //console.log("AutoTTRecConfigForm formState:", formMethods.formState.errors);
+  console.log("AutoTTRecConfigForm formState:", formMethods.formState.errors);
   //console.trace();
   //console.log("props:", props);
 
@@ -116,23 +116,30 @@ export function AutoTTRecConfigForm(
   //const mainGhostFilenameInput = <MainGhostFilenameInput arg={1}/>;
 
   let formState = formMethods.formState;
-  const runAutoTTRecOnSubmitCallback = formMethods.handleSubmit(onSubmit, onError);
-  const validateFormArgsOnlyOnSubmitCallback = formMethods.handleSubmit(onSubmitValidateOnly, onError);
+  const getRunAutoTTRecOnSubmitCallback = () => {
+    return formMethods.handleSubmit(onSubmit, onError);
+  };
 
-  const formOnSubmitCallbackRef = useRef<React.FormEventHandler<HTMLFormElement>>(runAutoTTRecOnSubmitCallback);
+  const getValidateFormArgsOnlyOnSubmitCallback = () => {
+    return formMethods.handleSubmit(onSubmitValidateOnly, onError);
+  };
+
+  const formOnSubmitCallbackRef = useRef<() => React.FormEventHandler<HTMLFormElement>>(getRunAutoTTRecOnSubmitCallback);
 
   //
 
-  const setRunAutoTTRecOnSubmitCallback = useCallback(() => {
-    formOnSubmitCallbackRef.current = runAutoTTRecOnSubmitCallback;
-  }, []);
+  // const setRunAutoTTRecOnSubmitCallback = useCallback(() => {
+  //   formOnSubmitCallbackRef.current = runAutoTTRecOnSubmitCallback;
+  // }, []);
 
-  const setValidateFormArgsOnlyOnSubmitCallback = useCallback(() => {
-    formOnSubmitCallbackRef.current = validateFormArgsOnlyOnSubmitCallback;
-  }, []);
+  // const setValidateFormArgsOnlyOnSubmitCallback = useCallback(() => {
+  //   formOnSubmitCallbackRef.current = validateFormArgsOnlyOnSubmitCallback;
+  // }, []);
 
   const [stateTest, setStateTest] = useState(false);
   const [submittedToggle, setSubmittedToggle] = useState(false);
+  const [importToggle, setImportToggle] = useState(false);
+
   const [doNotTriggerRendersDueToErrors, setDoNotTriggerRendersDueToErrors] = useState(false);
   
 /*
@@ -173,13 +180,13 @@ export function AutoTTRecConfigForm(
 
   return (
     <div>
-      <form onSubmit={formOnSubmitCallbackRef.current}>
-        <ImportTemplate_Memo formMethods={formMethods} setSubmittedToggle={setSubmittedToggle} validateFormArgsOnlyOnSubmitCallback={validateFormArgsOnlyOnSubmitCallback}/>
+      <form onSubmit={formOnSubmitCallbackRef.current()}>
+        <ImportTemplate_Memo formMethods={formMethods} setImportToggle={setImportToggle} onError={onError}/>
         <ClearAllFields_Memo formMethods={formMethods} submittedToggle={submittedToggle} setSubmittedToggle={setSubmittedToggle} />
         <fieldset disabled={props.isAutoTTRecRunning}>
-          <AutoTTRecConfigFormComponents_Memo formMethods={formMethods} forceUpdate={submittedToggle} isAutoTTRecRunning={props.isAutoTTRecRunning}/>
+          <AutoTTRecConfigFormComponents_Memo formMethods={formMethods} forceUpdate={submittedToggle} importToggle={importToggle} isAutoTTRecRunning={props.isAutoTTRecRunning}/>
         </fieldset>
-        <AutoTTRecSubmitAbortButtons_Memo isAutoTTRecRunning={props.isAutoTTRecRunning} onAbortCallback={props.onAbortCallback} setRunAutoTTRecOnSubmitCallback={setRunAutoTTRecOnSubmitCallback}/>
+        <AutoTTRecSubmitAbortButtons_Memo isAutoTTRecRunning={props.isAutoTTRecRunning} onAbortCallback={props.onAbortCallback} setRunAutoTTRecOnSubmitCallback={(() => {}) as any}/>
       </form>
       {renderCounter}
     </div>

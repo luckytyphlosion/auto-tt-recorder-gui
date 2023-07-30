@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
 
 
 
@@ -20,20 +20,19 @@ const FormComplexityLayout_Memo = memo(FormComplexityLayout);
 export function AutoTTRecConfigFormComponents(props: {
     formMethods: UseFormReturn<AutoTTRecConfigFormFields, any, undefined>,
     forceUpdate: boolean,
+    importToggle: boolean,
     isAutoTTRecRunning: boolean}) {  
   const renderCounter = useRenderCounter(false, "AutoTTRecConfigFormComponents");
   console.log("Rendering AutoTTRecConfigFormComponents. forceUpdate: ", props.forceUpdate);
-  // remaining components
-  // handling top 10 vs no top 10
-  // top 10 censors
-  // top 10 gecko code filename
-  // dolphin volume
+  const [thisForceUpdate, setForceUpdate] = useState(props.forceUpdate);
+
+  console.log("thisForceUpdate:", thisForceUpdate, ", props.forceUpdate:", props.forceUpdate);
 
   return (
     <div className="auto-tt-rec-config-form">
       <FormProvider {...props.formMethods}>
         <ISOWBFSFileInput_Memo/>
-        <FormComplexityLayout isAutoTTRecRunning={props.isAutoTTRecRunning} forceUpdate={props.forceUpdate}/>
+        <FormComplexityLayout_Memo isAutoTTRecRunning={props.isAutoTTRecRunning} importToggle={props.importToggle}/>
         {renderCounter}
       </FormProvider>
     </div>

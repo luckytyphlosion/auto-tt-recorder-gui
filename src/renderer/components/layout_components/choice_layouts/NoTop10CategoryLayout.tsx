@@ -22,6 +22,8 @@ export function NoTop10CategoryLayout(props: {isAutoTTRecRunning: boolean, formC
   const [noTop10Category, setNoTop10Category] = useState(getValues("no-top-10-category"));
   const renderCounter = useRenderCounter(true);
 
+  console.log("noTop10Category:", noTop10Category, `getValues("no-top-10-category"):`, getValues("no-top-10-category"));
+
   function updateNoTop10Category(event?: Event) {
     setNoTop10Category(getValues("no-top-10-category"));
   }

@@ -1,6 +1,6 @@
 
 import React, { useState, memo } from "react";
-import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
+import { useFormContextAutoTT, useWatchAutoTT } from "../../use-form-context-auto-tt";
 import useRenderCounter from "../../RenderCounter";
 
 export enum FormComplexity
@@ -14,35 +14,31 @@ import { TimelineCategoryLayout } from "./TimelineCategoryLayout";
 
 const TimelineCategoryLayout_Memo = memo(TimelineCategoryLayout);
 
-export function FormComplexityLayout(props: {isAutoTTRecRunning: boolean, forceUpdate: boolean}) {
+export function FormComplexityLayout(props: {isAutoTTRecRunning: boolean, importToggle: boolean}) {
   const {register, getValues} = useFormContextAutoTT();
   const renderCounter = useRenderCounter(false, "FormComplexityLayout");
-  const [formComplexity, setFormComplexity] = useState(getValues("form-complexity"));
+  const formComplexity = useWatchAutoTT({name: "form-complexity"});
 
-  function updateFormComplexity() {
-    setFormComplexity(getValues("form-complexity"));
-  }
-
-  console.log("FormComplexityLayout form-complexity:", getValues("form-complexity"));
+  console.log("FormComplexityLayout form-complexity:", getValues("form-complexity"), ", formComplexity", formComplexity);
 
   return (
     <div>
       <label htmlFor="form-complexity">Layout: </label>
       <label htmlFor="form-complexity-simple">Simple: </label>
       <input type="radio" id="form-complexity-simple" value={FormComplexity.SIMPLE}
-        {...register("form-complexity", {onChange: updateFormComplexity})}
+        {...register("form-complexity")}
       ></input>
       <label htmlFor="form-complexity-advanced">Advanced: </label>
       <input type="radio" id="form-complexity-advanced" value={FormComplexity.ADVANCED}
-        {...register("form-complexity", {onChange: updateFormComplexity})}
+        {...register("form-complexity")}
       ></input>
       <label htmlFor="speedometer-metric-all">All: </label>
       <input type="radio" id="form-complexity-all" value={FormComplexity.ALL}
-        {...register("form-complexity", {onChange: updateFormComplexity})}
+        {...register("form-complexity")}
       ></input>
       {renderCounter}
       <hr style={{height: "2px", borderWidth: 0, color: "gray", backgroundColor: "gray"}}/>
-      <TimelineCategoryLayout_Memo isAutoTTRecRunning={props.isAutoTTRecRunning} formComplexity={formComplexity} forceUpdate={props.forceUpdate}/>
+      <TimelineCategoryLayout_Memo isAutoTTRecRunning={props.isAutoTTRecRunning} formComplexity={formComplexity} importToggle={props.importToggle}/>
     </div>
   );
 }

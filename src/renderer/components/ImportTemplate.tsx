@@ -23,8 +23,8 @@ export interface ImportTemplateResul2t {
 
 export function ImportTemplate(props: {
   formMethods: UseFormReturn<AutoTTRecConfigFormFields, any, undefined>,
-  setSubmittedToggle: React.Dispatch<React.SetStateAction<boolean>>,
-  validateFormArgsOnlyOnSubmitCallback: (e?: React.BaseSyntheticEvent<object, any, any> | undefined) => Promise<void>
+  setImportToggle: React.Dispatch<React.SetStateAction<boolean>>,
+  onError: (errors: Object) => Promise<void> | void
 }) {
   const [isModalOpen, setModalOpen] = useState(false);
   const [importStatus, setImportStatus] = useState(ImportTemplateStatus.SUCCESS);
@@ -47,11 +47,11 @@ export function ImportTemplate(props: {
       setErrorWarningData(importTemplateResult.errorWarningData);
       if (importTemplateResult.status === ImportTemplateStatus.SUCCESS) {
         let newFormData = await convertAutoTTRecConfigToFormData(importTemplateResult.data, newAutoTTRecTemplateFilename);
-        props.setSubmittedToggle((submittedToggle) => !submittedToggle);
+        props.setImportToggle(true);
         props.formMethods.reset(newFormData);
         //props.validateFormArgsOnlyOnSubmitCallback();
         //formDataRef.current = newFormData;
-        setNewFormDataToggle((formDataToggle) => !formDataToggle);
+        //setNewFormDataToggle((formDataToggle) => !formDataToggle);
         console.log("newFormData:", newFormData);
       }
     }
@@ -59,10 +59,12 @@ export function ImportTemplate(props: {
   }
 
   useEffect(() => {
-    props.validateFormArgsOnlyOnSubmitCallback();
+    props.formMethods.handleSubmit(() => {}, props.onError)();
   }, [formDataToggle]);
 
   function importTemplateModal_cancel(event: React.MouseEvent<HTMLButtonElement>) {
+    props.setImportToggle(false);
+    setNewFormDataToggle((formDataToggle) => !formDataToggle);
     setModalOpen(false);
   }
 
