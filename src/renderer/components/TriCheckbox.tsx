@@ -43,7 +43,7 @@ function TriCheckboxInternal(props: {
         checkboxRef.current = inputRef;
         props.refCallback(inputRef);
       }} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-        console.log("e.target.checked:", e.target.checked);
+        //console.log("e.target.checked:", e.target.checked);
         if (props.userOnChange !== undefined) {
           props.userOnChange(e);
         }
@@ -78,7 +78,7 @@ export function TriCheckbox<K extends keyof AutoTTRecConfigFormTriCheckboxFields
   //const checkboxRef = useRef<HTMLInputElement | null>(null);
 
   //let [checked, setChecked] = useState<boolean | undefined>(getValues(props.name));
-  console.log(`TriCheckbox ${props.name}:`, getValues(props.name));
+  //console.log(`TriCheckbox ${props.name}:`, getValues(props.name));
   return (
     <>
     <Controller
@@ -100,7 +100,7 @@ export function TriCheckbox<K extends keyof AutoTTRecConfigFormTriCheckboxFields
       rules={{
         validate: (value) => {
           let value2 = getValues(props.name);
-          console.log(`TriCheckbox validate ${props.name} value:`, value, ", value2:", value2);
+          //console.log(`TriCheckbox validate ${props.name} value:`, value, ", value2:", value2);
           if (value === true || value === false) {
             return true;
           } else {

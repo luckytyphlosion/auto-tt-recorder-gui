@@ -1,5 +1,5 @@
 import React, { useState, ReactElement } from "react";
-import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
+import { useFormContextAutoTT, useWatchAutoTT } from "../../use-form-context-auto-tt";
 
 import { NoTop10CategoryLayout } from "./choice_layouts/NoTop10CategoryLayout";
 import { Top10ChadsoftLayout } from "./main_layouts/Top10ChadsoftLayout";
@@ -13,11 +13,14 @@ import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
 export const TIMELINE_CATEGORIES = makeReadonlyArraySet(["notop10", "top10chadsoft", "top10gecko"] as const);
 export type TimelineCategory = ValidValues<typeof TIMELINE_CATEGORIES>;
 
-export function TimelineCategoryLayout(props: {isAutoTTRecRunning: boolean, formComplexity: FormComplexity}) {
+export function TimelineCategoryLayout(props: {isAutoTTRecRunning: boolean, formComplexity: FormComplexity, forceUpdate: boolean}) {
   const {register, getValues} = useFormContextAutoTT();
+  //const timelineCategory = useWatchAutoTT({name: "timeline-category"});
+
   const [timelineCategory, setTimelineCategory] = useState(getValues("timeline-category"));
   const renderCounter = useRenderCounter(false, "TimelineCategoryInput");
 
+  console.log("timelineCategory:", timelineCategory, `, getValues("timeline-category"):`, getValues("timeline-category"));
   function updateTimelineCategory(event: Event) {
     setTimelineCategory(getValues("timeline-category"));
   }

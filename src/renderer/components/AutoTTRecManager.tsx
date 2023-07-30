@@ -23,7 +23,7 @@ function appendAccountingForCarriage(base: string, line: string) {
   return output;
 }
 
-const AutoTTRecConfigForm_Memo = memo(AutoTTRecConfigForm, areAutoTTRecConfigFormPropsEqual);
+const AutoTTRecConfigForm_Memo = memo(AutoTTRecConfigForm);
 
 export function AutoTTRecManager() {
   const [programStatusHeader, setProgramStatusHeader] = useState("Ready");

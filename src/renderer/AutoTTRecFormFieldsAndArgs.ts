@@ -252,10 +252,10 @@ type AutoTTRecConfigFormBooleanArgs = AutoTTRecConfigFormPrimitiveArgs<boolean |
 type AutoTTRecConfigFormBooleanArgName = keyof AutoTTRecConfigFormBooleanArgs;
 type AutoTTRecConfigFormSharedBooleanArgName = AutoTTRecConfigFormBooleanArgName & AutoTTRecArgName;
 
-type AutoTTRecConfigFormChoiceArgs = Pick<AutoTTRecConfigFormFields, {
+export type AutoTTRecConfigFormChoiceArgs = Pick<AutoTTRecConfigFormFields, {
   [K in AutoTTRecConfigFormFieldName]-?: IsChoiceType<AutoTTRecConfigFormFields[K]> extends true ? K : never
 }[AutoTTRecConfigFormFieldName]>;
-type AutoTTRecConfigFormChoiceArgName = keyof AutoTTRecConfigFormChoiceArgs;
+export type AutoTTRecConfigFormChoiceArgName = keyof AutoTTRecConfigFormChoiceArgs;
 type AutoTTRecConfigFormSharedChoiceArgName = AutoTTRecConfigFormChoiceArgName & AutoTTRecArgName;
 
 //type NaNCheck = 

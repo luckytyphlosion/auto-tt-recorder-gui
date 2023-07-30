@@ -15,7 +15,7 @@ import { AutoTTRecConfigFormFields } from "../AutoTTRecFormFieldsAndArgs";
 import useRenderCounter from "../RenderCounter";
 
 const ISOWBFSFileInput_Memo = memo(ISOWBFSFileInput);
-
+const FormComplexityLayout_Memo = memo(FormComplexityLayout);
 
 export function AutoTTRecConfigFormComponents(props: {
     formMethods: UseFormReturn<AutoTTRecConfigFormFields, any, undefined>,
@@ -33,7 +33,7 @@ export function AutoTTRecConfigFormComponents(props: {
     <div className="auto-tt-rec-config-form">
       <FormProvider {...props.formMethods}>
         <ISOWBFSFileInput_Memo/>
-        <FormComplexityLayout isAutoTTRecRunning={props.isAutoTTRecRunning}/>
+        <FormComplexityLayout isAutoTTRecRunning={props.isAutoTTRecRunning} forceUpdate={props.forceUpdate}/>
         {renderCounter}
       </FormProvider>
     </div>

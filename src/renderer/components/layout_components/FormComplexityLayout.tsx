@@ -14,7 +14,7 @@ import { TimelineCategoryLayout } from "./TimelineCategoryLayout";
 
 const TimelineCategoryLayout_Memo = memo(TimelineCategoryLayout);
 
-export function FormComplexityLayout(props: {isAutoTTRecRunning: boolean}) {
+export function FormComplexityLayout(props: {isAutoTTRecRunning: boolean, forceUpdate: boolean}) {
   const {register, getValues} = useFormContextAutoTT();
   const renderCounter = useRenderCounter(false, "FormComplexityLayout");
   const [formComplexity, setFormComplexity] = useState(getValues("form-complexity"));
@@ -23,7 +23,7 @@ export function FormComplexityLayout(props: {isAutoTTRecRunning: boolean}) {
     setFormComplexity(getValues("form-complexity"));
   }
 
-  //console.log("FormComplexityLayout form-complexity:", getValues("form-complexity"));
+  console.log("FormComplexityLayout form-complexity:", getValues("form-complexity"));
 
   return (
     <div>
@@ -42,7 +42,7 @@ export function FormComplexityLayout(props: {isAutoTTRecRunning: boolean}) {
       ></input>
       {renderCounter}
       <hr style={{height: "2px", borderWidth: 0, color: "gray", backgroundColor: "gray"}}/>
-      <TimelineCategoryLayout_Memo isAutoTTRecRunning={props.isAutoTTRecRunning} formComplexity={formComplexity}/>
+      <TimelineCategoryLayout_Memo isAutoTTRecRunning={props.isAutoTTRecRunning} formComplexity={formComplexity} forceUpdate={props.forceUpdate}/>
     </div>
   );
 }
