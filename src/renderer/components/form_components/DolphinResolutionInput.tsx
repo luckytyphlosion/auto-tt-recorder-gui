@@ -5,6 +5,7 @@ import { OutputWidthInput } from "./OutputWidthInput";
 import { FormComplexity } from "../layout_components/FormComplexityLayout";
 import { HQTexturesInput } from "./HQTexturesInput";
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
+import { DeselectableDropdown } from "../DeselectableDropdown";
 
 export const DOLPHIN_RESOLUTIONS = makeReadonlyArraySet(["2160p", "1440p", "1080p", "720p", "480p"] as const);
 export type DolphinResolution = ValidValues<typeof DOLPHIN_RESOLUTIONS>;
@@ -25,7 +26,7 @@ export function DolphinResolutionInput(props: {enableOutputWidth: boolean, formC
   const [dolphinResolution, setDolphinResolution] = useState(getValues("dolphin-resolution"));
   const [dolphinResolutionToggle, setDolphinResolutionToggle] = useState(false);
 
-  function updateDolphinResolution(event: Event) {
+  function updateDolphinResolution(event?: Event) {
     setDolphinResolution(getValues("dolphin-resolution"));
     setDolphinResolutionToggle(!dolphinResolutionToggle);
   }
@@ -33,14 +34,13 @@ export function DolphinResolutionInput(props: {enableOutputWidth: boolean, formC
   return (
     <div>
       <label htmlFor="dolphin-resolution">Dolphin resolution: </label>
-      <select {...register("dolphin-resolution", {
-        required: false, onChange: updateDolphinResolution})}>
+      <DeselectableDropdown name="dolphin-resolution" onChange={updateDolphinResolution}>
         <option value="2160p">2160p (4K)</option>
         <option value="1440p">1440p (2K)</option>
         <option value="1080p">1080p</option>
         <option value="720p">720p</option>
         <option value="480p">480p</option>
-      </select>
+      </DeselectableDropdown>
       {renderCounter}
       {props.enableOutputWidth ? 
         <OutputWidthInput dolphinResolution={dolphinResolution} dolphinResolutionToggle={dolphinResolutionToggle}/> : ""

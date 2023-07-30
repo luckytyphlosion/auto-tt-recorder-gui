@@ -1,6 +1,7 @@
 import React from "react";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
+import { DeselectableDropdown } from "../DeselectableDropdown";
 
 import useRenderCounter from "../../RenderCounter";
 
@@ -14,8 +15,7 @@ export function H26xPresetInput() {
   return (
     <div>
       <label htmlFor="h26x-preset">Encode speed (faster &#8594; larger filesize, slightly less quality): </label>
-      <select {...register("h26x-preset", {
-        required: false})}>
+      <DeselectableDropdown name="h26x-preset">
         <option value="ultrafast">ultrafast</option>
         <option value="superfast">superfast</option>
         <option value="veryfast">veryfast</option>
@@ -26,7 +26,7 @@ export function H26xPresetInput() {
         <option value="slower">slower</option>
         <option value="veryslow">veryslow</option>
         <option value="placebo">placebo</option>
-      </select>
+      </DeselectableDropdown>
       {renderCounter}
     </div>
   );

@@ -4,6 +4,8 @@ import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { MusicFilenameInput } from "./MusicFilenameInput";
 import { Top10LocationRegionalInput } from "./Top10LocationRegionalInput";
 import { AudioBitrateInput } from "./AudioBitrateInput";
+import { DeselectableDropdown } from "../DeselectableDropdown";
+
 import useRenderCounter from "../../RenderCounter";
 
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
@@ -19,7 +21,7 @@ export function AudioCodecAndBitrateInput(props: {encodeType: EncodeType, encode
   const [encodeTypeOrAudioCodecChanged, setEncodeTypeOrAudioCodecChanged] = useState(props.encodeTypeChanged);
   const renderCounter = useRenderCounter(true);
 
-  function updateAudioCodec(event: Event) {
+  function updateAudioCodec(event?: Event) {
     setAudioCodec(getValues("audio-codec"));
     setEncodeTypeOrAudioCodecChanged((oldEncodeTypeOrAudioCodecChanged) => (!oldEncodeTypeOrAudioCodecChanged));
   }
@@ -27,11 +29,10 @@ export function AudioCodecAndBitrateInput(props: {encodeType: EncodeType, encode
   return (
     <div>
       <label htmlFor="audio-codec">Audio codec: </label>
-      <select {...register("audio-codec", {
-        required: false, onChange: updateAudioCodec})}>
+      <DeselectableDropdown name="audio-codec" onChange={updateAudioCodec}>
         <option value="libopus">libopus</option>
         <option value="aac">aac</option>
-      </select>
+      </DeselectableDropdown>
       {renderCounter}
       <AudioBitrateInput encodeType={props.encodeType} audioCodec={audioCodec} resetToDefaultAudioBitrate={encodeTypeOrAudioCodecChanged}/>
     </div>

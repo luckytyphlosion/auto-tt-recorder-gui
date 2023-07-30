@@ -3,6 +3,7 @@ import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { MusicFilenameInput } from "./MusicFilenameInput";
 import { Top10LocationRegionalInput } from "./Top10LocationRegionalInput";
 import { FormComplexity } from "../layout_components/FormComplexityLayout";
+import { DeselectableDropdown } from "../DeselectableDropdown";
 
 import { VideoCodec } from "./VideoCodecInput";
 
@@ -61,8 +62,7 @@ export function OutputVideoFileFormatInput(props: {videoCodec: VideoCodec, formC
   return (
     <div> 
       <label htmlFor="output-video-file-format">Video format: </label>
-      <select {...register("output-video-file-format", {
-        required: false, onChange: props.formComplexity === FormComplexity.ADVANCED ? updateVideoCodecForAdvancedForm : () => {}})}>
+      <DeselectableDropdown name="output-video-file-format" onChange={props.formComplexity === FormComplexity.ADVANCED ? updateVideoCodecForAdvancedForm : () => {}}>
         {
           props.formComplexity === FormComplexity.ALL ? 
           (
@@ -78,8 +78,7 @@ export function OutputVideoFileFormatInput(props: {videoCodec: VideoCodec, formC
             </>
           )
         }
-
-      </select>
+      </DeselectableDropdown>
       {renderCounter}
     </div>
   );

@@ -3,6 +3,7 @@ import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { MusicFilenameInput } from "./MusicFilenameInput";
 import { Top10LocationRegionalInput } from "./Top10LocationRegionalInput";
 import { OutputWidthCustomInput } from "./OutputWidthCustomInput";
+import { DeselectableDropdown } from "../DeselectableDropdown";
 
 import { DolphinResolution } from "./DolphinResolutionInput";
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
@@ -27,7 +28,7 @@ export function OutputWidthInput(props: {dolphinResolution: DolphinResolution, d
   const [dolphinResolutionToggle, setDolphinResolutionToggle] = useState(props.dolphinResolutionToggle);
   const renderCounter = useRenderCounter(false, "OutputWidthInput");
 
-  function updateOutputWidthPreset(event: Event) {
+  function updateOutputWidthPreset(event?: Event) {
     setOutputWidthPreset(getValues("output-width-preset"));
   }
 
@@ -43,8 +44,7 @@ export function OutputWidthInput(props: {dolphinResolution: DolphinResolution, d
   return (
     <div>
       <label htmlFor="output-width-preset">Output video width: </label>
-      <select {...register("output-width-preset", {
-        required: false, onChange: updateOutputWidthPreset})}>
+      <DeselectableDropdown name="output-width-preset" onChange={updateOutputWidthPreset}>
         <option value="none">Don't rescale</option>
         <option value="3840">3840 (2160p/4k)</option>
         <option value="2560">2560 (1440p/2k)</option>
@@ -52,7 +52,7 @@ export function OutputWidthInput(props: {dolphinResolution: DolphinResolution, d
         <option value="1280">1280 (720p)</option>
         <option value="854">854 (480p)</option>
         <option value="custom">Custom...</option>
-      </select>
+      </DeselectableDropdown>
       {renderCounter}
       {
         outputWidthPreset === "custom" ? <OutputWidthCustomInput/> : ""

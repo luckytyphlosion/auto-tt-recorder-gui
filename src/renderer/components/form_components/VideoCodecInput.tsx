@@ -4,6 +4,7 @@ import { MusicFilenameInput } from "./MusicFilenameInput";
 import { OutputVideoFileFormatInput } from "./OutputVideoFileFormatInput";
 import { FormComplexity } from "../layout_components/FormComplexityLayout";
 import useRenderCounter from "../../RenderCounter";
+import { DeselectableDropdown } from "../DeselectableDropdown";
 
 import { EncodeType } from "../layout_components/choice_layouts/EncodeSettingsLayout";
 import { AutoTTRecConfigFormFields } from "../../AutoTTRecFormFieldsAndArgs";
@@ -30,12 +31,11 @@ export function VideoCodecInput(props: {encodeType: EncodeType, formComplexity: 
   return (
     <div>
       <label htmlFor="video-codec">Video codec: </label>
-      <select {...register("video-codec", {
-        required: false, onChange: updateVideoCodec})}>
+      <DeselectableDropdown name="video-codec" onChange={updateVideoCodec}>
         <option value="libx264">libx264</option>
         {props.encodeType === "crf" ?
           <option value="libx265">libx265</option> : <option value="libvpx-vp9">libvpx-vp9</option>}
-      </select>
+      </DeselectableDropdown>
       {renderCounter}
       <OutputVideoFileFormatInput videoCodec={videoCodec} formComplexity={props.formComplexity}/>
     </div>

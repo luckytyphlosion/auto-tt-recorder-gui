@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { MusicFilenameInput } from "./MusicFilenameInput";
+import { DeselectableDropdown } from "../DeselectableDropdown";
 
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
 
@@ -289,11 +290,11 @@ export function Top10LocationCountryInput() {
   return (
     <>
       <label htmlFor="top-10-location-country-location">Location: </label>
-      <select {...register("top-10-location-country-location")}>
+      <DeselectableDropdown name="top-10-location-country-location">
         {COUNTRY_LOCATIONS.arr.map((countryLocation) => (
           <option value={countryLocation} key={countryLocation}>{countryLocation}</option>
         ))}
-      </select>
+      </DeselectableDropdown>
     </>
   );
 }

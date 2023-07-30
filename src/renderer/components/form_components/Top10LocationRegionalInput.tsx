@@ -3,6 +3,7 @@ import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { MusicFilenameInput } from "./MusicFilenameInput";
 
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
+import { DeselectableDropdown } from "../DeselectableDropdown";
 
 export const REGIONAL_LOCATIONS = makeReadonlyArraySet([
   "Europe",
@@ -38,11 +39,11 @@ export function Top10LocationRegionalInput() {
   return (
     <>
       <label htmlFor="top-10-location-regional-location">Location: </label>
-      <select {...register("top-10-location-regional-location")}>
+      <DeselectableDropdown name="top-10-location-regional-location">
         {REGIONAL_LOCATIONS.arr.map((regionalLocation) => (
           <option value={regionalLocation} key={regionalLocation}>{regionalLocation}</option>
         ))}
-      </select>
+      </DeselectableDropdown>
     </>
   );
 }
