@@ -8,6 +8,8 @@ import { BooleanFILLME } from "../../shared/shared-types";
 
 import useRenderCounter from "../RenderCounter";
 
+type TriCheckboxUserOnChangeDecl = (newValue: BooleanFILLME) => void;
+
 interface CustomCheckboxProps {
   name: string;
   control: Control<any>;
@@ -19,7 +21,7 @@ function TriCheckboxInternal(props: {
   value: BooleanFILLME,
   refCallback: RefCallBack,
   onChange: (...event: any[]) => void,
-  userOnChange?: ((event?: React.ChangeEvent<HTMLInputElement>) => void) | (() => void),
+  userOnChange?: TriCheckboxUserOnChangeDecl,
 }) {
   const checkboxRef = useRef<HTMLInputElement | null>(null);
   const renderCounter = useRenderCounter(true, "TriCheckboxInternal");
@@ -46,19 +48,20 @@ function TriCheckboxInternal(props: {
       }} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
         //console.log("e.target.checked:", e.target.checked);
         if (props.userOnChange !== undefined) {
-          props.userOnChange(e);
+          props.userOnChange(e.target.checked);
         }
         props.onChange(e);
       }} onContextMenu={(e: React.MouseEvent<HTMLInputElement>) => {
         let newValue: BooleanFILLME = false;
         if (checkboxRef !== null && checkboxRef.current !== null) {
           checkboxRef.current.indeterminate = !checkboxRef.current.indeterminate;
+          checkboxRef.current.checked = false;
           newValue = checkboxRef.current.indeterminate ? "<FILLME>" : false;
           //console.log("checkboxRef.current.value:", checkboxRef.current.value);
         }
 
         if (props.userOnChange !== undefined) {
-          props.userOnChange();
+          props.userOnChange(newValue);
         }
         props.onChange(newValue);
         e.preventDefault();
@@ -70,10 +73,26 @@ function TriCheckboxInternal(props: {
   );
 }
 
+type ExcludeNoArgFunc<T> = T extends (() => void) ? never : T;
+type FuncExtendsNoArgVoid<T extends Function> = T extends (() => void) ? true : false;
+
+type ExcludeNoArgFuncTest = ExcludeNoArgFunc<(newValue: BooleanFILLME) => void>;
+const sffsf: ExcludeNoArgFuncTest = () => {};
+
+function onChange243() {
+
+}
+
+type ExcludeNoArgFuncTest2 = FuncExtendsNoArgVoid<typeof onChange243>;
+
+
+type NoArgExtendsTest = (() => {}) extends (() => void) ? true : false;
+
 export function TriCheckbox<K extends keyof AutoTTRecConfigFormTriCheckboxFields>(
   props: {
     name: K,
-    onChange?: ((event?: React.ChangeEvent<HTMLInputElement>) => void) | (() => void)
+    onChange?: TriCheckboxUserOnChangeDecl,
+    noErrorMessage?: boolean
   }
 ) {
   const {control, setValue, getValues} = useFormContextAutoTT();
@@ -111,7 +130,9 @@ export function TriCheckbox<K extends keyof AutoTTRecConfigFormTriCheckboxFields
         }
       }}
     />
-    <SimpleErrorMessage name={props.name}/>
+    {
+      props.noErrorMessage ? "" : <SimpleErrorMessage name={props.name}/>
+    }
     {renderCounter}
     </>
   );

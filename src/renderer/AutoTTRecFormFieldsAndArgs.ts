@@ -44,7 +44,6 @@ import { Set200cc, SET_200CC_VALUES } from "./components/form_components/Set200c
 import { AutoTTRecConfig, StringOrError, BooleanFILLME } from "../shared/shared-types";
 
 import { ValidValues, ReadonlyArraySet, makeReadonlyArraySet } from "../shared/array-set";
-import { ResetAudioBitrateState } from "./reset-audio-bitrate-state";
 
 import { shallowCopy } from "../shared/util-shared";
 

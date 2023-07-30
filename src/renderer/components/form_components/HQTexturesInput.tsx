@@ -6,6 +6,7 @@ import { ExtraHQTexturesFolderInput } from "./ExtraHQTexturesFolderInput";
 import { DolphinResolution } from "./DolphinResolutionInput";
 
 import { TriCheckbox } from "../TriCheckbox";
+import { BooleanFILLME } from "../../../shared/shared-types";
 
 import useRenderCounter from "../../RenderCounter";
 
@@ -16,8 +17,8 @@ export function HQTexturesInput(props: {isDolphinResolution480p: boolean, dolphi
   const renderCounter = useRenderCounter(false, "HQTexturesInput");
   const [dolphinResolutionToggle, setDolphinResolutionToggle] = useState(props.dolphinResolutionToggle);
 
-  function updateHQTexturesEnabled() {
-    setHqTexturesEnabled(getValues("hq-textures"));
+  function updateHQTexturesEnabled(newValue: BooleanFILLME) {
+    setHqTexturesEnabled(newValue);
   }
 
   if (dolphinResolutionToggle !== props.dolphinResolutionToggle) {
@@ -33,7 +34,7 @@ export function HQTexturesInput(props: {isDolphinResolution480p: boolean, dolphi
       <TriCheckbox name="hq-textures" onChange={updateHQTexturesEnabled}/>
       {renderCounter}
       {
-        hqTexturesEnabled ? <ExtraHQTexturesFolderInput/> : ""
+        hqTexturesEnabled === true || hqTexturesEnabled === "<FILLME>" ? <ExtraHQTexturesFolderInput/> : ""
       }
     </div>
   );

@@ -3,7 +3,7 @@ import useRenderCounter from "../../RenderCounter";
 import { useFormContextAutoTT, useWatchAutoTT } from "../../use-form-context-auto-tt";
 import { FileFilter } from "electron";
 
-import { UseFormRegister, UseFormSetValue } from "react-hook-form";
+import { UseFormRegister, UseFormSetValue, ValidateResult } from "react-hook-form";
 
 import { AutoTTRecConfigFormFields } from "../../AutoTTRecFormFieldsAndArgs";
 import { isFolderReadable } from "../../util-renderer"
@@ -23,17 +23,26 @@ export function ExtraHQTexturesFolderInput() {
     }
   }
 
+  async function validateExtraHQTexturesFolder(value: string): Promise<ValidateResult> {
+    if (extraHQTexturesFolderEnable === "<FILLME>") {
+      return `"Add extra HQ Textures" checkbox is required.`;
+    } else {
+      if (value === "") {
+        return "Extra HQ Textures folder is required.";
+      } else {
+        return isFolderReadable(value);
+      }
+    }
+  }
+
   return (
     <div>
       <label htmlFor="extra-hq-textures-folder-enable">Add extra HQ Textures? </label>
-      <TriCheckbox name="extra-hq-textures-folder-enable"/>
+      <TriCheckbox name="extra-hq-textures-folder-enable" noErrorMessage={true}/>
       {
-        extraHQTexturesFolderEnable ? <>
+        extraHQTexturesFolderEnable === true || extraHQTexturesFolderEnable === "<FILLME>" ? <>
           <input type="text" readOnly
-            {...register("extra-hq-textures-folder", {required: {
-              value: true,
-              message: "This input is required."
-            }, validate: isFolderReadable})}
+            {...register("extra-hq-textures-folder", {validate: validateExtraHQTexturesFolder})}
           ></input>
           <button onClick={event => {
             queueOpenFolderDialog(event);
