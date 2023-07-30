@@ -3,6 +3,7 @@ import React from "react";
 import { useFormContextAutoTT, useWatchAutoTT } from "../../use-form-context-auto-tt";
 
 import { ExtraGeckoCodesInput } from "./ExtraGeckoCodesInput";
+import { TriCheckbox } from "../TriCheckbox";
 
 export function ExtraGeckoCodesEnableInput(props: {isAutoTTRecRunning: boolean}) {
   const {register} = useFormContextAutoTT();
@@ -11,7 +12,7 @@ export function ExtraGeckoCodesEnableInput(props: {isAutoTTRecRunning: boolean})
   return (
     <div>
       <label htmlFor="extra-gecko-codes-enable">Add extra gecko codes?</label>
-      <input type="checkbox" {...register("extra-gecko-codes-enable")}/>
+      <TriCheckbox name="extra-gecko-codes-enable"/>
       {
         extraGeckoCodesEnable ? <ExtraGeckoCodesInput isAutoTTRecRunning={props.isAutoTTRecRunning}/> : ""
       }

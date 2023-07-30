@@ -5,6 +5,8 @@ import { useFormContextAutoTT, useWatchAutoTT } from "../../use-form-context-aut
 import { ChadsoftWriteCacheInput } from "./ChadsoftWriteCacheInput";
 import { ChadsoftCacheExpiryInput } from "./ChadsoftCacheExpiryInput";
 
+import { TriCheckbox } from "../TriCheckbox";
+
 export function ChadsoftReadCacheAndSettingsInput() {
   const {register} = useFormContextAutoTT();
   const chadsoftReadCache = useWatchAutoTT({name: "chadsoft-read-cache"});
@@ -12,7 +14,7 @@ export function ChadsoftReadCacheAndSettingsInput() {
   return (
     <div>
       <label htmlFor="chadsoft-read-cache">Read cached Chadsoft files (chadsoft-read-cache): </label>
-      <input type="checkbox" {...register("chadsoft-read-cache")}/>
+      <TriCheckbox name="chadsoft-read-cache"/>
       <ChadsoftWriteCacheInput/>
       {
         chadsoftReadCache ? <ChadsoftCacheExpiryInput/> : ""

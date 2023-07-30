@@ -5,6 +5,8 @@ import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { ExtraHQTexturesFolderInput } from "./ExtraHQTexturesFolderInput";
 import { DolphinResolution } from "./DolphinResolutionInput";
 
+import { TriCheckbox } from "../TriCheckbox";
+
 import useRenderCounter from "../../RenderCounter";
 
 export function HQTexturesInput(props: {isDolphinResolution480p: boolean, dolphinResolutionToggle: boolean}) {
@@ -14,7 +16,7 @@ export function HQTexturesInput(props: {isDolphinResolution480p: boolean, dolphi
   const renderCounter = useRenderCounter(false, "HQTexturesInput");
   const [dolphinResolutionToggle, setDolphinResolutionToggle] = useState(props.dolphinResolutionToggle);
 
-  function updateHQTexturesEnabled(event: Event) {
+  function updateHQTexturesEnabled() {
     setHqTexturesEnabled(getValues("hq-textures"));
   }
 
@@ -28,7 +30,7 @@ export function HQTexturesInput(props: {isDolphinResolution480p: boolean, dolphi
   return (
     <div>
       <label htmlFor="hq-textures">HQ Textures: </label>
-      <input type="checkbox" {...register("hq-textures", {onChange: updateHQTexturesEnabled})}/>
+      <TriCheckbox name="hq-textures" onChange={updateHQTexturesEnabled}/>
       {renderCounter}
       {
         hqTexturesEnabled ? <ExtraHQTexturesFolderInput/> : ""

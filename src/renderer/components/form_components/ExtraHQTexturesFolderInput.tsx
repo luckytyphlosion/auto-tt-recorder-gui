@@ -9,6 +9,7 @@ import { AutoTTRecConfigFormFields } from "../../AutoTTRecFormFieldsAndArgs";
 import { isFolderReadable } from "../../util-renderer"
 
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
+import { TriCheckbox } from "../TriCheckbox";
 
 export function ExtraHQTexturesFolderInput() {
   const {register, setValue, getValues} = useFormContextAutoTT();
@@ -25,7 +26,7 @@ export function ExtraHQTexturesFolderInput() {
   return (
     <div>
       <label htmlFor="extra-hq-textures-folder-enable">Add extra HQ Textures? </label>
-      <input type="checkbox" {...register("extra-hq-textures-folder-enable")}/>
+      <TriCheckbox name="extra-hq-textures-folder-enable"/>
       {
         extraHQTexturesFolderEnable ? <>
           <input type="text" readOnly

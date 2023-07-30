@@ -4,6 +4,7 @@ import { useFormContextAutoTT, useWatchAutoTT } from "../../use-form-context-aut
 
 import { Top10HighlightInput } from "./Top10HighlightInput";
 import { MainGhostSourceInput } from "./MainGhostSourceInput";
+import { TriCheckbox } from "../TriCheckbox";
 
 export function Top10HighlightEnableInput() {
   const {register} = useFormContextAutoTT();
@@ -12,7 +13,7 @@ export function Top10HighlightEnableInput() {
   return (
     <div>
       <label htmlFor="top-10-highlight-enable">Highlight Entry in Top 10 Leaderboard: </label>
-      <input type="checkbox" {...register("top-10-highlight-enable")}/>
+      <TriCheckbox name="top-10-highlight-enable"/>
       {
         top10HighlightEnable ? <Top10HighlightInput/> : <MainGhostSourceInput/>
       }

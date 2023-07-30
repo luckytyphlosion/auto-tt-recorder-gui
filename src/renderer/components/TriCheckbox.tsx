@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Control, Controller, RefCallBack, UseFormSetValue, UseFormGetValues } from 'react-hook-form';
 import { useFormContextAutoTT } from "../use-form-context-auto-tt";
 import { AutoTTRecConfigFormFields, AutoTTRecConfigFormTriCheckboxFields } from "../AutoTTRecFormFieldsAndArgs";
+import { SimpleErrorMessage } from "./SimpleErrorMessage";
 
 import useRenderCounter from "../RenderCounter";
 
@@ -17,16 +18,13 @@ function TriCheckboxInternal(props: {
   value: boolean | "<FILLME>",
   refCallback: RefCallBack,
   onChange: (...event: any[]) => void,
-  userOnChange?: (event?: React.ChangeEvent<HTMLInputElement>) => void,
-  setValue: UseFormSetValue<AutoTTRecConfigFormFields>,
-  getValues: UseFormGetValues<AutoTTRecConfigFormFields>
+  userOnChange?: ((event?: React.ChangeEvent<HTMLInputElement>) => void) | (() => void),
 }) {
   const checkboxRef = useRef<HTMLInputElement | null>(null);
-  const renderCounter = useRenderCounter(false, "TriCheckboxInternal");
+  const renderCounter = useRenderCounter(true, "TriCheckboxInternal");
   useEffect(() => {
     //console.log("TriCheckboxInternal checked:", checked);
-    console.log("getValues('youtube-settings'):", props.getValues("youtube-settings"));
-    console.log("props.value:", props.value);
+    //console.log("props.value:", props.value);
 
     if (checkboxRef !== null && checkboxRef.current !== null) {
       if (props.value === true || props.value === false) {
@@ -50,19 +48,37 @@ function TriCheckboxInternal(props: {
           props.userOnChange(e);
         }
         props.onChange(e);
-      }}/>
+      }} onContextMenu={(e: React.MouseEvent<HTMLInputElement>) => {
+        if (checkboxRef !== null && checkboxRef.current !== null) {
+          checkboxRef.current.indeterminate = true;
+          checkboxRef.current.checked = false;  
+          //console.log("checkboxRef.current.value:", checkboxRef.current.value);
+        }
+        if (props.userOnChange !== undefined) {
+          props.userOnChange();
+        }
+        props.onChange("<FILLME>");
+        e.preventDefault();
+        return false;
+      }}
+      />
       {renderCounter}
     </>
   );
 }
 
-export function TriCheckbox<K extends keyof AutoTTRecConfigFormTriCheckboxFields>(props: {name: K, onChange?: (event?: React.ChangeEvent<HTMLInputElement>) => void}) {
+export function TriCheckbox<K extends keyof AutoTTRecConfigFormTriCheckboxFields>(
+  props: {
+    name: K,
+    onChange?: ((event?: React.ChangeEvent<HTMLInputElement>) => void) | (() => void)
+  }
+) {
   const {control, setValue, getValues} = useFormContextAutoTT();
   const renderCounter = useRenderCounter(false, "TriCheckbox");
   //const checkboxRef = useRef<HTMLInputElement | null>(null);
 
   //let [checked, setChecked] = useState<boolean | undefined>(getValues(props.name));
-  console.log("TriCheckbox getValues('youtube-settings'):", getValues("youtube-settings"));
+  console.log(`TriCheckbox ${props.name}:`, getValues(props.name));
   return (
     <>
     <Controller
@@ -71,16 +87,29 @@ export function TriCheckbox<K extends keyof AutoTTRecConfigFormTriCheckboxFields
       render={({
         field: {onChange, value, ref}
       }) => (
+        <span>
         <TriCheckboxInternal
           value={value}
           onChange={onChange}
           userOnChange={props.onChange}
           refCallback={ref}
-          setValue={setValue}
-          getValues={getValues}
         />
+        
+        </span>
       )}
+      rules={{
+        validate: (value) => {
+          let value2 = getValues(props.name);
+          console.log(`TriCheckbox validate ${props.name} value:`, value, ", value2:", value2);
+          if (value === true || value === false) {
+            return true;
+          } else {
+            return "This input is required.";
+          }
+        }
+      }}
     />
+    <SimpleErrorMessage name={props.name}/>
     {renderCounter}
     </>
   );
