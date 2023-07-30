@@ -7,6 +7,14 @@ import useRenderCounter from "../../RenderCounter";
 
 const durationRegex = /^(?:([0-9]+)h)?(?:([0-9]+)m)?(?:([0-9]+)s?)?(?<=.)$/;
 
+function isNotNaNAndInfinite(num: number) {
+  if (Number.isNaN(num)) {
+    return false;
+  } else {
+    return !Number.isFinite(num);
+  }
+}
+
 export function ChadsoftCacheExpiryInput() {
   const {register} = useFormContextAutoTT();
 
@@ -17,17 +25,18 @@ export function ChadsoftCacheExpiryInput() {
     let errorMessage = "";
 
     if (matchObj !== null) {
+      console.log("ChadsoftCacheExpiryInput matchObj", matchObj);
       let hours = Number(matchObj[1]);
       let minutes = Number(matchObj[2]);
       let seconds = Number(matchObj[3]);
 
       if (Number.isNaN(hours) && Number.isNaN(minutes) && Number.isNaN(seconds)) {
         errorMessage = "Must specify one of hours, minutes, or seconds.";
-      } else if (!Number.isFinite(hours) || !Number.isFinite(minutes) || !Number.isFinite(seconds)) {
+      } else if (isNotNaNAndInfinite(hours) || isNotNaNAndInfinite(minutes) || isNotNaNAndInfinite(seconds)) {
         errorMessage = "One of hours, minutes, or seconds is too large.";
       }
     } else {
-      errorMessage = "Not a valid duration."
+      errorMessage = "Not a valid duration. (e.g. 1h23m46s, 24h, 3h30m, 1000, 90m100s)"
     }
 
     if (errorMessage === "") {

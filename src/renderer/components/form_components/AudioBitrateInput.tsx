@@ -79,33 +79,35 @@ export function AudioBitrateInput(props: {encodeType: EncodeType, audioCodec: Au
     const unmodifiedAudioBitrateDisplayed = getDefaultAudioBitrateDisplayed(props.encodeType, props.audioCodec, audioBitrateUnit);
     let audioBitrateDisplayed = unmodifiedAudioBitrateDisplayed;
 
-    if (Number.isNaN(audioBitrate) || audioBitrate < MIN_AUDIO_BITRATE || audioBitrate > MAX_AUDIO_BITRATE) {
-      useDefaultAudioBitrate = true;
-    } else {
-      if (audioBitrateUnit === "kbps") {
-        // 64000 -> 64kbps
-        audioBitrateDisplayed = Math.floor(Math.floor(audioBitrate) / 1000);
+    if (audioBitrateUnit !== "<FILLME>") {
+      if (Number.isNaN(audioBitrate) || audioBitrate < MIN_AUDIO_BITRATE || audioBitrate > MAX_AUDIO_BITRATE) {
+        useDefaultAudioBitrate = true;
       } else {
-        // 64kbps -> 64000
-        audioBitrateDisplayed = Math.floor(audioBitrate);
+        if (audioBitrateUnit === "kbps") {
+          // 64000 -> 64kbps
+          audioBitrateDisplayed = Math.floor(Math.floor(audioBitrate) / 1000);
+        } else if (audioBitrateUnit === "bps") {
+          // 64kbps -> 64000
+          audioBitrateDisplayed = Math.floor(audioBitrate);
+        }
+        if (Number.isNaN(audioBitrateDisplayed)) {
+          useDefaultAudioBitrate = true;
+        } else if (audioBitrateUnit === "kbps"
+          && (audioBitrateDisplayed < MIN_AUDIO_BITRATE_KBPS || audioBitrateDisplayed > MAX_AUDIO_BITRATE_KBPS)) {
+          useDefaultAudioBitrate = true;
+        }
       }
-      if (Number.isNaN(audioBitrateDisplayed)) {
-        useDefaultAudioBitrate = true;
-      } else if (audioBitrateUnit === "kbps"
-        && (audioBitrateDisplayed < MIN_AUDIO_BITRATE_KBPS || audioBitrateDisplayed > MAX_AUDIO_BITRATE_KBPS)) {
-        useDefaultAudioBitrate = true;
+  
+      if (useDefaultAudioBitrate) {
+        audioBitrateDisplayed = unmodifiedAudioBitrateDisplayed;
       }
-    }
-
-    if (useDefaultAudioBitrate) {
-      audioBitrateDisplayed = unmodifiedAudioBitrateDisplayed;
+    } else {
+      audioBitrateDisplayed = NaN;
     }
 
     setValue("audio-bitrate-displayed", audioBitrateDisplayed, {shouldTouch: true});
     updateAudioBitrateDisplayed(event);
   }
-
-  //console.log("audioCodec:", props.audioCodec);
 
   useEffect(() => {
     let lastEncodeType = getValues("audio-bitrate-last-encode-type");
@@ -122,13 +124,14 @@ export function AudioBitrateInput(props: {encodeType: EncodeType, audioCodec: Au
   }, [props.encodeType, props.audioCodec]);
 
   function validateAudioBitrate(value: number) : ValidateResult {
-    if (Number.isNaN(value)) {
-      return "This input is required.";
-    }
-    if (value >= MIN_AUDIO_BITRATE && value <= MAX_AUDIO_BITRATE) {
+    let audioBitrateUnit = getValues("audio-bitrate-unit");
+    if (audioBitrateUnit === "<FILLME>") {
+      return "Must select an audio bitrate unit."
+    } else if (Number.isNaN(value)) {
+      return "Audio bitrate is required.";
+    } else if (value >= MIN_AUDIO_BITRATE && value <= MAX_AUDIO_BITRATE) {
       return true;
     } else {
-      let audioBitrateUnit = getValues("audio-bitrate-unit");
       if (audioBitrateUnit === "kbps") {
         return `Audio bitrate must be between ${MIN_AUDIO_BITRATE_KBPS}kbps and ${MAX_AUDIO_BITRATE_KBPS}kbps.`
       } else {
@@ -146,16 +149,11 @@ export function AudioBitrateInput(props: {encodeType: EncodeType, audioCodec: Au
         }, validate: validateAudioBitrate})}/>
       <input type="hidden" {...register("audio-bitrate-last-encode-type")}/>
       <input type="hidden" {...register("audio-bitrate-last-audio-codec")}/>
-      <input type="number" onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-        //console.log("e.key:", e.key);
-        //if (e.key.match(/\D/g)) {
-        //  e.preventDefault();
-        //}
-      }}
+      <input type="number"
         {...register("audio-bitrate-displayed", {
         onChange: updateAudioBitrateDisplayed, valueAsNumber: true})}
       ></input>
-      <DeselectableRadioButtonGroup name="audio-bitrate-unit">
+      <DeselectableRadioButtonGroup name="audio-bitrate-unit" noErrorMessage={true}>
         <DeselectableRadioButton labelValue="kbps" id="audio-bitrate-unit-kbps" value="kbps" onChange={updateAudioBitrateUnit}/>
         <DeselectableRadioButton labelValue="bps" id="audio-bitrate-unit-bps" value="bps" onChange={updateAudioBitrateUnit}/>
       </DeselectableRadioButtonGroup>
