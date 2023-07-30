@@ -55,7 +55,7 @@ export function OutputWidthInput(props: {dolphinResolution: DolphinResolution, d
       </DeselectableDropdown>
       {renderCounter}
       {
-        outputWidthPreset === "custom" ? <OutputWidthCustomInput/> : ""
+        outputWidthPreset === "custom" || outputWidthPreset === "<FILLME>" ? <OutputWidthCustomInput outputWidthPreset={outputWidthPreset}/> : ""
       }
     </div>
   );

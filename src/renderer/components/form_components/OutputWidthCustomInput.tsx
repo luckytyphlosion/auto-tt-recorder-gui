@@ -2,16 +2,19 @@ import React from "react";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import useRenderCounter from "../../RenderCounter";
 
+import { OutputWidthPreset } from "./OutputWidthInput";
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
 
-export function OutputWidthCustomInput() {
+export function OutputWidthCustomInput(props: {outputWidthPreset: OutputWidthPreset}) {
   const {register, getValues} = useFormContextAutoTT();
   const renderCounter = useRenderCounter();
   console.log("output-width-custom:", getValues("output-width-custom"));
 
   return (
     <div>
-      <label htmlFor="output-width-custom"></label>
+      {
+        props.outputWidthPreset === "<FILLME>" ? <label htmlFor="output-width-custom">(Custom output width) </label> : ""
+      }
       <input type="number"
         {...register("output-width-custom", {valueAsNumber: true, required: {
           value: true,
