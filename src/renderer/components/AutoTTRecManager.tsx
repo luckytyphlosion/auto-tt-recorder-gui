@@ -1,5 +1,5 @@
 import React, { useState, useCallback, memo } from "react";
-import { AutoTTRecConfigForm } from "./AutoTTRecConfigForm";
+import { AutoTTRecConfigForm, areAutoTTRecConfigFormPropsEqual } from "./AutoTTRecConfigForm";
 import { AutoTTRecArgs } from "../AutoTTRecFormFieldsAndArgs";
 import { AutoTTRecStatus } from "./AutoTTRecStatus";
 import { IpcRendererEvent } from "electron";
@@ -23,7 +23,7 @@ function appendAccountingForCarriage(base: string, line: string) {
   return output;
 }
 
-const AutoTTRecConfigForm_Memo = memo(AutoTTRecConfigForm);
+const AutoTTRecConfigForm_Memo = memo(AutoTTRecConfigForm, areAutoTTRecConfigFormPropsEqual);
 
 export function AutoTTRecManager() {
   const [programStatusHeader, setProgramStatusHeader] = useState("Ready");
@@ -96,7 +96,7 @@ export function AutoTTRecManager() {
   return (
     <div>
       <AutoTTRecConfigForm_Memo whichUI={true} onSubmitCallback={runAutoTTRec}
-        onAbortCallback={abortAutoTTRec} isAutoTTRecRunning={isAutoTTRecRunning} formDefaultValues={formDefaultValues}/>
+        onAbortCallback={abortAutoTTRec} isAutoTTRecRunning={isAutoTTRecRunning}/>
       {renderCounter}
       <AutoTTRecStatus programStatusHeader={programStatusHeader}
         programStatusDetails={programStatusDetails}/>

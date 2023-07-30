@@ -61,6 +61,8 @@ import useRenderCounter from "../RenderCounter";
 
 const AutoTTRecConfigFormComponents_Memo = memo(AutoTTRecConfigFormComponents);
 const AutoTTRecSubmitAbortButtons_Memo = memo(AutoTTRecSubmitAbortButtons);
+const ClearAllFields_Memo = memo(ClearAllFields);
+const ImportTemplate_Memo = memo(ImportTemplate);
 
 type Entries<T> = {
   [K in keyof T]: [K, T[K]];
@@ -80,21 +82,34 @@ function createUnFILLMEFormData(formData: Readonly<AutoTTRecConfigFormFields>) {
   return formDataUnFILLME as AutoTTRecConfigFormFieldsNoFILLME;
 }
 
-export function AutoTTRecConfigForm(
-  props: {
-    whichUI: boolean, onSubmitCallback: (autoTTRecArgs: AutoTTRecArgs, setSubmittedToggle: React.Dispatch<React.SetStateAction<boolean>>) => any,
-    onAbortCallback: (event: React.MouseEvent<HTMLButtonElement>) => void,
-    isAutoTTRecRunning: boolean,
-    formDefaultValues: AutoTTRecConfigFormFields,
-    //setFormDefaultValues: React.Dispatch<React.SetStateAction<AutoTTRecConfigFormFields>>
+type AutoTTRecConfigFormProps = {
+  whichUI: boolean,
+  onSubmitCallback: (autoTTRecArgs: AutoTTRecArgs, setSubmittedToggle: React.Dispatch<React.SetStateAction<boolean>>) => any,
+  onAbortCallback: (event: React.MouseEvent<HTMLButtonElement>) => void,
+  isAutoTTRecRunning: boolean
+  //setFormDefaultValues: React.Dispatch<React.SetStateAction<AutoTTRecConfigFormFields>>
+}
+
+export function areAutoTTRecConfigFormPropsEqual(oldProps: AutoTTRecConfigFormProps, newProps: AutoTTRecConfigFormProps) {
+  if (oldProps.whichUI === newProps.whichUI && oldProps.isAutoTTRecRunning === newProps.isAutoTTRecRunning) {
+    return true;
+  } else {
+    return false;
   }
+}
+
+export function AutoTTRecConfigForm(
+  props: AutoTTRecConfigFormProps
 ) {  
   const renderCounter = useRenderCounter(false, "AutoTTRecConfigForm");
   const formMethods = useForm<AutoTTRecConfigFormFields>({
-    criteriaMode: "all",
-    defaultValues: props.formDefaultValues
+    criteriaMode: "firstError",
+    reValidateMode: "onSubmit",
+    defaultValues: DEFAULT_FORM_VALUES
   });
-  console.log("AutoTTRecConfigForm formState:", formMethods.formState);
+  console.log("AutoTTRecConfigForm formState:", formMethods.formState.errors);
+  //console.trace();
+  //console.log("props:", props);
 
   //console.log("formMethods:", formMethods);
   //const isoWbfsFileInput = <ISOWBFSFileInput/>;
@@ -104,11 +119,18 @@ export function AutoTTRecConfigForm(
 
   const [stateTest, setStateTest] = useState(false);
   const [submittedToggle, setSubmittedToggle] = useState(false);
-
+  const [doNotTriggerRendersDueToErrors, setDoNotTriggerRendersDueToErrors] = useState(false);
+/*
+  useEffect(() => {
+    //setTimeout(() => {
+      formMethods.reset(undefined, {keepValues: true, keepErrors: false, keepIsValid: true});
+    //}, 1000);
+  }, [doNotTriggerRendersDueToErrors]);
+*/
   async function onSubmit(formData: AutoTTRecConfigFormFields) {
     //setSubmittedToggle((submittedToggle) => !submittedToggle);
     console.log("onSubmit");
-    formMethods.reset(undefined, {keepValues: true});
+    formMethods.reset(undefined, {keepValues: true, keepIsValid: true});
     console.log(formData);
     console.log("formState.dirtyFields:", formState.dirtyFields);
     console.log("formState.touchedFields:", formState.touchedFields);
@@ -125,19 +147,19 @@ export function AutoTTRecConfigForm(
     console.log("formState.dirtyFields:", formState.dirtyFields);
     console.log("formState.touchedFields:", formState.touchedFields);
     setSubmittedToggle((submittedToggle) => !submittedToggle);
+    setDoNotTriggerRendersDueToErrors((doNotTriggerRendersDueToErrors) => !doNotTriggerRendersDueToErrors);
     //props.setFormDefaultValues(DEFAULT_FORM_VALUES);
-    formMethods.reset(undefined, {keepValues: true, keepErrors: true});
+    formMethods.reset(undefined, {keepValues: true, keepErrors: true, keepIsValid: true, keepDirty: true, keepDirtyValues: true, keepDefaultValues: true, keepIsSubmitted: true, keepTouched: true, keepSubmitCount: true});
   }
 
-  function onCheckChange(event: React.ChangeEvent<HTMLInputElement>) {
-    setStateTest((stateTest) => !stateTest);
-  }
+  const formMethodsHandleSubmitFunc = useCallback(formMethods.handleSubmit(onSubmit, onError), []);
+
   // setFormDefaultValues={props.setFormDefaultValues}
   return (
     <div>
-      <form onSubmit={formMethods.handleSubmit(onSubmit, onError)}>
-        <ImportTemplate/>
-        <ClearAllFields formMethods={formMethods} submittedToggle={submittedToggle} setSubmittedToggle={setSubmittedToggle} />
+      <form onSubmit={formMethodsHandleSubmitFunc}>
+        <ImportTemplate_Memo/>
+        <ClearAllFields_Memo formMethods={formMethods} submittedToggle={submittedToggle} setSubmittedToggle={setSubmittedToggle} />
         <fieldset disabled={props.isAutoTTRecRunning}>
           {/*<AutoTTRecConfigFormComponents_Memo formMethods={formMethods} forceUpdate={submittedToggle} isAutoTTRecRunning={props.isAutoTTRecRunning}/>*/}
           <AutoTTRecConfigFormComponents_Memo formMethods={formMethods} forceUpdate={submittedToggle} isAutoTTRecRunning={props.isAutoTTRecRunning}/>
