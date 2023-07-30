@@ -120,13 +120,13 @@ export function AutoTTRecConfigForm(
   const [stateTest, setStateTest] = useState(false);
   const [submittedToggle, setSubmittedToggle] = useState(false);
   const [doNotTriggerRendersDueToErrors, setDoNotTriggerRendersDueToErrors] = useState(false);
-/*
+
   useEffect(() => {
     //setTimeout(() => {
-      formMethods.reset(undefined, {keepValues: true, keepErrors: false, keepIsValid: true});
+      formMethods.reset(undefined, {keepValues: true, keepErrors: false});
     //}, 1000);
   }, [doNotTriggerRendersDueToErrors]);
-*/
+
   async function onSubmit(formData: AutoTTRecConfigFormFields) {
     //setSubmittedToggle((submittedToggle) => !submittedToggle);
     console.log("onSubmit");
@@ -148,20 +148,15 @@ export function AutoTTRecConfigForm(
     console.log("formState.touchedFields:", formState.touchedFields);
     setSubmittedToggle((submittedToggle) => !submittedToggle);
     setDoNotTriggerRendersDueToErrors((doNotTriggerRendersDueToErrors) => !doNotTriggerRendersDueToErrors);
-    //props.setFormDefaultValues(DEFAULT_FORM_VALUES);
-    formMethods.reset(undefined, {keepValues: true, keepErrors: true, keepIsValid: true, keepDirty: true, keepDirtyValues: true, keepDefaultValues: true, keepIsSubmitted: true, keepTouched: true, keepSubmitCount: true});
+    formMethods.reset(undefined, {keepValues: true, keepErrors: true});
   }
 
-  const formMethodsHandleSubmitFunc = useCallback(formMethods.handleSubmit(onSubmit, onError), []);
-
-  // setFormDefaultValues={props.setFormDefaultValues}
   return (
     <div>
-      <form onSubmit={formMethodsHandleSubmitFunc}>
+      <form onSubmit={formMethods.handleSubmit(onSubmit, onError)}>
         <ImportTemplate_Memo/>
         <ClearAllFields_Memo formMethods={formMethods} submittedToggle={submittedToggle} setSubmittedToggle={setSubmittedToggle} />
         <fieldset disabled={props.isAutoTTRecRunning}>
-          {/*<AutoTTRecConfigFormComponents_Memo formMethods={formMethods} forceUpdate={submittedToggle} isAutoTTRecRunning={props.isAutoTTRecRunning}/>*/}
           <AutoTTRecConfigFormComponents_Memo formMethods={formMethods} forceUpdate={submittedToggle} isAutoTTRecRunning={props.isAutoTTRecRunning}/>
         </fieldset>
         <AutoTTRecSubmitAbortButtons_Memo isAutoTTRecRunning={props.isAutoTTRecRunning} onAbortCallback={props.onAbortCallback}/>
