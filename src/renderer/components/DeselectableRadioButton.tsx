@@ -7,7 +7,15 @@ import { SimpleErrorMessage } from "./SimpleErrorMessage";
 
 import useRenderCounter from "../RenderCounter";
 
-const DeselectableRadioButtonsGroupContext = createContext<AutoTTRecConfigFormChoiceArgName>("aspect-ratio-16-by-9");
+interface DeselectableRadioButtonsGroupContextType {
+  name: AutoTTRecConfigFormChoiceArgName,
+  notDeselectable?: boolean
+}
+
+const DeselectableRadioButtonsGroupContext = createContext<DeselectableRadioButtonsGroupContextType>({
+  name: "aspect-ratio-16-by-9",
+  notDeselectable: false
+});
 
 function useDeselectableRadioButtonsGroupContext() {
   return useContext(DeselectableRadioButtonsGroupContext);
@@ -30,9 +38,9 @@ function useDeselectableRadioButtonsGroupContext() {
   return lastElement;
 }*/
 
-export function DeselectableRadioButtonGroup<K extends AutoTTRecConfigFormChoiceArgName>(props: {name: K, children?: React.ReactNode}) {
+export function DeselectableRadioButtonGroup<K extends AutoTTRecConfigFormChoiceArgName>(props: {name: K, noErrorMessage?: boolean, notDeselectable?: boolean, children?: React.ReactNode}) {
   const {register} = useFormContextAutoTT();
-
+  const renderCounter = useRenderCounter(false, `DeselectableRadioButtonGroup ${props.name}`);
   function validateDeselectableRadioButton(value: AutoTTRecConfigFormChoiceArgs[AutoTTRecConfigFormChoiceArgName]): ValidateResult {
     if (value === "<FILLME>") {
       return "This input is required.";
@@ -43,41 +51,52 @@ export function DeselectableRadioButtonGroup<K extends AutoTTRecConfigFormChoice
 
   return (
     <>
-      <DeselectableRadioButtonsGroupContext.Provider value={props.name}>
+      <DeselectableRadioButtonsGroupContext.Provider value={{
+        name: props.name,
+        notDeselectable: props.notDeselectable
+      }}>
         {props.children}
         <input type="radio" id={`${props.name}-FILLME`} value="<FILLME>" style={{display: "none"}} {...register(props.name, {
           validate: validateDeselectableRadioButton
         })}/>
       </DeselectableRadioButtonsGroupContext.Provider>
-      <SimpleErrorMessage name={props.name}/>
+      {
+        props.noErrorMessage ? "" : <SimpleErrorMessage name={props.name}/>
+      }
+      {renderCounter}
     </>
   )
 }
 
 export function DeselectableRadioButton<K extends AutoTTRecConfigFormChoiceArgName, V extends AutoTTRecConfigFormChoiceArgs[K]>(props: {labelValue: string, id: string, value: V, onChange?: ((event?: Event) => void) | (() => void), isLast?: boolean}) {
   const {register, setValue, getValues} = useFormContextAutoTT();
-  const name = useDeselectableRadioButtonsGroupContext();
+  const context = useDeselectableRadioButtonsGroupContext();
+  const renderCounter = useRenderCounter(false, `DeselectableRadioButton ${props.value}`);
 
   return (
     <>
       <label htmlFor={props.id}>{props.labelValue}</label>
       <input type="radio" id={props.id} value={props.value}
-        {...register(name, {
+        {...register(context.name, {
           onChange: props.onChange
         })}
-        onContextMenu={(e: React.MouseEvent<HTMLInputElement>) => {
-          setValue<AutoTTRecConfigFormChoiceArgName>(name, "<FILLME>", {shouldTouch: true});
-          if (props.onChange !== undefined) {
-            if (e instanceof Event) {
-              props.onChange(e);
-            } else {
-              props.onChange();
+        {...!context.notDeselectable ? {
+            onContextMenu: (e: React.MouseEvent<HTMLInputElement>) => {
+              setValue<AutoTTRecConfigFormChoiceArgName>(context.name, "<FILLME>", {shouldTouch: true});
+              if (props.onChange !== undefined) {
+                if (e instanceof Event) {
+                  props.onChange(e);
+                } else {
+                  props.onChange();
+                }
+              }
+              e.preventDefault();
+              return false;
             }
-          }
-          e.preventDefault();
-          return false;
-        }}
+          } : {}
+        }
       ></input>
+      {renderCounter}
     </>
   )
 }

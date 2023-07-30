@@ -10,6 +10,8 @@ import { FormComplexity } from "./FormComplexityLayout";
 
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
 
+import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../DeselectableRadioButton";
+
 export const TIMELINE_CATEGORIES = makeReadonlyArraySet(["notop10", "top10chadsoft", "top10gecko"] as const);
 export type TimelineCategory = ValidValues<typeof TIMELINE_CATEGORIES>;
 
@@ -21,24 +23,17 @@ export function TimelineCategoryLayout(props: {isAutoTTRecRunning: boolean, form
   const renderCounter = useRenderCounter(false, "TimelineCategoryInput");
 
   console.log("timelineCategory:", timelineCategory, `, getValues("timeline-category"):`, getValues("timeline-category"));
-  function updateTimelineCategory(event: Event) {
+  function updateTimelineCategory(event?: Event) {
     setTimelineCategory(getValues("timeline-category"));
   }
 
   return (
     <div>
-      <label htmlFor="timeline-category-no-top-10">No Top 10:</label>
-      <input type="radio" id="timeline-category-no-top-10" value="notop10"
-        {...register("timeline-category", {onChange: updateTimelineCategory})}
-      ></input>
-      <label htmlFor="timeline-category-top-10">Top 10 from Chadsoft: </label>
-      <input type="radio" id="timeline-category-top-10" value="top10chadsoft"
-        {...register("timeline-category", {onChange: updateTimelineCategory})}
-      ></input>
-      <label htmlFor="timeline-category-top-10-manual">Top 10 from Gecko Code: </label>
-      <input type="radio" id="timeline-category-top-10-manual" value="top10gecko"
-        {...register("timeline-category", {onChange: updateTimelineCategory})}
-      ></input>
+      <DeselectableRadioButtonGroup name="timeline-category" notDeselectable={true}>
+        <DeselectableRadioButton labelValue="No Top 10:" id="timeline-category-no-top-10" value="notop10" onChange={updateTimelineCategory}/>
+        <DeselectableRadioButton labelValue="Top 10 from Chadsoft: " id="timeline-category-top-10" value="top10chadsoft" onChange={updateTimelineCategory}/>
+        <DeselectableRadioButton labelValue="Top 10 from Gecko Code: " id="timeline-category-top-10-manual" value="top10gecko" onChange={updateTimelineCategory}/>
+      </DeselectableRadioButtonGroup>
       {renderCounter}
       <hr style={{height: "2px", borderWidth: 0, color: "gray", backgroundColor: "gray"}}/>
       {

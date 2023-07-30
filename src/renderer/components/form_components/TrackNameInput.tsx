@@ -4,6 +4,8 @@ import { SimpleErrorMessage } from "../SimpleErrorMessage";
 import { FormComplexity } from "../layout_components/FormComplexityLayout";
 import useRenderCounter from "../../RenderCounter";
 
+import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../DeselectableRadioButton";
+
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
 
 export const TRACK_NAME_TYPES = makeReadonlyArraySet(["auto", "manual", "rkg-slot"] as const);
@@ -22,30 +24,23 @@ export function TrackNameInput(props: {formComplexity: FormComplexity}) {
     }
   }, [props.formComplexity]);
 
-  function updateTrackNameType(event: Event) {
+  function updateTrackNameType(event?: Event) {
     setTrackNameType(getValues("track-name-type"));
   }
 
   return (
     <div>
       <label htmlFor="track-name-type">Track name: </label>
-      <label htmlFor="track-name-type-auto">Auto-detect (recommended):</label>
-      <input type="radio" id="track-name-type-auto" value="auto"
-        {...register("track-name-type", {onChange: updateTrackNameType})}
-      ></input>
-      {
-        props.formComplexity === FormComplexity.ALL ? 
-        <>
-          <label htmlFor="track-name-type-rkg-slot">Use rkg slot name:</label>
-          <input type="radio" id="track-name-type-rkg-slot" value="rkg-slot"
-            {...register("track-name-type", {onChange: updateTrackNameType})}
-          ></input>
-        </> : ""
-      }
-      <label htmlFor="track-name-type-manual">Supply manually:</label>
-      <input type="radio" id="track-name-type-manual" value="manual"
-        {...register("track-name-type", {onChange: updateTrackNameType})}
-      ></input>
+      <DeselectableRadioButtonGroup name="track-name-type" noErrorMessage={true}>
+        <DeselectableRadioButton labelValue="Auto-detect (recommended):" id="track-name-type-auto" value="auto" onChange={updateTrackNameType}/>
+        {
+          props.formComplexity === FormComplexity.ALL ? 
+          <>
+            <DeselectableRadioButton labelValue="Use rkg slot name:" id="track-name-type-rkg-slot" value="rkg-slot" onChange={updateTrackNameType}/>
+          </> : ""
+        }
+        <DeselectableRadioButton labelValue="Supply manually:" id="track-name-type-manual" value="manual" onChange={updateTrackNameType}/>
+      </DeselectableRadioButtonGroup>
       {
         trackNameType === "manual" ? <>
           <input type="text" {...register("track-name", {required: {
@@ -54,6 +49,8 @@ export function TrackNameInput(props: {formComplexity: FormComplexity}) {
           }})}
           ></input>
           <SimpleErrorMessage name="track-name"/>
+        </> : trackNameType === "<FILLME>" ? <>
+          <SimpleErrorMessage name="track-name-type"/>
         </> : ""
       }
       {renderCounter}

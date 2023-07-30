@@ -6,6 +6,8 @@ import { SpeedometerMetricInput } from "./SpeedometerMetricInput";
 import { SpeedometerDecimalPlacesInput } from "./SpeedometerDecimalPlacesInput";
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
 
+import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../DeselectableRadioButton";
+
 const SpeedometerMetricInput_Memo = memo(SpeedometerMetricInput);
 
 export const SPEEDOMETER_STYLES = makeReadonlyArraySet(["fancy", "regular", "standard", "none"] as const);
@@ -17,7 +19,7 @@ export function SpeedometerInput() {
   const [speedometerStyle, setSpeedometerStyle] = useState("fancy");
   const renderCounter = useRenderCounter(false, "SpeedometerInput");
 
-  function updateSpeedometerStyle(event: Event) {
+  function updateSpeedometerStyle(event?: Event) {
     let speedometerStyleFromForm = getValues("speedometer-style");
     setSpeedometerStyle(speedometerStyleFromForm);
   }
@@ -26,22 +28,12 @@ export function SpeedometerInput() {
     <div>
       <h3>Speedometer</h3>
       <label htmlFor="speedometer-style">Style: </label>
-      <label htmlFor="speedometer-style-fancy">Fancy: </label>
-      <input type="radio" id="speedometer-style-fancy" value="fancy"
-        {...register("speedometer-style", {onChange: updateSpeedometerStyle})}
-      ></input>
-      <label htmlFor="speedometer-style-regular">Regular: </label>
-      <input type="radio" id="speedometer-style-regular" value="regular"
-        {...register("speedometer-style", {onChange: updateSpeedometerStyle})}
-      ></input>
-      <label htmlFor="speedometer-style-standard">Standard: </label>
-      <input type="radio" id="speedometer-style-standard" value="standard"
-        {...register("speedometer-style", {onChange: updateSpeedometerStyle})}
-      ></input>
-      <label htmlFor="speedometer-style-none">None: </label>
-      <input type="radio" id="speedometer-style-none" value="none"
-        {...register("speedometer-style", {onChange: updateSpeedometerStyle})}
-      ></input>
+      <DeselectableRadioButtonGroup name="speedometer-style">
+        <DeselectableRadioButton labelValue="Fancy: " id="speedometer-style-fancy" value="fancy" onChange={updateSpeedometerStyle}/>
+        <DeselectableRadioButton labelValue="Regular: " id="speedometer-style-regular" value="regular" onChange={updateSpeedometerStyle}/>
+        <DeselectableRadioButton labelValue="Standard: " id="speedometer-style-standard" value="standard" onChange={updateSpeedometerStyle}/>
+        <DeselectableRadioButton labelValue="None: " id="speedometer-style-none" value="none" onChange={updateSpeedometerStyle}/>
+      </DeselectableRadioButtonGroup>
       {renderCounter}
       {
         speedometerStyle !== "none" ? 

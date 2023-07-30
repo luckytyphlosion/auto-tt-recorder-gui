@@ -9,6 +9,8 @@ import { EncodeType } from "../layout_components/choice_layouts/EncodeSettingsLa
 
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
 
+import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../DeselectableRadioButton";
+
 export const ENCODE_SIZE_UNITS = makeReadonlyArraySet(["mib", "bytes"] as const);
 export type EncodeSizeUnit = ValidValues<typeof ENCODE_SIZE_UNITS>;
 
@@ -53,7 +55,7 @@ export function EncodeSizeInput() {
   const {register, setValue, getValues, control} = useFormContextAutoTT();
   const renderCounter = useRenderCounter(true);
 
-  function updateEncodeSizeDisplayed(event: Event | null) {
+  function updateEncodeSizeDisplayed(event?: Event) {
     let encodeSizeDisplayed = getValues("encode-size-displayed");
     let encodeSizeKbpsUnit = getValues("encode-size-unit");
     let encodeSize;
@@ -67,7 +69,7 @@ export function EncodeSizeInput() {
     console.log("encodeSize:", encodeSize);
   }
 
-  function updateEncodeSizeUnit(event: Event | null) {
+  function updateEncodeSizeUnit(event?: Event) {
     let encodeSizeUnit = getValues("encode-size-unit");
     let encodeSize = getValues("encode-size");
     console.log("updateEncodeSizeUnit encodeSizeUnit:", encodeSizeUnit);
@@ -109,15 +111,10 @@ export function EncodeSizeInput() {
       }} min={MIN_ENCODE_SIZE} max={MAX_ENCODE_SIZE}
         {...register("encode-size-displayed", {required: false, onChange: updateEncodeSizeDisplayed, valueAsNumber: true})}
       ></input>
-      <label htmlFor="encode-size-unit-mib">MiB</label>
-      <input type="radio" id="encode-size-unit-mib" value="mib"
-        {...register("encode-size-unit", {onChange: updateEncodeSizeUnit})}
-      ></input>
-      <label htmlFor="encode-size-unit-bytes">bytes</label>
-      <input type="radio" id="encode-size-unit-bytes" value="bytes"
-        {...register("encode-size-unit", {onChange: updateEncodeSizeUnit})}
-      ></input>
-
+      <DeselectableRadioButtonGroup name="encode-size-unit">
+        <DeselectableRadioButton labelValue="MiB" id="encode-size-unit-mib" value="mib" onChange={updateEncodeSizeUnit}/>
+        <DeselectableRadioButton labelValue="bytes" id="encode-size-unit-bytes" value="bytes" onChange={updateEncodeSizeUnit}/>
+      </DeselectableRadioButtonGroup>
       {renderCounter}
     </div>
   );

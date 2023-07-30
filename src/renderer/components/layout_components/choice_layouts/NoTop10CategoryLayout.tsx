@@ -9,6 +9,8 @@ import { NoEncodeLayout } from "../main_layouts/NoEncodeLayout";
 import { OutputVideoFilenameInput } from "../../form_components/OutputVideoFilenameInput";
 import { FormComplexity } from "../FormComplexityLayout";
 
+import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../../DeselectableRadioButton";
+
 import { makeReadonlyArraySet, ValidValues } from "../../../../shared/array-set";
 
 export const NO_TOP_10_CATEGORIES = makeReadonlyArraySet(["mkchannel", "ghostselect", "ghostonly", "noencode"] as const);
@@ -20,32 +22,22 @@ export function NoTop10CategoryLayout(props: {isAutoTTRecRunning: boolean, formC
   const [noTop10Category, setNoTop10Category] = useState(getValues("no-top-10-category"));
   const renderCounter = useRenderCounter(true);
 
-  function updateNoTop10Category(event: Event) {
+  function updateNoTop10Category(event?: Event) {
     setNoTop10Category(getValues("no-top-10-category"));
   }
 
   return (
     <div>
-      <label htmlFor="no-top-10-category-mkchannel">Mario Kart Channel: </label>
-      <input type="radio" id="no-top-10-category-mkchannel" value="mkchannel"
-        {...register("no-top-10-category", {onChange: updateNoTop10Category})}
-      ></input>
-      <label htmlFor="no-top-10-category-ghostselect">Time Trial Ghost Select: </label>
-      <input type="radio" id="no-top-10-category-ghostselect" value="ghostselect"
-        {...register("no-top-10-category", {onChange: updateNoTop10Category})}
-      ></input>
-      <label htmlFor="no-top-10-category-ghostonly">Race Only: </label>
-      <input type="radio" id="no-top-10-category-ghostonly" value="ghostonly"
-        {...register("no-top-10-category", {onChange: updateNoTop10Category})}
-      ></input>
+      <DeselectableRadioButtonGroup name="no-top-10-category" notDeselectable={true}>
+        <DeselectableRadioButton labelValue="Mario Kart Channel: " id="no-top-10-category-mkchannel" value="mkchannel" onChange={updateNoTop10Category}/>
+        <DeselectableRadioButton labelValue="Time Trial Ghost Select: " id="no-top-10-category-ghostselect" value="ghostselect" onChange={updateNoTop10Category}/>
+        <DeselectableRadioButton labelValue="Race Only: " id="no-top-10-category-ghostonly" value="ghostonly" onChange={updateNoTop10Category}/>
       {
         props.formComplexity === FormComplexity.ALL ? <>
-          <label htmlFor="no-top-10-category-noencode">Raw Frame Dump: </label>
-            <input type="radio" id="no-top-10-category-noencode" value="noencode"
-            {...register("no-top-10-category", {onChange: updateNoTop10Category})}
-          ></input>
+          <DeselectableRadioButton labelValue="Raw Frame Dump: " id="no-top-10-category-noencode" value="noencode" onChange={updateNoTop10Category}/>
         </> : ""
       }
+      </DeselectableRadioButtonGroup>
       <hr style={{height: "2px", borderWidth: 0, color: "gray", backgroundColor: "gray"}}/>
       {
         noTop10Category === "mkchannel" ? <MarioKartChannelLayout isAutoTTRecRunning={props.isAutoTTRecRunning} formComplexity={props.formComplexity}/> :

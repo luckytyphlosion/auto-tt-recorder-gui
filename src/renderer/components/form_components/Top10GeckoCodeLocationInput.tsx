@@ -3,6 +3,7 @@ import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import useRenderCounter from "../../RenderCounter";
 
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
+import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../DeselectableRadioButton";
 
 export const TOP_10_GECKO_CODE_LOCATION_REGIONS = makeReadonlyArraySet(["worldwide", "regional"] as const);
 export type Top10GeckoCodeLocationRegion = ValidValues<typeof TOP_10_GECKO_CODE_LOCATION_REGIONS>;
@@ -14,14 +15,10 @@ export function Top10GeckoCodeLocationInput() {
   return (
     <div>
       <label htmlFor="top-10-gecko-code-location-region">Region: </label>
-      <label htmlFor="top-10-gecko-code-location-region-ww">Worldwide:</label>
-      <input type="radio" id="top-10-gecko-code-location-region-ww" value="worldwide"
-        {...register("top-10-gecko-code-location-region")}
-      ></input>
-      <label htmlFor="top-10-gecko-code-location-region-regional">Regional (No globe):</label>
-      <input type="radio" id="stop-10-gecko-code-location-region-regional" value="regional"
-        {...register("top-10-gecko-code-location-region")}
-      ></input>
+      <DeselectableRadioButtonGroup name="top-10-gecko-code-location-region">
+        <DeselectableRadioButton labelValue="Worldwide:" id="top-10-gecko-code-location-region-ww" value="worldwide"/>
+        <DeselectableRadioButton labelValue="Regional (No globe):" id="stop-10-gecko-code-location-region-regional" value="regional"/>
+      </DeselectableRadioButtonGroup>
       {renderCounter}
     </div>
   );

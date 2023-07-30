@@ -8,6 +8,7 @@ import { AudioCodec } from "./AudioCodecAndBitrateInput";
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
 
 import { EncodeType } from "../layout_components/choice_layouts/EncodeSettingsLayout";
+import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../DeselectableRadioButton";
 
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
 
@@ -55,7 +56,7 @@ export function AudioBitrateInput(props: {encodeType: EncodeType, audioCodec: Au
   const {register, setValue, getValues} = useFormContextAutoTT();
   const renderCounter = useRenderCounter(true);
 
-  function updateAudioBitrateDisplayed(event: Event | null) {
+  function updateAudioBitrateDisplayed(event?: Event) {
     let audioBitrateDisplayed = getValues("audio-bitrate-displayed");
     let audioBitrateUnit = getValues("audio-bitrate-unit");
     let audioBitrate;
@@ -69,7 +70,7 @@ export function AudioBitrateInput(props: {encodeType: EncodeType, audioCodec: Au
     console.log("audioBitrate:", audioBitrate);
   }
 
-  function updateAudioBitrateUnit(event: Event | null) {
+  function updateAudioBitrateUnit(event?: Event) {
     let audioBitrateUnit = getValues("audio-bitrate-unit");
     let audioBitrate = getValues("audio-bitrate");
     console.log("updateAudioBitrateUnit audioBitrateUnit:", audioBitrateUnit);
@@ -147,14 +148,10 @@ export function AudioBitrateInput(props: {encodeType: EncodeType, audioCodec: Au
         {...register("audio-bitrate-displayed", {
         onChange: updateAudioBitrateDisplayed, valueAsNumber: true})}
       ></input>
-      <label htmlFor="audio-bitrate-unit">kbps</label>
-      <input type="radio" id="audio-bitrate-unit-kbps" value="kbps"
-        {...register("audio-bitrate-unit", {onChange: updateAudioBitrateUnit})}
-      ></input>
-      <label htmlFor="audio-bitrate-unit-bps">bps</label>
-      <input type="radio" id="audio-bitrate-unit-bps" value="bps"
-        {...register("audio-bitrate-unit", {onChange: updateAudioBitrateUnit})}
-      ></input>
+      <DeselectableRadioButtonGroup name="audio-bitrate-unit">
+        <DeselectableRadioButton labelValue="kbps" id="audio-bitrate-unit-kbps" value="kbps" onChange={updateAudioBitrateUnit}/>
+        <DeselectableRadioButton labelValue="bps" id="audio-bitrate-unit-bps" value="bps" onChange={updateAudioBitrateUnit}/>
+      </DeselectableRadioButtonGroup>
       <SimpleErrorMessage name="audio-bitrate"/>
       {renderCounter}
     </div>
