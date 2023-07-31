@@ -5,6 +5,8 @@ import { FileFilter } from "electron";
 
 import { UseFormRegister, UseFormSetValue } from "react-hook-form";
 
+import { ClearableReadonlyTextInput } from "../ClearableReadonlyTextInput";
+
 import { isFileReadable } from "../../util-renderer";
 
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
@@ -23,12 +25,7 @@ export function ISOWBFSFileInput() {
   return (
     <div>
       <label htmlFor="iso-filename">ISO or WBFS: </label>
-      <input type="text" readOnly
-        {...register("iso-filename", {required: {
-          value: true,
-          message: "This input is required."
-        }, validate: isFileReadable})}
-      ></input>
+      <ClearableReadonlyTextInput name="iso-filename" validate={isFileReadable}/>
       <button onClick={event => {
         queueOpenDialog(event, [
           {name: "ISO/WBFS files", extensions: ["iso", "wbfs"]}

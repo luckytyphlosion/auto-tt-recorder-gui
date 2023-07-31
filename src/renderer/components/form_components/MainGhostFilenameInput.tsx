@@ -5,6 +5,8 @@ import { FileFilter } from "electron";
 import { Set200ccInput } from "./Set200ccInput";
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
 
+import { ClearableReadonlyTextInput } from "../ClearableReadonlyTextInput";
+
 import { isFileReadable } from "../../util-renderer"
 
 export function MainGhostFilenameInput() {
@@ -20,12 +22,7 @@ export function MainGhostFilenameInput() {
   return (
     <div>
       <label htmlFor="main-ghost-filename">RKG file to record:</label>
-      <input type="text" readOnly
-        {...register("main-ghost-filename", {required: {
-          value: true,
-          message: "This input is required."
-        }, validate: isFileReadable})}
-      ></input>
+      <ClearableReadonlyTextInput name="main-ghost-filename" validate={isFileReadable}/>
       <button onClick={event => {
         queueOpenDialog(event, [
           {name: "RKG files", extensions: ["rkg"]}

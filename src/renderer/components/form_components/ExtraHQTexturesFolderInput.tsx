@@ -5,6 +5,8 @@ import { FileFilter } from "electron";
 
 import { UseFormRegister, UseFormSetValue, ValidateResult } from "react-hook-form";
 
+import { ClearableReadonlyTextInput } from "../ClearableReadonlyTextInput";
+
 import { isFolderReadable } from "../../util-renderer"
 
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
@@ -40,9 +42,7 @@ export function ExtraHQTexturesFolderInput() {
       <TriCheckbox name="extra-hq-textures-folder-enable" noErrorMessage={true}/>
       {
         extraHQTexturesFolderEnable === true || extraHQTexturesFolderEnable === "<FILLME>" ? <>
-          <input type="text" readOnly
-            {...register("extra-hq-textures-folder", {validate: validateExtraHQTexturesFolder})}
-          ></input>
+          <ClearableReadonlyTextInput name="extra-hq-textures-folder" notRequired={true} validate={validateExtraHQTexturesFolder}/>
           <button onClick={event => {
             queueOpenFolderDialog(event);
           }} type="button">Browse&#8230;</button>

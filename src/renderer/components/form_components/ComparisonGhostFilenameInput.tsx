@@ -4,6 +4,8 @@ import { FileFilter } from "electron";
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
 import { isFileReadable } from "../../util-renderer"
 
+import { ClearableReadonlyTextInput } from "../ClearableReadonlyTextInput";
+
 export function ComparisonGhostFilenameInput() {
   const {register, setValue, getValues} = useFormContextAutoTT();
 
@@ -17,12 +19,7 @@ export function ComparisonGhostFilenameInput() {
   return (
     <div>
       <label htmlFor="comparison-ghost-filename">RKG file to compare against: </label>
-      <input type="text" readOnly
-        {...register("comparison-ghost-filename", {required: {
-          value: true,
-          message: "This input is required."
-        }, validate: isFileReadable})}
-      ></input>
+      <ClearableReadonlyTextInput name="comparison-ghost-filename" validate={isFileReadable}/>
       <button onClick={event => {
         queueOpenDialog(event, [
           {name: "RKG files", extensions: ["rkg"]}

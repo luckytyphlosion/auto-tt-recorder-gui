@@ -5,6 +5,8 @@ import { FileFilter } from "electron";
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
 import { isFileReadable } from "../../util-renderer"
 
+import { ClearableReadonlyTextInput } from "../ClearableReadonlyTextInput";
+
 export function MusicFilenameInput() {
   const {register, setValue, getValues} = useFormContextAutoTT();
 
@@ -18,12 +20,7 @@ export function MusicFilenameInput() {
   return (
     <>
       <label htmlFor="music-filename"> </label>
-      <input type="text" readOnly
-        {...register("music-filename", {required: {
-          value: true,
-          message: "This input is required."
-        }, validate: isFileReadable})}
-      ></input>
+      <ClearableReadonlyTextInput name="music-filename" validate={isFileReadable}/>
       <button onClick={event => {
         queueOpenDialog(event, [
           {name: "Music files", extensions: ["*"]}

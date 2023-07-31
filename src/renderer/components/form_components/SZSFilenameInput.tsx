@@ -4,6 +4,8 @@ import { FileFilter } from "electron";
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
 import { isFileReadable } from "../../util-renderer"
 
+import { ClearableReadonlyTextInput } from "../ClearableReadonlyTextInput";
+
 export function SZSFilenameInput() {
   const {register, setValue, getValues} = useFormContextAutoTT();
 
@@ -17,12 +19,7 @@ export function SZSFilenameInput() {
   return (
     <div>
       <label htmlFor="szs-filename">SZS Filename: </label>
-      <input type="text" readOnly
-        {...register("szs-filename", {required: {
-          value: true,
-          message: "This input is required."
-        }, validate: isFileReadable})}
-      ></input>
+      <ClearableReadonlyTextInput name="szs-filename" validate={isFileReadable}/>
       <button onClick={event => {
         queueOpenDialog(event, [
           {name: "SZS files", extensions: ["szs"]}

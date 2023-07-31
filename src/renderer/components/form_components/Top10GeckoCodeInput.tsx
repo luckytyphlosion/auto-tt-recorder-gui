@@ -7,6 +7,8 @@ import { FilenameAndContents } from "../../../shared/shared-types"
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
 import { EditorView } from "@codemirror/view";
 
+import { ClearableReadonlyTextInput } from "../ClearableReadonlyTextInput";
+
 import CodeMirror from '@uiw/react-codemirror';
 
 import Modal from "react-modal";
@@ -54,6 +56,13 @@ export function Top10GeckoCodeInput(props: {isAutoTTRecRunning: boolean}) {
   function updateGeckoCodeUnsaved(newGeckoCodeUnsaved: boolean) {
     setGeckoCodeUnsaved(newGeckoCodeUnsaved);
     setValue("top-10-gecko-code-unsaved", newGeckoCodeUnsaved, {shouldTouch: true});
+  }
+
+  function updateTop10GeckoCodeFilenameAfterRightClick(newTop10GeckoCodeFilename: string) {
+    if (newTop10GeckoCodeFilename !== top10GeckoCodeFilename) {
+      updateGeckoCodeUnsaved(true);
+    }
+    setTop10GeckoCodeFilename(newTop10GeckoCodeFilename);
   }
 
   function setSaveModalOpenAndFrom(newModalOpen: boolean, newSaveModalFrom: SaveModalFrom) {
@@ -239,9 +248,7 @@ export function Top10GeckoCodeInput(props: {isAutoTTRecRunning: boolean}) {
         </Modal>
 
         <label htmlFor="top-10-gecko-code-filename">Filename:</label>
-        <input type="text" readOnly
-          {...register("top-10-gecko-code-filename", {validate: geckoCodeValidator})}
-        ></input>
+        <ClearableReadonlyTextInput name="top-10-gecko-code-filename" notRequired={true} validate={geckoCodeValidator} setState={updateTop10GeckoCodeFilenameAfterRightClick}/>
 
         <button onClick={event => {
           createNewFile(event);

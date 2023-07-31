@@ -7,6 +7,8 @@ import { FilenameAndContents } from "../../../shared/shared-types"
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
 import { EditorView } from "@codemirror/view";
 
+import { ClearableReadonlyTextInput } from "../ClearableReadonlyTextInput";
+
 import CodeMirror from '@uiw/react-codemirror';
 
 import Modal from "react-modal";
@@ -46,6 +48,13 @@ export function ExtraGeckoCodesInput(props: {isAutoTTRecRunning: boolean}) {
     updateExtraGeckoCodesFilename("");
     setValue("extra-gecko-codes-contents", "", {shouldTouch: true});
     updateGeckoCodeUnsaved(false);
+  }
+
+  function updateExtraGeckoCodesFilenameAfterRightClick(newExtraGeckoCodesFilename: string) {
+    if (newExtraGeckoCodesFilename !== extraGeckoCodesFilename) {
+      updateGeckoCodeUnsaved(true);
+    }
+    setExtraGeckoCodesFilename(newExtraGeckoCodesFilename);
   }
 
   function updateGeckoCodeUnsaved(newGeckoCodeUnsaved: boolean) {
@@ -188,9 +197,7 @@ export function ExtraGeckoCodesInput(props: {isAutoTTRecRunning: boolean}) {
         </Modal>
 
         <label htmlFor="extra-gecko-codes-filename">Filename:</label>
-        <input type="text" readOnly
-          {...register("extra-gecko-codes-filename", {validate: geckoCodeValidator})}
-        ></input>
+        <ClearableReadonlyTextInput name="extra-gecko-codes-filename" notRequired={true} validate={geckoCodeValidator} setState={updateExtraGeckoCodesFilenameAfterRightClick}/>
 
         <button onClick={event => {
           createNewFile(event);
