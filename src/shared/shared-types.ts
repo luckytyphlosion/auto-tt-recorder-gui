@@ -55,3 +55,5 @@ export type BooleanFILLME = boolean | "<FILLME>";
 export type IfEquals<T, U, Y=unknown, N=never> =
   (<G>() => G extends T ? 1 : 2) extends
   (<G>() => G extends U ? 1 : 2) ? Y : N;
+
+export const chadsoftGhostPageLinkRegex = /^https:\/\/(?:www\.)?chadsoft\.co\.uk\/time-trials\/rkgd\/([0-9A-Fa-f]{2}\/[0-9A-Fa-f]{2}\/[0-9A-Fa-f]{36})\.html/;

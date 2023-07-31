@@ -1,6 +1,7 @@
 import React from "react";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
+import { chadsoftGhostPageLinkRegex } from "../../../shared/shared-types";
 
 import useRenderCounter from "../../RenderCounter";
 
@@ -20,7 +21,7 @@ export function ChadsoftGhostPageInput() {
               message: "This input is required."
             },
             pattern: {
-              value: /^https:\/\/(?:www\.)?chadsoft\.co\.uk\/time-trials\/rkgd\/[0-9A-Fa-f]{2}\/[0-9A-Fa-f]{2}\/[0-9A-Fa-f]{36}\.html$/,
+              value: chadsoftGhostPageLinkRegex,
               message: "Must be a valid chadsoft ghost link."
             }
           })}
