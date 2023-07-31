@@ -4,7 +4,7 @@ import Modal from "react-modal";
 import { FormProvider, UseFormReturn } from "react-hook-form";
 import { AutoTTRecConfigFormFields } from "../auto-tt-rec-form-field-types";
 
-import { makeMinimalFormData } from "../auto-tt-rec-form-data-generators";
+import { makeMinimalFormData, makeDefaultFormData } from "../auto-tt-rec-form-data-generators";
 
 export function ClearAllFields(props: {
   formMethods: UseFormReturn<AutoTTRecConfigFormFields, any, undefined>,
@@ -13,34 +13,39 @@ export function ClearAllFields(props: {
   //setFormDefaultValues: React.Dispatch<React.SetStateAction<AutoTTRecConfigFormFields>>
 }) {
   const [isModalOpen, setModalOpen] = useState(false);
-  const [allFieldsCleared, setAllFieldsCleared] = useState(false);
-  const [afterAllFieldsCleared, setAfterAllFieldsCleared] = useState(false);
+  const [isFormWipeTypeReset, setFormWipeTypeReset] = useState(false);
 
-  function clearAllFieldsModal_confirm(event: React.MouseEvent<HTMLButtonElement>) {
-    const {reset, getValues} = props.formMethods;
+  function clearOrResetAllFieldsModal_confirm(event: React.MouseEvent<HTMLButtonElement>) {
+    const {getValues} = props.formMethods;
     let formComplexity = getValues("form-complexity");
     let timelineCategory = getValues("timeline-category");
     let noTop10Category = getValues("no-top-10-category");
-
-    const minimalFormData = makeMinimalFormData(formComplexity, timelineCategory, noTop10Category);
-    reset(minimalFormData);
-    setAllFieldsCleared(false);
+    let newFormData: AutoTTRecConfigFormFields;
+    if (isFormWipeTypeReset) {
+      newFormData = makeDefaultFormData(formComplexity, timelineCategory, noTop10Category);
+    } else {
+      newFormData = makeMinimalFormData(formComplexity, timelineCategory, noTop10Category);
+    }
+    props.formMethods.reset(newFormData);
     props.setSubmittedToggle((submittedToggle) => (!submittedToggle));
-    //props.setFormDefaultValues(clearedDefaultValues);
-    //setAfterAllFieldsCleared(true);
     setModalOpen(false);
-    setAllFieldsCleared(true);
   }
 
-  function clearAlFieldsModal_cancel(event: React.MouseEvent<HTMLButtonElement>) {
+  function clearOrResetAllFieldsModal_cancel(event: React.MouseEvent<HTMLButtonElement>) {
     setModalOpen(false);
   }
 
   function onClickClearAllFields(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
+    setFormWipeTypeReset(false);
     setModalOpen(true);
   }
 
+  function onClickResetAllFields(event: React.MouseEvent<HTMLButtonElement>) {
+    event.preventDefault();
+    setFormWipeTypeReset(true);
+    setModalOpen(true);
+  }
   /*useEffect(() => {
     if (allFieldsCleared) {
 
@@ -59,17 +64,22 @@ export function ClearAllFields(props: {
   return (
     <div>
     <button onClick={onClickClearAllFields}>Clear all fields...</button>
+    <button onClick={onClickResetAllFields}>Reset all fields to defaults...</button>
     <Modal
       overlayClassName="extra-gecko-codes-save-modal"
       className="extra-gecko-codes-save-modal-contents"
       isOpen={isModalOpen}
-      onRequestClose={clearAlFieldsModal_cancel}
+      onRequestClose={clearOrResetAllFieldsModal_cancel}
       shouldCloseOnOverlayClick={false}
       contentLabel="Save Gecko Code Dialog"
     >
-      <h3>Are you SURE you want to clear all input fields?</h3>
-      <button onClick={clearAllFieldsModal_confirm}>Yes</button>
-      <button onClick={clearAlFieldsModal_cancel}>No</button>
+      <h3>{
+        isFormWipeTypeReset ?
+        "Are you SURE you want to reset all input fields to defaults?" : 
+        "Are you SURE you want to clear all input fields?"
+      }</h3>
+      <button onClick={clearOrResetAllFieldsModal_confirm}>Yes</button>
+      <button onClick={clearOrResetAllFieldsModal_cancel}>No</button>
     </Modal>
     </div>
   )
