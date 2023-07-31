@@ -7,7 +7,7 @@ export function Top10HighlightInput() {
 
   return (
     <div>
-      <label htmlFor="top-10-highlight">Which entry to highlight? </label>
+      <label htmlFor="top-10-highlight">Which entry to highlight and record? </label>
       <input type="number"
         {...register("top-10-highlight", {
           required: {
