@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
-import { MusicFilenameInput } from "./MusicFilenameInput";
+import { Top10LocationRegion } from "./Top10LocationInput";
 import { DeselectableDropdown } from "../DeselectableDropdown";
 
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
@@ -290,10 +290,10 @@ const COUNTRY_LOCATIONS_NO_FILLME = Object.keys(COUNTRY_LOCATION_FLAG_IDS_BY_NAM
 export type Top10LocationCountry = ValidValues<typeof COUNTRY_LOCATIONS>;
 export type Top10LocationCountryFlagId = ValidValues<typeof COUNTRY_FLAG_IDS>;
 
-export function Top10LocationCountryInput() {
+export function Top10LocationCountryInput(props: {top10LocationRegion: Top10LocationRegion}) {
   return (
     <>
-      <label htmlFor="top-10-location-country-location">Location: </label>
+      <label htmlFor="top-10-location-country-location">{props.top10LocationRegion === "<FILLME>" ? "(Country) " : ""}Location: </label>
       <DeselectableDropdown name="top-10-location-country-location">
         {COUNTRY_LOCATIONS_NO_FILLME.map((countryLocation) => (
           <option value={countryLocation} key={countryLocation}>{countryLocation}</option>
