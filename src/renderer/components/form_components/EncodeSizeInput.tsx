@@ -71,29 +71,35 @@ export function EncodeSizeInput() {
 
   function updateEncodeSizeUnit(event?: Event) {
     let encodeSizeUnit = getValues("encode-size-unit");
-    let encodeSize = getValues("encode-size");
-    console.log("updateEncodeSizeUnit encodeSizeUnit:", encodeSizeUnit);
-    console.log("updateEncodeSizeUnit encodeSize:", encodeSize);
-    let useDefaultEncodeSize = false;
     const unmodifiedEncodeSizeDisplayed = getDefaultEncodeSizeDisplayed(encodeSizeUnit);
     let encodeSizeDisplayed = unmodifiedEncodeSizeDisplayed;
 
-    if (Number.isNaN(encodeSize) || encodeSize < MIN_ENCODE_SIZE || encodeSize > MAX_ENCODE_SIZE) {
-      useDefaultEncodeSize = true;
+    if (encodeSizeUnit === "<FILLME>") {
+      encodeSizeDisplayed = NaN;
     } else {
-      if (encodeSizeUnit === "mib") {
-        // 50000000 -> 47.68MiB
-        encodeSizeDisplayed = Number((Math.floor(encodeSize) / 1048576).toFixed(2));
-      } else {
-        encodeSizeDisplayed = Math.floor(encodeSize);
-      }
-      if (Number.isNaN(encodeSizeDisplayed) || encodeSizeDisplayed < MIN_ENCODE_SIZE || encodeSizeDisplayed > MAX_ENCODE_SIZE) {
+      let encodeSize = getValues("encode-size");
+      console.log("updateEncodeSizeUnit encodeSizeUnit:", encodeSizeUnit);
+      console.log("updateEncodeSizeUnit encodeSize:", encodeSize);
+      let useDefaultEncodeSize = false;
+  
+  
+      if (Number.isNaN(encodeSize) || encodeSize < MIN_ENCODE_SIZE || encodeSize > MAX_ENCODE_SIZE) {
         useDefaultEncodeSize = true;
+      } else {
+        if (encodeSizeUnit === "mib") {
+          // 50000000 -> 47.68MiB
+          encodeSizeDisplayed = Number((Math.floor(encodeSize) / 1048576).toFixed(2));
+        } else {
+          encodeSizeDisplayed = Math.floor(encodeSize);
+        }
+        if (Number.isNaN(encodeSizeDisplayed) || encodeSizeDisplayed < MIN_ENCODE_SIZE || encodeSizeDisplayed > MAX_ENCODE_SIZE) {
+          useDefaultEncodeSize = true;
+        }
       }
-    }
-
-    if (useDefaultEncodeSize) {
-      encodeSizeDisplayed = unmodifiedEncodeSizeDisplayed;
+  
+      if (useDefaultEncodeSize) {
+        encodeSizeDisplayed = unmodifiedEncodeSizeDisplayed;
+      }
     }
 
     setValue("encode-size-displayed", encodeSizeDisplayed, {shouldTouch: true});
