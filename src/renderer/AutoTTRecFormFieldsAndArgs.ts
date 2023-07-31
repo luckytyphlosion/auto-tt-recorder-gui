@@ -54,17 +54,6 @@ import { AutoTTRecArgNameExtended, AUTO_TT_REC_ARG_NAMES_EXTENDED, GhostAutoArgN
 function isFILLMEOrEmptyOrNull(x: any): x is "<FILLME>" | "" | null {
   return x === null || x === "" || x === "<FILLME>";
 }
-function validateFormDataNonPartial(formData: AutoTTRecConfigFormFieldsPartial, errorsAndWarnings: AutoTTRecConfigErrorsAndWarnings) {
-  for (const argName of AUTO_TT_REC_CONFIG_FORM_FIELD_NAMES) {
-    if (formData[argName] === undefined) {
-      errorsAndWarnings.addKeyUndefinedWarning(argName, "formData");
-      formData[argName] = DEFAULT_FORM_VALUES[argName] as any;
-    } else if (formData[argName] === null) {
-      errorsAndWarnings.addWarning(argName, `formData[${argName}] was somehow null! (this is an error within the program itself and not your fault, please contact the developer!)`);
-      formData[argName] = DEFAULT_FORM_VALUES[argName] as any;
-    }
-  }
-}
 
 export function makeMinimalFormData(formComplexity: FormComplexity, timelineCategory: TimelineCategory, noTop10Category: NoTop10Category) {
   let formData: AutoTTRecConfigFormFields = shallowCopy(MINIMAL_FORM_VALUES);
@@ -91,21 +80,21 @@ const listFormatter = new Intl.ListFormat("en", {style: "long", type: "disjuncti
 // and the possible names in AutoTTRecConfigFormFields
 type AutoTTRecArgExtendedAndFormFieldName = AutoTTRecArgNameExtended | AutoTTRecConfigFormFieldName;
 
-interface AutoTTRecConfigImporterErrorOrWarningMessage {
+interface AutoTTRecConfigErrorOrWarningMessage {
   isWarning: boolean,
   message: string
 }
 
 class AutoTTRecConfigErrorsAndWarnings {
-  private _errorsAndWarnings: Map<AutoTTRecArgExtendedAndFormFieldName, AutoTTRecConfigImporterErrorOrWarningMessage[]>;
-  private _errorsAndWarningsInvalidCommands: Map<string, AutoTTRecConfigImporterErrorOrWarningMessage[]>;
+  private _errorsAndWarnings: Map<AutoTTRecArgExtendedAndFormFieldName, AutoTTRecConfigErrorOrWarningMessage[]>;
+  private _errorsAndWarningsInvalidCommands: Map<string, AutoTTRecConfigErrorOrWarningMessage[]>;
 
   constructor() {
     this._errorsAndWarnings = new Map();
     this._errorsAndWarningsInvalidCommands = new Map();
   }
 
-  private addToErrorsWarningMap<K extends string, M extends Map<K, AutoTTRecConfigImporterErrorOrWarningMessage[]>>(name: K, message: string, isWarning: boolean, errorsAndWarnings: M) {
+  private addToErrorsWarningMap<K extends string, M extends Map<K, AutoTTRecConfigErrorOrWarningMessage[]>>(name: K, message: string, isWarning: boolean, errorsAndWarnings: M) {
     let errorsAndWarningsForName = errorsAndWarnings.get(name);
     if (errorsAndWarningsForName === undefined) {
       errorsAndWarningsForName = [];
@@ -1417,6 +1406,18 @@ class AutoTTRecConfigImporter {
     this.formData["audio-bitrate-last-audio-codec"] = audioCodec;
   }
 
+  private validateFormDataNonPartial() {
+    for (const argName of AUTO_TT_REC_CONFIG_FORM_FIELD_NAMES) {
+      if (this.formData[argName] === undefined) {
+        this.errorsAndWarnings.addKeyUndefinedWarning(argName, "formData");
+        this.formData[argName] = DEFAULT_FORM_VALUES[argName] as any;
+      } else if (this.formData[argName] === null) {
+        this.errorsAndWarnings.addWarning(argName, `formData[${argName}] was somehow null! (this is an error within the program itself and not your fault, please contact the developer!)`);
+        this.formData[argName] = DEFAULT_FORM_VALUES[argName] as any;
+      }
+    }
+  }
+
   public async import(): Promise<AutoTTRecConfigFormFields> {
     if (!this.hasImported) {
       this.importStraightCopyArgs();
@@ -1444,7 +1445,7 @@ class AutoTTRecConfigImporter {
       this.importTop10TitleAndSetTop10TitleType();
       this.importTrackNameAndSetTrackNameType();
       this.clearAudioBitrateAndCodecState();
-      validateFormDataNonPartial(this.formData, this.errorsAndWarnings);
+      this.validateFormDataNonPartial();
       this.hasImported = true;
     }
 
