@@ -26,7 +26,7 @@ export function MusicPresentationInput(props: {hasMusic: boolean, isOnMKChannel:
     <div>
       <label htmlFor="music-presentation">Music presentation: </label>
       <DeselectableRadioButtonGroup name="music-presentation">
-      <DeselectableRadioButton labelValue="Normal: " id="music-presentation-normal" value="normal"/>
+        <DeselectableRadioButton labelValue="Normal: " id="music-presentation-normal" value="normal"/>
         {
           props.hasMusic ? <>
             <DeselectableRadioButton labelValue="Start music at beginning: " id="music-presentation-start-music-at-beginning" value="start-music-at-beginning"/>

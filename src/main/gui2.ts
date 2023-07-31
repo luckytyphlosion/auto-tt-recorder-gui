@@ -1,7 +1,7 @@
 import { dialog, IpcMainInvokeEvent, FileFilter, OpenDialogOptions, SaveDialogOptions} from "electron";
 
 import { mainWindow } from "./electron";
-import { FilenameAndContents, StringOrError, DialogId, ExpectedExtensionAndErrorMessage } from "../shared/shared-types";
+import { FilenameAndContents, StringOrError, DialogId, ExpectedExtensionAndErrorMessage, IsFileWritableResult, IsFileWritableResultCode } from "../shared/shared-types";
 import fsPromises from "fs/promises";
 import fs from "fs";
 
@@ -176,8 +176,10 @@ export async function openFileDialogAndRead(event: IpcMainInvokeEvent, fileFilte
   }
 }
 
-export async function saveFileDialog(event: IpcMainInvokeEvent, fileFilters: FileFilter[],
-    lastFilename: string | undefined, dialogId: DialogId): Promise<string> {
+export async function saveFileDialog(
+  event: IpcMainInvokeEvent, fileFilters: FileFilter[],
+  lastFilename: string | undefined, dialogId: DialogId
+): Promise<string> {
   let dialogProperties: SaveDialogOptions["properties"] = [];
   lastFilename = retrieveLastPathname(lastFilename, dialogId);
   let response = await dialog.showSaveDialog(mainWindow, {
@@ -187,6 +189,7 @@ export async function saveFileDialog(event: IpcMainInvokeEvent, fileFilters: Fil
   });
   if (!response.canceled && response.filePath !== undefined) {
     globalConfig.setNewDialogPathnameAndSave(dialogId, response.filePath);
+    console.log("saveFileDialog response.filePath:", response.filePath);
     return response.filePath;
   } else {
     return "";
@@ -229,6 +232,27 @@ export async function isFileReadable(event: IpcMainInvokeEvent, filename: string
   return fsAccessHelper(filename, fs.constants.R_OK);
 }
 
-export async function isFileWritable(event: IpcMainInvokeEvent, filename: string): Promise<boolean> {
-  return !await fsAccessHelper(filename, fs.constants.X_OK) || await fsAccessHelper(filename, fs.constants.W_OK);
+export async function isFileWritable_alsoGetExtension(event: IpcMainInvokeEvent, filename: string, expectedExtensionMinusDot?: string): Promise<IsFileWritableResult> {
+  let filenameExt = path.extname(filename);
+  let result: IsFileWritableResult = {
+    code: IsFileWritableResultCode.SUCCESS,
+    fileExtensionMinusDot: filenameExt.charAt(0) === "." ? filenameExt.substring(1) : filenameExt
+  };
+
+  if (expectedExtensionMinusDot !== undefined) {
+    let expectedExtension = `.${expectedExtensionMinusDot}`;
+    if (filenameExt !== expectedExtension) {
+      result.code = IsFileWritableResultCode.WRONG_EXTENSION;
+      return result;
+    }
+  }
+
+  let isWritableAnswer =  !await fsAccessHelper(filename, fs.constants.X_OK) || await fsAccessHelper(filename, fs.constants.W_OK);
+  if (isWritableAnswer) {
+    result.code = IsFileWritableResultCode.SUCCESS;
+  } else {
+    result.code = IsFileWritableResultCode.UNWRITABLE;
+  }
+
+  return result;
 }

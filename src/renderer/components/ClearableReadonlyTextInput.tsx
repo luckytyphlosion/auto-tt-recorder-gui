@@ -6,13 +6,13 @@ import { AutoTTRecConfigFormStringArgName, PartialFILLME_FormComplexityNoFILLME,
 
 import useRenderCounter from "../RenderCounter";
 
-export function ClearableReadonlyTextInput<K extends AutoTTRecConfigFormStringArgName>(props: {name: K, notRequired?: boolean, validate: (value: string) => Promise<ValidateResult> | ValidateResult, setState?: (value: string) => void}) {
+export function ClearableReadonlyTextInput<K extends AutoTTRecConfigFormStringArgName>(props: {name: K, notRequired?: boolean, validate: (value: string) => Promise<ValidateResult> | ValidateResult, setState?: (value: string) => void, className?: string}) {
   const {register, setValue} = useFormContextAutoTT();
   const renderCounter = useRenderCounter(false, `ClearableReadonlyTextInput ${props.name}`);
 
   return (
     <>
-      <input type="text" readOnly
+      <input type="text" readOnly className={props.className}
       {...register(props.name, {required: !props.notRequired ? {
         value: true,
         message: "This input is required."

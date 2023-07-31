@@ -5,7 +5,7 @@ import { AutoTTRecStatus } from "./AutoTTRecStatus";
 import { IpcRendererEvent } from "electron";
 import { DEFAULT_FORM_VALUES } from "../auto-tt-rec-form-field-types";
 
-import { AutoTTRecResponse } from "../../shared/enums";
+import { AutoTTRecResponse } from "../../shared/shared-types";
 
 import useRenderCounter from "../RenderCounter";
 

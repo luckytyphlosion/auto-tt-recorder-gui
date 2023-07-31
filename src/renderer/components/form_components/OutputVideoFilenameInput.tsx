@@ -3,7 +3,10 @@ import { FileFilter } from "electron";
 
 import { useFormContextAutoTT, useWatchAutoTT } from "../../use-form-context-auto-tt";
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
-import { isFileWritable } from "../../util-renderer"
+import { isFileWritableAndHasCorrectExtension } from "../../util-renderer"
+
+import { FormComplexity } from "../layout_components/FormComplexityLayout";
+import { ClearableReadonlyTextInput } from "../ClearableReadonlyTextInput";
 
 import useRenderCounter from "../../RenderCounter";
 
@@ -21,13 +24,27 @@ export function OutputVideoFilenameInput(props: {noTop10CategoryIsNoEncode: bool
 
   function getAllowedOutputVideoFileFormat() {
     let outputVideoFileFormat;
-    if (getValues("timeline-category") === "notop10" && getValues("no-top-10-category") === "noencode") {
+    let formComplexity: FormComplexity = getValues("form-complexity");
+    if (formComplexity === FormComplexity.SIMPLE) {
+      outputVideoFileFormat = "mp4";
+    } else if (formComplexity === FormComplexity.ADVANCED && getValues("encode-type") === "crf") {
+      outputVideoFileFormat = "mp4";
+    } else if (getValues("timeline-category") === "notop10" && getValues("no-top-10-category") === "noencode") {
       outputVideoFileFormat = "mkv";
     } else {
       outputVideoFileFormat = getValues("output-video-file-format");
     }
-
+  
     return outputVideoFileFormat;
+  }
+
+  async function validateOutputVideoFilename(outputVideoFilename: string) {
+    let outputVideoFileFormat = getAllowedOutputVideoFileFormat();
+    if (outputVideoFileFormat === "<FILLME>") {
+      return "Please specify the video format."
+    } else {
+      return isFileWritableAndHasCorrectExtension(outputVideoFilename, outputVideoFileFormat);
+    }
   }
 
   useEffect(() => {
@@ -45,18 +62,20 @@ export function OutputVideoFilenameInput(props: {noTop10CategoryIsNoEncode: bool
   return (
     <div>
       <label htmlFor="output-video-filename">Output filename: </label>
-      <input
-        className="filename-input" type="text" readOnly
-        {...register("output-video-filename", {required: {
-          value: true,
-          message: "This input is required."
-        }, validate: isFileWritable})}
-      ></input>
-      <button onClick={event => {
+      <ClearableReadonlyTextInput className="filename-input" name="output-video-filename" validate={validateOutputVideoFilename}/>
+      <button onClick={async (event) => {
         let outputVideoFileFormat = getAllowedOutputVideoFileFormat();
-        queueSaveDialog(event, [
-          {name: `${outputVideoFileFormat} files`, extensions: [outputVideoFileFormat]}
-        ]);
+        let fileFilters: FileFilter[];
+        if (outputVideoFileFormat === "<FILLME>") {
+          fileFilters = [
+            {name: "All video files", extensions: ["mkv", "mp4", "webm"]}
+          ];
+        } else {
+          fileFilters = [
+            {name: `${outputVideoFileFormat} files`, extensions: [outputVideoFileFormat]}
+          ];
+        }
+        await queueSaveDialog(event, fileFilters);  
       }} type="button">Export as&#8230;</button>
       <SimpleErrorMessage name="output-video-filename"/>
       {renderCounter}

@@ -13,7 +13,7 @@ contextBridge.exposeInMainWorld("api", {
   ipcReadFileEnforceUTF8: (filename, badEncodingErrorMessage, expectedExtensionAndErrorMessage = undefined) => ipcRenderer.invoke("read-file-enforce-utf8", filename, badEncodingErrorMessage, expectedExtensionAndErrorMessage),
   getAbsolutePathRelativeToFilename: (pathname, filenameRelativeFrom) => ipcRenderer.invoke("get-absolute-path-relative-to-filename", pathname, filenameRelativeFrom),
   isFileReadable: (filename) => ipcRenderer.invoke("is-file-readable", filename),
-  isFileWritable: (filename) => ipcRenderer.invoke("is-file-writable", filename),
+  isFileWritable_alsoGetExtension: (filename, expectedExtension = undefined) => ipcRenderer.invoke("is-file-writable", filename, expectedExtension),
   spawnAutoTTRec: (templateFilename, autoTTRecArgs) => ipcRenderer.invoke("spawn-auto-tt-rec", templateFilename, autoTTRecArgs),
   waitAutoTTRec: () => ipcRenderer.invoke("wait-auto-tt-rec"),
   handleSendStdout: (callable) => ipcRenderer.on("send-stdout", callable),

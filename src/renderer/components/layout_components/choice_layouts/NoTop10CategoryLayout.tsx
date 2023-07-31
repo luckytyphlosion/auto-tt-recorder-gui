@@ -1,5 +1,5 @@
-import React, { useState, memo } from "react";
-import { useFormContextAutoTT } from "../../../use-form-context-auto-tt";
+import React, { useState, memo, useEffect } from "react";
+import { useFormContextAutoTT, useWatchAutoTT } from "../../../use-form-context-auto-tt";
 import useRenderCounter from "../../../RenderCounter";
 
 import { MarioKartChannelLayout } from "../main_layouts/MarioKartChannelLayout";
@@ -20,37 +20,33 @@ export const TIMELINES = makeReadonlyArraySet([...NO_TOP_10_CATEGORIES.arr, "top
 export type Timeline = ValidValues<typeof TIMELINES>;
 
 const OutputVideoFilenameInput_Memo = memo(OutputVideoFilenameInput);
-export function NoTop10CategoryLayout(props: {isAutoTTRecRunning: boolean, formComplexity: FormComplexity}) {
+export function NoTop10CategoryLayout(props: {isAutoTTRecRunning: boolean, formComplexity: FormComplexity, noTop10Category: NoTop10Category}) {
   const {register, getValues} = useFormContextAutoTT();
-  const [noTop10Category, setNoTop10Category] = useState(getValues("no-top-10-category"));
-  const renderCounter = useRenderCounter(true);
+  const renderCounter = useRenderCounter(false, "NoTop10CategoryLayout");
 
-  function updateNoTop10Category(event?: Event) {
-    setNoTop10Category(getValues("no-top-10-category"));
-  }
-
+  console.log("noTop10Category:", props.noTop10Category, `, getValues("no-top-10-category"):`, getValues("no-top-10-category"));
   return (
     <div>
       <DeselectableRadioButtonGroup name="no-top-10-category" notDeselectable={true}>
-        <DeselectableRadioButton labelValue="Mario Kart Channel: " id="no-top-10-category-mkchannel" value="mkchannel" onChange={updateNoTop10Category}/>
-        <DeselectableRadioButton labelValue="Time Trial Ghost Select: " id="no-top-10-category-ghostselect" value="ghostselect" onChange={updateNoTop10Category}/>
-        <DeselectableRadioButton labelValue="Race Only: " id="no-top-10-category-ghostonly" value="ghostonly" onChange={updateNoTop10Category}/>
+        <DeselectableRadioButton labelValue="Mario Kart Channel: " id="no-top-10-category-mkchannel" value="mkchannel"/>
+        <DeselectableRadioButton labelValue="Time Trial Ghost Select: " id="no-top-10-category-ghostselect" value="ghostselect"/>
+        <DeselectableRadioButton labelValue="Race Only: " id="no-top-10-category-ghostonly" value="ghostonly"/>
       {
         props.formComplexity === FormComplexity.ALL ? <>
-          <DeselectableRadioButton labelValue="Raw Frame Dump: " id="no-top-10-category-noencode" value="noencode" onChange={updateNoTop10Category}/>
+          <DeselectableRadioButton labelValue="Raw Frame Dump: " id="no-top-10-category-noencode" value="noencode"/>
         </> : ""
       }
       </DeselectableRadioButtonGroup>
+      {renderCounter}
       <hr style={{height: "2px", borderWidth: 0, color: "gray", backgroundColor: "gray"}}/>
       {
-        noTop10Category === "mkchannel" ? <MarioKartChannelLayout isAutoTTRecRunning={props.isAutoTTRecRunning} formComplexity={props.formComplexity}/> :
-          noTop10Category === "ghostselect" ? <GhostSelectLayout isAutoTTRecRunning={props.isAutoTTRecRunning} formComplexity={props.formComplexity}/> :
-          noTop10Category === "ghostonly" ? <GhostOnlyLayout isAutoTTRecRunning={props.isAutoTTRecRunning} formComplexity={props.formComplexity}/> : 
-          noTop10Category === "noencode" ?
+        props.noTop10Category === "mkchannel" ? <MarioKartChannelLayout isAutoTTRecRunning={props.isAutoTTRecRunning} formComplexity={props.formComplexity}/> :
+          props.noTop10Category === "ghostselect" ? <GhostSelectLayout isAutoTTRecRunning={props.isAutoTTRecRunning} formComplexity={props.formComplexity}/> :
+          props.noTop10Category === "ghostonly" ? <GhostOnlyLayout isAutoTTRecRunning={props.isAutoTTRecRunning} formComplexity={props.formComplexity}/> : 
+          props.noTop10Category === "noencode" ?
             props.formComplexity === FormComplexity.ALL ? <NoEncodeLayout isAutoTTRecRunning={props.isAutoTTRecRunning}/> : "" : ""
-      }
-      {renderCounter}
-      <OutputVideoFilenameInput_Memo noTop10CategoryIsNoEncode={noTop10Category === "noencode"}/>
+      }      
+      <OutputVideoFilenameInput_Memo noTop10CategoryIsNoEncode={props.noTop10Category === "noencode"}/>
     </div>
   );
 }

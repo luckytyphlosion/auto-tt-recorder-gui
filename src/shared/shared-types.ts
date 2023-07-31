@@ -8,6 +8,11 @@ export interface FilenameAndContents {
   contents: string
 }
 
+export enum AutoTTRecResponse {
+  COMPLETED = 1,
+  ABORTED
+}
+
 export enum ImportTemplateStatus {
   INDETERMINATE = -1,
   SUCCESS = 0,
@@ -57,3 +62,14 @@ export type IfEquals<T, U, Y=unknown, N=never> =
   (<G>() => G extends U ? 1 : 2) ? Y : N;
 
 export const chadsoftGhostPageLinkRegex = /^https:\/\/(?:www\.)?chadsoft\.co\.uk\/time-trials\/rkgd\/([0-9A-Fa-f]{2}\/[0-9A-Fa-f]{2}\/[0-9A-Fa-f]{36})\.html/;
+
+export enum IsFileWritableResultCode {
+  SUCCESS = 0,
+  WRONG_EXTENSION = 1,
+  UNWRITABLE = 2
+}
+
+export interface IsFileWritableResult {
+  code: IsFileWritableResultCode,
+  fileExtensionMinusDot: string
+}
