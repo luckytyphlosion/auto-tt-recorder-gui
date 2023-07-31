@@ -14,7 +14,7 @@ export function ExtraGeckoCodesEnableInput(props: {isAutoTTRecRunning: boolean})
       <label htmlFor="extra-gecko-codes-enable">Add extra gecko codes?</label>
       <TriCheckbox name="extra-gecko-codes-enable"/>
       {
-        extraGeckoCodesEnable ? <ExtraGeckoCodesInput isAutoTTRecRunning={props.isAutoTTRecRunning}/> : ""
+        extraGeckoCodesEnable === true || extraGeckoCodesEnable === "<FILLME>" ? <ExtraGeckoCodesInput isAutoTTRecRunning={props.isAutoTTRecRunning}/> : ""
       }
     </div>
   );
