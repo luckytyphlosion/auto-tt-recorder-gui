@@ -28,7 +28,7 @@ export function SZSSourceInput() {
       </DeselectableRadioButtonGroup>
       {renderCounter}
       {
-        szsSource === "fromfile" ? <SZSFilenameInput/> : ''
+        szsSource === "fromfile" || szsSource === "<FILLME>" ? <SZSFilenameInput/> : ''
       }
     </div>
   );
