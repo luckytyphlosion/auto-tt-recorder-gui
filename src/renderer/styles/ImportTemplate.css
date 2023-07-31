@@ -1,0 +1,12 @@
+.import-template-modal-contents {
+  max-height: 80%;
+  width: 60%;
+}
+
+.import-template-modal-textarea {
+  height: 100%;
+  width: 100%;
+	font-family: Arial, sans-serif;
+	font-size: 11pt;
+  display: block;
+}

@@ -1,13 +1,19 @@
 import React, { useState, useRef, useEffect, MouseEventHandler } from "react";
 
+import TextareaAutosize from 'react-textarea-autosize';
 import Modal from "react-modal";
 import { FormProvider, UseFormReturn } from "react-hook-form";
 import { AutoTTRecConfigFormFields } from "../auto-tt-rec-form-field-types";
 import { ImportTemplateResult, ImportTemplateStatus, AutoTTRecConfig } from "../../shared/shared-types";
 
+import { useFormContextAutoTT } from "../use-form-context-auto-tt";
+
 import { convertAutoTTRecConfigToFormData } from "../auto-tt-rec-form-data-generators";
 
 import { BooleanFILLME } from "../../shared/shared-types";
+
+import "./form_components/styles/ExtraGeckoCodesInput.css";
+import "../styles/ImportTemplate.css";
 
 export enum ImportTemplateStatu2s {
   INDETERMINATE = -1,
@@ -50,8 +56,10 @@ export function ImportTemplate(props: {
       setHasWarnings(importTemplateResult.hasWarnings);
       setErrorWarningData(importTemplateResult.errorWarningData);
       if (importTemplateResult.status === ImportTemplateStatus.SUCCESS) {
-        let newFormData = await convertAutoTTRecConfigToFormData(importTemplateResult.data, newAutoTTRecTemplateFilename);
+        let formComplexity = props.formMethods.getValues("form-complexity");
+        let [newFormData, errorsAndWarningsStr] = await convertAutoTTRecConfigToFormData(importTemplateResult.data, newAutoTTRecTemplateFilename, formComplexity);
         props.setImportToggle(true);
+        setErrorWarningData(errorsAndWarningsStr);
         props.formMethods.reset(newFormData);
         //props.validateFormArgsOnlyOnSubmitCallback();
         //formDataRef.current = newFormData;
@@ -78,14 +86,14 @@ export function ImportTemplate(props: {
     <div>
       <Modal
         overlayClassName="extra-gecko-codes-save-modal"
-        className="extra-gecko-codes-save-modal-contents"
+        className="extra-gecko-codes-save-modal-contents import-template-modal-contents"
         isOpen={isModalOpen}
         onRequestClose={importTemplateModal_cancel}
         shouldCloseOnOverlayClick={false}
         contentLabel="Save Gecko Code Dialog"
       >
         <h3>Errors occurred on import</h3>
-        <textarea rows={20} cols={16} value={errorWarningData} readOnly/>
+        <TextareaAutosize className="import-template-modal-textarea" value={errorWarningData} readOnly/>
         <button onClick={importTemplateModal_cancel}>Ok</button>
       </Modal>
 

@@ -137,7 +137,7 @@ class AutoTTRecConfigFormFieldsSomeFILLMEClass {
 }
 
 // interface version of the respective class, which allows TypeScript manipulation of the type
-interface AutoTTRecConfigFormFieldsSomeFILLME extends AutoTTRecConfigFormFieldsSomeFILLMEClass {};
+export interface AutoTTRecConfigFormFieldsSomeFILLME extends AutoTTRecConfigFormFieldsSomeFILLMEClass {};
 
 // A helper type which adds a <FILLME>-like option to every field
 // as every field is allowed to be missing, for flexible template support
@@ -224,6 +224,13 @@ export type AutoTTRecConfigFormChoiceArgs = Pick<AutoTTRecConfigFormFields, {
 }[AutoTTRecConfigFormFieldName]>;
 export type AutoTTRecConfigFormChoiceArgName = keyof AutoTTRecConfigFormChoiceArgs;
 export type AutoTTRecConfigFormSharedChoiceArgName = AutoTTRecConfigFormChoiceArgName & AutoTTRecArgName;
+
+// A type describing the field names of fields with a pathname type, but not checked that the types are actual string args
+type AutoTTRecConfigFormPathnameArgNameUnvalidated = ("iso-filename" | "extra-gecko-codes-filename" | "top-10-gecko-code-filename" | "extra-hq-textures-folder" | "main-ghost-filename" | "comparison-ghost-filename" | "szs-filename" | "music-filename" | "output-video-filename");
+// The above type, but validated to ensure that the specified types are string args in the form data
+export type AutoTTRecConfigFormPathnameArgName = AutoTTRecConfigFormPathnameArgNameUnvalidated extends AutoTTRecConfigFormStringArgName ? AutoTTRecConfigFormPathnameArgNameUnvalidated : never;
+
+export type AutoTTRecConfigFormSharedPathnameArgName = AutoTTRecConfigFormPathnameArgName & AutoTTRecArgName;
 
 // A restricted version of AutoTTRecConfigFormFields dictating the expected values
 // for each field, when the form is cleared.

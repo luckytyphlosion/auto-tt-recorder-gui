@@ -43,7 +43,7 @@ import { ReadonlyArraySet } from "../shared/array-set";
 
 import { isInSet } from "../shared/util-shared";
 
-import { AutoTTRecConfigFormFieldsPartial, AUTO_TT_REC_CONFIG_FORM_FIELD_NAMES, DEFAULT_FORM_VALUES, AutoTTRecConfigFormFields, AutoTTRecConfigFormFieldName, AutoTTRecConfigFormStringArgName, AutoTTRecConfigFormChoiceArgName, AutoTTRecConfigFormNumberArgName, AutoTTRecConfigFormBooleanArgName, AutoTTRecConfigFormSharedStringArgName, AutoTTRecConfigFormSharedChoiceArgName, AutoTTRecConfigFormSharedNumberArgName, AutoTTRecConfigFormSharedBooleanArgName, AutoTTRecConfigFormChoiceArgs, BothGhostSource } from "./auto-tt-rec-form-field-types";
+import { AutoTTRecConfigFormFieldsPartial, AUTO_TT_REC_CONFIG_FORM_FIELD_NAMES, DEFAULT_FORM_VALUES, AutoTTRecConfigFormFields, AutoTTRecConfigFormFieldName, AutoTTRecConfigFormStringArgName, AutoTTRecConfigFormChoiceArgName, AutoTTRecConfigFormNumberArgName, AutoTTRecConfigFormBooleanArgName, AutoTTRecConfigFormSharedStringArgName, AutoTTRecConfigFormSharedChoiceArgName, AutoTTRecConfigFormSharedNumberArgName, AutoTTRecConfigFormSharedBooleanArgName, AutoTTRecConfigFormChoiceArgs, BothGhostSource, AutoTTRecConfigFormPathnameArgName, AutoTTRecConfigFormSharedPathnameArgName } from "./auto-tt-rec-form-field-types";
 
 import { AutoTTRecArgName } from "./auto-tt-rec-args-types";
 
@@ -56,14 +56,16 @@ export class AutoTTRecConfigImporter {
   private errorsAndWarnings: AutoTTRecConfigErrorsAndWarnings;
   private configArgWasNullOrDisallowedFILLMESet: Set<AutoTTRecConfigFormStringArgName | AutoTTRecConfigFormChoiceArgName | AutoTTRecConfigFormNumberArgName | AutoTTRecConfigFormBooleanArgName | "form-complexity">;
   private autoTTRecConfigFilename: string;
+  private oldFormComplexity: FormComplexity;
 
-  constructor(autoTTRecConfig: AutoTTRecConfig, errorsAndWarnings: AutoTTRecConfigErrorsAndWarnings, autoTTRecConfigFilename: string) {
+  constructor(autoTTRecConfig: AutoTTRecConfig, errorsAndWarnings: AutoTTRecConfigErrorsAndWarnings, autoTTRecConfigFilename: string, oldFormComplexity: FormComplexity) {
     this.formData = {};
     this.hasImported = false;
     this.autoTTRecConfig = autoTTRecConfig;
     this.errorsAndWarnings = errorsAndWarnings;
     this.configArgWasNullOrDisallowedFILLMESet = new Set();
     this.autoTTRecConfigFilename = autoTTRecConfigFilename;
+    this.oldFormComplexity = oldFormComplexity;
   }
 
   public addDefault<K extends AutoTTRecConfigFormFieldName>(key: K) {
@@ -246,6 +248,15 @@ export class AutoTTRecConfigImporter {
     }
   }
 
+  private async importSharedPathnameArg<K extends AutoTTRecConfigFormSharedPathnameArgName>(key: K) {
+    let pathnameArgValue = this.validateSharedStringOrChoiceArg_errorIfNot_handleUndefinedNull(key);
+    let pathnameAbsoluteArgValue: string = pathnameArgValue;
+    if (pathnameArgValue !== "") {
+      pathnameAbsoluteArgValue = await window.api.getAbsolutePathRelativeToFilename(pathnameArgValue, this.autoTTRecConfigFilename);
+    }
+    this.formData[key] = pathnameAbsoluteArgValue;
+  }
+
   private setStringOrChoiceArg_handleNullOrDisallowedFILLME<K extends AutoTTRecConfigFormStringArgName | AutoTTRecConfigFormChoiceArgName, V extends AutoTTRecConfigFormFields[K]>(key: K, value: V | null) {
     let valueNullable: V | null;
     if (value === "<FILLME>") {
@@ -263,7 +274,7 @@ export class AutoTTRecConfigImporter {
   private setPathnameArgEnable_resolvePathname_returnOriginalFilenameAndPathnameArgs(pathnameArgName: "top-10-gecko-code-filename"): [string, string];
 */
 
-  private async setPathnameArgEnable_resolvePathname_returnOriginalAndResolvedFilename(
+  private async setPathnameArgEnable_resolvePathname_returnOriginalAndResolvedFilename<K extends AutoTTRecConfigFormPathnameArgName>(
     {pathnameArgName, enableArgName}: ({
       pathnameArgName: "extra-gecko-codes-filename",
       enableArgName: "extra-gecko-codes-enable"
@@ -273,9 +284,24 @@ export class AutoTTRecConfigImporter {
     } | {
       pathnameArgName: "extra-hq-textures-folder",
       enableArgName: "extra-hq-textures-folder-enable"
+    } | {
+      pathnameArgName: "main-ghost-filename",
+      enableArgName: undefined,
+    } | {
+      pathnameArgName: "comparison-ghost-filename",
+      enableArgName: undefined,
+    } | {
+      pathnameArgName: "szs-filename",
+      enableArgName: undefined,
+    } | {
+      pathnameArgName: "music-filename",
+      enableArgName: undefined
+    } | {
+      pathnameArgName: "output-video-filename",
+      enableArgName: undefined
     }) & {
-      pathnameArgName: ("extra-gecko-codes-filename" | "top-10-gecko-code-filename" | "extra-hq-textures-folder") & AutoTTRecConfigFormSharedStringArgName,
-      enableArgName: (("extra-gecko-codes-enable" | "extra-hq-textures-folder-enable") & AutoTTRecConfigFormBooleanArgName) | undefined
+      pathnameArgName: K,
+      enableArgName?: (("extra-gecko-codes-enable" | "extra-hq-textures-folder-enable") & AutoTTRecConfigFormBooleanArgName) | undefined
     }
   ): Promise<[string, string]> {
     let enableArgValue: BooleanFILLME;
@@ -350,7 +376,6 @@ export class AutoTTRecConfigImporter {
           let errorMessage: string = `Error occurred when reading ${pathnameArgName} "${textFilename}": ${errorMessageReason}`;
           //console.log("importTextFileArgsAll errorMessage:", errorMessage);
           this.errorsAndWarnings.addError(pathnameArgName, errorMessage);
-          //console.log("after import errorsAndWarnings:", this.errorsAndWarnings.debug_get_errorsAndWarnings());
           absoluteTextFilename = "";
         }
       } catch (e) {
@@ -406,15 +431,15 @@ export class AutoTTRecConfigImporter {
     "video-codec"?: VideoCodec = "libx264";
     "youtube-settings"?: boolean = true;
 }*/
-
-  private importStraightCopyArgs() {
+  // "output-video-filename"
+  private async importStraightCopyArgs() {
     this.importSharedChoiceArg("aspect-ratio-16-by-9", ASPECT_RATIO_16_BY_9_VALUES);
     this.importSharedChoiceArg("audio-codec", AUDIO_CODECS);
     this.importSharedStringArg("chadsoft-ghost-page");
     this.importSharedStringArg("chadsoft-comparison-ghost-page");
     this.importSharedBooleanArg("chadsoft-read-cache");
     this.importSharedBooleanArg("chadsoft-write-cache");
-    this.importSharedStringArg("comparison-ghost-filename");
+    await this.importSharedPathnameArg("comparison-ghost-filename");
     this.importSharedNumberArg("crf-value");
     this.importSharedChoiceArg("dolphin-resolution", DOLPHIN_RESOLUTIONS);
     this.importSharedBooleanArg("encode-only");
@@ -424,14 +449,14 @@ export class AutoTTRecConfigImporter {
 
     this.importSharedStringArg("extra-gecko-codes-filename");
     this.importSharedStringArg("extra-hq-textures-folder");
-    this.importSharedStringArg("iso-filename");
-    this.importSharedStringArg("main-ghost-filename");
+    await this.importSharedPathnameArg("iso-filename");
+    await this.importSharedPathnameArg("main-ghost-filename");
     this.importSharedStringArg("mk-channel-ghost-description");
     this.importSharedStringArg("pixel-format");
-    this.importSharedStringArg("szs-filename");
+    await this.importSharedPathnameArg("szs-filename");
     this.importSharedStringArg("top-10-chadsoft");
     this.importSharedStringArg("top-10-gecko-code-filename");
-    
+
     this.importSharedBooleanArg("fade-in-at-start");
     this.importSharedBooleanArg("hq-textures");
     this.importSharedBooleanArg("input-display-dont-create");
@@ -479,10 +504,9 @@ export class AutoTTRecConfigImporter {
     let formComplexity: FormComplexity;
 
     if (formComplexityArgValue === null) {
-      this.errorsAndWarnings.addWarning("form-complexity", `form-complexity is unspecified or null, defaulting to advanced. (Specify 0 for simple, 1 for advanced, and 2 for all)`);
-      formComplexity = FormComplexity.ADVANCED;
+      formComplexity = this.oldFormComplexity;
     } else if (formComplexityArgValue === "") {
-      this.errorsAndWarnings.addError("form-complexity", "form-complexity MUST be specified (0 for simple, 1 for advanced, and 2 for all). Defaulting to advanced.");
+      this.errorsAndWarnings.addError("form-complexity", "form-complexity CANNOT be empty or <FILLME> and must be specified (0 for simple, 1 for advanced, and 2 for all). Defaulting to advanced.");
       formComplexity = FormComplexity.ADVANCED;
     } else if (formComplexityArgValue === FormComplexity.SIMPLE || formComplexityArgValue === FormComplexity.ADVANCED || formComplexityArgValue === FormComplexity.ALL) {
       formComplexity = formComplexityArgValue;
@@ -494,12 +518,12 @@ export class AutoTTRecConfigImporter {
   }
 
   private importAudioBitrateAll() {
-    let audioBitrate = this.autoTTRecConfig["audio-bitrate"];
-    let newAudioBitrate: number = NaN;
+    let audioBitrate = this.validateString_errorIfNot_handleUndefined("audio-bitrate");
+    let newAudioBitrate: number;
 
     let hasKbps: boolean = true;
 
-    if (audioBitrate === "<FILLME>") {
+    if (audioBitrate === "") {
       newAudioBitrate = NaN;
     } else if (audioBitrate === null) {
       let encodeType = this.getFormDataStringOrChoice_verifyNotUndefined("encode-type");
@@ -507,30 +531,20 @@ export class AutoTTRecConfigImporter {
       newAudioBitrate = getDefaultAudioBitrate(encodeType, audioCodec);
       hasKbps = false;
     } else {
-      let numericAudioBitrate: undefined | number;
-      if (typeof audioBitrate === "string") {
-        let kbpsMultiplier = 1;
-        if (audioBitrate.charAt(audioBitrate.length - 1) === "k") {
-          audioBitrate = audioBitrate.substring(0, audioBitrate.length - 1);
-        } else {
-          hasKbps = false;
-        }
-        numericAudioBitrate = Number(audioBitrate) * kbpsMultiplier;
-      } else if (typeof audioBitrate === "number") {
-        numericAudioBitrate = audioBitrate;
-        hasKbps = false;
+      let kbpsMultiplier = 1;
+      console.log("importAudioBitrateAll audioBitrate:", audioBitrate, "audioBitrate.charAt(-1):", audioBitrate.charAt(audioBitrate.length - 1));
+      if (audioBitrate.charAt(audioBitrate.length - 1) === "k") {
+        audioBitrate = audioBitrate.substring(0, audioBitrate.length - 1);
+        kbpsMultiplier = 1000;
       } else {
-        this.errorsAndWarnings.addErrorWrongType("audio-bitrate", "string or number", audioBitrate);
-        numericAudioBitrate = undefined;
-        hasKbps = true;
+        hasKbps = false;
       }
+      newAudioBitrate = Number(audioBitrate) * kbpsMultiplier;
 
-      if (numericAudioBitrate !== undefined) {
-        if (Number.isNaN(numericAudioBitrate)) {
-          this.errorsAndWarnings.addError("audio-bitrate", `Invalid audio bitrate ${audioBitrate}!`);
-          newAudioBitrate = NaN;
-          hasKbps = true;
-        }
+      if (Number.isNaN(newAudioBitrate) || !Number.isFinite(newAudioBitrate)) {
+        this.errorsAndWarnings.addError("audio-bitrate", `audio-bitrate "${audioBitrate}" is not valid (should be either a number of a number followed by k, e.g. 128k)!`);
+        newAudioBitrate = NaN;
+        hasKbps = true;
       }
     }
 
@@ -553,7 +567,7 @@ export class AutoTTRecConfigImporter {
     }
   }
 
-  private importBackgroundMusicSourceAndMusicFilename() {
+  private async importBackgroundMusicSourceAndMusicFilename() {
     let musicFilename = this.validateSharedStringOrChoiceArg_errorIfNot_handleUndefinedNull("music-filename");
     if (musicFilename === "") {
       this.formData["background-music-source"] = "<FILLME>";
@@ -565,6 +579,7 @@ export class AutoTTRecConfigImporter {
       musicFilename = "";
     } else {
       this.formData["background-music-source"] = "music-filename";
+      musicFilename = await window.api.getAbsolutePathRelativeToFilename(musicFilename, this.autoTTRecConfigFilename);
     }
 
     this.formData["music-filename"] = musicFilename;
@@ -600,7 +615,7 @@ export class AutoTTRecConfigImporter {
         timelineCategory = "top10gecko";
       } else {
         timelineCategory = "<FILLME>";
-        this.errorsAndWarnings.addError("timeline", "timeline was specified as top10 but neither top-10-chadsoft nor top-10-gecko-code-filename were specified! Defaulting to top10chadsoft.");
+        this.errorsAndWarnings.addError("timeline", "In determining whether to pick a top 10 option or not, timeline was specified as top10 but neither top-10-chadsoft nor top-10-gecko-code-filename were specified! Defaulting to top10chadsoft.");
       }
       noTop10Category = "mkchannel";
     } else {
@@ -611,13 +626,13 @@ export class AutoTTRecConfigImporter {
         } else {
           noTop10Category = "<FILLME>";          
           if (timeline === "") {
-            this.errorsAndWarnings.addError("timeline", "Timeline cannot be empty or <FILLME>! Defaulting to mkchannel.");
+            this.errorsAndWarnings.addError("timeline", "timeline cannot be empty or <FILLME>! Defaulting to mkchannel.");
           } else {
             this.errorsAndWarnings.addInvalidChoiceError("timeline", TIMELINES, timeline, " Defaulting to mkchannel.");
           }
         }
       } else {
-        this.errorsAndWarnings.addWarning("timeline", "timeline was unspecified/null, defaulting to mkchannel.");
+        this.errorsAndWarnings.addWarning("timeline", "timeline was unspecified or null, defaulting to mkchannel.");
         noTop10Category = null;
       }
     }
@@ -670,7 +685,7 @@ export class AutoTTRecConfigImporter {
           ghostSourceValue = "chadsoft";
         } else {
           ghostSourceValue = "<FILLME>";
-          this.errorsAndWarnings.addError("main-ghost-source", "Neither chadsoft-ghost-page nor main-ghost-filename were specified and timeline isn't top10 with top-10-highlight enabled (not -1).");
+          this.errorsAndWarnings.addError("main-ghost-source", "Could not determine which main ghost source (chadsoft link or rkg) to record from because neither chadsoft-ghost-page nor main-ghost-filename were specified and timeline isn't top10 with top-10-highlight enabled (not -1).");
         }
         this.formData[ghostSourceArgName] = ghostSourceValue
       } else {
@@ -808,25 +823,36 @@ export class AutoTTRecConfigImporter {
 // special case for handling "encode-type", "video-codec", and "output-video-file-format"
 
 
-  private importOutputVideoFilename_setOutputVideoFileFormat_validateAllowedVideoCodec() {
+  private async importOutputVideoFilename_setOutputVideoFileFormat_validateAllowedVideoCodec() {
     let outputVideoFilename = this.validateString_errorIfNot_handleUndefined("output-video-filename");
     let outputVideoFileFormat: OutputVideoFileFormat;
+    let convertOutputVideoFilenameToAbsolute: boolean = false;
 
     if (outputVideoFilename === "" || outputVideoFilename === null) {
       outputVideoFileFormat = "<FILLME>";
       outputVideoFilename = "";
     } else if (isInSet(OUTPUT_VIDEO_FILE_FORMATS.set, outputVideoFilename)) {
       outputVideoFileFormat = outputVideoFilename;
+      outputVideoFilename = "";
     } else if (outputVideoFilename.endsWith(".mkv")) {
       outputVideoFileFormat = "mkv";
+      convertOutputVideoFilenameToAbsolute = true;
     } else if (outputVideoFilename.endsWith(".mp4")) {
       outputVideoFileFormat = "mp4"
+      convertOutputVideoFilenameToAbsolute = true;
     } else if (outputVideoFilename.endsWith(".webm")) {
       outputVideoFileFormat = "webm";
+      convertOutputVideoFilenameToAbsolute = true;
     } else {
-      this.errorsAndWarnings.addError("output-video-filename", `output-video-filename ${outputVideoFilename} is not an mkv, mp4, or webm, and is not mkv, mp4, or webm itself!`);
+      this.errorsAndWarnings.addError("output-video-filename", `output-video-filename ${outputVideoFilename} is not an mkv, mp4, or webm, and is not mkv, mp4, or webm itself (for setting the output video file format, but requiring the output video filename to be filled in)!`);
       outputVideoFileFormat = "<FILLME>";
       outputVideoFilename = "";
+    }
+
+    if (convertOutputVideoFilenameToAbsolute) {
+      console.log("outputVideoFilename before convert:", outputVideoFilename);
+      outputVideoFilename = await window.api.getAbsolutePathRelativeToFilename(outputVideoFilename, this.autoTTRecConfigFilename);
+      console.log("outputVideoFilename after convert:", outputVideoFilename);
     }
 
     let encodeType = this.getFormDataStringOrChoice_verifyNotUndefined("encode-type");
@@ -1091,10 +1117,10 @@ export class AutoTTRecConfigImporter {
 
   public async import(): Promise<AutoTTRecConfigFormFields> {
     if (!this.hasImported) {
-      this.importStraightCopyArgs();
+      await this.importStraightCopyArgs();
       this.importFormComplexity();
       this.importAudioBitrateAll();
-      this.importBackgroundMusicSourceAndMusicFilename();
+      await this.importBackgroundMusicSourceAndMusicFilename();
       this.setTimelineCategoryAndNoTop10();
       this.setTop10HighlightEnable();
       this.importGhostSource(true);
@@ -1108,7 +1134,7 @@ export class AutoTTRecConfigImporter {
       this.importVolume("game-volume", "game-volume-numberinput", "game-volume-slider");
       this.importVolume("music-volume", "music-volume-numberinput","music-volume-slider");
       this.setMusicPresentation();
-      this.importOutputVideoFilename_setOutputVideoFileFormat_validateAllowedVideoCodec();
+      await this.importOutputVideoFilename_setOutputVideoFileFormat_validateAllowedVideoCodec();
       this.setOutputWidthPreset();
       this.setSzsSource();
       this.importTop10Location_setTop10GeckoCodeLocationRegion();

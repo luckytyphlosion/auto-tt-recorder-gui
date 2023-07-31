@@ -8,6 +8,8 @@ import { AutoTTRecArgNameExtended, AUTO_TT_REC_ARG_NAMES_EXTENDED, GhostAutoArgN
 import { AutoTTRecConfigImporter } from "./auto-tt-rec-config-importer";
 import { AutoTTRecConfigErrorsAndWarnings } from "./auto-tt-rec-errors-and-warnings";
 
+import { FormComplexity } from "./components/layout_components/FormComplexityLayout";
+
 function isFILLMEOrEmptyOrNull(x: any): x is "<FILLME>" | "" | null {
   return x === null || x === "" || x === "<FILLME>";
 }
@@ -17,12 +19,14 @@ export class AutoTTRecConfigPreprocessor {
   private errorsAndWarnings: AutoTTRecConfigErrorsAndWarnings;
   private autoTTRecConfigImporter: AutoTTRecConfigImporter | null;
   private autoTTRecConfigFilename: string;
+  private oldFormComplexity: FormComplexity;
 
-  constructor(autoTTRecConfig: AutoTTRecConfig, errorsAndWarnings: AutoTTRecConfigErrorsAndWarnings, autoTTRecConfigFilename: string) {
+  constructor(autoTTRecConfig: AutoTTRecConfig, errorsAndWarnings: AutoTTRecConfigErrorsAndWarnings, autoTTRecConfigFilename: string, oldFormComplexity: FormComplexity) {
     this.autoTTRecConfigImporter = null;
     this.autoTTRecConfig = shallowCopy(autoTTRecConfig);
     this.errorsAndWarnings = errorsAndWarnings;
     this.autoTTRecConfigFilename = autoTTRecConfigFilename;
+    this.oldFormComplexity = oldFormComplexity;
   }
 
   private isAutoTTRecArgValueString_ignoreOnNullOrEmpty<K extends AutoTTRecArgNameExtended>(argName: K): string {
@@ -137,7 +141,7 @@ export class AutoTTRecConfigPreprocessor {
     }
   }
 
-  private convertStringOrNumArgToString(stringOrNumArgName: "chadsoft-cache-expiry" | "speedometer-decimal-places" | "form-complexity", newArgName?: "speedometer-decimal-places-str") {
+  private convertStringOrNumArgToString(stringOrNumArgName: "chadsoft-cache-expiry" | "speedometer-decimal-places" | "form-complexity" | "audio-bitrate", newArgName?: "speedometer-decimal-places-str") {
     let stringOrNumArgValue = this.autoTTRecConfig[stringOrNumArgName];
     let destValue: string | null;
     let destArgName: typeof stringOrNumArgName | Exclude<typeof newArgName, undefined>
@@ -193,12 +197,13 @@ export class AutoTTRecConfigPreprocessor {
       this.convertStringOrNumArgToString("chadsoft-cache-expiry");
       this.convertStringOrNumArgToString("speedometer-decimal-places", "speedometer-decimal-places-str");
       this.convertStringOrNumArgToString("form-complexity");
+      this.convertStringOrNumArgToString("audio-bitrate");
       this.convertDifferingArgNames();
       this.removeFFmpegFFprobeArgs();
       for (const unsupportedArgName of UNSUPPORTED_ARG_NAMES.arr)  {
         this.warnUnsupportedArg(unsupportedArgName);
       }
-      this.autoTTRecConfigImporter = new AutoTTRecConfigImporter(this.autoTTRecConfig, this.errorsAndWarnings, this.autoTTRecConfigFilename);
+      this.autoTTRecConfigImporter = new AutoTTRecConfigImporter(this.autoTTRecConfig, this.errorsAndWarnings, this.autoTTRecConfigFilename, this.oldFormComplexity);
     }
 
     return this.autoTTRecConfigImporter;

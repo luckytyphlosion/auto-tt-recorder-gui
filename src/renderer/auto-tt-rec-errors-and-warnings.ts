@@ -17,19 +17,19 @@ interface AutoTTRecConfigErrorOrWarningMessage {
 const listFormatter = new Intl.ListFormat("en", {style: "long", type: "disjunction"});
 
 export class AutoTTRecConfigErrorsAndWarnings {
-  private _errorsAndWarnings: Map<AutoTTRecArgExtendedAndFormFieldName, AutoTTRecConfigErrorOrWarningMessage[]>;
-  private _errorsAndWarningsInvalidCommands: Map<string, AutoTTRecConfigErrorOrWarningMessage[]>;
+  private _errorsAndWarningsMap: Map<AutoTTRecArgExtendedAndFormFieldName, AutoTTRecConfigErrorOrWarningMessage[]>;
+  private _errorsAndWarningsInvalidCommandsMap: Map<string, AutoTTRecConfigErrorOrWarningMessage[]>;
 
   constructor() {
-    this._errorsAndWarnings = new Map();
-    this._errorsAndWarningsInvalidCommands = new Map();
+    this._errorsAndWarningsMap = new Map();
+    this._errorsAndWarningsInvalidCommandsMap = new Map();
   }
 
-  private addToErrorsWarningMap<K extends string, M extends Map<K, AutoTTRecConfigErrorOrWarningMessage[]>>(name: K, message: string, isWarning: boolean, errorsAndWarnings: M) {
-    let errorsAndWarningsForName = errorsAndWarnings.get(name);
+  private addToErrorsWarningMap<K extends string, M extends Map<K, AutoTTRecConfigErrorOrWarningMessage[]>>(name: K, message: string, isWarning: boolean, errorsAndWarningsMap: M) {
+    let errorsAndWarningsForName = errorsAndWarningsMap.get(name);
     if (errorsAndWarningsForName === undefined) {
       errorsAndWarningsForName = [];
-      errorsAndWarnings.set(name, errorsAndWarningsForName);
+      errorsAndWarningsMap.set(name, errorsAndWarningsForName);
     }
 
     errorsAndWarningsForName.push({
@@ -39,7 +39,7 @@ export class AutoTTRecConfigErrorsAndWarnings {
   }
 
   private add(name: AutoTTRecArgExtendedAndFormFieldName, message: string, isWarning: boolean) {
-    this.addToErrorsWarningMap(name, message, isWarning, this._errorsAndWarnings);
+    this.addToErrorsWarningMap(name, message, isWarning, this._errorsAndWarningsMap);
   }
 
   public addError(name: AutoTTRecArgExtendedAndFormFieldName, message: string) {
@@ -66,50 +66,52 @@ export class AutoTTRecConfigErrorsAndWarnings {
   }
 
   public addErrorInvalidCommand(name: string) {
-    this.addToErrorsWarningMap(name, `${name} is not a valid auto-tt-recorder command.`, false, this._errorsAndWarningsInvalidCommands);
+    this.addToErrorsWarningMap(name, `${name} is not a valid auto-tt-recorder command.`, false, this._errorsAndWarningsInvalidCommandsMap);
   }
 
-  public debug_get_errorsAndWarnings() {
-    return this._errorsAndWarnings;
+  public debug_get_errorsAndWarningsMap() {
+    return this._errorsAndWarningsMap;
   }
 
   public compile() {
     let output: string[] = [];
 
-    for (const [invalidCommandName, invalidCommandMessages] of this._errorsAndWarningsInvalidCommands.entries()) {
-      output.push(`Error with ${invalidCommandName}:`);
-      for (const invalidCommandMessage of invalidCommandMessages) {
-        let curErrorOrWarningMessage: string;
+    if (this._errorsAndWarningsInvalidCommandsMap.size !== 0) {
+      for (const [invalidCommandName, invalidCommandMessages] of this._errorsAndWarningsInvalidCommandsMap.entries()) {
+        output.push(`Error with ${invalidCommandName}:`);
+        for (const invalidCommandMessage of invalidCommandMessages) {
+          let curErrorOrWarningMessage: string;
+    
+          if (invalidCommandMessage.isWarning) {
+            curErrorOrWarningMessage = "  Warning: ";
+          } else {
+            curErrorOrWarningMessage = "  Error: ";
+          }
   
-        if (invalidCommandMessage.isWarning) {
-          curErrorOrWarningMessage = "  Warning: ";
-        } else {
-          curErrorOrWarningMessage = "  Error: ";
+          curErrorOrWarningMessage += invalidCommandMessage.message;
+          output.push(curErrorOrWarningMessage);
         }
-
-        curErrorOrWarningMessage += invalidCommandMessage.message;
-        output.push(curErrorOrWarningMessage);
       }
+      output.push("=======================\n");  
     }
 
-    output.push("\n");
-
-    for (const [commandName, commandMessages] of this._errorsAndWarnings.entries()) {
-      output.push(`Error with ${commandName}:`);
+    for (const [commandName, commandMessages] of this._errorsAndWarningsMap.entries()) {
+      //output.push(`Error with ${commandName}:`);
       for (const commandMessage of commandMessages) {
         let curErrorOrWarningMessage: string;
   
         if (commandMessage.isWarning) {
-          curErrorOrWarningMessage = "  Warning: ";
+          curErrorOrWarningMessage = "Warning: ";
         } else {
-          curErrorOrWarningMessage = "  Error: ";
+          curErrorOrWarningMessage = "Error: ";
         }
 
         curErrorOrWarningMessage += commandMessage.message;
         output.push(curErrorOrWarningMessage);
       }
+      output.push("");
     }
 
-    return output.join("\n");
+    return output.join("\n").trim();
   }
 }

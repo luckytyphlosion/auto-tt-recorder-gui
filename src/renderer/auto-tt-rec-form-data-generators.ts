@@ -33,14 +33,15 @@ export function makeMinimalFormData(formComplexity: FormComplexity, timelineCate
   return formData;
 }
 
-export async function convertAutoTTRecConfigToFormData(autoTTRecConfig: AutoTTRecConfig, autoTTRecConfigFilename: string) {
+export async function convertAutoTTRecConfigToFormData(autoTTRecConfig: AutoTTRecConfig, autoTTRecConfigFilename: string, oldFormComplexity: FormComplexity): Promise<[AutoTTRecConfigFormFields, string]> {
   let errorsAndWarnings = new AutoTTRecConfigErrorsAndWarnings();
-  let autoTTRecConfigPreprocessor = new AutoTTRecConfigPreprocessor(autoTTRecConfig, errorsAndWarnings, autoTTRecConfigFilename);
+  let autoTTRecConfigPreprocessor = new AutoTTRecConfigPreprocessor(autoTTRecConfig, errorsAndWarnings, autoTTRecConfigFilename, oldFormComplexity);
   let autoTTRecConfigImporter = autoTTRecConfigPreprocessor.preprocess();
   let autoTTRecConfigFormFields = await autoTTRecConfigImporter.import();
-  console.log(errorsAndWarnings.compile());
-  console.log("after import errorsAndWarnings: ", errorsAndWarnings.debug_get_errorsAndWarnings());
+  let errorsAndWarningsStr = errorsAndWarnings.compile();
+  console.log(errorsAndWarningsStr);
+  console.log("after import errorsAndWarnings: ", errorsAndWarnings.debug_get_errorsAndWarningsMap());
 
-  return autoTTRecConfigFormFields;
+  return [autoTTRecConfigFormFields, errorsAndWarningsStr];
 }
 
