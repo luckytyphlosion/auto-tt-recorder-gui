@@ -28,6 +28,16 @@ export function TrackNameInput(props: {formComplexity: FormComplexity}) {
     setTrackNameType(getValues("track-name-type"));
   }
 
+  function validateTrackName(trackName: string) {
+    if (trackNameType === "<FILLME>") {
+      return "Track name type (auto vs rkg vs manual) is required.";
+    } else if (trackName === "") {
+      return "Track name is required.";
+    } else {
+      return true;
+    }
+  }
+
   return (
     <div>
       <label htmlFor="track-name-type">Track name: </label>
@@ -42,15 +52,9 @@ export function TrackNameInput(props: {formComplexity: FormComplexity}) {
         <DeselectableRadioButton labelValue="Supply manually:" id="track-name-type-manual" value="manual" onChange={updateTrackNameType}/>
       </DeselectableRadioButtonGroup>
       {
-        trackNameType === "manual" ? <>
-          <input type="text" {...register("track-name", {required: {
-            value: true,
-            message: "This input is required."
-          }})}
-          ></input>
+        trackNameType === "manual" || trackNameType === "<FILLME>" ? <>
+          <input type="text" {...register("track-name", {validate: validateTrackName})}/>
           <SimpleErrorMessage name="track-name"/>
-        </> : trackNameType === "<FILLME>" ? <>
-          <SimpleErrorMessage name="track-name-type"/>
         </> : ""
       }
       {renderCounter}
