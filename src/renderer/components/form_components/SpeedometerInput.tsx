@@ -40,7 +40,7 @@ export function SpeedometerInput() {
         (<>
           <SpeedometerMetricInput_Memo/>
           {speedometerStyle !== "standard" ?
-            <SpeedometerDecimalPlacesInput twoDecimalPlaces={speedometerStyle === "regular"}/>
+            <SpeedometerDecimalPlacesInput twoDecimalPlaces={speedometerStyle === "regular" || speedometerStyle === "<FILLME>"}/>
             : ""}
         </>) : ""
       }
