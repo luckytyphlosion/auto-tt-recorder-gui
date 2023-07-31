@@ -128,7 +128,7 @@ export function convertFormDataToAutoTTRecArgs(formData: AutoTTRecConfigFormFiel
   if (timeline !== "ghostonly" && timeline !== "noencode") {
     if (formData["track-name-type"] === "auto") {
       argsBuilder.addManual("track-name", "auto");
-    } else {
+    } else if (formData["track-name-type"] === "manual") {
       argsBuilder.add("track-name");
     }
   }
@@ -236,6 +236,9 @@ export function convertFormDataToAutoTTRecArgs(formData: AutoTTRecConfigFormFiel
   }
 
   argsBuilder.add("keep-window");
+  if (!formData["chadsoft-read-cache"]) {
+    formData["chadsoft-cache-expiry"] = "24h";
+  }
   argsBuilder.add("output-video-filename");
 
   return argsBuilder.autoTTRecArgs;

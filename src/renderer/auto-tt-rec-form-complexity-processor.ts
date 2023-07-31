@@ -124,6 +124,9 @@ export class AutoTTRecFormDataFormComplexityProcessor {
     this.formData["encode-only"] = false;
     this.formData["input-display-dont-create"] = false;
     this.formData["keep-window"] = true;
+    this.formData["chadsoft-read-cache"] = true;
+    this.formData["chadsoft-write-cache"] = true;
+    this.formData["chadsoft-cache-expiry"] = "24h";
   }
 
   public get formData() {

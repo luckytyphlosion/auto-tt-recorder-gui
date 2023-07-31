@@ -10,6 +10,7 @@ export function ClearAllFields(props: {
   formMethods: UseFormReturn<AutoTTRecConfigFormFields, any, undefined>,
   submittedToggle: boolean,
   setSubmittedToggle: React.Dispatch<React.SetStateAction<boolean>>,
+  disabled: boolean
   //setFormDefaultValues: React.Dispatch<React.SetStateAction<AutoTTRecConfigFormFields>>
 }) {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -63,8 +64,8 @@ export function ClearAllFields(props: {
 
   return (
     <div>
-    <button onClick={onClickClearAllFields}>Clear all fields...</button>
-    <button onClick={onClickResetAllFields}>Reset all fields to defaults...</button>
+    <button disabled={props.disabled} onClick={onClickClearAllFields}>Clear all fields...</button>
+    <button disabled={props.disabled} onClick={onClickResetAllFields}>Reset all fields to defaults...</button>
     <Modal
       overlayClassName="extra-gecko-codes-save-modal"
       className="extra-gecko-codes-save-modal-contents"

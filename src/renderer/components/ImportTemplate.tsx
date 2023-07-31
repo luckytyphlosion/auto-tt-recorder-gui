@@ -34,7 +34,8 @@ export interface ImportTemplateResul2t {
 export function ImportTemplate(props: {
   formMethods: UseFormReturn<AutoTTRecConfigFormFields, any, undefined>,
   setImportToggle: React.Dispatch<React.SetStateAction<boolean>>,
-  onError: (errors: Object) => Promise<void> | void
+  onError: (errors: Object) => Promise<void> | void,
+  disabled: boolean
 }) {
   const [isModalOpen, setModalOpen] = useState(false);
   const [importStatus, setImportStatus] = useState(ImportTemplateStatus.SUCCESS);
@@ -97,7 +98,7 @@ export function ImportTemplate(props: {
         <button onClick={importTemplateModal_cancel}>Ok</button>
       </Modal>
 
-      <button onClick={onClickImportTemplate}>Import template...</button>
+      <button disabled={props.disabled} onClick={onClickImportTemplate}>Import template...</button>
     </div>
   )
 }

@@ -183,8 +183,8 @@ export function AutoTTRecConfigForm(
   return (
     <div>
       <form onSubmit={formOnSubmitCallbackRef.current()}>
-        <ImportTemplate_Memo formMethods={formMethods} setImportToggle={setImportToggle} onError={onError}/>
-        <ClearAllFields_Memo formMethods={formMethods} submittedToggle={submittedToggle} setSubmittedToggle={setSubmittedToggle} />
+        <ImportTemplate_Memo disabled={props.isAutoTTRecRunning} formMethods={formMethods} setImportToggle={setImportToggle} onError={onError}/>
+        <ClearAllFields_Memo disabled={props.isAutoTTRecRunning} formMethods={formMethods} submittedToggle={submittedToggle} setSubmittedToggle={setSubmittedToggle} />
         <fieldset disabled={props.isAutoTTRecRunning}>
           <AutoTTRecConfigFormComponents_Memo formMethods={formMethods} forceUpdate={submittedToggle} importToggle={importToggle} isAutoTTRecRunning={props.isAutoTTRecRunning}/>
         </fieldset>
