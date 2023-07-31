@@ -51,10 +51,6 @@ import { AutoTTRecConfigFormFieldsPartial, AUTO_TT_REC_CONFIG_FORM_FIELD_NAMES, 
 
 import { AutoTTRecArgNameExtended, AUTO_TT_REC_ARG_NAMES_EXTENDED, GhostAutoArgName, AutoTTRecUnsupportedArgName, UNSUPPORTED_ARG_NAMES, AutoTTRecArgName, AutoTTRecRealArgs, AutoTTRecRealArgName } from "./auto-tt-rec-args-types";
 
-function isFILLMEOrEmptyOrNull(x: any): x is "<FILLME>" | "" | null {
-  return x === null || x === "" || x === "<FILLME>";
-}
-
 class AutoTTRecArgsBuilder {
   private _autoTTRecArgs: AutoTTRecRealArgs;
   private formData: AutoTTRecConfigFormFieldsNoFILLME;

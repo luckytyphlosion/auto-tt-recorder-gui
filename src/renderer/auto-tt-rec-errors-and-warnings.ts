@@ -1,3 +1,10 @@
+
+import { ReadonlyArraySet } from "../shared/array-set";
+
+import { AutoTTRecConfigFormFieldName } from "./auto-tt-rec-form-field-types";
+
+import { AutoTTRecArgNameExtended } from "./auto-tt-rec-args-types";
+
 // A type describing the possible names for both auto-tt-recorder commands (combined extended-only and non-extended)
 // and the possible names in AutoTTRecConfigFormFields
 type AutoTTRecArgExtendedAndFormFieldName = AutoTTRecArgNameExtended | AutoTTRecConfigFormFieldName;
@@ -9,7 +16,7 @@ interface AutoTTRecConfigErrorOrWarningMessage {
 
 const listFormatter = new Intl.ListFormat("en", {style: "long", type: "disjunction"});
 
-class AutoTTRecConfigErrorsAndWarnings {
+export class AutoTTRecConfigErrorsAndWarnings {
   private _errorsAndWarnings: Map<AutoTTRecArgExtendedAndFormFieldName, AutoTTRecConfigErrorOrWarningMessage[]>;
   private _errorsAndWarningsInvalidCommands: Map<string, AutoTTRecConfigErrorOrWarningMessage[]>;
 

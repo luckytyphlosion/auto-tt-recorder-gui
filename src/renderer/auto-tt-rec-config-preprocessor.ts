@@ -1,5 +1,18 @@
 
-class AutoTTRecConfigPreprocessor {
+import { AutoTTRecConfig, chadsoftGhostPageLinkRegex } from "../shared/shared-types";
+
+import { shallowCopy, deleteFromSet } from "../shared/util-shared";
+
+import { AutoTTRecArgNameExtended, AUTO_TT_REC_ARG_NAMES_EXTENDED, GhostAutoArgName, AutoTTRecUnsupportedArgName, UNSUPPORTED_ARG_NAMES } from "./auto-tt-rec-args-types";
+
+import { AutoTTRecConfigImporter } from "./auto-tt-rec-config-importer";
+import { AutoTTRecConfigErrorsAndWarnings } from "./auto-tt-rec-errors-and-warnings";
+
+function isFILLMEOrEmptyOrNull(x: any): x is "<FILLME>" | "" | null {
+  return x === null || x === "" || x === "<FILLME>";
+}
+
+export class AutoTTRecConfigPreprocessor {
   private autoTTRecConfig: AutoTTRecConfig;
   private errorsAndWarnings: AutoTTRecConfigErrorsAndWarnings;
   private autoTTRecConfigImporter: AutoTTRecConfigImporter | null;
