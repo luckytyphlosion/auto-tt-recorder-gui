@@ -30,9 +30,10 @@ export function MainGhostSourceInput() {
       </DeselectableRadioButtonGroup>
       {renderCounter}
       {
-        mainGhostSource === "chadsoft" ? <ChadsoftGhostPageInput/>
-        : mainGhostSource === "rkg" ? <MainGhostFilenameInput/>
-        : ''
+        mainGhostSource === "chadsoft" || mainGhostSource === "<FILLME>" ? <ChadsoftGhostPageInput/> : ""
+      }
+      {
+        mainGhostSource === "rkg" || mainGhostSource === "<FILLME>" ? <MainGhostFilenameInput/> : ""
       }
     </div>
   );
