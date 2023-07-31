@@ -17,20 +17,27 @@ export function Top10TitleInput() {
     setTop10TitleType(getValues("top-10-title-type"));
   }
 
+  function validateTop10Title(top10Title: string) {
+    if (top10TitleType === "<FILLME>") {
+      return "Top 10 Title type (auto vs manual) is required.";
+    } else if (top10Title === "") {
+      return "Top 10 Title is required.";
+    } else {
+      return true;
+    }
+  }
+
   return (
     <div>
       <label htmlFor="top-10-title">Top 10 Title: </label>
-      <DeselectableRadioButtonGroup name="top-10-title-type">
+      <DeselectableRadioButtonGroup name="top-10-title-type" noErrorMessage={true}>
         <DeselectableRadioButton labelValue="Autogenerate:" id="top-10-title-type-auto" value="auto" onChange={updateTop10TitleType}/>
         <DeselectableRadioButton labelValue="Supply manually:" id="top-10-title-type-manual" value="manual" onChange={updateTop10TitleType}/>
       </DeselectableRadioButtonGroup>
       {
-        top10TitleType === "manual" ? <>
+        top10TitleType === "manual" || top10TitleType === "<FILLME>" ? <>
           <input type="text"
-            {...register("top-10-title", {required: {
-              value: true,
-              message: "This input is required."
-            }})}
+            {...register("top-10-title", {validate: validateTop10Title})}
           ></input>
           <SimpleErrorMessage name="top-10-title"/>
         </> : ""
