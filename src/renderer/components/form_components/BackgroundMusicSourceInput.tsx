@@ -16,8 +16,10 @@ export type BackgroundMusicSource = ValidValues<typeof BACKGROUND_MUSIC_SOURCES>
 
 export function BackgroundMusicSourceInput(props: {timeline: Timeline, formComplexity: FormComplexity}) {
   const {register, getValues} = useFormContextAutoTT();
+
   function isFormBackgroundMusicFromFilename() {
-    return getValues("background-music-source") === "music-filename";
+    const backgroundMusicSource = getValues("background-music-source");
+    return backgroundMusicSource === "music-filename" || backgroundMusicSource === "<FILLME>";
   }
 
   const [musicFilenameInputEnable, setMusicFilenameInputEnable] = useState(isFormBackgroundMusicFromFilename());
@@ -33,11 +35,10 @@ export function BackgroundMusicSourceInput(props: {timeline: Timeline, formCompl
   return (
     <div>
       <label htmlFor="background-music-source">Background Music: </label>
-      <DeselectableDropdown name="background-music-source" onChange={updateMusicFilenameInputEnable}>
+      <DeselectableDropdown name="background-music-source" noErrorMessage={true} onChange={updateMusicFilenameInputEnable}>
         <option value="music-filename">Music filename</option>
         <option value="game-bgm">Game BGM</option>
         <option value="none">None</option>
-        <option value="<FILLME>" disabled style={{display: "none"}}></option>
       </DeselectableDropdown>
       {
         musicFilenameInputEnable ? 

@@ -17,10 +17,20 @@ export function MusicFilenameInput() {
     }
   }
 
+  async function validateBackgroundMusicSourceAndCheckIsFileReadable(value: string) {
+    let backgroundMusicSource = getValues("background-music-source");
+    console.log("validateBackgroundMusicSourceAndCheckIsFileReadable backgroundMusicSource:", backgroundMusicSource);
+    if (backgroundMusicSource === "<FILLME>") {
+      return "Background music source (dropdown) is required.";
+    } else {
+      return await isFileReadable(value);
+    }
+  }
+
   return (
     <>
       <label htmlFor="music-filename"> </label>
-      <ClearableReadonlyTextInput name="music-filename" validate={isFileReadable}/>
+      <ClearableReadonlyTextInput name="music-filename" notRequired={true} validate={validateBackgroundMusicSourceAndCheckIsFileReadable}/>
       <button onClick={event => {
         queueOpenDialog(event, [
           {name: "Music files", extensions: ["*"]}
