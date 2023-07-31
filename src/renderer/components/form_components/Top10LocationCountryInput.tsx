@@ -5,8 +5,7 @@ import { DeselectableDropdown } from "../DeselectableDropdown";
 
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
 
-const COUNTRY_LOCATION_FLAG_IDS_BY_NAME = {
-  "<FILLME>": "<FILLME>",
+const COUNTRY_LOCATION_FLAG_IDS_BY_NAME_NO_FILLME = {
   "Abkhazia": "AK",
   "Afghanistan": "AF",
   "Åland": "AX",
@@ -264,6 +263,11 @@ const COUNTRY_LOCATION_FLAG_IDS_BY_NAME = {
   "Zimbabwe": "ZW"
 } as const;
 
+const COUNTRY_LOCATION_FLAG_IDS_BY_NAME = {
+  ...COUNTRY_LOCATION_FLAG_IDS_BY_NAME_NO_FILLME,
+  "<FILLME>": "<FILLME>"
+} as const;
+
 type ReverseMap<T extends Record<keyof T, T[keyof T]>> = {
   [P in T[keyof T]]: {
     [K in keyof T]: T[K] extends P ? K : never
@@ -281,17 +285,17 @@ export const COUNTRY_LOCATION_NAMES_BY_FLAG_ID: ReverseMap<typeof COUNTRY_LOCATI
 export const COUNTRY_LOCATIONS = makeReadonlyArraySet(Object.keys(COUNTRY_LOCATION_FLAG_IDS_BY_NAME) as (keyof typeof COUNTRY_LOCATION_FLAG_IDS_BY_NAME)[]);
 export const COUNTRY_FLAG_IDS = makeReadonlyArraySet(Object.keys(COUNTRY_LOCATION_NAMES_BY_FLAG_ID) as (keyof typeof COUNTRY_LOCATION_NAMES_BY_FLAG_ID)[]);
 
+const COUNTRY_LOCATIONS_NO_FILLME = Object.keys(COUNTRY_LOCATION_FLAG_IDS_BY_NAME_NO_FILLME);
+
 export type Top10LocationCountry = ValidValues<typeof COUNTRY_LOCATIONS>;
 export type Top10LocationCountryFlagId = ValidValues<typeof COUNTRY_FLAG_IDS>;
 
 export function Top10LocationCountryInput() {
-  const {register} = useFormContextAutoTT();
-
   return (
     <>
       <label htmlFor="top-10-location-country-location">Location: </label>
       <DeselectableDropdown name="top-10-location-country-location">
-        {COUNTRY_LOCATIONS.arr.map((countryLocation) => (
+        {COUNTRY_LOCATIONS_NO_FILLME.map((countryLocation) => (
           <option value={countryLocation} key={countryLocation}>{countryLocation}</option>
         ))}
       </DeselectableDropdown>
