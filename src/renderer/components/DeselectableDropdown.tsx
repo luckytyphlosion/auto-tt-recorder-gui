@@ -2,7 +2,7 @@
 import React, { memo, useState, useEffect, useRef, createContext, useContext, useMemo } from 'react';
 import { ValidateResult, Control, Controller, RefCallBack, UseFormSetValue, UseFormGetValues, useFormContext } from 'react-hook-form';
 import { useFormContextAutoTT } from "../use-form-context-auto-tt";
-import { AutoTTRecConfigFormChoiceArgName, AutoTTRecConfigFormChoiceArgs } from "../AutoTTRecFormFieldsAndArgs";
+import { AutoTTRecConfigFormChoiceArgName, AutoTTRecConfigFormChoiceArgs } from "../auto-tt-rec-form-field-types";
 import { SimpleErrorMessage } from "./SimpleErrorMessage";
 
 import useRenderCounter from "../RenderCounter";

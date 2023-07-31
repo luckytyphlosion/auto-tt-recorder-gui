@@ -2,7 +2,9 @@ import React, { useState, useEffect, MouseEventHandler } from "react";
 
 import Modal from "react-modal";
 import { FormProvider, UseFormReturn } from "react-hook-form";
-import { AutoTTRecConfigFormFields, makeMinimalFormData, DEFAULT_FORM_VALUES } from "../AutoTTRecFormFieldsAndArgs";
+import { AutoTTRecConfigFormFields } from "../auto-tt-rec-form-field-types";
+
+import { makeMinimalFormData } from "../auto-tt-rec-form-data-generators";
 
 export function ClearAllFields(props: {
   formMethods: UseFormReturn<AutoTTRecConfigFormFields, any, undefined>,

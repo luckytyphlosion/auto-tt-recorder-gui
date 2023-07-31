@@ -1,9 +1,9 @@
 import React, { useState, useCallback, memo } from "react";
 import { AutoTTRecConfigForm, areAutoTTRecConfigFormPropsEqual } from "./AutoTTRecConfigForm";
-import { AutoTTRecArgs } from "../AutoTTRecFormFieldsAndArgs";
+import { AutoTTRecArgs } from "../auto-tt-rec-args-types";
 import { AutoTTRecStatus } from "./AutoTTRecStatus";
 import { IpcRendererEvent } from "electron";
-import { DEFAULT_FORM_VALUES } from "../AutoTTRecFormFieldsAndArgs";
+import { DEFAULT_FORM_VALUES } from "../auto-tt-rec-form-field-types";
 
 import { AutoTTRecResponse } from "../../shared/enums";
 

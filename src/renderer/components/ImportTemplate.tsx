@@ -2,8 +2,10 @@ import React, { useState, useRef, useEffect, MouseEventHandler } from "react";
 
 import Modal from "react-modal";
 import { FormProvider, UseFormReturn } from "react-hook-form";
-import { convertAutoTTRecConfigToFormData, AutoTTRecConfigFormFields } from "../AutoTTRecFormFieldsAndArgs";
+import { AutoTTRecConfigFormFields } from "../auto-tt-rec-form-field-types";
 import { ImportTemplateResult, ImportTemplateStatus, AutoTTRecConfig } from "../../shared/shared-types";
+
+import { convertAutoTTRecConfigToFormData } from "../auto-tt-rec-form-data-generators";
 
 import { BooleanFILLME } from "../../shared/shared-types";
 

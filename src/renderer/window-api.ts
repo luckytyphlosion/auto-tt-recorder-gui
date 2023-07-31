@@ -1,10 +1,7 @@
 import { FileFilter, IpcRendererEvent } from "electron";
 import { AutoTTRecResponse } from "../shared/enums";
-import { AutoTTRecArgs } from "./AutoTTRecFormFieldsAndArgs";
+import { AutoTTRecArgs } from "./auto-tt-rec-args-types";
 import { FilenameAndContents, ImportTemplateResult, ExpectedExtensionAndErrorMessage, DialogId, StringOrError } from "../shared/shared-types";
-
-import { AutoTTRecConfig } from "../shared/shared-types";
-import { AutoTTRecConfigFormFields } from "./AutoTTRecFormFieldsAndArgs";
 
 declare global {
   interface Window {

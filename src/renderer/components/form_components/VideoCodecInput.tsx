@@ -7,7 +7,6 @@ import useRenderCounter from "../../RenderCounter";
 import { DeselectableDropdown } from "../DeselectableDropdown";
 
 import { EncodeType } from "../layout_components/choice_layouts/EncodeSettingsLayout";
-import { AutoTTRecConfigFormFields } from "../../AutoTTRecFormFieldsAndArgs";
 
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
 

@@ -55,7 +55,10 @@ import { ImportTemplate } from "./ImportTemplate";
 
 import { shallowCopy } from "../../shared/util-shared";
 
-import { AutoTTRecConfigFormFields, AutoTTRecConfigFormFieldsNoFILLME, AutoTTRecArgs, DEFAULT_FORM_VALUES, convertFormDataToAutoTTRecArgs } from "../AutoTTRecFormFieldsAndArgs";
+import { DEFAULT_FORM_VALUES, AutoTTRecConfigFormFields, AutoTTRecConfigFormFieldsNoFILLME } from "../auto-tt-rec-form-field-types";
+import { convertFormDataToAutoTTRecArgs } from "../auto-tt-rec-args-builder";
+
+import { AutoTTRecArgs } from "../auto-tt-rec-args-types";
 
 import useRenderCounter from "../RenderCounter";
 
