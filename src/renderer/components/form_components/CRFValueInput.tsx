@@ -2,12 +2,12 @@ import React from "react";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
 
-export function CRFValueInput() {
+export function CRFValueInput(props: {addCRFReminderToLabel: boolean}) {
   const {register} = useFormContextAutoTT();
 
   return (
     <div>
-      <label htmlFor="crf-value">Quality (lower is better but file size becomes larger):</label>
+      <label htmlFor="crf-value">Quality ({props.addCRFReminderToLabel ? "For CRF; " : ""}lower is better but file size becomes larger):</label>
       <input type="number"
         {...register("crf-value", {valueAsNumber: true, required: {
           value: true,

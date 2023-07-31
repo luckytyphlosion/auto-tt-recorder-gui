@@ -1,8 +1,7 @@
 import React, { useState, memo } from "react";
 import { useFormContextAutoTT } from "../../../use-form-context-auto-tt";
 import { PixelFormatInput } from "../../form_components/PixelFormatInput";
-import { SizeBasedEncodeSettingsLayout } from "../sub_layouts/SizeBasedEncodeSettingsLayout";
-import { CRFEncodeSettingsLayout } from "../sub_layouts/CRFEncodeSettingsLayout";
+import { EncodeSettingsContentsLayout } from "../sub_layouts/EncodeSettingsContentsLayout";
 import { FormComplexity } from "../FormComplexityLayout";
 import { makeReadonlyArraySet, ValidValues } from "../../../../shared/array-set";
 
@@ -34,11 +33,7 @@ export function EncodeSettingsLayout(props: {formComplexity: FormComplexity}) {
         <DeselectableRadioButton labelValue="Size based (for Discord uploads): " id="encode-type-size" value="size" onChange={updateEncodeType}/>
       </DeselectableRadioButtonGroup>
       {renderCounter}
-      {
-        encodeType === "crf" ? <CRFEncodeSettingsLayout formComplexity={props.formComplexity}/> :
-        encodeType === "size" ? <SizeBasedEncodeSettingsLayout formComplexity={props.formComplexity}/> :
-        ''
-      }
+      <EncodeSettingsContentsLayout formComplexity={props.formComplexity} encodeType={encodeType}/>
       {
         props.formComplexity === FormComplexity.ALL ? <PixelFormatInput_Memo/> : ""
       }

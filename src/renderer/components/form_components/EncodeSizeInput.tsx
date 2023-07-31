@@ -51,7 +51,7 @@ function getDefaultEncodeSizeDisplayed(encodeSizeUnit: EncodeSizeUnit) {
 const MIN_ENCODE_SIZE = 1;
 const MAX_ENCODE_SIZE = 274877906944; // 256GiB, max that youtube allows
 
-export function EncodeSizeInput() {
+export function EncodeSizeInput(props: {addSizeBasedReminderToLabel: boolean}) {
   const {register, setValue, getValues, control} = useFormContextAutoTT();
   const renderCounter = useRenderCounter(true);
 
@@ -108,7 +108,7 @@ export function EncodeSizeInput() {
 
   return (
     <div>
-      <label htmlFor="encode-size">Output video size:</label>
+      <label htmlFor="encode-size">Output video size{props.addSizeBasedReminderToLabel ? " (For size-based)" : ""}:</label>
       <input type="hidden" {...register("encode-size")}/>
       <input type="number" onKeyPress={(e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key.match(/[^\d\.]/g)) {

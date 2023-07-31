@@ -32,11 +32,11 @@ export function VideoCodecInput(props: {encodeType: EncodeType, formComplexity: 
       <label htmlFor="video-codec">Video codec: </label>
       <DeselectableDropdown name="video-codec" onChange={updateVideoCodec}>
         <option value="libx264">libx264</option>
-        {props.encodeType === "crf" ?
-          <option value="libx265">libx265</option> : <option value="libvpx-vp9">libvpx-vp9</option>}
+        {props.encodeType === "crf" || props.encodeType === "<FILLME>" ? <option value="libx265">libx265</option> : ""}
+        {props.encodeType === "size" || props.encodeType === "<FILLME>" ? <option value="libvpx-vp9">libvpx-vp9</option> : ""}
       </DeselectableDropdown>
       {renderCounter}
-      <OutputVideoFileFormatInput videoCodec={videoCodec} formComplexity={props.formComplexity}/>
+      <OutputVideoFileFormatInput videoCodec={videoCodec} addSizeBasedReminderToLabel={false} formComplexity={props.formComplexity}/>
     </div>
   );
 }

@@ -5,7 +5,6 @@ import { useForm, FormProvider, UseFormRegister, UseFormSetValue, FieldValues, F
 import { ISOWBFSFileInput } from "./form_components/ISOWBFSFileInput";
 import { ChadsoftGhostPageInput } from "./form_components/ChadsoftGhostPageInput";
 import { TrackNameInput } from "./form_components/TrackNameInput";
-import { QualityInput } from "./form_components/QualityInput";
 import { OutputVideoFilenameInput } from "./form_components/OutputVideoFilenameInput";
 import AutoTTRecSubmitAbortButtons from "./AutoTTRecSubmitAbortButtons";
 import { AutoTTRecConfigFormComponents } from "./AutoTTRecConfigFormComponents";

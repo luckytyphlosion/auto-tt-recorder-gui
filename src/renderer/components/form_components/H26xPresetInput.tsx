@@ -8,13 +8,13 @@ import useRenderCounter from "../../RenderCounter";
 export const H26X_PRESETS = makeReadonlyArraySet(["ultrafast", "superfast", "veryfast", "faster", "fast", "medium", "slow", "slower", "veryslow", "placebo"] as const);
 export type H26xPreset = ValidValues<typeof H26X_PRESETS>;
 
-export function H26xPresetInput() {
+export function H26xPresetInput(props: {addCRFReminderToLabel: boolean}) {
   const {register} = useFormContextAutoTT();
   const renderCounter = useRenderCounter(true);
 
   return (
     <div>
-      <label htmlFor="h26x-preset">Encode speed (faster &#8594; larger filesize, slightly less quality): </label>
+      <label htmlFor="h26x-preset">Encode speed ({props.addCRFReminderToLabel ? "For CRF; " : ""}faster &#8594; larger filesize, slightly less quality): </label>
       <DeselectableDropdown name="h26x-preset">
         <option value="ultrafast">ultrafast</option>
         <option value="superfast">superfast</option>
