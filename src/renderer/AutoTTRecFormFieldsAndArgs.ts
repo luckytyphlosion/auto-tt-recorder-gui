@@ -47,17 +47,7 @@ import { ValidValues, ReadonlyArraySet, makeReadonlyArraySet } from "../shared/a
 
 import { shallowCopy, isInSet, deleteFromSet } from "../shared/util-shared";
 
-type ExtendedTimeline = "noencode" | "ghostonly" | "ghostselect" | "mkchannel" | "top10chadsoft" | "top10gecko";
-
 const DEBUG_PREFILLED_DEFAULTS = false;
-
-// == types without <FILLME> ==
-// arbitrary (string) types can just be set to ""
-// number types can just be set to NaN
-// internal types need custom logic
-// == types with <FILLME> ==
-// choice inputs (dropdown, radio button)
-// checkbox inputs (tri-checkbox)
 
 // The class containing the entire definition of the form data used in the form
 // It is a class rather than an interface so that I can also define default values at the same time
@@ -1926,6 +1916,13 @@ class AutoTTRecArgsBuilder {
     return this._autoTTRecArgs;
   }
 }
+
+// A type describing the possible "extended timeline" values
+// As in all the possible forms displayed with the possible combinations
+// of the input in the TimelineCategoryLayout and the input in the NoTop10CategoryLayout
+// This type primarily helps avoiding needing to check if the "timeline-category" is "notop10"
+// before checking the "no-top-10-category" for desired values
+type ExtendedTimeline = Exclude<Timeline, "top10"> | Exclude<TimelineCategory, "notop10">
 
 class AutoTTRecFormData {
   private _formData: AutoTTRecConfigFormFieldsNoFILLME;
