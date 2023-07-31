@@ -31,7 +31,7 @@ import { Top10GeckoCodeLocationRegion } from "./components/form_components/Top10
 
 import { TimelineCategory } from "./components/layout_components/TimelineCategoryLayout";
 
-import { NoTop10Category, NO_TOP_10_CATEGORIES } from "./components/layout_components/choice_layouts/NoTop10CategoryLayout";
+import { NoTop10Category, NO_TOP_10_CATEGORIES, Timeline, TIMELINES } from "./components/layout_components/choice_layouts/NoTop10CategoryLayout";
 import { AspectRatio16By9, ASPECT_RATIO_16_BY_9_VALUES } from "./components/form_components/AspectRatio16By9Input";
 import { TrackNameType } from "./components/form_components/TrackNameInput";
 
@@ -41,16 +41,13 @@ import { Top10TitleType } from "./components/form_components/Top10TitleInput";
 
 import { Set200cc, SET_200CC_VALUES } from "./components/form_components/Set200ccInput";
 
-import { AutoTTRecConfig, StringOrError, BooleanFILLME } from "../shared/shared-types";
+import { AutoTTRecConfig, StringOrError, BooleanFILLME, IfEquals } from "../shared/shared-types";
 
 import { ValidValues, ReadonlyArraySet, makeReadonlyArraySet } from "../shared/array-set";
 
-import { shallowCopy } from "../shared/util-shared";
+import { shallowCopy, isInSet, deleteFromSet } from "../shared/util-shared";
 
-const TIMELINES = makeReadonlyArraySet(["noencode", "ghostonly", "ghostselect", "mkchannel", "top10"] as const);
-export type Timeline = ValidValues<typeof TIMELINES>;
-
-export type ExtendedTimeline = "noencode" | "ghostonly" | "ghostselect" | "mkchannel" | "top10chadsoft" | "top10gecko";
+type ExtendedTimeline = "noencode" | "ghostonly" | "ghostselect" | "mkchannel" | "top10chadsoft" | "top10gecko";
 
 const DEBUG_PREFILLED_DEFAULTS = false;
 
@@ -62,8 +59,13 @@ const DEBUG_PREFILLED_DEFAULTS = false;
 // choice inputs (dropdown, radio button)
 // checkbox inputs (tri-checkbox)
 
-type AnyFIXME = any;
-
+// The class containing the entire definition of the form data used in the form
+// It is a class rather than an interface so that I can also define default values at the same time
+// which reduces clutter
+// Types must be either string, number, boolean, or "Choice" (string union)
+// "SomeFILLME" is derived from the fact that any choice type specified here
+// is derived from the ValidValues generic type, which also adds "<FILLME>" to the type union
+// as every choice input can be uninitialized to support config flexibility
 class AutoTTRecConfigFormFieldsSomeFILLMEClass {
   "aspect-ratio-16-by-9": AspectRatio16By9 = "auto"; // choice
   "audio-bitrate": number = 128000; // number
@@ -146,120 +148,100 @@ class AutoTTRecConfigFormFieldsSomeFILLMEClass {
   "youtube-settings": boolean = true; // checkbox
 }
 
-class AutoTTRecArgsClass {
-  "aspect-ratio-16-by-9"?: AspectRatio16By9 = "true";
-  "audio-bitrate"?: number | string = 128000;
-  "audio-codec"?: AudioCodec = "libopus";
-  "chadsoft-comparison-ghost-page"?: string = "";
-  "chadsoft-ghost-page"?: string = "";
-  "chadsoft-read-cache"?: boolean = true;
-  "chadsoft-write-cache"?: boolean = true;
-  "chadsoft-cache-expiry"?: string = "24h";
-  "comparison-ghost-filename"?: string = "";
-  "crf-value"?: number = 15;
-  "dolphin-resolution"?: DolphinResolution = "1440p";
-  "encode-only"?: boolean = false;
-  "encode-size"?: number = 52428800;
-  "encode-type"?: EncodeType = "crf";
-  "ending-delay"?: number = 600;
-  "extra-gecko-codes-filename"?: string = "";
-  "extra-hq-textures-folder"?: string = "";
-  "fade-in-at-start"?: boolean = false;
-  "form-complexity"?: FormComplexity = FormComplexity.ALL;
-  "game-volume"?: number = 1.0;
-  "h26x-preset"?: H26xPreset = "slow";
-  "hq-textures"?: boolean = true;
-  "input-display"?: InputDisplay = "auto";
-  "input-display-dont-create"?: boolean = false;
-  "iso-filename"?: string = "";
-  "keep-window"?: boolean = true;
-  "main-ghost-filename"?: string = "";
-  "mk-channel-ghost-description"?: string = "";
-  "music-filename"?: string = "";
-  "music-volume"?: number = 1.0;
-  "no-background-blur"?: boolean = true;
-  "no-bloom"?: boolean = false;
-  "no-music"?: boolean = false;
-  "no-music-mkchannel"?: boolean = false;
-  "on-200cc"?: boolean = false;
-  "output-video-filename"?: string = "";
-  "output-width"?: number = 2560;
-  "output-width-custom"?: void;
-  "pixel-format"?: string = "yuv420p";
-  "set-200cc"?: void;
-  "speedometer"?: SpeedometerStyle = "fancy";
-  "speedometer-style"?: void;
-  "speedometer-decimal-places"?: SpeedometerDecimalPlacesNumeric = 1;
-  "speedometer-decimal-places-str"?: void;
-  "speedometer-metric"?: SpeedometerMetric = "engine";
-  "start-music-at-beginning"?: boolean = false;
-  "szs-filename"?: string = "";
-  "timeline"?: Timeline = "mkchannel";
-  "top-10-chadsoft"?: string = "";
-  "top-10-gecko-code-filename"?: string = "";
-  "top-10-highlight"?: number = 1;
-  "top-10-location"?: Top10LocationFull = "worldwide";
-  "top-10-title"?: string = "";
-  "track-name"?: string = "";
-  "use-ffv1"?: boolean = false;
-  "video-codec"?: VideoCodec = "libx264";
-  "youtube-settings"?: boolean = true;
-}
+// interface version of the respective class, which allows TypeScript manipulation of the type
+interface AutoTTRecConfigFormFieldsSomeFILLME extends AutoTTRecConfigFormFieldsSomeFILLMEClass {};
 
-type IfEquals<T, U, Y=unknown, N=never> =
-  (<G>() => G extends T ? 1 : 2) extends
-  (<G>() => G extends U ? 1 : 2) ? Y : N;
-
-type IsChoiceType<T, U extends T = T> =
-    (Exclude<T, "<FILLME>"> extends string ?
-    (U extends Exclude<T, "<FILLME>"> ? false : true)
-        : never) extends false ? false : true
-
-//type NonNullable<T> = {[P in keyof T]: Exclude<T[P], null>};
-
+// A helper type which adds a <FILLME>-like option to every field
+// as every field is allowed to be missing, for flexible template support
+// numeric types don't need <FILLME> as any number inputs will be NaN if they are empty
+// string types get added <FILLME> even though a <FILLME> string is empty,
+// but it doesn't matter because the type still ends up being string
+// "form-complexity" is omitted because it is an enum which messes up the following generated types (TODO how?)
+// (Technically speaking, neither timeline-category nor no-top-10-category can be <FILLME> either,
+// but this was implemented before I realized that, and it doesn't affect the program logic by much).
 export type PartialFILLME_FormComplexityNoFILLME<T> = {
   [P in keyof T]: IfEquals<T[P], number, number, 
     P extends "form-complexity" ? FormComplexity : T[P] | "<FILLME>">;
 };
 
-export type ExcludeFILLME<T> = {
+// The actual form data type used by most of the code, based on the initial class with the above FILLME type adder
+export type AutoTTRecConfigFormFields = PartialFILLME_FormComplexityNoFILLME<AutoTTRecConfigFormFieldsSomeFILLME>;
+// A partial version of AutoTTRecConfigFormFields, allowing for undefined values. This makes
+// constructing the form data from the auto-tt-recorder config a lot easier, as it
+// can be done incrementally this way, as opposed to requiring all fields to be defined first.
+type AutoTTRecConfigFormFieldsPartial = Partial<AutoTTRecConfigFormFields>;
+
+// A type indicating a possible field name in AutoTTRecConfigFormFields
+type AutoTTRecConfigFormFieldName = keyof AutoTTRecConfigFormFields;
+
+// A helper type which excludes <FILLME> from every field in the object-like type.
+type ExcludeFILLME<T> = {
   [P in keyof T]: Exclude<T[P], "<FILLME>">;
 }
 
-export interface AutoTTRecConfigFormFieldsSomeFILLME extends AutoTTRecConfigFormFieldsSomeFILLMEClass {};
-export type AutoTTRecConfigFormFields = PartialFILLME_FormComplexityNoFILLME<AutoTTRecConfigFormFieldsSomeFILLME>;
-export type AutoTTRecConfigFormFieldName = keyof AutoTTRecConfigFormFields;
-export type AutoTTRecConfigFormNonSpecialFieldName = Exclude<AutoTTRecConfigFormFieldName, "form-complexity">;
-
-
-
+// AutoTTRecConfigFormFields, without any <FILLME>s
+// Makes the conversion of the form data to auto-tt-recorder arguments
+// a lot easier, as it avoids needing to account for <FILLME>, and
+// none of the submitted form data values should ever be <FILLME>
+// if the form is considered valid anyway
 export type AutoTTRecConfigFormFieldsNoFILLME = ExcludeFILLME<AutoTTRecConfigFormFieldsSomeFILLME>;
 
+// A helper type which will remove all fields that are not exactly of the specified type
+// avoiding the TypeScript extending logic using a special IfEquals helper type
+// defined in shared-types.ts
 type AutoTTRecConfigFormPrimitiveArgs<T> = Pick<AutoTTRecConfigFormFields, {
   [K in AutoTTRecConfigFormFieldName]-?:
     IfEquals<AutoTTRecConfigFormFields[K], T, K, never>
 }[AutoTTRecConfigFormFieldName]>;
 
+// Below are four categories of types which divide the form data type into partitions
+// based on a specific type
+// The four categories are arbitrary strings, numbers, booleans, and choice-based types (e.g. radio button, dropdown)
+// each category has three types associated.
+// The first type ends in Args and just contains AutoTTRecConfigFormFields
+// with ONLY fields that match the specified type
+// The second type is a union of the possible field names with the specified type
+// The third type is the intersection of the possible field names with the specified type
+// AND the possible auto-tt-recorder command names (AutoTTRecArgName)
+// This third type allows us to define functions related to directly copying
+// a value in the auto-tt-recorder config to the form data object, with minimal validation
+
+// only string fields are kept here
 type AutoTTRecConfigFormStringArgs = AutoTTRecConfigFormPrimitiveArgs<string | "<FILLME>">;
 type AutoTTRecConfigFormStringArgName = keyof AutoTTRecConfigFormStringArgs;
 type AutoTTRecConfigFormSharedStringArgName = AutoTTRecConfigFormStringArgName & AutoTTRecArgName;
 
+// only number fields are kept here
 type AutoTTRecConfigFormNumberArgs = AutoTTRecConfigFormPrimitiveArgs<number>;
 type AutoTTRecConfigFormNumberArgName = keyof AutoTTRecConfigFormNumberArgs;
 type AutoTTRecConfigFormSharedNumberArgName = AutoTTRecConfigFormNumberArgName & AutoTTRecArgName;
 
-type AutoTTRecConfigFormBooleanArgs = AutoTTRecConfigFormPrimitiveArgs<boolean | "<FILLME>">;
+// only boolean fields are kept here
+export type AutoTTRecConfigFormBooleanArgs = AutoTTRecConfigFormPrimitiveArgs<boolean | "<FILLME>">;
 type AutoTTRecConfigFormBooleanArgName = keyof AutoTTRecConfigFormBooleanArgs;
 type AutoTTRecConfigFormSharedBooleanArgName = AutoTTRecConfigFormBooleanArgName & AutoTTRecArgName;
 
+// A helper type to determine if a type is a choice type, that is the type
+// is a union of strings
+// Because "<FILLME>" is also added to boolean types, we must remove it in order
+// to test whether the type is a string
+type IsChoiceType<T, U extends T = T> =
+    (Exclude<T, "<FILLME>"> extends string ?
+    (U extends Exclude<T, "<FILLME>"> ? false : true)
+        : never) extends false ? false : true
+
+// only choice (string union, e.g. radio button/dropdown) fields are kept here
 export type AutoTTRecConfigFormChoiceArgs = Pick<AutoTTRecConfigFormFields, {
   [K in AutoTTRecConfigFormFieldName]-?: IsChoiceType<AutoTTRecConfigFormFields[K]> extends true ? K : never
 }[AutoTTRecConfigFormFieldName]>;
 export type AutoTTRecConfigFormChoiceArgName = keyof AutoTTRecConfigFormChoiceArgs;
 type AutoTTRecConfigFormSharedChoiceArgName = AutoTTRecConfigFormChoiceArgName & AutoTTRecArgName;
 
-//type NaNCheck = 
-
+// A restricted version of AutoTTRecConfigFormFields dictating the expected values
+// for each field, when the form is cleared.
+// This is an empty string for string fields
+// a NaN for number fields (unfortunately not possible to state something as a NaN type)
+// and <FILLME> for boolean and choice fields
 type AutoTTRecConfigFormMinimalFields = (
   {[K in AutoTTRecConfigFormStringArgName]: ""}
   | {[K in AutoTTRecConfigFormNumberArgName]: number}
@@ -268,6 +250,7 @@ type AutoTTRecConfigFormMinimalFields = (
   | {"form-complexity": FormComplexity}
 ) & AutoTTRecConfigFormFields;
 
+// The actual object definition adhering to the above type AutoTTRecConfigFormMinimalFields
 export const MINIMAL_FORM_VALUES: AutoTTRecConfigFormMinimalFields = {
   "aspect-ratio-16-by-9": "<FILLME>",
   "audio-bitrate": NaN,
@@ -350,112 +333,164 @@ export const MINIMAL_FORM_VALUES: AutoTTRecConfigFormMinimalFields = {
   "youtube-settings": "<FILLME>"
 };
 
-// type AutoTTRecStringOrChoiceArgName = Pick<AutoTTRecArgs, {
-//   [K in AutoTTRecArgName]-?:
-//     (AutoTTRecArgs[K] extends string | null | undefined) extends true ? K : never
-// }[AutoTTRecArgName]>;
-
+// The object created from instantiating the base form data class
+// which allows us to access default values and create other data structures
+// Because of TypeScript limitations, we will have to use `as` assertions to set the type
+// of the data structures we create from the object containing the default values
 const autoTTRecConfigFormFieldTypesClassObj = new AutoTTRecConfigFormFieldsSomeFILLMEClass();
 
-type AutoTTRecConfigFormFieldNamesArray = Array<AutoTTRecConfigFormFieldName>;
-
+// The default form values of the form
 export const DEFAULT_FORM_VALUES: AutoTTRecConfigFormFieldsNoFILLME = autoTTRecConfigFormFieldTypesClassObj as AutoTTRecConfigFormFieldsNoFILLME;
 
-export const AUTO_TT_REC_CONFIG_FORM_FIELD_NAMES = Object.keys(autoTTRecConfigFormFieldTypesClassObj) as AutoTTRecConfigFormFieldNamesArray;
+// A type describing an array with all of the field names in AutoTTRecConfigFormFields
+type AutoTTRecConfigFormFieldNamesArray = Array<AutoTTRecConfigFormFieldName>;
+// The actual array as described by the above type
+const AUTO_TT_REC_CONFIG_FORM_FIELD_NAMES = Object.keys(autoTTRecConfigFormFieldTypesClassObj) as AutoTTRecConfigFormFieldNamesArray;
 
-const AUTO_TT_REC_TOP_10_LOCATIONS = makeReadonlyArraySet(["ww", "worldwide", ...COUNTRY_LOCATIONS.arr, ...REGIONAL_LOCATIONS.arr] as const);
-type Top10LocationFull = ValidValues<typeof AUTO_TT_REC_TOP_10_LOCATIONS>;
-
-function isInSet<T>(values: ReadonlySet<T>, x: any): x is T {
-  return values.has(x);
-}
-
-function isFILLMEOrEmptyOrNull(x: any): x is "<FILLME>" | "" | null {
-  return x === null || x === "" || x === "<FILLME>";
-}
-
-function deleteFromSet<T>(values: Set<T>, x: any): boolean {
-  return values.delete(x);
-}
-
-export type PartialNull<T> = {
-  [P in keyof T]?: T[P] | null;
-};
-
-export type AutoTTRecConfigFormTriCheckboxFields = Pick<AutoTTRecConfigFormFields, {
-  [K in AutoTTRecConfigFormFieldName]-?:
-    IfEquals<AutoTTRecConfigFormFields[K], boolean | "<FILLME>", K, never>
-}[AutoTTRecConfigFormFieldName]>;
-
-//type AutoTTRecConfigFormFieldsPartialNull = PartialNull<AutoTTRecConfigFormFields>;
-type AutoTTRecConfigFormFieldsPartial = Partial<AutoTTRecConfigFormFields>;
-
-//type NoUndefinedField<T> = { [P in keyof T]-?: NoUndefinedField<T[P]> };
-
-export type DoesSomething<T> = {
-  [P in keyof T]: T[P] | null;
-}
-
+// A type describing the possible sources of both the main and comparison ghost
 type BothGhostSource = MainGhostSource | ComparisonGhostSource;
 
-//export type AutoTTRecConfigFormFieldTypesWithoutFILLME = ExcludeFILLME<AutoTTRecConfigFormFields>;
-//export type PartialAutoTTRecConfigFormFieldTypesWithoutFILLME = Partial<AutoTTRecConfigFormFieldTypesWithoutFILLME>;
-//export type AutoTTRecArgsWithFILLME = PartialFILLME<AutoTTRecArgs>;
+// ========================
+// START AUTO-TT-REC-ARGS TYPES
+// ========================
 
+// The class containing all the auto-tt-recorder commands which the program can set
+// Like above, it is a class instead of an interface to be able to set default values
+// some fields are set up such that their name and type match exactly with fields in 
+// the form data class above
+class AutoTTRecArgsClass {
+  "aspect-ratio-16-by-9"?: AspectRatio16By9 = "true";
+  "audio-bitrate"?: number | string = 128000;
+  "audio-codec"?: AudioCodec = "libopus";
+  "chadsoft-comparison-ghost-page"?: string = "";
+  "chadsoft-ghost-page"?: string = "";
+  "chadsoft-read-cache"?: boolean = true;
+  "chadsoft-write-cache"?: boolean = true;
+  "chadsoft-cache-expiry"?: string = "24h";
+  "comparison-ghost-filename"?: string = "";
+  "crf-value"?: number = 15;
+  "dolphin-resolution"?: DolphinResolution = "1440p";
+  "encode-only"?: boolean = false;
+  "encode-size"?: number = 52428800;
+  "encode-type"?: EncodeType = "crf";
+  "ending-delay"?: number = 600;
+  "extra-gecko-codes-filename"?: string = "";
+  "extra-hq-textures-folder"?: string = "";
+  "fade-in-at-start"?: boolean = false;
+  "form-complexity"?: FormComplexity = FormComplexity.ALL;
+  "game-volume"?: number = 1.0;
+  "h26x-preset"?: H26xPreset = "slow";
+  "hq-textures"?: boolean = true;
+  "input-display"?: InputDisplay = "auto";
+  "input-display-dont-create"?: boolean = false;
+  "iso-filename"?: string = "";
+  "keep-window"?: boolean = true;
+  "main-ghost-filename"?: string = "";
+  "mk-channel-ghost-description"?: string = "";
+  "music-filename"?: string = "";
+  "music-volume"?: number = 1.0;
+  "no-background-blur"?: boolean = true;
+  "no-bloom"?: boolean = false;
+  "no-music"?: boolean = false;
+  "no-music-mkchannel"?: boolean = false;
+  "on-200cc"?: boolean = false;
+  "output-video-filename"?: string = "";
+  "output-width"?: number = 2560;
+  "output-width-custom"?: void;
+  "pixel-format"?: string = "yuv420p";
+  "set-200cc"?: void;
+  "speedometer"?: SpeedometerStyle = "fancy";
+  "speedometer-style"?: void;
+  "speedometer-decimal-places"?: SpeedometerDecimalPlacesNumeric = 1;
+  "speedometer-decimal-places-str"?: void;
+  "speedometer-metric"?: SpeedometerMetric = "engine";
+  "start-music-at-beginning"?: boolean = false;
+  "szs-filename"?: string = "";
+  "timeline"?: Timeline = "mkchannel";
+  "top-10-chadsoft"?: string = "";
+  "top-10-gecko-code-filename"?: string = "";
+  "top-10-highlight"?: number = 1;
+  "top-10-location"?: Top10LocationFull = "worldwide";
+  "top-10-title"?: string = "";
+  "track-name"?: string = "";
+  "use-ffv1"?: boolean = false;
+  "video-codec"?: VideoCodec = "libx264";
+  "youtube-settings"?: boolean = true;
+}
+
+// The actual auto-tt-recorder arguments type used by most of the code,
+// extended from the above class AutoTTRecArgsClass for greater type
+// manipulation with TypeScript
+export interface AutoTTRecArgs extends AutoTTRecArgsClass {}
+
+// The object created from instantiating the base form data class
+// which allows us to access default values and create other data structures
+// Because of TypeScript limitations, we will have to use `as` assertions to set the type
+// of the data structures we create from the object containing the default values
+// Actually, the only objects created are related to the argument names,
+// and the default values go unused
 const autoTTRecArgsClassObj = new AutoTTRecArgsClass();
 
-export interface AutoTTRecArgs extends AutoTTRecArgsClass {}
-//type AutoTTRecArgsNoNever = ExcludeNever<AutoTTRecArgs>;
+// A type indicating a possible auto-tt-recorder command name defined in AutoTTRecArgsClass
+type AutoTTRecArgName = keyof AutoTTRecArgs;
+// A type describing an array with all of the auto-tt-recorder command names defined in AutoTTRecArgsClass
+type AutoTTRecArgNamesArray = Array<keyof AutoTTRecArgs>;
+// The actual array as described by the above type
+const AUTO_TT_REC_ARG_NAMES = makeReadonlyArraySet(Object.keys(autoTTRecArgsClassObj) as AutoTTRecArgNamesArray);
 
+// An ArraySet containing the "auto"-based ghost commands
+// This is only used to create a type containing the possible "auto"-based ghost commands
+const GHOST_AUTO_ARG_NAMES = makeReadonlyArraySet(["main-ghost-auto", "comparison-ghost-auto"] as const);
+// An ArraySet containing the auto-tt-recorder commands unsupported by the program at this time
+const UNSUPPORTED_ARG_NAMES = makeReadonlyArraySet(["top-10-censors", "ending-message", "dolphin-volume", "unbuffered-output"] as const);
+// An ArraySet containing auto-tt-recorder commands supported by the program
+// but are preprocessed or ignored before the conversion step
+const OTHER_EXTENDED_ONLY_ARG_NAMES = makeReadonlyArraySet(["no-200cc", "ffmpeg-filename", "ffprobe-filename"] as const);
+
+// An ArraySet containing all of the auto-tt-recorder commands which can be found in a config file
+// but are not included in the auto-tt-recorder config file generated by the program
+const AUTO_TT_REC_ARG_NAMES_EXTENDED_ONLY = makeReadonlyArraySet([...GHOST_AUTO_ARG_NAMES.arr, ...UNSUPPORTED_ARG_NAMES.arr, ...OTHER_EXTENDED_ONLY_ARG_NAMES.arr] as const);
+
+// An ArraySet containing both the "extended only" auto-tt-recorder commands described above
+// as well as the auto-tt-recorder commands which are used when exporting.
+const AUTO_TT_REC_ARG_NAMES_EXTENDED = makeReadonlyArraySet([
+  ...AUTO_TT_REC_ARG_NAMES.arr,
+  ...AUTO_TT_REC_ARG_NAMES_EXTENDED_ONLY.arr] as const);
+
+// Below are types which correspond to the possible values of the ArraySets defined above
+export type AutoTTRecExtendedOnlyArgName = ValidValues<typeof AUTO_TT_REC_ARG_NAMES_EXTENDED_ONLY>;
+type AutoTTRecUnsupportedArgName = ValidValues<typeof UNSUPPORTED_ARG_NAMES>;
+type GhostAutoArgName = ValidValues<typeof GHOST_AUTO_ARG_NAMES>;
+type AutoTTRecArgNameExtended = ValidValues<typeof AUTO_TT_REC_ARG_NAMES_EXTENDED>;
+
+// A type describing the possible names for both auto-tt-recorder commands (combined extended-only and non-extended)
+// and the possible names in AutoTTRecConfigFormFields
+type AutoTTRecArgExtendedAndFormFieldName = AutoTTRecArgNameExtended | AutoTTRecConfigFormFieldName;
+
+// A helper type which removes any fields in an object-like type that extend void
 type WithoutVoid<T> = {
   [P in keyof T as T[P] extends void ? never : P]: T[P]
 };
 
+// A type describing all "real" auto-tt-recorder command
+// void is used in the AutoTTRecArgs class to indicate a command that is not
+// actually an auto-tt-recorder command (i.e. a "fake"/non-"real" command)
+// but is generated during the preprocessing stage, to allow a "straight copy"
+// to be done between the auto-tt-recorder config object and the form data object
 type AutoTTRecRealArgs = WithoutVoid<AutoTTRecArgs>;
+
+// A type describing the possible real auto-tt-recorder command names
 type AutoTTRecRealArgName = keyof AutoTTRecRealArgs;
 
-//export type AutoTTRecArgs = PartialNull<AutoTTRecArgsWithoutNulls>;
-type AutoTTRecArgNamesType = Array<keyof AutoTTRecArgs>;
+// An array containing all the valid locations for the `top-10-location` option of auto-tt-recorder.
+// This array is currently only used to derive the type (Top10LocationFull)
+const AUTO_TT_REC_TOP_10_LOCATIONS = makeReadonlyArraySet(["ww", "worldwide", ...COUNTRY_LOCATIONS.arr, ...REGIONAL_LOCATIONS.arr] as const);
+// A type describing the possible values of the `top-10-location` option of auto-tt-recorder
+type Top10LocationFull = ValidValues<typeof AUTO_TT_REC_TOP_10_LOCATIONS>;
 
-type AutoTTRecArgName = keyof AutoTTRecArgs;
-
-const GHOST_AUTO_ARG_NAMES = makeReadonlyArraySet(["main-ghost-auto", "comparison-ghost-auto"] as const);
-const UNSUPPORTED_ARG_NAMES = makeReadonlyArraySet(["top-10-censors", "ending-message", "dolphin-volume", "unbuffered-output"] as const);
-const OTHER_EXTENDED_ONLY_ARG_NAMES = makeReadonlyArraySet(["no-200cc", "ffmpeg-filename", "ffprobe-filename"] as const);
-const AUTO_TT_REC_ARG_NAMES_EXTENDED_ONLY = makeReadonlyArraySet([...GHOST_AUTO_ARG_NAMES.arr, ...UNSUPPORTED_ARG_NAMES.arr, ...OTHER_EXTENDED_ONLY_ARG_NAMES.arr] as const);
-
-type AutoTTRecExtendedOnlyArgName = ValidValues<typeof AUTO_TT_REC_ARG_NAMES_EXTENDED_ONLY>;
-type AutoTTRecUnsupportedArgName = ValidValues<typeof UNSUPPORTED_ARG_NAMES>;
-type GhostAutoArgName = ValidValues<typeof GHOST_AUTO_ARG_NAMES>;
-
-const AUTO_TT_REC_ARG_NAMES = makeReadonlyArraySet(Object.keys(autoTTRecArgsClassObj) as AutoTTRecArgNamesType);
-
-const AUTO_TT_REC_ARG_NAMES_EXTENDED = makeReadonlyArraySet([
-    ...AUTO_TT_REC_ARG_NAMES.arr,
-    ...AUTO_TT_REC_ARG_NAMES_EXTENDED_ONLY.arr] as const);
-
-type AutoTTRecArgNameExtended = ValidValues<typeof AUTO_TT_REC_ARG_NAMES_EXTENDED>;
-type AutoTTRecArgExtendedAndFormFieldName = AutoTTRecArgNameExtended | AutoTTRecConfigFormFieldName;
-
-export interface AutoTTRecConfigImporterError {
-  option: AutoTTRecArgName,
-  messages: string[]
+function isFILLMEOrEmptyOrNull(x: any): x is "<FILLME>" | "" | null {
+  return x === null || x === "" || x === "<FILLME>";
 }
-
-// type AutoTTRecPrimitiveArgs = Pick<AutoTTRecArgs, {
-//   [K in keyof AutoTTRecArgs]-?:
-//     IfEquals<AutoTTRecArgs[K], (string | undefined | null), K,
-//       IfEquals<AutoTTRecArgs[K], (number | undefined | null), K,
-//         IfEquals<AutoTTRecArgs[K], (boolean | undefined | null), K, never>
-//       >
-//     >
-// }[keyof AutoTTRecArgs]>;
-
-interface AutoTTRecConfigImporterErrorOrWarningMessage {
-  isWarning: boolean,
-  message: string
-}
-
 function validateFormDataNonPartial(formData: AutoTTRecConfigFormFieldsPartial, errorsAndWarnings: AutoTTRecConfigErrorsAndWarnings) {
   for (const argName of AUTO_TT_REC_CONFIG_FORM_FIELD_NAMES) {
     if (formData[argName] === undefined) {
@@ -488,6 +523,16 @@ export function makeMinimalFormData(formComplexity: FormComplexity, timelineCate
 }
 
 const listFormatter = new Intl.ListFormat("en", {style: "long", type: "disjunction"});
+
+interface AutoTTRecConfigImporterError {
+  option: AutoTTRecArgName,
+  messages: string[]
+}
+
+interface AutoTTRecConfigImporterErrorOrWarningMessage {
+  isWarning: boolean,
+  message: string
+}
 
 class AutoTTRecConfigErrorsAndWarnings {
   private _errorsAndWarnings: Map<AutoTTRecArgExtendedAndFormFieldName, AutoTTRecConfigImporterErrorOrWarningMessage[]>;
@@ -787,7 +832,7 @@ class AutoTTRecConfigImporter {
   private hasImported: boolean;
   private autoTTRecConfig: AutoTTRecConfig;
   private errorsAndWarnings: AutoTTRecConfigErrorsAndWarnings;
-  private configArgWasNullOrDisallowedFILLMESet: Set<AutoTTRecConfigFormStringArgName | AutoTTRecConfigFormChoiceArgName | AutoTTRecConfigFormNumberArgName | AutoTTRecConfigFormBooleanArgName>;
+  private configArgWasNullOrDisallowedFILLMESet: Set<AutoTTRecConfigFormStringArgName | AutoTTRecConfigFormChoiceArgName | AutoTTRecConfigFormNumberArgName | AutoTTRecConfigFormBooleanArgName | "form-complexity">;
   private autoTTRecConfigFilename: string;
 
   constructor(autoTTRecConfig: AutoTTRecConfig, errorsAndWarnings: AutoTTRecConfigErrorsAndWarnings, autoTTRecConfigFilename: string) {
@@ -803,7 +848,7 @@ class AutoTTRecConfigImporter {
     this.formData[key] = DEFAULT_FORM_VALUES[key];
   }
 
-  public isArgValueNull_addDefaultIfNull<K extends AutoTTRecConfigFormNonSpecialFieldName>(key: K, value: string | number | boolean | null): value is null {
+  public isArgValueNull_addDefaultIfNull<K extends AutoTTRecConfigFormFieldName>(key: K, value: string | number | boolean | null): value is null {
     if (value === null) {
       this.addDefault(key);
       this.configArgWasNullOrDisallowedFILLMESet.add(key);

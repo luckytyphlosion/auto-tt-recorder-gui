@@ -5,7 +5,7 @@ import { GameVolumeInput } from "./GameVolumeInput";
 import { MusicVolumeInput } from "./MusicVolumeInput";
 import { MusicPresentationInput } from "./MusicPresentationInput";
 import { FormComplexity } from "../layout_components/FormComplexityLayout";
-import { Timeline } from "../../AutoTTRecFormFieldsAndArgs";
+import { Timeline } from "../layout_components/choice_layouts/NoTop10CategoryLayout";
 import { DeselectableDropdown } from "../DeselectableDropdown";
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
 

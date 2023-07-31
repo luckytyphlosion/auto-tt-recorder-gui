@@ -16,6 +16,9 @@ import { makeReadonlyArraySet, ValidValues } from "../../../../shared/array-set"
 export const NO_TOP_10_CATEGORIES = makeReadonlyArraySet(["mkchannel", "ghostselect", "ghostonly", "noencode"] as const);
 export type NoTop10Category = ValidValues<typeof NO_TOP_10_CATEGORIES>;
 
+export const TIMELINES = makeReadonlyArraySet([...NO_TOP_10_CATEGORIES.arr, "top10"] as const);
+export type Timeline = ValidValues<typeof TIMELINES>;
+
 const OutputVideoFilenameInput_Memo = memo(OutputVideoFilenameInput);
 export function NoTop10CategoryLayout(props: {isAutoTTRecRunning: boolean, formComplexity: FormComplexity}) {
   const {register, getValues} = useFormContextAutoTT();

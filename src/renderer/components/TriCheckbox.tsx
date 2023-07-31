@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Control, Controller, RefCallBack, UseFormSetValue, UseFormGetValues } from 'react-hook-form';
 import { useFormContextAutoTT } from "../use-form-context-auto-tt";
-import { AutoTTRecConfigFormFields, AutoTTRecConfigFormTriCheckboxFields } from "../AutoTTRecFormFieldsAndArgs";
+import { AutoTTRecConfigFormFields, AutoTTRecConfigFormBooleanArgs } from "../AutoTTRecFormFieldsAndArgs";
 import { SimpleErrorMessage } from "./SimpleErrorMessage";
 import { BooleanFILLME } from "../../shared/shared-types";
 
@@ -88,7 +88,7 @@ type ExcludeNoArgFuncTest2 = FuncExtendsNoArgVoid<typeof onChange243>;
 
 type NoArgExtendsTest = (() => {}) extends (() => void) ? true : false;
 
-export function TriCheckbox<K extends keyof AutoTTRecConfigFormTriCheckboxFields>(
+export function TriCheckbox<K extends keyof AutoTTRecConfigFormBooleanArgs>(
   props: {
     name: K,
     onChange?: TriCheckboxUserOnChangeDecl,
