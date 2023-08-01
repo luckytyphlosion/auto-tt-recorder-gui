@@ -67,8 +67,8 @@ export function ImportTemplate(props: {
         //setNewFormDataToggle((formDataToggle) => !formDataToggle);
         console.log("newFormData:", newFormData);
       }
+      setModalOpen(true);
     }
-    setModalOpen(true);
   }
 
   function importTemplateModal_cancel(event: React.MouseEvent<HTMLButtonElement>) {
@@ -93,7 +93,7 @@ export function ImportTemplate(props: {
         shouldCloseOnOverlayClick={false}
         contentLabel="Save Gecko Code Dialog"
       >
-        <h3>Errors occurred on import</h3>
+        <h3>Errors/warnings occurred on import (none if empty)</h3>
         <TextareaAutosize className="import-template-modal-textarea" value={errorWarningData} readOnly/>
         <button onClick={importTemplateModal_cancel}>Ok</button>
       </Modal>
