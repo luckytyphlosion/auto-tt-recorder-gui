@@ -42,6 +42,7 @@ class AutoTTRecArgsClass {
   "encode-size"?: number = 52428800;
   "encode-type"?: EncodeType = "crf";
   "ending-delay"?: number = 600;
+  "ending-message"?: string = "";
   "extra-gecko-codes-filename"?: string = "";
   "extra-hq-textures-folder"?: string = "";
   "fade-in-at-start"?: boolean = false;
@@ -110,7 +111,7 @@ const AUTO_TT_REC_ARG_NAMES = makeReadonlyArraySet(Object.keys(autoTTRecArgsClas
 // This is only used to create a type containing the possible "auto"-based ghost commands
 const GHOST_AUTO_ARG_NAMES = makeReadonlyArraySet(["main-ghost-auto", "comparison-ghost-auto"] as const);
 // An ArraySet containing the auto-tt-recorder commands unsupported by the program at this time
-export const UNSUPPORTED_ARG_NAMES = makeReadonlyArraySet(["top-10-censors", "ending-message", "dolphin-volume", "unbuffered-output"] as const);
+export const UNSUPPORTED_ARG_NAMES = makeReadonlyArraySet(["top-10-censors", "dolphin-volume", "unbuffered-output"] as const);
 // An ArraySet containing auto-tt-recorder commands supported by the program
 // but are preprocessed or ignored before the conversion step
 const OTHER_EXTENDED_ONLY_ARG_NAMES = makeReadonlyArraySet(["no-200cc", "ffmpeg-filename", "ffprobe-filename"] as const);

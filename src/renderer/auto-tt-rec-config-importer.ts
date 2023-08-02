@@ -479,6 +479,7 @@ export class AutoTTRecConfigImporter {
     this.importSharedNumberArg("top-10-highlight");    
 
     this.importSharedStringArg("chadsoft-cache-expiry");
+    this.importSharedStringArg("ending-message");
 
   }
 

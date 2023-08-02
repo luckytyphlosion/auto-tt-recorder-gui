@@ -239,7 +239,9 @@ export function convertFormDataToAutoTTRecArgs(formData: AutoTTRecConfigFormFiel
   if (!formData["chadsoft-read-cache"]) {
     formData["chadsoft-cache-expiry"] = "24h";
   }
+  argsBuilder.add("ending-message");
   argsBuilder.add("output-video-filename");
+  
 
   return argsBuilder.autoTTRecArgs;
 }

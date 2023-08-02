@@ -78,6 +78,7 @@ class AutoTTRecConfigFormFieldsSomeFILLMEClass {
   "encode-size-unit": EncodeSizeUnit = "mib"; // internal
   "encode-type": EncodeType = "crf"; // choice
   "ending-delay": number = 600; // number
+  "ending-message": string = "Video recorded by https://bit.ly/AutoTTRecorderGUI"; // string
   "extra-gecko-codes-enable": boolean = false; // checkbox
   "extra-gecko-codes-contents": string = ""; // arbitrary
   "extra-gecko-codes-filename": string = ""; // arbitrary
@@ -270,6 +271,7 @@ export const MINIMAL_FORM_VALUES: AutoTTRecConfigFormMinimalFields = {
   "encode-size-unit": "<FILLME>",
   "encode-type": "<FILLME>",
   "ending-delay": NaN,
+  "ending-message": "<FILLME>",
   "extra-gecko-codes-enable": "<FILLME>",
   "extra-gecko-codes-contents": "",
   "extra-gecko-codes-filename": "",

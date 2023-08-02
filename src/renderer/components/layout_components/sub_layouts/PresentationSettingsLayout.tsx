@@ -4,7 +4,7 @@ import { FormComplexity } from "../FormComplexityLayout";
 import { FadeInAtStartInput } from "../../form_components/FadeInAtStartInput";
 import { EndingDelayInput } from "../../form_components/EndingDelayInput";
 import { InputDisplayDontCreateInput } from "../../form_components/InputDisplayDontCreateInput";
-import { KeepWindowInput } from "../../form_components/KeepWindowInput";
+import { EndingMessageInput } from "../../form_components/EndingMessageInput";
 
 export function PresentationSettingsLayout(props: {formComplexity: FormComplexity, enableFadeInAtStart: boolean}) {
   return <>{
@@ -15,6 +15,7 @@ export function PresentationSettingsLayout(props: {formComplexity: FormComplexit
         props.enableFadeInAtStart ? <FadeInAtStartInput/> : ""
       }
       <EndingDelayInput/>
+      <EndingMessageInput/>
     </> : ""
   }</>
 }
