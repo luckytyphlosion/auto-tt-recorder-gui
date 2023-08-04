@@ -47,7 +47,7 @@ import { isInSet } from "../shared/util-shared";
 
 import { AutoTTRecConfigFormStringArgs, AutoTTRecConfigFormFieldsPartial, AUTO_TT_REC_CONFIG_FORM_FIELD_NAMES, DEFAULT_FORM_VALUES, AutoTTRecConfigFormFields, AutoTTRecConfigFormFieldName, AutoTTRecConfigFormStringArgName, AutoTTRecConfigFormChoiceArgName, AutoTTRecConfigFormNumberArgName, AutoTTRecConfigFormBooleanArgName, AutoTTRecConfigFormSharedStringArgName, AutoTTRecConfigFormSharedChoiceArgName, AutoTTRecConfigFormSharedNumberArgName, AutoTTRecConfigFormSharedBooleanArgName, AutoTTRecConfigFormChoiceArgs, BothGhostSource, AutoTTRecConfigFormPathnameArgName, AutoTTRecConfigFormSharedPathnameArgName } from "./auto-tt-rec-form-field-types";
 
-import { AutoTTRecExportArgName, AutoTTRecExportArgs } from "./auto-tt-rec-args-types";
+import { AutoTTRecExportArgName, AutoTTRecExportArgs, Top10LocationExport } from "./auto-tt-rec-args-types";
 
 import { AutoTTRecConfigErrorsAndWarnings } from "./auto-tt-rec-errors-and-warnings";
 
@@ -377,6 +377,52 @@ export class AutoTTRecConfigExporter {
     } else {
       this.exportArg("top-10-highlight", this.getFormDataNumberValue("top-10-highlight"));
     }
+  }
+
+  private exportTop10Location() {
+    let timelineCategory = this.getFormDataChoiceValue("timeline-category");
+    let top10LocationRegion = this.getFormDataChoiceValue("top-10-location-region");
+    let top10LocationRegionalLocation = this.getFormDataChoiceValue("top-10-location-regional-location");
+    let top10LocationCountryLocation = this.getFormDataChoiceValue("top-10-location-country-location");
+    let top10Location: Top10LocationExport;
+
+    if (timelineCategory === "top10gecko") {
+      let top10GeckoCodeLocationRegion = this.getFormDataChoiceValue("top-10-gecko-code-location-region");
+      if (top10GeckoCodeLocationRegion === "worldwide") {
+        top10Location = "worldwide";
+      } else if (top10GeckoCodeLocationRegion === "regional") {
+        if (top10LocationRegion === "worldwide") {
+          top10Location = "regional";
+        } else if (top10LocationRegion === "regional" && top10LocationRegionalLocation !== "<FILLME>") {
+          top10Location = top10LocationRegionalLocation;
+        } else if (top10LocationRegion === "country" && top10LocationCountryLocation !== "<FILLME>") {
+          top10Location = top10LocationCountryLocation;
+        } else {
+          top10Location = "regional";
+        }
+      } else {
+        top10Location = "<FILLME>";
+      }
+    } else {
+      if (top10LocationRegion === "worldwide") {
+        top10Location = "worldwide";
+      } else if (top10LocationRegion === "regional") {
+        if (top10LocationRegionalLocation === "<FILLME>") {
+          top10Location = "regional";
+        } else {
+          top10Location = top10LocationRegionalLocation;
+        }
+      } else if (top10LocationRegion === "country") {
+        if (top10LocationCountryLocation === "<FILLME>") {
+          top10Location = "country";
+        } else {
+          top10Location = top10LocationCountryLocation;
+        }
+      } else {
+        top10Location = "<FILLME>";
+      }
+    }
+    this.exportArg("top-10-location", top10Location);
   }
 
   public async export(): Promise<AutoTTRecExportArgs> {

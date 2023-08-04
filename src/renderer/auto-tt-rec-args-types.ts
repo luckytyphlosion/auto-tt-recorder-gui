@@ -150,16 +150,24 @@ export type AutoTTRecRealArgName = keyof AutoTTRecRealArgs;
 // An array containing all the valid locations for the `top-10-location` option of auto-tt-recorder.
 // This array is currently only used to derive the type (Top10LocationFull)
 const AUTO_TT_REC_TOP_10_LOCATIONS = makeReadonlyArraySet(["ww", "worldwide", ...COUNTRY_LOCATIONS.arr, ...REGIONAL_LOCATIONS.arr] as const);
+
 // A type describing the possible values of the `top-10-location` option of auto-tt-recorder
 export type Top10LocationFull = ValidValues<typeof AUTO_TT_REC_TOP_10_LOCATIONS>;
+export type Top10LocationExport = Top10LocationFull | "regional" | "country";
 
 // A helper type which includes <FILLME> and null to every field in the object-like type.
 type IncludeFILLMENull<T> = {
   [P in keyof T]: T[P] | "<FILLME>" | null;
 }
 
+// A helper type to override the type of "top-10-location" to support special values for templates
+type ExtendTop10LocationForTemplateExport<T> = {
+  [P in keyof T]: P extends "top-10-location" ? T[P] | Top10LocationExport : T[P];
+}
+
 // A type specifically for the template exporter which allows <FILLME> and null values
-export type AutoTTRecExportArgs = IncludeFILLMENull<AutoTTRecRealArgs>;
+// as well as overriding the type of "top-10-location" as described above
+export type AutoTTRecExportArgs = ExtendTop10LocationForTemplateExport<IncludeFILLMENull<AutoTTRecRealArgs>>;
 
 // A type describing the possible names of the auto-tt-recorder args that can be exported 
 export type AutoTTRecExportArgName = keyof AutoTTRecExportArgs;
