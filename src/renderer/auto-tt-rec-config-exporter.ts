@@ -425,6 +425,15 @@ export class AutoTTRecConfigExporter {
     this.exportArg("top-10-location", top10Location);
   }
 
+  private exportTop10Title() {
+    let top10TitleType = this.getFormDataChoiceValue("top-10-title-type");
+    if (top10TitleType === "auto") {
+      this.exportArg("top-10-title", "auto");
+    } else {
+      this.exportSharedStringArg("top-10-title");
+    }
+  }
+
   public async export(): Promise<AutoTTRecExportArgs> {
     if (!this.hasExported) {
       this.exportStraightCopyArgs();
