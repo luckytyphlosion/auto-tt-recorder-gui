@@ -246,6 +246,17 @@ export class AutoTTRecConfigExporter {
     this.exportArg("music-volume", this.getNumberArg_reduceNaNToFILLME("music-volume-numberinput"));
   }
 
+  private exportMusicFilename() {
+    let backgroundMusicSource = this.getFormDataValue("background-music-source");
+    if (backgroundMusicSource === "game-bgm") {
+      this.exportArg("music-filename", "bgm");
+    } else if (backgroundMusicSource === "none") {
+      this.exportArg("music-filename", "none");
+    } else {
+      this.exportSharedStringArg("music-filename");
+    }
+  }
+
   public async export(): Promise<AutoTTRecExportArgs> {
     if (!this.hasExported) {
       this.exportStraightCopyArgs();
