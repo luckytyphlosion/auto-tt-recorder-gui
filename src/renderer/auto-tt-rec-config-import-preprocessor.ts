@@ -14,7 +14,7 @@ function isFILLMEOrEmptyOrNull(x: any): x is "<FILLME>" | "" | null {
   return x === null || x === "" || x === "<FILLME>";
 }
 
-export class AutoTTRecConfigPreprocessor {
+export class AutoTTRecConfigImportPreprocessor {
   private autoTTRecConfig: AutoTTRecConfig;
   private errorsAndWarnings: AutoTTRecConfigErrorsAndWarnings;
   private autoTTRecConfigImporter: AutoTTRecConfigImporter | null;

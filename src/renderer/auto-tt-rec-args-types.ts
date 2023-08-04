@@ -153,7 +153,7 @@ const AUTO_TT_REC_TOP_10_LOCATIONS = makeReadonlyArraySet(["ww", "worldwide", ..
 // A type describing the possible values of the `top-10-location` option of auto-tt-recorder
 export type Top10LocationFull = ValidValues<typeof AUTO_TT_REC_TOP_10_LOCATIONS>;
 
-// A helper type which includes <FILLME> from every field in the object-like type.
+// A helper type which includes <FILLME> and null to every field in the object-like type.
 type IncludeFILLMENull<T> = {
   [P in keyof T]: T[P] | "<FILLME>" | null;
 }

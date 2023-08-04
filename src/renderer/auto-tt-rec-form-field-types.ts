@@ -346,3 +346,10 @@ export const AUTO_TT_REC_CONFIG_FORM_FIELD_NAMES = Object.keys(autoTTRecConfigFo
 
 // A type describing the possible sources of both the main and comparison ghost
 export type BothGhostSource = MainGhostSource | ComparisonGhostSource;
+
+// A helper type which includes <FILLME> to every field in the object-like type.
+type IncludeFILLME<T> = {
+  [P in keyof T]: T[P] | "<FILLME>" | null;
+}
+
+export type AutoTTRecConfigFormExportFields = IncludeFILLME<AutoTTRecConfigFormFields>;

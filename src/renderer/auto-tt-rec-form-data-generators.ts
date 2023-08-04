@@ -12,7 +12,7 @@ import { shallowCopy } from "../shared/util-shared";
 import { AUTO_TT_REC_CONFIG_FORM_FIELD_NAMES, AutoTTRecConfigFormFields, MINIMAL_FORM_VALUES, DEFAULT_FORM_VALUES } from "./auto-tt-rec-form-field-types";
 
 import { AutoTTRecConfigErrorsAndWarnings } from "./auto-tt-rec-errors-and-warnings";
-import { AutoTTRecConfigPreprocessor } from "./auto-tt-rec-config-preprocessor";
+import { AutoTTRecConfigImportPreprocessor } from "./auto-tt-rec-config-import-preprocessor";
 
 export function makeMinimalFormData(formComplexity: FormComplexity, timelineCategory: TimelineCategory, noTop10Category: NoTop10Category) {
   let formData: AutoTTRecConfigFormFields = shallowCopy(MINIMAL_FORM_VALUES);
@@ -43,7 +43,7 @@ export function makeDefaultFormData(formComplexity: FormComplexity, timelineCate
 
 export async function convertAutoTTRecConfigToFormData(autoTTRecConfig: AutoTTRecConfig, autoTTRecConfigFilename: string, oldFormComplexity: FormComplexity): Promise<[AutoTTRecConfigFormFields, string]> {
   let errorsAndWarnings = new AutoTTRecConfigErrorsAndWarnings();
-  let autoTTRecConfigPreprocessor = new AutoTTRecConfigPreprocessor(autoTTRecConfig, errorsAndWarnings, autoTTRecConfigFilename, oldFormComplexity);
+  let autoTTRecConfigPreprocessor = new AutoTTRecConfigImportPreprocessor(autoTTRecConfig, errorsAndWarnings, autoTTRecConfigFilename, oldFormComplexity);
   let autoTTRecConfigImporter = autoTTRecConfigPreprocessor.preprocess();
   let autoTTRecConfigFormFields = await autoTTRecConfigImporter.import();
   let errorsAndWarningsStr = errorsAndWarnings.compile();

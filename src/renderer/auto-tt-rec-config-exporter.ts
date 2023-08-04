@@ -43,7 +43,7 @@ import { ReadonlyArraySet } from "../shared/array-set";
 
 import { isInSet } from "../shared/util-shared";
 
-import { AutoTTRecConfigFormFieldsPartial, AUTO_TT_REC_CONFIG_FORM_FIELD_NAMES, DEFAULT_FORM_VALUES, AutoTTRecConfigFormFields, AutoTTRecConfigFormFieldName, AutoTTRecConfigFormStringArgName, AutoTTRecConfigFormChoiceArgName, AutoTTRecConfigFormNumberArgName, AutoTTRecConfigFormBooleanArgName, AutoTTRecConfigFormSharedStringArgName, AutoTTRecConfigFormSharedChoiceArgName, AutoTTRecConfigFormSharedNumberArgName, AutoTTRecConfigFormSharedBooleanArgName, AutoTTRecConfigFormChoiceArgs, BothGhostSource, AutoTTRecConfigFormPathnameArgName, AutoTTRecConfigFormSharedPathnameArgName } from "./auto-tt-rec-form-field-types";
+import { AutoTTRecConfigFormStringArgs, AutoTTRecConfigFormFieldsPartial, AUTO_TT_REC_CONFIG_FORM_FIELD_NAMES, DEFAULT_FORM_VALUES, AutoTTRecConfigFormFields, AutoTTRecConfigFormFieldName, AutoTTRecConfigFormStringArgName, AutoTTRecConfigFormChoiceArgName, AutoTTRecConfigFormNumberArgName, AutoTTRecConfigFormBooleanArgName, AutoTTRecConfigFormSharedStringArgName, AutoTTRecConfigFormSharedChoiceArgName, AutoTTRecConfigFormSharedNumberArgName, AutoTTRecConfigFormSharedBooleanArgName, AutoTTRecConfigFormChoiceArgs, BothGhostSource, AutoTTRecConfigFormPathnameArgName, AutoTTRecConfigFormSharedPathnameArgName } from "./auto-tt-rec-form-field-types";
 
 import { AutoTTRecExportArgName, AutoTTRecExportArgs } from "./auto-tt-rec-args-types";
 
@@ -53,11 +53,36 @@ export class AutoTTRecConfigExporter {
   private formData: AutoTTRecConfigFormFields;
   private hasExported: boolean;
   private autoTTRecExportArgs: AutoTTRecExportArgs;
+  private errorsAndWarnings: AutoTTRecConfigErrorsAndWarnings;
 
-  constructor(formData: AutoTTRecConfigFormFields) {
+  constructor(formData: AutoTTRecConfigFormFields, errorsAndWarnings: AutoTTRecConfigErrorsAndWarnings) {
     this.formData = formData;
     this.hasExported = false;
     this.autoTTRecExportArgs = {};
+    this.errorsAndWarnings = errorsAndWarnings;
+  }
+
+  private getStringArg_reduceFILLME<K extends AutoTTRecConfigFormStringArgName>(key: K): string {
+    let value = this.formData[key];
+    if (typeof value === "number") {
+      this.errorsAndWarnings.addWarning(key, `formData[${key}] was somehow number! (this is an error within the program itself and not your fault, please contact the developer!)`);
+      value = value.toString();
+      this.formData[key] = value;
+    } else if (value === "<FILLME>") {
+      this.formData[key] = "";
+      value = "";
+    }
+
+    return value;
+  }
+
+  private getStringArg_reduceFILLMEToNull<K extends AutoTTRecConfigFormStringArgName>(key: K): string | null {
+    let value = this.getStringArg_reduceFILLME(key);
+    if (value === "") {
+      return null;
+    } else {
+      return value;
+    }
   }
 
   private exportSharedStringArg<K extends AutoTTRecExportArgName & AutoTTRecConfigFormStringArgName>(key: K) {
@@ -84,6 +109,10 @@ export class AutoTTRecConfigExporter {
 
   private exportSharedChoiceArg<K extends AutoTTRecExportArgName & AutoTTRecConfigFormChoiceArgName>(key: K) {
     this.autoTTRecExportArgs[key] = this.formData[key];
+  }
+
+  private exportArg<K extends AutoTTRecExportArgName, V extends AutoTTRecExportArgs[K]>(key: K, value: V) {
+    this.autoTTRecExportArgs[key] = value;
   }
 
   private exportStraightCopyArgs() {
@@ -119,6 +148,30 @@ export class AutoTTRecConfigExporter {
     this.exportSharedBooleanArg("youtube-settings");
   }
 
+  private exportGhostPageAndFilename(isMainGhost: boolean) {
+    let [ghostPageArgName, ghostFilenameArgName, ghostSourceArgName]: ["chadsoft-ghost-page", "main-ghost-filename", "main-ghost-source"] | ["chadsoft-comparison-ghost-page", "comparison-ghost-filename", "comparison-ghost-source"] = isMainGhost ? ["chadsoft-ghost-page", "main-ghost-filename", "main-ghost-source"] : ["chadsoft-comparison-ghost-page", "comparison-ghost-filename", "comparison-ghost-source"];
+
+    let ghostFilenameValue_nullIfFILLME = this.getStringArg_reduceFILLMEToNull(ghostFilenameArgName);
+    let ghostSourceValue = this.formData[ghostSourceArgName];
+
+    if (ghostSourceValue === "chadsoft") {
+      this.exportSharedStringArg(ghostPageArgName);
+      this.exportArg(ghostFilenameArgName, ghostFilenameValue_nullIfFILLME);
+    } else if (ghostSourceValue === "rkg") {
+      this.exportArg(ghostPageArgName, null);
+      this.exportSharedStringArg(ghostFilenameArgName);
+    } else if (ghostSourceValue === "none") {
+      this.exportArg(ghostPageArgName, null);
+      this.exportArg(ghostFilenameArgName, null);
+    } else if (ghostSourceValue === "<FILLME>") {
+      this.exportArg(ghostPageArgName, "<FILLME>");
+      this.exportArg(ghostFilenameArgName, "<FILLME>");
+    }
+  }
+
+  private exportAudioBitrate() {
+    
+  }
   public async export(): Promise<AutoTTRecExportArgs> {
     if (!this.hasExported) {
       this.exportStraightCopyArgs();
