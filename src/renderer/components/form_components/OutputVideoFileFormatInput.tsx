@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
+import { useFormContextAutoTT, isValueOrFILLMEIsValueMaker } from "../../use-form-context-auto-tt";
 import { MusicFilenameInput } from "./MusicFilenameInput";
 import { Top10LocationRegionalInput } from "./Top10LocationRegionalInput";
 import { FormComplexity } from "../layout_components/FormComplexityLayout";
@@ -17,6 +17,7 @@ export type OutputVideoFileFormat = ValidValues<typeof OUTPUT_VIDEO_FILE_FORMATS
 export function OutputVideoFileFormatInput(props: {videoCodec: VideoCodec, formComplexity: FormComplexity, addSizeBasedReminderToLabel: boolean}) {
   const {getValues, setValue} = useFormContextAutoTT();
   const renderCounter = useRenderCounter();
+  const isValueOrFILLMEIsValue = isValueOrFILLMEIsValueMaker();
 
   useEffect(() => {
     let outputVideoFileFormat = getValues("output-video-file-format");
@@ -56,8 +57,8 @@ export function OutputVideoFileFormatInput(props: {videoCodec: VideoCodec, formC
           props.formComplexity === FormComplexity.ALL ? 
           (
             <>
-              {props.videoCodec === "libvpx-vp9" || props.videoCodec === "<FILLME>" ? <option value="webm">webm</option> : ""}
-              {props.videoCodec === "libx264" || props.videoCodec === "libx265" || props.videoCodec === "<FILLME>" ? <option value="mp4">mp4</option> : ""}
+              {isValueOrFILLMEIsValue(props.videoCodec, "libvpx-vp9") ? <option value="webm">webm</option> : ""}
+              {isValueOrFILLMEIsValue(props.videoCodec, "libx264", "libx265") ? <option value="mp4">mp4</option> : ""}
               <option value="mkv">mkv</option>
             </>
           ) : (

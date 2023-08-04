@@ -1,6 +1,6 @@
 
 import React, { useState, useRef } from "react";
-import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
+import { useFormContextAutoTT, isValueOrFILLMEIsValueMaker } from "../../use-form-context-auto-tt";
 
 import { ExtraHQTexturesFolderInput } from "./ExtraHQTexturesFolderInput";
 import { DolphinResolution } from "./DolphinResolutionInput";
@@ -16,6 +16,7 @@ export function HQTexturesInput(props: {isDolphinResolution480p: boolean, dolphi
   //const dolphinResolutionToggleRef = useRef(!props.dolphinResolutionToggle);
   const renderCounter = useRenderCounter(false, "HQTexturesInput");
   const [dolphinResolutionToggle, setDolphinResolutionToggle] = useState(props.dolphinResolutionToggle);
+  const isValueOrFILLMEIsValue = isValueOrFILLMEIsValueMaker();
 
   function updateHQTexturesEnabled(newValue: BooleanFILLME) {
     setHqTexturesEnabled(newValue);
@@ -34,7 +35,7 @@ export function HQTexturesInput(props: {isDolphinResolution480p: boolean, dolphi
       <TriCheckbox name="hq-textures" onChange={updateHQTexturesEnabled}/>
       {renderCounter}
       {
-        hqTexturesEnabled === true || hqTexturesEnabled === "<FILLME>" ? <ExtraHQTexturesFolderInput/> : ""
+        isValueOrFILLMEIsValue(hqTexturesEnabled, true) ? <ExtraHQTexturesFolderInput/> : ""
       }
     </div>
   );

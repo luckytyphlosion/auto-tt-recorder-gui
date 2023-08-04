@@ -20,7 +20,8 @@ export function isValueOrFILLMEIsValueMaker(debugName?: string) {
   if (debugName !== undefined) {
     console.log(`Making isValueOrFILLMEIsValue for ${debugName}`);
   }
-  return function(value: string | boolean | "<FILLME>", expectedValue: string | boolean) {
-    return value === expectedValue || (expandUnselectedChoiceInputs && value === "<FILLME>");
+  return function(value: string | boolean | "<FILLME>", ...expectedValues: Array<string | boolean>) {
+    return expectedValues.includes(value) || (expandUnselectedChoiceInputs && value === "<FILLME>");
   }
 }
+
