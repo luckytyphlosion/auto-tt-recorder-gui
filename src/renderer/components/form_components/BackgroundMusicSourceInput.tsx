@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
+import React, { useState, useEffect } from "react";
+import { useFormContextAutoTT, useWatchExpandUnselectedChoiceInputs, isValueOrFillmeIsValueMaker, useWatchAutoTT } from "../../use-form-context-auto-tt";
 import { MusicFilenameInput } from "./MusicFilenameInput";
 import { GameVolumeInput } from "./GameVolumeInput";
 import { MusicVolumeInput } from "./MusicVolumeInput";
@@ -16,18 +16,11 @@ export type BackgroundMusicSource = ValidValues<typeof BACKGROUND_MUSIC_SOURCES>
 
 export function BackgroundMusicSourceInput(props: {timeline: Timeline, formComplexity: FormComplexity}) {
   const {register, getValues} = useFormContextAutoTT();
+  const backgroundMusicSource = useWatchAutoTT({name: "background-music-source"});
+  const isValueOrFillmeIsValue = isValueOrFillmeIsValueMaker();
+  const musicFilenameInputEnable = isValueOrFillmeIsValue(backgroundMusicSource, "music-filename");
 
-  function isFormBackgroundMusicFromFilename() {
-    const backgroundMusicSource = getValues("background-music-source");
-    return backgroundMusicSource === "music-filename" || backgroundMusicSource === "<FILLME>";
-  }
-
-  const [musicFilenameInputEnable, setMusicFilenameInputEnable] = useState(isFormBackgroundMusicFromFilename());
   const renderCounter = useRenderCounter(false, "BackgroundMusicSourceInput");
-
-  function updateMusicFilenameInputEnable(event?: React.MouseEvent<HTMLButtonElement>) {
-    setMusicFilenameInputEnable(isFormBackgroundMusicFromFilename());
-  }
 
   let isOnMKChannel = props.timeline === "top10" || props.timeline === "mkchannel";
   let enableMusicPresentationInput = isOnMKChannel || (props.timeline === "ghostselect" && musicFilenameInputEnable);
@@ -35,7 +28,7 @@ export function BackgroundMusicSourceInput(props: {timeline: Timeline, formCompl
   return (
     <div>
       <label htmlFor="background-music-source">Background Music: </label>
-      <DeselectableDropdown name="background-music-source" noErrorMessage={true} onChange={updateMusicFilenameInputEnable}>
+      <DeselectableDropdown name="background-music-source" noErrorMessage={true}>
         <option value="music-filename">Music filename</option>
         <option value="game-bgm">Game BGM</option>
         <option value="none">None</option>

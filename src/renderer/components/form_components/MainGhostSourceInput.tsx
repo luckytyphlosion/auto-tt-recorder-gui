@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useFormContextAutoTT, useWatchAutoTT } from "../../use-form-context-auto-tt";
+import { useFormContextAutoTT, isValueOrFillmeIsValueMaker } from "../../use-form-context-auto-tt";
 import useRenderCounter from "../../RenderCounter";
 
 import { ChadsoftGhostPageInput } from "./ChadsoftGhostPageInput";
@@ -16,7 +16,7 @@ export function MainGhostSourceInput() {
   const {register, getValues} = useFormContextAutoTT();
   const [mainGhostSource, setMainGhostSource] = useState(getValues("main-ghost-source"));
   const renderCounter = useRenderCounter(false, "MainGhostSourceInput");
-  const expandUnselectedChoiceInputs = useWatchAutoTT({name: "expand-unselected-choice-inputs"});
+  const isValueOrFillmeIsValue = isValueOrFillmeIsValueMaker();
 
   function updateMainGhostSource(event?: Event) {
     setMainGhostSource(getValues("main-ghost-source"));
@@ -31,10 +31,10 @@ export function MainGhostSourceInput() {
       </DeselectableRadioButtonGroup>
       {renderCounter}
       {
-        mainGhostSource === "chadsoft" || (mainGhostSource === "<FILLME>" && expandUnselectedChoiceInputs) ? <ChadsoftGhostPageInput/> : ""
+        isValueOrFillmeIsValue(mainGhostSource, "chadsoft") ? <ChadsoftGhostPageInput/> : ""
       }
       {
-        mainGhostSource === "rkg" || (mainGhostSource === "<FILLME>" && expandUnselectedChoiceInputs) ? <MainGhostFilenameInput/> : ""
+        isValueOrFillmeIsValue(mainGhostSource, "rkg") ? <MainGhostFilenameInput/> : ""
       }
     </div>
   );
