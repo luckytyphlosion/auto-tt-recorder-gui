@@ -295,6 +295,15 @@ export class AutoTTRecConfigExporter {
     this.exportArg("on-200cc", on200cc);
   }
 
+  private exportOutputVideoFilename() {
+    let outputVideoFilename = this.getStringArg_reduceFILLME("output-video-filename");
+    if (outputVideoFilename !== "<FILLME>") {
+      this.exportArg("output-video-filename", outputVideoFilename);
+    } else {
+      this.exportArg("output-video-filename", this.getFormDataValue("output-video-file-format"));
+    }
+  }
+
   public async export(): Promise<AutoTTRecExportArgs> {
     if (!this.hasExported) {
       this.exportStraightCopyArgs();
