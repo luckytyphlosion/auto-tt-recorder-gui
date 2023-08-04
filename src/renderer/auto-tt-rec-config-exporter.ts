@@ -449,9 +449,34 @@ export class AutoTTRecConfigExporter {
     this.exportArg("track-name", trackName);
   }
 
-  public async export(): Promise<AutoTTRecExportArgs> {
+  public export(): AutoTTRecExportArgs {
     if (!this.hasExported) {
       this.exportStraightCopyArgs();
+      this.exportGhostPageAndFilename(true);
+      this.exportGhostPageAndFilename(false);
+      this.exportAudioBitrate();
+      this.exportFormComplexity();
+      this.exportEnabledPathname({
+        pathnameArgName: "extra-gecko-codes-filename",
+        enableArgName: "extra-gecko-codes-enable"
+      });
+      this.exportEnabledPathname({
+        pathnameArgName: "extra-hq-textures-folder",
+        enableArgName: "extra-hq-textures-folder-enable"
+      });
+      this.exportVolumeInputs();
+      this.exportMusicFilename();
+      this.exportMusicPresentation();
+      this.exportSet200cc();
+      this.exportOutputVideoFilename();
+      this.exportOutputWidth();
+      this.exportSpeedometerStyle();
+      this.exportSZSFilename();
+      this.exportTimeline();
+      this.exportTop10Highlight();
+      this.exportTop10Location();
+      this.exportTop10Title();
+      this.exportTrackName();
       this.hasExported = true;
     }
 
