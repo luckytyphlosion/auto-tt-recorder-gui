@@ -101,6 +101,14 @@ export class AutoTTRecConfigExporter {
     }
   }
 
+  private getNumberArg_reduceNaNToFILLME<K extends AutoTTRecConfigFormNumberArgName>(key: K): number | "<FILLME>" {
+    let value: number | "<FILLME>" = this.formData[key];
+    if (Number.isNaN(value)) {
+      value = "<FILLME>";
+    }
+    return value;
+  }
+
   private exportSharedStringArg<K extends AutoTTRecExportArgName & AutoTTRecConfigFormStringArgName>(key: K) {
     let value = this.formData[key];
     if (value === "") {
@@ -111,12 +119,7 @@ export class AutoTTRecConfigExporter {
   }
 
   private exportSharedNumberArg<K extends AutoTTRecExportArgName & AutoTTRecConfigFormNumberArgName>(key: K) {
-    let value: number | "<FILLME>" = this.formData[key];
-    if (Number.isNaN(value)) {
-      value = "<FILLME>";
-    }
-
-    this.autoTTRecExportArgs[key] = value;
+    this.autoTTRecExportArgs[key] = this.getNumberArg_reduceNaNToFILLME(key);
   }
 
   private exportSharedBooleanArg<K extends AutoTTRecExportArgName & AutoTTRecConfigFormBooleanArgName>(key: K) {
@@ -236,6 +239,11 @@ export class AutoTTRecConfigExporter {
     } else {
       this.exportArg(pathnameArgName, "<FILLME>");
     }
+  }
+
+  private exportVolumeInputs() {
+    this.exportArg("game-volume", this.getNumberArg_reduceNaNToFILLME("game-volume-numberinput"));
+    this.exportArg("music-volume", this.getNumberArg_reduceNaNToFILLME("music-volume-numberinput"));
   }
 
   public async export(): Promise<AutoTTRecExportArgs> {
