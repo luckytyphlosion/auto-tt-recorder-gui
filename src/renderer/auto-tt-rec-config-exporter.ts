@@ -353,6 +353,15 @@ export class AutoTTRecConfigExporter {
     }
   }
 
+  private exportTimeline() {
+    let timelineCategory = this.getFormDataValue("timeline-category");
+    if (timelineCategory === "top10chadsoft" || timelineCategory === "top10gecko") {
+      this.exportArg("timeline", "top10");
+    } else {
+      this.exportArg("timeline", this.getFormDataValue("no-top-10-category"));
+    }
+  }
+
   public async export(): Promise<AutoTTRecExportArgs> {
     if (!this.hasExported) {
       this.exportStraightCopyArgs();
