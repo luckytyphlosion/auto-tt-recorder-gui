@@ -304,6 +304,28 @@ export class AutoTTRecConfigExporter {
     }
   }
 
+  private exportOutputWidth() {
+    let outputWidthPreset = this.getFormDataValue("output-width-preset");
+    let outputWidth: number | null | "<FILLME>";
+
+    if (outputWidthPreset === "none") {
+      outputWidth = null;
+    } else if (outputWidthPreset === "custom" || outputWidthPreset === "<FILLME>") {
+      outputWidth = this.getNumberArg_reduceNaNToFILLME("output-width-custom");
+    } else {
+      let outputWidthPresetAsNumber: number = Number(outputWidthPreset);
+      if (Number.isNaN(outputWidthPresetAsNumber)) {
+        outputWidth = "<FILLME>";
+      } else {
+        outputWidth = outputWidthPresetAsNumber
+      }
+    }
+
+    this.exportArg("output-width", outputWidth);
+  }
+
+  
+
   public async export(): Promise<AutoTTRecExportArgs> {
     if (!this.hasExported) {
       this.exportStraightCopyArgs();
