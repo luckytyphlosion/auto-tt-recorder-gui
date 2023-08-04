@@ -257,6 +257,29 @@ export class AutoTTRecConfigExporter {
     }
   }
 
+  private exportMusicPresentation() {
+    let musicPresentation = this.getFormDataValue("music-presentation");
+    let noMusicMKChannel: BooleanFILLME;
+    let startMusicAtBeginning: BooleanFILLME;
+    
+    if (musicPresentation === "no-music-mkchannel") {
+      noMusicMKChannel = true;
+      startMusicAtBeginning = false;
+    } else if (musicPresentation === "start-music-at-beginning") {
+      noMusicMKChannel = false;
+      startMusicAtBeginning = true;
+    } else if (musicPresentation === "normal") {
+      noMusicMKChannel = false;
+      startMusicAtBeginning = false;
+    } else {
+      noMusicMKChannel = "<FILLME>";
+      startMusicAtBeginning = "<FILLME>";
+    }
+
+    this.exportArg("no-music-mkchannel", noMusicMKChannel);
+    this.exportArg("start-music-at-beginning", startMusicAtBeginning);
+  } 
+
   public async export(): Promise<AutoTTRecExportArgs> {
     if (!this.hasExported) {
       this.exportStraightCopyArgs();
