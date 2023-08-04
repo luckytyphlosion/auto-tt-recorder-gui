@@ -144,7 +144,7 @@ async function createWindow() {
   ipcMain.handle("get-global-config", confighandler.getGlobalConfig);
 
   ipcMain.handle("import-form-template", formTemplate.importFormTemplate);
-
+  ipcMain.handle("write-object-to-yaml", formTemplate.writeObjectToYAML);
   // and load the index.html of the app.
   // win.loadFile("index.html");
   console.log("isDev:", isDev);

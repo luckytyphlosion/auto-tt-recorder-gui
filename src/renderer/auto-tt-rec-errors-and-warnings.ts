@@ -77,6 +77,10 @@ export class AutoTTRecConfigErrorsAndWarnings {
     return this._errorsAndWarningsMap;
   }
 
+  public hasErrorsOrWarnings() {
+    return this._errorsAndWarningsMap.size !== 0 || this._errorsAndWarningsInvalidCommandsMap.size !== 0;
+  }
+
   public compile() {
     let output: string[] = [];
 

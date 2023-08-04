@@ -51,7 +51,7 @@ import { AutoTTRecExportArgName, AutoTTRecExportArgs, Top10LocationExport } from
 
 import { AutoTTRecConfigErrorsAndWarnings } from "./auto-tt-rec-errors-and-warnings";
 
-function validateNoUnsavedFiles(formData: AutoTTRecConfigFormFields, errorsAndWarnings: AutoTTRecConfigErrorsAndWarnings) {
+export function validateNoUnsavedFiles(formData: AutoTTRecConfigFormFields, errorsAndWarnings: AutoTTRecConfigErrorsAndWarnings) {
   let hasUnsavedFiles: boolean = false;
 
   if (formData["extra-gecko-codes-unsaved"]) {
@@ -84,9 +84,9 @@ export class AutoTTRecConfigExporter {
       this.errorsAndWarnings.addWarning(key, `formData[${key}] was somehow number! (this is an error within the program itself and not your fault, please contact the developer!)`);
       value = value.toString();
       this.formData[key] = value;
-    } else if (value === "<FILLME>") {
-      this.formData[key] = "";
-      value = "";
+    } else if (value === "") {
+      this.formData[key] = "<FILLME>";
+      value = "<FILLME>";
     }
 
     return value;
@@ -94,7 +94,7 @@ export class AutoTTRecConfigExporter {
 
   private getFormDataStringValue_reduceFILLMEToNull<K extends AutoTTRecConfigFormStringArgName>(key: K): string | null {
     let value = this.getFormDataStringValue(key);
-    if (value === "") {
+    if (value === "<FILLME>") {
       return null;
     } else {
       return value;

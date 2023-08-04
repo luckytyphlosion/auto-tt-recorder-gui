@@ -13,12 +13,15 @@ import { AUTO_TT_REC_CONFIG_FORM_FIELD_NAMES, AutoTTRecConfigFormFields, MINIMAL
 
 import { AutoTTRecConfigErrorsAndWarnings } from "./auto-tt-rec-errors-and-warnings";
 import { AutoTTRecConfigImportPreprocessor } from "./auto-tt-rec-config-import-preprocessor";
+import { validateNoUnsavedFiles, AutoTTRecConfigExporter } from "./auto-tt-rec-config-exporter";
 
 export function makeMinimalFormData(formComplexity: FormComplexity, timelineCategory: TimelineCategory, noTop10Category: NoTop10Category) {
   let formData: AutoTTRecConfigFormFields = shallowCopy(MINIMAL_FORM_VALUES);
   formData["form-complexity"] = formComplexity;
   formData["timeline-category"] = timelineCategory;
   formData["no-top-10-category"] = noTop10Category;
+  formData["extra-gecko-codes-unsaved"] = false;
+  formData["top-10-gecko-code-unsaved"] = false;
   let errorsAndWarnings = new AutoTTRecConfigErrorsAndWarnings();
 
   for (const argName of AUTO_TT_REC_CONFIG_FORM_FIELD_NAMES) {
@@ -41,6 +44,17 @@ export function makeDefaultFormData(formComplexity: FormComplexity, timelineCate
   return formData;
 }
 
+export enum ExportTemplateStatus {
+  SUCCESS = 0,
+  ERROR_UNSAVED = 1,
+  ERROR_ON_EXPORT = 2
+}
+
+export interface ExportTemplateResult {
+  status: ExportTemplateStatus,
+  errorWarningData: string
+}
+
 export async function convertAutoTTRecConfigToFormData(autoTTRecConfig: AutoTTRecConfig, autoTTRecConfigFilename: string, oldFormComplexity: FormComplexity): Promise<[AutoTTRecConfigFormFields, string]> {
   let errorsAndWarnings = new AutoTTRecConfigErrorsAndWarnings();
   let autoTTRecConfigPreprocessor = new AutoTTRecConfigImportPreprocessor(autoTTRecConfig, errorsAndWarnings, autoTTRecConfigFilename, oldFormComplexity);
@@ -53,3 +67,29 @@ export async function convertAutoTTRecConfigToFormData(autoTTRecConfig: AutoTTRe
   return [autoTTRecConfigFormFields, errorsAndWarningsStr];
 }
 
+export async function tryExportAutoTTRecConfigTemplate(formData: AutoTTRecConfigFormFields, autoTTRecConfigFilename: string): Promise<ExportTemplateResult> {
+  let errorsAndWarnings = new AutoTTRecConfigErrorsAndWarnings();
+  if (validateNoUnsavedFiles(formData, errorsAndWarnings)) {
+    return {
+      status: ExportTemplateStatus.ERROR_UNSAVED,
+      errorWarningData: errorsAndWarnings.compile()
+    }
+  }
+
+  let autoTTRecConfigExporter = new AutoTTRecConfigExporter(formData, errorsAndWarnings);
+  let autoTTRecExportArgs = autoTTRecConfigExporter.export();
+
+  await window.api.writeObjectToYAML(autoTTRecExportArgs, autoTTRecConfigFilename);
+
+  let status: ExportTemplateStatus;
+  if (errorsAndWarnings.hasErrorsOrWarnings()) {
+    status = ExportTemplateStatus.ERROR_ON_EXPORT;
+  } else {
+    status = ExportTemplateStatus.SUCCESS;
+  }
+
+  return {
+    status: status,
+    errorWarningData: errorsAndWarnings.compile()
+  }
+}

@@ -107,3 +107,8 @@ async function loadYAML_formatErrorsIfErrorOrWarnings(filename: string): Promise
 export async function importFormTemplate(event: IpcMainInvokeEvent, filename: string): Promise<ImportTemplateResult> {
   return await loadYAML_formatErrorsIfErrorOrWarnings(filename);
 }
+
+export async function writeObjectToYAML(event: IpcMainInvokeEvent, yamlObj: AutoTTRecConfig, filename: string): Promise<void> {
+  const yamlObjAsStr = YAML.stringify(yamlObj);
+  await fsPromises.writeFile(filename, yamlObjAsStr, "utf8");
+}

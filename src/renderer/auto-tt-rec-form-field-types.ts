@@ -271,7 +271,7 @@ export const MINIMAL_FORM_VALUES: AutoTTRecConfigFormMinimalFields = {
   "encode-size-unit": "<FILLME>",
   "encode-type": "<FILLME>",
   "ending-delay": NaN,
-  "ending-message": "<FILLME>",
+  "ending-message": "",
   "extra-gecko-codes-enable": "<FILLME>",
   "extra-gecko-codes-contents": "",
   "extra-gecko-codes-filename": "",

@@ -1,7 +1,7 @@
 import { FileFilter, IpcRendererEvent } from "electron";
 import { AutoTTRecResponse } from "../shared/shared-types";
 import { AutoTTRecArgs } from "./auto-tt-rec-args-types";
-import { FilenameAndContents, ImportTemplateResult, ExpectedExtensionAndErrorMessage, DialogId, StringOrError, IsFileWritableResult } from "../shared/shared-types";
+import { FilenameAndContents, ImportTemplateResult, ExpectedExtensionAndErrorMessage, DialogId, StringOrError, IsFileWritableResult, AutoTTRecConfig } from "../shared/shared-types";
 
 declare global {
   interface Window {
@@ -28,6 +28,7 @@ declare global {
       removeHandleSendStderr: (callable: (event: IpcRendererEvent, stderrData: string) => void) => void;
       terminateAutoTTRec: () => Promise<void>;
       importFormTemplate: (filename: string) => Promise<ImportTemplateResult>;
+      writeObjectToYAML: (autoTTRecConfig: AutoTTRecConfig, filename: string) => Promise<void>;
     }
   }
 }
