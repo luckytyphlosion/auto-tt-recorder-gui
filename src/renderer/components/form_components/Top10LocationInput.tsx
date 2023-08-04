@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
+import { useFormContextAutoTT, isValueOrFILLMEIsValueMaker } from "../../use-form-context-auto-tt";
 import { MusicFilenameInput } from "./MusicFilenameInput";
 import { Top10LocationRegionalInput } from "./Top10LocationRegionalInput";
 import { Top10LocationCountryInput } from "./Top10LocationCountryInput";
@@ -15,6 +15,7 @@ export function Top10LocationInput() {
   const {getValues, formState} = useFormContextAutoTT();
   const [top10LocationRegion, setTop10LocationRegion] = useState(getValues("top-10-location-region"));
   const [showErrorMessage, setShowErrorMessage] = useState(true);
+  const isValueOrFILLMEIsValue = isValueOrFILLMEIsValueMaker();
 
   function updateTop10LocationRegion(event?: Event) {
     let top10LocationRegionHasError = (formState.errors["top-10-location-region"] !== undefined);
@@ -39,16 +40,16 @@ export function Top10LocationInput() {
         showErrorMessage ? <SimpleErrorMessage name="top-10-location-region"/> : ""
       }
       {
-        top10LocationRegion === "<FILLME>" ? <br/> : ""
+        isValueOrFILLMEIsValue(top10LocationRegion) ? <br/> : ""
       }
       {
-        top10LocationRegion === "regional" || top10LocationRegion === "<FILLME>" ? <Top10LocationRegionalInput top10LocationRegion={top10LocationRegion}/> : ""
+        isValueOrFILLMEIsValue(top10LocationRegion, "regional") ? <Top10LocationRegionalInput top10LocationRegion={top10LocationRegion}/> : ""
       }
       {
-        top10LocationRegion === "<FILLME>" ? <br/> : ""
+        isValueOrFILLMEIsValue(top10LocationRegion) ? <br/> : ""
       }
       {
-        top10LocationRegion === "country" || top10LocationRegion === "<FILLME>" ? <Top10LocationCountryInput top10LocationRegion={top10LocationRegion}/> : ""
+        isValueOrFILLMEIsValue(top10LocationRegion, "country") ? <Top10LocationCountryInput top10LocationRegion={top10LocationRegion}/> : ""
       }
     </div>
   );

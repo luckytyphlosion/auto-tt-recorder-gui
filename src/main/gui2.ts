@@ -182,6 +182,12 @@ export async function saveFileDialog(
 ): Promise<string> {
   let dialogProperties: SaveDialogOptions["properties"] = [];
   lastFilename = retrieveLastPathname(lastFilename, dialogId);
+  if (lastFilename !== undefined) {
+    let parsedPath = path.parse(lastFilename);
+    parsedPath.ext = `.${fileFilters[0].extensions[0]}`;
+    parsedPath.base = "";
+    lastFilename = path.format(parsedPath);
+  }
   let response = await dialog.showSaveDialog(mainWindow, {
     properties: dialogProperties,
     filters: fileFilters,

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useFormContextAutoTT, useWatchAutoTT } from "../../use-form-context-auto-tt";
+import { useFormContextAutoTT, isValueOrFILLMEIsValueMaker } from "../../use-form-context-auto-tt";
 import { MusicFilenameInput } from "./MusicFilenameInput";
 import { OutputVideoFileFormatInput } from "./OutputVideoFileFormatInput";
 import { FormComplexity } from "../layout_components/FormComplexityLayout";
@@ -17,6 +17,7 @@ export function VideoCodecInput(props: {encodeType: EncodeType, formComplexity: 
   const {register, setValue, getValues} = useFormContextAutoTT();
   const [videoCodec, setVideoCodec] = useState(getValues("video-codec"))
   const renderCounter = useRenderCounter(false);
+  const isValueOrFILLMEIsValue = isValueOrFILLMEIsValueMaker();
 
   if ((props.encodeType === "crf" && videoCodec === "libvpx-vp9")
     || (props.encodeType === "size" && videoCodec === "libx265")) {
@@ -32,8 +33,8 @@ export function VideoCodecInput(props: {encodeType: EncodeType, formComplexity: 
       <label htmlFor="video-codec">Video codec: </label>
       <DeselectableDropdown name="video-codec" onChange={updateVideoCodec}>
         <option value="libx264">libx264</option>
-        {props.encodeType === "crf" || props.encodeType === "<FILLME>" ? <option value="libx265">libx265</option> : ""}
-        {props.encodeType === "size" || props.encodeType === "<FILLME>" ? <option value="libvpx-vp9">libvpx-vp9</option> : ""}
+        {isValueOrFILLMEIsValue(props.encodeType, "crf") ? <option value="libx265">libx265</option> : ""}
+        {isValueOrFILLMEIsValue(props.encodeType, "size") ? <option value="libvpx-vp9">libvpx-vp9</option> : ""}
       </DeselectableDropdown>
       {renderCounter}
       <OutputVideoFileFormatInput videoCodec={videoCodec} addSizeBasedReminderToLabel={false} formComplexity={props.formComplexity}/>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
+import { useFormContextAutoTT, isValueOrFILLMEIsValueMaker } from "../../use-form-context-auto-tt";
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
 import { FormComplexity } from "../layout_components/FormComplexityLayout";
 import useRenderCounter from "../../RenderCounter";
@@ -15,6 +15,7 @@ export function TrackNameInput(props: {formComplexity: FormComplexity}) {
   const {register, getValues, setValue} = useFormContextAutoTT();
   const [trackNameType, setTrackNameType] = useState(getValues("track-name-type"));
   const renderCounter = useRenderCounter(false, "TrackNameInput");
+  const isValueOrFILLMEIsValue = isValueOrFILLMEIsValueMaker();
 
   useEffect(() => {
     let trackNameType = getValues("track-name-type");
@@ -52,7 +53,7 @@ export function TrackNameInput(props: {formComplexity: FormComplexity}) {
         <DeselectableRadioButton labelValue="Supply manually:" id="track-name-type-manual" value="manual" onChange={updateTrackNameType}/>
       </DeselectableRadioButtonGroup>
       {
-        trackNameType === "manual" || trackNameType === "<FILLME>" ? <>
+        isValueOrFILLMEIsValue(trackNameType, "manual") ? <>
           <input type="text" {...register("track-name", {validate: validateTrackName})}/>
           <SimpleErrorMessage name="track-name"/>
         </> : ""

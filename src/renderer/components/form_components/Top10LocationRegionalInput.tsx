@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
+import { isValueOrFILLMEIsValueMaker } from "../../use-form-context-auto-tt";
 import { MusicFilenameInput } from "./MusicFilenameInput";
 import { Top10LocationRegion } from "./Top10LocationInput";
 
@@ -37,11 +37,11 @@ export const TOP_10_LOCATION_REGIONAL_TO_FULL_NAME: {[key: string]: Top10Locatio
 }
 
 export function Top10LocationRegionalInput(props: {top10LocationRegion: Top10LocationRegion}) {
-  const {register} = useFormContextAutoTT();
+  const isValueOrFILLMEIsValue = isValueOrFILLMEIsValueMaker();
 
   return (
     <>
-      <label htmlFor="top-10-location-regional-location">{props.top10LocationRegion === "<FILLME>" ? "(Regional) " : ""}Location: </label>
+      <label htmlFor="top-10-location-regional-location">{isValueOrFILLMEIsValue(props.top10LocationRegion) ? "(Regional) " : ""}Location: </label>
       <DeselectableDropdown name="top-10-location-regional-location">
         {REGIONAL_LOCATION_NAMES.map((regionalLocation) => (
           <option value={regionalLocation} key={regionalLocation}>{regionalLocation}</option>

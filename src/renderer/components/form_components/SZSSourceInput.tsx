@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
+import { useFormContextAutoTT, isValueOrFILLMEIsValueMaker } from "../../use-form-context-auto-tt";
 import useRenderCounter from "../../RenderCounter";
 
 import { SZSFilenameInput } from "./SZSFilenameInput";
@@ -11,9 +11,10 @@ export type SZSSource = ValidValues<typeof SZS_SOURCES>;
 import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../DeselectableRadioButton";
 
 export function SZSSourceInput() {
-  const {register, getValues} = useFormContextAutoTT();
+  const {getValues} = useFormContextAutoTT();
   const [szsSource, setSZSSource] = useState(getValues("szs-source"));
   const renderCounter = useRenderCounter(true);
+  const isValueOrFILLMEIsValue = isValueOrFILLMEIsValueMaker();
 
   function updateSZSSource(event?: Event) {
     setSZSSource(getValues("szs-source"));
@@ -28,7 +29,7 @@ export function SZSSourceInput() {
       </DeselectableRadioButtonGroup>
       {renderCounter}
       {
-        szsSource === "fromfile" || szsSource === "<FILLME>" ? <SZSFilenameInput/> : ''
+        isValueOrFILLMEIsValue(szsSource, "fromfile") ? <SZSFilenameInput/> : ''
       }
     </div>
   );

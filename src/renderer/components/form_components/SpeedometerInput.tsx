@@ -1,5 +1,5 @@
 import React, { useState, memo } from "react";
-import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
+import { useFormContextAutoTT, isValueOrFILLMEIsValueMaker } from "../../use-form-context-auto-tt";
 import useRenderCounter from "../../RenderCounter";
 
 import { SpeedometerMetricInput } from "./SpeedometerMetricInput";
@@ -18,6 +18,7 @@ export function SpeedometerInput() {
   const {register, getValues} = useFormContextAutoTT();
   const [speedometerStyle, setSpeedometerStyle] = useState("fancy");
   const renderCounter = useRenderCounter(false, "SpeedometerInput");
+  const isValueOrFILLMEIsValue = isValueOrFILLMEIsValueMaker();
 
   function updateSpeedometerStyle(event?: Event) {
     let speedometerStyleFromForm = getValues("speedometer-style");
@@ -40,7 +41,7 @@ export function SpeedometerInput() {
         (<>
           <SpeedometerMetricInput_Memo/>
           {speedometerStyle !== "standard" ?
-            <SpeedometerDecimalPlacesInput twoDecimalPlaces={speedometerStyle === "regular" || speedometerStyle === "<FILLME>"}/>
+            <SpeedometerDecimalPlacesInput twoDecimalPlaces={isValueOrFILLMEIsValue(speedometerStyle, "regular")}/>
             : ""}
         </>) : ""
       }

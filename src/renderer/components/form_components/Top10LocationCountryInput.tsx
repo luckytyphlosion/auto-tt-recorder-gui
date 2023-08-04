@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
+import { isValueOrFILLMEIsValueMaker } from "../../use-form-context-auto-tt";
 import { Top10LocationRegion } from "./Top10LocationInput";
 import { DeselectableDropdown } from "../DeselectableDropdown";
 
@@ -291,9 +291,11 @@ export type Top10LocationCountry = ValidValues<typeof COUNTRY_LOCATIONS>;
 export type Top10LocationCountryFlagId = ValidValues<typeof COUNTRY_FLAG_IDS>;
 
 export function Top10LocationCountryInput(props: {top10LocationRegion: Top10LocationRegion}) {
+  const isValueOrFILLMEIsValue = isValueOrFILLMEIsValueMaker();
+
   return (
     <>
-      <label htmlFor="top-10-location-country-location">{props.top10LocationRegion === "<FILLME>" ? "(Country) " : ""}Location: </label>
+      <label htmlFor="top-10-location-country-location">{isValueOrFILLMEIsValue(props.top10LocationRegion) ? "(Country) " : ""}Location: </label>
       <DeselectableDropdown name="top-10-location-country-location">
         {COUNTRY_LOCATIONS_NO_FILLME.map((countryLocation) => (
           <option value={countryLocation} key={countryLocation}>{countryLocation}</option>

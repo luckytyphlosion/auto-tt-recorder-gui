@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
+import { useFormContextAutoTT, isValueOrFILLMEIsValueMaker } from "../../use-form-context-auto-tt";
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
 
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
@@ -12,6 +12,7 @@ import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../Desele
 export function Top10TitleInput() {
   const {register, getValues} = useFormContextAutoTT();
   const [top10TitleType, setTop10TitleType] = useState(getValues("top-10-title-type"));
+  const isValueOrFILLMEIsValue = isValueOrFILLMEIsValueMaker();
 
   function updateTop10TitleType(event?: Event) {
     setTop10TitleType(getValues("top-10-title-type"));
@@ -35,7 +36,7 @@ export function Top10TitleInput() {
         <DeselectableRadioButton labelValue="Supply manually:" id="top-10-title-type-manual" value="manual" onChange={updateTop10TitleType}/>
       </DeselectableRadioButtonGroup>
       {
-        top10TitleType === "manual" || top10TitleType === "<FILLME>" ? <>
+        isValueOrFILLMEIsValue(top10TitleType, "manual") ? <>
           <input type="text"
             {...register("top-10-title", {validate: validateTop10Title})}
           ></input>

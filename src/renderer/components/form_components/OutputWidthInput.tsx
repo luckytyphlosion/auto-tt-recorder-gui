@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
+import { useFormContextAutoTT, isValueOrFILLMEIsValueMaker } from "../../use-form-context-auto-tt";
 import { MusicFilenameInput } from "./MusicFilenameInput";
 import { Top10LocationRegionalInput } from "./Top10LocationRegionalInput";
 import { OutputWidthCustomInput } from "./OutputWidthCustomInput";
@@ -27,6 +27,7 @@ export function OutputWidthInput(props: {dolphinResolution: DolphinResolution, d
   const [outputWidthPreset, setOutputWidthPreset] = useState(getValues("output-width-preset"));
   const [dolphinResolutionToggle, setDolphinResolutionToggle] = useState(props.dolphinResolutionToggle);
   const renderCounter = useRenderCounter(false, "OutputWidthInput");
+  const isValueOrFILLMEIsValue = isValueOrFILLMEIsValueMaker();
 
   function updateOutputWidthPreset(event?: Event) {
     setOutputWidthPreset(getValues("output-width-preset"));
@@ -55,7 +56,7 @@ export function OutputWidthInput(props: {dolphinResolution: DolphinResolution, d
       </DeselectableDropdown>
       {renderCounter}
       {
-        outputWidthPreset === "custom" || outputWidthPreset === "<FILLME>" ? <OutputWidthCustomInput outputWidthPreset={outputWidthPreset}/> : ""
+        isValueOrFILLMEIsValue(outputWidthPreset, "custom") ? <OutputWidthCustomInput outputWidthPreset={outputWidthPreset}/> : ""
       }
     </div>
   );
