@@ -35,6 +35,8 @@ import { MusicPresentation } from "./components/form_components/MusicPresentatio
 import { FormComplexity } from "./components/layout_components/FormComplexityLayout";
 import { Top10TitleType } from "./components/form_components/Top10TitleInput";
 
+import { AudioBitrateUnit, AUDIO_BITRATE_UNITS } from "./components/form_components/AudioBitrateInput";
+
 import { SET_200CC_VALUES } from "./components/form_components/Set200ccInput";
 
 import { AutoTTRecConfig, StringOrError, BooleanFILLME } from "../shared/shared-types";
@@ -115,6 +117,10 @@ export class AutoTTRecConfigExporter {
     this.autoTTRecExportArgs[key] = value;
   }
 
+  private getFormDataValue<K extends AutoTTRecConfigFormFieldName>(key: K) {
+    return this.formData[key];
+  }
+
   private exportStraightCopyArgs() {
     this.exportSharedChoiceArg("aspect-ratio-16-by-9");
     this.exportSharedChoiceArg("audio-codec");
@@ -152,7 +158,7 @@ export class AutoTTRecConfigExporter {
     let [ghostPageArgName, ghostFilenameArgName, ghostSourceArgName]: ["chadsoft-ghost-page", "main-ghost-filename", "main-ghost-source"] | ["chadsoft-comparison-ghost-page", "comparison-ghost-filename", "comparison-ghost-source"] = isMainGhost ? ["chadsoft-ghost-page", "main-ghost-filename", "main-ghost-source"] : ["chadsoft-comparison-ghost-page", "comparison-ghost-filename", "comparison-ghost-source"];
 
     let ghostFilenameValue_nullIfFILLME = this.getStringArg_reduceFILLMEToNull(ghostFilenameArgName);
-    let ghostSourceValue = this.formData[ghostSourceArgName];
+    let ghostSourceValue = this.getFormDataValue(ghostSourceArgName);
 
     if (ghostSourceValue === "chadsoft") {
       this.exportSharedStringArg(ghostPageArgName);
@@ -170,8 +176,28 @@ export class AutoTTRecConfigExporter {
   }
 
   private exportAudioBitrate() {
-    
+    let audioBitrateUnit = this.getFormDataValue("audio-bitrate-unit");
+    let audioBitrateDisplayed = this.getFormDataValue("audio-bitrate-displayed");
+    let exportedAudioBitrate: string;
+
+    if (Number.isNaN(audioBitrateDisplayed)) {
+      exportedAudioBitrate = "<FILLME>";
+    } else {
+      if (audioBitrateUnit === "kbps") {
+        exportedAudioBitrate = `${audioBitrateDisplayed}k`;
+      } else if (audioBitrateUnit === "bps") {
+        exportedAudioBitrate = audioBitrateDisplayed.toString();
+      } else if (audioBitrateUnit === "<FILLME>") {
+        exportedAudioBitrate = "<FILLME>";
+      } else {
+        this.errorsAndWarnings.addExporterUnknownChoiceWarning("audio-bitrate-unit", AUDIO_BITRATE_UNITS, audioBitrateUnit);
+        exportedAudioBitrate = "<FILLME>";
+      }
+    }
+
+    this.exportArg("audio-bitrate", exportedAudioBitrate);
   }
+
   public async export(): Promise<AutoTTRecExportArgs> {
     if (!this.hasExported) {
       this.exportStraightCopyArgs();

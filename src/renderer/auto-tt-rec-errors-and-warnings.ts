@@ -61,6 +61,10 @@ export class AutoTTRecConfigErrorsAndWarnings {
     this.addWarning(name, `${objVariableName}["${name}"] was not defined! (this is an error within the program itself and not your fault, please contact the developer!)`);
   }
 
+  public addExporterUnknownChoiceWarning(name: AutoTTRecArgExtendedAndFormFieldName, validValues: ReadonlyArraySet<string>, actualValue: string) {
+    this.addWarning(name, `${name} should be one of ${listFormatter.format(validValues.arr)}, but got ${actualValue} instead. (this is an error within the program itself and not your fault, please contact the developer!)`);
+  }
+
   public addWarning(name: AutoTTRecArgExtendedAndFormFieldName, message: string) {
     this.add(name, message, true);
   }
