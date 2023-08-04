@@ -51,6 +51,7 @@ import { FormComplexity } from "./layout_components/FormComplexityLayout";
 
 import { ClearAllFields } from "./ClearAllFields";
 import { ImportTemplate } from "./ImportTemplate";
+import { ExpandUnselectedChoiceInputs } from "./ExpandUnselectedChoiceInputs";
 
 import { shallowCopy } from "../../shared/util-shared";
 
@@ -63,6 +64,7 @@ import useRenderCounter from "../RenderCounter";
 
 const AutoTTRecConfigFormComponents_Memo = memo(AutoTTRecConfigFormComponents);
 const AutoTTRecSubmitAbortButtons_Memo = memo(AutoTTRecSubmitAbortButtons);
+const ExpandUnselectedChoiceInputs_Memo = memo(ExpandUnselectedChoiceInputs);
 const ClearAllFields_Memo = memo(ClearAllFields);
 const ImportTemplate_Memo = memo(ImportTemplate);
 
@@ -138,12 +140,14 @@ export function AutoTTRecConfigForm(
   //   formOnSubmitCallbackRef.current = validateFormArgsOnlyOnSubmitCallback;
   // }, []);
 
-  const [stateTest, setStateTest] = useState(false);
   const [submittedToggle, setSubmittedToggle] = useState(false);
   const [importToggle, setImportToggle] = useState(false);
+  const [expandUnselectedChoiceInputs, setExpandUnselectedChoiceInputs] = useState(false);
 
-  const [doNotTriggerRendersDueToErrors, setDoNotTriggerRendersDueToErrors] = useState(false);
-  
+  function updateExpandUnselectedChoiceInputs(event: React.ChangeEvent<HTMLInputElement>) {
+    setExpandUnselectedChoiceInputs(event.target.checked);
+  }
+
 /*
   useEffect(() => {
     //setTimeout(() => {
@@ -184,9 +188,12 @@ export function AutoTTRecConfigForm(
     <div>
       <form onSubmit={formOnSubmitCallbackRef.current()}>
         <ImportTemplate_Memo disabled={props.isAutoTTRecRunning} formMethods={formMethods} setImportToggle={setImportToggle} onError={onError}/>
-        <ClearAllFields_Memo disabled={props.isAutoTTRecRunning} formMethods={formMethods} submittedToggle={submittedToggle} setSubmittedToggle={setSubmittedToggle} />
+        <ClearAllFields_Memo disabled={props.isAutoTTRecRunning} formMethods={formMethods} submittedToggle={submittedToggle} setSubmittedToggle={setSubmittedToggle}/>
+        {/*<label htmlFor="expand-unselected-choice-inputs">Expand unselected "choice" inputs (advanced)</label>
+        <input id="expand-unselected-choice-inputs" type="checkbox" checked={expandUnselectedChoiceInputs} onChange={updateExpandUnselectedChoiceInputs}/>*/}
+        <ExpandUnselectedChoiceInputs_Memo disabled={props.isAutoTTRecRunning} formMethods={formMethods}/>
         <fieldset disabled={props.isAutoTTRecRunning}>
-          <AutoTTRecConfigFormComponents_Memo formMethods={formMethods} forceUpdate={submittedToggle} importToggle={importToggle} isAutoTTRecRunning={props.isAutoTTRecRunning}/>
+          <AutoTTRecConfigFormComponents_Memo formMethods={formMethods} forceUpdate={submittedToggle} importToggle={importToggle} isAutoTTRecRunning={props.isAutoTTRecRunning} expandUnselectedChoiceInputs={expandUnselectedChoiceInputs}/>
         </fieldset>
         <AutoTTRecSubmitAbortButtons_Memo isAutoTTRecRunning={props.isAutoTTRecRunning} onAbortCallback={props.onAbortCallback} setRunAutoTTRecOnSubmitCallback={(() => {}) as any}/>
       </form>

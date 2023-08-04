@@ -1042,6 +1042,10 @@ export class AutoTTRecConfigImporter {
     this.formData["audio-bitrate-last-audio-codec"] = audioCodec;
   }
 
+  private setExpandUnselectedChoiceInputs() {
+    this.formData["expand-unselected-choice-inputs"] = false;
+  }
+
   private validateFormDataNonPartial() {
     for (const argName of AUTO_TT_REC_CONFIG_FORM_FIELD_NAMES) {
       if (this.formData[argName] === undefined) {
@@ -1080,6 +1084,7 @@ export class AutoTTRecConfigImporter {
       this.importTop10TitleAndSetTop10TitleType();
       this.importTrackNameAndSetTrackNameType();
       this.clearAudioBitrateAndCodecState();
+      this.setExpandUnselectedChoiceInputs();
       this.validateFormDataNonPartial();
       this.hasImported = true;
     }

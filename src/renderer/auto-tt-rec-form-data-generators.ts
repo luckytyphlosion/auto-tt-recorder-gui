@@ -14,14 +14,16 @@ import { AUTO_TT_REC_CONFIG_FORM_FIELD_NAMES, AutoTTRecConfigFormFields, MINIMAL
 import { AutoTTRecConfigErrorsAndWarnings } from "./auto-tt-rec-errors-and-warnings";
 import { AutoTTRecConfigImportPreprocessor } from "./auto-tt-rec-config-import-preprocessor";
 import { validateNoUnsavedFiles, AutoTTRecConfigExporter } from "./auto-tt-rec-config-exporter";
+import { BooleanFILLME } from "../shared/shared-types";
 
-export function makeMinimalFormData(formComplexity: FormComplexity, timelineCategory: TimelineCategory, noTop10Category: NoTop10Category) {
+export function makeMinimalFormData(formComplexity: FormComplexity, timelineCategory: TimelineCategory, noTop10Category: NoTop10Category, expandUnselectedChoiceInputs: BooleanFILLME) {
   let formData: AutoTTRecConfigFormFields = shallowCopy(MINIMAL_FORM_VALUES);
   formData["form-complexity"] = formComplexity;
   formData["timeline-category"] = timelineCategory;
   formData["no-top-10-category"] = noTop10Category;
   formData["extra-gecko-codes-unsaved"] = false;
   formData["top-10-gecko-code-unsaved"] = false;
+  formData["expand-unselected-choice-inputs"] = expandUnselectedChoiceInputs;
   let errorsAndWarnings = new AutoTTRecConfigErrorsAndWarnings();
 
   for (const argName of AUTO_TT_REC_CONFIG_FORM_FIELD_NAMES) {
@@ -36,11 +38,12 @@ export function makeMinimalFormData(formComplexity: FormComplexity, timelineCate
   return formData;
 }
 
-export function makeDefaultFormData(formComplexity: FormComplexity, timelineCategory: TimelineCategory, noTop10Category: NoTop10Category) {
+export function makeDefaultFormData(formComplexity: FormComplexity, timelineCategory: TimelineCategory, noTop10Category: NoTop10Category, expandUnselectedChoiceInputs: BooleanFILLME) {
   let formData: AutoTTRecConfigFormFields = shallowCopy(DEFAULT_FORM_VALUES);
   formData["form-complexity"] = formComplexity;
   formData["timeline-category"] = timelineCategory;
   formData["no-top-10-category"] = noTop10Category;
+  formData["expand-unselected-choice-inputs"] = expandUnselectedChoiceInputs;
   return formData;
 }
 

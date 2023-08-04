@@ -21,11 +21,12 @@ export function ClearAllFields(props: {
     let formComplexity = getValues("form-complexity");
     let timelineCategory = getValues("timeline-category");
     let noTop10Category = getValues("no-top-10-category");
+    let expandUnselectedChoiceInputs = getValues("expand-unselected-choice-inputs");
     let newFormData: AutoTTRecConfigFormFields;
     if (isFormWipeTypeReset) {
-      newFormData = makeDefaultFormData(formComplexity, timelineCategory, noTop10Category);
+      newFormData = makeDefaultFormData(formComplexity, timelineCategory, noTop10Category, expandUnselectedChoiceInputs);
     } else {
-      newFormData = makeMinimalFormData(formComplexity, timelineCategory, noTop10Category);
+      newFormData = makeMinimalFormData(formComplexity, timelineCategory, noTop10Category, expandUnselectedChoiceInputs);
     }
     props.formMethods.reset(newFormData);
     props.setSubmittedToggle((submittedToggle) => (!submittedToggle));

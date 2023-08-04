@@ -12,6 +12,8 @@ import { FormComplexityLayout } from "./layout_components/FormComplexityLayout";
 import { FormProvider, UseFormReturn } from "react-hook-form";
 import { AutoTTRecConfigFormFields } from "../auto-tt-rec-form-field-types";
 
+import { ExpandUnselectedChoiceInputsInput } from "./form_components/ExpandUnselectedChoiceInputsInput";
+
 import useRenderCounter from "../RenderCounter";
 
 const ISOWBFSFileInput_Memo = memo(ISOWBFSFileInput);
@@ -21,7 +23,8 @@ export function AutoTTRecConfigFormComponents(props: {
     formMethods: UseFormReturn<AutoTTRecConfigFormFields, any, undefined>,
     forceUpdate: boolean,
     importToggle: boolean,
-    isAutoTTRecRunning: boolean}) {  
+    isAutoTTRecRunning: boolean,
+    expandUnselectedChoiceInputs: boolean}) {  
   const renderCounter = useRenderCounter(false, "AutoTTRecConfigFormComponents");
   console.log("Rendering AutoTTRecConfigFormComponents. forceUpdate: ", props.forceUpdate);
 
