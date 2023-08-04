@@ -280,6 +280,21 @@ export class AutoTTRecConfigExporter {
     this.exportArg("start-music-at-beginning", startMusicAtBeginning);
   } 
 
+  private exportSet200cc() {
+    let set200cc = this.getFormDataValue("set-200cc");
+    let on200cc: BooleanFILLME;
+
+    if (set200cc === "on-200cc") {
+      on200cc = true;
+    } else if (set200cc === "no-200cc") {
+      on200cc = false;
+    } else {
+      on200cc = "<FILLME>";
+    }
+
+    this.exportArg("on-200cc", on200cc);
+  }
+
   public async export(): Promise<AutoTTRecExportArgs> {
     if (!this.hasExported) {
       this.exportStraightCopyArgs();
