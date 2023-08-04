@@ -78,7 +78,7 @@ export class AutoTTRecConfigExporter {
     this.errorsAndWarnings = errorsAndWarnings;
   }
 
-  private getStringArg_reduceFILLME<K extends AutoTTRecConfigFormStringArgName>(key: K): string {
+  private getFormDataStringValue<K extends AutoTTRecConfigFormStringArgName>(key: K): string {
     let value = this.formData[key];
     if (typeof value === "number") {
       this.errorsAndWarnings.addWarning(key, `formData[${key}] was somehow number! (this is an error within the program itself and not your fault, please contact the developer!)`);
@@ -92,8 +92,8 @@ export class AutoTTRecConfigExporter {
     return value;
   }
 
-  private getStringArg_reduceFILLMEToNull<K extends AutoTTRecConfigFormStringArgName>(key: K): string | null {
-    let value = this.getStringArg_reduceFILLME(key);
+  private getFormDataStringValue_reduceFILLMEToNull<K extends AutoTTRecConfigFormStringArgName>(key: K): string | null {
+    let value = this.getFormDataStringValue(key);
     if (value === "") {
       return null;
     } else {
@@ -101,12 +101,24 @@ export class AutoTTRecConfigExporter {
     }
   }
 
-  private getNumberArg_reduceNaNToFILLME<K extends AutoTTRecConfigFormNumberArgName>(key: K): number | "<FILLME>" {
+  private getFormDataNumberValue<K extends AutoTTRecConfigFormNumberArgName>(key: K): number | "<FILLME>" {
     let value: number | "<FILLME>" = this.formData[key];
     if (Number.isNaN(value)) {
       value = "<FILLME>";
     }
     return value;
+  }
+  
+  private getFormDataBooleanValue<K extends AutoTTRecConfigFormBooleanArgName>(key: K) {
+    return this.formData[key];
+  }
+
+  private getFormDataChoiceValue<K extends AutoTTRecConfigFormChoiceArgName>(key: K) {
+    return this.formData[key];
+  }
+
+  private getFormDataSpecialValue<K extends Exclude<AutoTTRecConfigFormFieldName, AutoTTRecConfigFormStringArgName | AutoTTRecConfigFormNumberArgName | AutoTTRecConfigFormBooleanArgName | AutoTTRecConfigFormChoiceArgName>>(key: K) {
+    return this.formData[key];
   }
 
   private exportSharedStringArg<K extends AutoTTRecExportArgName & AutoTTRecConfigFormStringArgName>(key: K) {
@@ -119,7 +131,7 @@ export class AutoTTRecConfigExporter {
   }
 
   private exportSharedNumberArg<K extends AutoTTRecExportArgName & AutoTTRecConfigFormNumberArgName>(key: K) {
-    this.autoTTRecExportArgs[key] = this.getNumberArg_reduceNaNToFILLME(key);
+    this.autoTTRecExportArgs[key] = this.getFormDataNumberValue(key);
   }
 
   private exportSharedBooleanArg<K extends AutoTTRecExportArgName & AutoTTRecConfigFormBooleanArgName>(key: K) {
@@ -132,10 +144,6 @@ export class AutoTTRecConfigExporter {
 
   private exportArg<K extends AutoTTRecExportArgName, V extends AutoTTRecExportArgs[K]>(key: K, value: V) {
     this.autoTTRecExportArgs[key] = value;
-  }
-
-  private getFormDataValue<K extends AutoTTRecConfigFormFieldName>(key: K) {
-    return this.formData[key];
   }
 
   private exportStraightCopyArgs() {
@@ -174,8 +182,8 @@ export class AutoTTRecConfigExporter {
   private exportGhostPageAndFilename(isMainGhost: boolean) {
     let [ghostPageArgName, ghostFilenameArgName, ghostSourceArgName]: ["chadsoft-ghost-page", "main-ghost-filename", "main-ghost-source"] | ["chadsoft-comparison-ghost-page", "comparison-ghost-filename", "comparison-ghost-source"] = isMainGhost ? ["chadsoft-ghost-page", "main-ghost-filename", "main-ghost-source"] : ["chadsoft-comparison-ghost-page", "comparison-ghost-filename", "comparison-ghost-source"];
 
-    let ghostFilenameValue_nullIfFILLME = this.getStringArg_reduceFILLMEToNull(ghostFilenameArgName);
-    let ghostSourceValue = this.getFormDataValue(ghostSourceArgName);
+    let ghostFilenameValue_nullIfFILLME = this.getFormDataStringValue_reduceFILLMEToNull(ghostFilenameArgName);
+    let ghostSourceValue = this.getFormDataChoiceValue(ghostSourceArgName);
 
     if (ghostSourceValue === "chadsoft") {
       this.exportSharedStringArg(ghostPageArgName);
@@ -193,11 +201,11 @@ export class AutoTTRecConfigExporter {
   }
 
   private exportAudioBitrate() {
-    let audioBitrateUnit = this.getFormDataValue("audio-bitrate-unit");
-    let audioBitrateDisplayed = this.getFormDataValue("audio-bitrate-displayed");
+    let audioBitrateUnit = this.getFormDataChoiceValue("audio-bitrate-unit");
+    let audioBitrateDisplayed = this.getFormDataNumberValue("audio-bitrate-displayed");
     let exportedAudioBitrate: string;
 
-    if (Number.isNaN(audioBitrateDisplayed)) {
+    if (audioBitrateDisplayed === "<FILLME>") {
       exportedAudioBitrate = "<FILLME>";
     } else {
       if (audioBitrateUnit === "kbps") {
@@ -216,7 +224,7 @@ export class AutoTTRecConfigExporter {
   }
 
   private exportFormComplexity() {
-    this.exportArg("form-complexity", this.getFormDataValue("form-complexity"));
+    this.exportArg("form-complexity", this.getFormDataSpecialValue("form-complexity"));
   }
 
   private exportEnabledPathname<K extends AutoTTRecConfigFormPathnameArgName>(
@@ -231,7 +239,7 @@ export class AutoTTRecConfigExporter {
       enableArgName: (("extra-gecko-codes-enable" | "extra-hq-textures-folder-enable") & AutoTTRecConfigFormBooleanArgName)
     }
   ) {
-    let enableArgValue = this.getFormDataValue(enableArgName);
+    let enableArgValue = this.getFormDataBooleanValue(enableArgName);
     if (enableArgValue === true) {
       this.exportSharedStringArg(pathnameArgName);
     } else if (enableArgValue === false) {
@@ -242,12 +250,12 @@ export class AutoTTRecConfigExporter {
   }
 
   private exportVolumeInputs() {
-    this.exportArg("game-volume", this.getNumberArg_reduceNaNToFILLME("game-volume-numberinput"));
-    this.exportArg("music-volume", this.getNumberArg_reduceNaNToFILLME("music-volume-numberinput"));
+    this.exportArg("game-volume", this.getFormDataNumberValue("game-volume-numberinput"));
+    this.exportArg("music-volume", this.getFormDataNumberValue("music-volume-numberinput"));
   }
 
   private exportMusicFilename() {
-    let backgroundMusicSource = this.getFormDataValue("background-music-source");
+    let backgroundMusicSource = this.getFormDataChoiceValue("background-music-source");
     if (backgroundMusicSource === "game-bgm") {
       this.exportArg("music-filename", "bgm");
     } else if (backgroundMusicSource === "none") {
@@ -258,7 +266,7 @@ export class AutoTTRecConfigExporter {
   }
 
   private exportMusicPresentation() {
-    let musicPresentation = this.getFormDataValue("music-presentation");
+    let musicPresentation = this.getFormDataChoiceValue("music-presentation");
     let noMusicMKChannel: BooleanFILLME;
     let startMusicAtBeginning: BooleanFILLME;
     
@@ -281,7 +289,7 @@ export class AutoTTRecConfigExporter {
   } 
 
   private exportSet200cc() {
-    let set200cc = this.getFormDataValue("set-200cc");
+    let set200cc = this.getFormDataChoiceValue("set-200cc");
     let on200cc: BooleanFILLME;
 
     if (set200cc === "on-200cc") {
@@ -296,22 +304,22 @@ export class AutoTTRecConfigExporter {
   }
 
   private exportOutputVideoFilename() {
-    let outputVideoFilename = this.getStringArg_reduceFILLME("output-video-filename");
+    let outputVideoFilename = this.getFormDataStringValue("output-video-filename");
     if (outputVideoFilename !== "<FILLME>") {
       this.exportArg("output-video-filename", outputVideoFilename);
     } else {
-      this.exportArg("output-video-filename", this.getFormDataValue("output-video-file-format"));
+      this.exportArg("output-video-filename", this.getFormDataChoiceValue("output-video-file-format"));
     }
   }
 
   private exportOutputWidth() {
-    let outputWidthPreset = this.getFormDataValue("output-width-preset");
+    let outputWidthPreset = this.getFormDataChoiceValue("output-width-preset");
     let outputWidth: number | null | "<FILLME>";
 
     if (outputWidthPreset === "none") {
       outputWidth = null;
     } else if (outputWidthPreset === "custom" || outputWidthPreset === "<FILLME>") {
-      outputWidth = this.getNumberArg_reduceNaNToFILLME("output-width-custom");
+      outputWidth = this.getFormDataNumberValue("output-width-custom");
     } else {
       let outputWidthPresetAsNumber: number = Number(outputWidthPreset);
       if (Number.isNaN(outputWidthPresetAsNumber)) {
@@ -325,11 +333,11 @@ export class AutoTTRecConfigExporter {
   }
 
   private exportSpeedometerStyle() {
-    this.exportArg("speedometer", this.getFormDataValue("speedometer-style"));
+    this.exportArg("speedometer", this.getFormDataChoiceValue("speedometer-style"));
   }
 
   private exportSpeedometerDecimalPlacesStr() {
-    let speedometerDecimalPlacesStr = this.getFormDataValue("speedometer-decimal-places-str");
+    let speedometerDecimalPlacesStr = this.getFormDataChoiceValue("speedometer-decimal-places-str");
 
     if (speedometerDecimalPlacesStr === "<FILLME>") {
       this.exportArg("speedometer-decimal-places", "<FILLME>");
@@ -345,7 +353,7 @@ export class AutoTTRecConfigExporter {
   }
 
   private exportSZSFilename() {
-    let szsSource = this.getFormDataValue("szs-source");
+    let szsSource = this.getFormDataChoiceValue("szs-source");
     if (szsSource === "automatic") {
       this.exportArg("szs-filename", null);
     } else {
@@ -354,11 +362,20 @@ export class AutoTTRecConfigExporter {
   }
 
   private exportTimeline() {
-    let timelineCategory = this.getFormDataValue("timeline-category");
+    let timelineCategory = this.getFormDataChoiceValue("timeline-category");
     if (timelineCategory === "top10chadsoft" || timelineCategory === "top10gecko") {
       this.exportArg("timeline", "top10");
     } else {
-      this.exportArg("timeline", this.getFormDataValue("no-top-10-category"));
+      this.exportArg("timeline", this.getFormDataChoiceValue("no-top-10-category"));
+    }
+  }
+
+  private exportTop10Highlight() {
+    let top10HighlightEnable = this.getFormDataBooleanValue("top-10-highlight-enable");
+    if (top10HighlightEnable === false) {
+      this.exportArg("top-10-highlight", -1);
+    } else {
+      this.exportArg("top-10-highlight", this.getFormDataNumberValue("top-10-highlight"));
     }
   }
 
