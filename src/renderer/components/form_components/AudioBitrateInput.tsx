@@ -19,21 +19,17 @@ const defaultAudioBitrates = {
   crf: {
     libopus: 128000,
     aac: 384000,
-    "<FILLME>": NaN
-  },
-  "<FILLME>": {
-    libopus: 128000,
-    aac: 384000,
-    "<FILLME>": NaN
   },
   size: {
     libopus: 64000,
     aac: 128000,
-    "<FILLME>": NaN
   }
 }
 
 export function getDefaultAudioBitrate(encodeType: EncodeType, audioCodec: AudioCodec): number {
+  if (encodeType === "<FILLME>" || audioCodec === "<FILLME>") {
+    return NaN;
+  }
   return defaultAudioBitrates[encodeType][audioCodec];
 }
 

@@ -387,51 +387,6 @@ export class AutoTTRecConfigImporter {
     this.formData[contentsArgName] = contentsArgValue;
   }
 
-
-/*
-  class AutoTTRecArgsClass {
-    
-    ?: AudioCodec = "libopus";
-    "chadsoft-comparison-ghost-page"?: string = "";
-    "chadsoft-ghost-page"?: string = "";
-    "chadsoft-read-cache"?: boolean = true;
-    "chadsoft-write-cache"?: boolean = true;
-    "comparison-ghost-filename"?: string = "";
-    "crf-value"?: number = 15;
-    "dolphin-resolution"?: DolphinResolution = "1440p";
-    "encode-only"?: boolean = false;
-    "encode-size"?: number = 52428800;
-    "encode-type"?: EncodeType = "crf";
-    "ending-delay"?: number = 600;
-    "extra-gecko-codes-filename"?: string = "";
-    "extra-hq-textures-folder"?: string = "";
-    "fade-in-at-start"?: boolean = false;
-    "h26x-preset"?: H26xPreset = "slow";
-    "hq-textures"?: boolean = true;
-    "input-display"?: InputDisplay = "auto";
-    "input-display-dont-create"?: boolean = false;
-    "iso-filename"?: string = "";
-    "keep-window"?: boolean = true;
-    "main-ghost-filename"?: string = "";
-    "mk-channel-ghost-description"?: string = "";
-    "no-background-blur"?: boolean = true;
-    "no-bloom"?: boolean = false;
-    "no-music"?: boolean = false;
-    "on-200cc"?: boolean = false;
-    "output-width"?: number = 2560; (SPECIAL DEFAULT?)
-    "pixel-format"?: string = "yuv420p";
-    "speedometer"?: SpeedometerStyle = "fancy";
-    ??? "speedometer-decimal-places"?: SpeedometerDecimalPlacesNumeric = 1;
-    "speedometer-metric"?: SpeedometerMetric = "engine";
-    "szs-filename"?: string = "";
-    "top-10-chadsoft"?: string = "";
-    "top-10-gecko-code-filename"?: string = "";
-    "top-10-highlight"?: number = 1;
-    "use-ffv1"?: boolean = false;
-    "video-codec"?: VideoCodec = "libx264";
-    "youtube-settings"?: boolean = true;
-}*/
-  // "output-video-filename"
   private async importStraightCopyArgs() {
     this.importSharedChoiceArg("aspect-ratio-16-by-9", ASPECT_RATIO_16_BY_9_VALUES);
     this.importSharedChoiceArg("audio-codec", AUDIO_CODECS);
@@ -482,23 +437,6 @@ export class AutoTTRecConfigImporter {
     this.importSharedStringArg("ending-message");
 
   }
-
-  // if "audio-bitrate" is <FILLME>, NaN
-  // else if "audio-bitrate" is null
-  //   if "audio-codec" is "libopus"
-  //     if "encode-type" is "crf", default 128k
-  //     else if "encode-type" is "size", default 64k
-  //   else if "audio-codec" is "aac"
-  //     if "encode-type" is "crf", default 384k
-  //     else if "encode-type" is "size", default 128k
-  // then special convert
-
-  // if "audio-bitrate" has k
-  //   hasK = true
-  //   convert from "audio-bitrate" accounting for k
-  // else
-  //   hasK = false
-  //   "audio-bitrate" is "audio-bitrate"
 
   private importFormComplexity() {
     let formComplexityArgValue = this.validateString_errorIfNot_handleUndefined("form-complexity");
@@ -1138,7 +1076,6 @@ export class AutoTTRecConfigImporter {
       await this.importOutputVideoFilename_setOutputVideoFileFormat_validateAllowedVideoCodec();
       this.setOutputWidthPreset();
       this.setSzsSource();
-      this.importTop10Location_setTop10GeckoCodeLocationRegion();
       this.importTop10Location();
       this.importTop10TitleAndSetTop10TitleType();
       this.importTrackNameAndSetTrackNameType();

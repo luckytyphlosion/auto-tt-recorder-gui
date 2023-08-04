@@ -152,3 +152,14 @@ export type AutoTTRecRealArgName = keyof AutoTTRecRealArgs;
 const AUTO_TT_REC_TOP_10_LOCATIONS = makeReadonlyArraySet(["ww", "worldwide", ...COUNTRY_LOCATIONS.arr, ...REGIONAL_LOCATIONS.arr] as const);
 // A type describing the possible values of the `top-10-location` option of auto-tt-recorder
 export type Top10LocationFull = ValidValues<typeof AUTO_TT_REC_TOP_10_LOCATIONS>;
+
+// A helper type which includes <FILLME> from every field in the object-like type.
+type IncludeFILLMENull<T> = {
+  [P in keyof T]: T[P] | "<FILLME>" | null;
+}
+
+// A type specifically for the template exporter which allows <FILLME> and null values
+export type AutoTTRecExportArgs = IncludeFILLMENull<AutoTTRecRealArgs>;
+
+// A type describing the possible names of the auto-tt-recorder args that can be exported 
+export type AutoTTRecExportArgName = keyof AutoTTRecExportArgs;

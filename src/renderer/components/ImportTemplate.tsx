@@ -49,7 +49,7 @@ export function ImportTemplate(props: {
 
   async function onClickImportTemplate(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
-    let newAutoTTRecTemplateFilename = await window.api.openFileDialog([{name: "YAML files", extensions: ["yml"]}], autoTTRecTemplateFilename, "szs");
+    let newAutoTTRecTemplateFilename = await window.api.openFileDialog([{name: "YAML files", extensions: ["yml"]}], autoTTRecTemplateFilename, "template");
     if (newAutoTTRecTemplateFilename !== "") {
       setAutoTTRecTemplateFilename(newAutoTTRecTemplateFilename);
       let importTemplateResult: ImportTemplateResult = await window.api.importFormTemplate(newAutoTTRecTemplateFilename);
@@ -71,6 +71,29 @@ export function ImportTemplate(props: {
     }
   }
 
+  async function onClickExportTemplate(event: React.MouseEvent<HTMLButtonElement>) {
+    event.preventDefault();
+    let newAutoTTRecTemplateFilename = await window.api.saveFileDialog([{name: "YAML files", extensions: ["yml"]}], autoTTRecTemplateFilename, "template");
+    if (newAutoTTRecTemplateFilename !== "") {
+      setAutoTTRecTemplateFilename(newAutoTTRecTemplateFilename);
+      let importTemplateResult: ImportTemplateResult = await window.api.importFormTemplate(newAutoTTRecTemplateFilename);
+      setImportStatus(importTemplateResult.status);
+      setHasWarnings(importTemplateResult.hasWarnings);
+      setErrorWarningData(importTemplateResult.errorWarningData);
+      if (importTemplateResult.status === ImportTemplateStatus.SUCCESS) {
+        let formComplexity = props.formMethods.getValues("form-complexity");
+        let [newFormData, errorsAndWarningsStr] = await convertAutoTTRecConfigToFormData(importTemplateResult.data, newAutoTTRecTemplateFilename, formComplexity);
+        props.setImportToggle(true);
+        setErrorWarningData(errorsAndWarningsStr);
+        props.formMethods.reset(newFormData);
+        //props.validateFormArgsOnlyOnSubmitCallback();
+        //formDataRef.current = newFormData;
+        //setNewFormDataToggle((formDataToggle) => !formDataToggle);
+        console.log("newFormData:", newFormData);
+      }
+      setModalOpen(true);
+    }
+  }
   function importTemplateModal_cancel(event: React.MouseEvent<HTMLButtonElement>) {
     props.setImportToggle(false);
     setNewFormDataToggle((formDataToggle) => !formDataToggle);
@@ -99,6 +122,7 @@ export function ImportTemplate(props: {
       </Modal>
 
       <button disabled={props.disabled} onClick={onClickImportTemplate}>Import template...</button>
+      <button disabled={props.disabled} onClick={onClickExportTemplate}>Export template...</button>
     </div>
   )
 }
