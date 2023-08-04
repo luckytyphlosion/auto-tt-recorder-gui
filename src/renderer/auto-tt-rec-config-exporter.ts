@@ -51,6 +51,20 @@ import { AutoTTRecExportArgName, AutoTTRecExportArgs } from "./auto-tt-rec-args-
 
 import { AutoTTRecConfigErrorsAndWarnings } from "./auto-tt-rec-errors-and-warnings";
 
+function validateNoUnsavedFiles(formData: AutoTTRecConfigFormFields, errorsAndWarnings: AutoTTRecConfigErrorsAndWarnings) {
+  let hasUnsavedFiles: boolean = false;
+
+  if (formData["extra-gecko-codes-unsaved"]) {
+    errorsAndWarnings.addError("extra-gecko-codes-unsaved", "Please save your extra gecko codes file first.");
+    hasUnsavedFiles = true;
+  } if (formData["top-10-gecko-code-unsaved"]) {
+    errorsAndWarnings.addError("top-10-gecko-code-unsaved", "Please save your top 10 gecko code file first.");
+    hasUnsavedFiles = true;
+  }
+
+  return hasUnsavedFiles;
+}
+
 export class AutoTTRecConfigExporter {
   private formData: AutoTTRecConfigFormFields;
   private hasExported: boolean;
@@ -196,6 +210,32 @@ export class AutoTTRecConfigExporter {
     }
 
     this.exportArg("audio-bitrate", exportedAudioBitrate);
+  }
+
+  private exportFormComplexity() {
+    this.exportArg("form-complexity", this.getFormDataValue("form-complexity"));
+  }
+
+  private exportEnabledPathname<K extends AutoTTRecConfigFormPathnameArgName>(
+    {pathnameArgName, enableArgName}: ({
+      pathnameArgName: "extra-gecko-codes-filename",
+      enableArgName: "extra-gecko-codes-enable"
+    } | {
+      pathnameArgName: "extra-hq-textures-folder",
+      enableArgName: "extra-hq-textures-folder-enable"
+    }) & {
+      pathnameArgName: K,
+      enableArgName: (("extra-gecko-codes-enable" | "extra-hq-textures-folder-enable") & AutoTTRecConfigFormBooleanArgName)
+    }
+  ) {
+    let enableArgValue = this.getFormDataValue(enableArgName);
+    if (enableArgValue === true) {
+      this.exportSharedStringArg(pathnameArgName);
+    } else if (enableArgValue === false) {
+      this.exportArg(pathnameArgName, null);
+    } else {
+      this.exportArg(pathnameArgName, "<FILLME>");
+    }
   }
 
   public async export(): Promise<AutoTTRecExportArgs> {
