@@ -434,6 +434,21 @@ export class AutoTTRecConfigExporter {
     }
   }
 
+  private exportTrackName() {
+    let trackNameType = this.getFormDataChoiceValue("track-name-type");
+    let trackName: string | null;
+
+    if (trackNameType === "auto") {
+      trackName = "auto";
+    } else if (trackNameType === "rkg-slot") {
+      trackName = null;
+    } else {
+      trackName = this.getFormDataStringValue("track-name");
+    }
+
+    this.exportArg("track-name", trackName);
+  }
+
   public async export(): Promise<AutoTTRecExportArgs> {
     if (!this.hasExported) {
       this.exportStraightCopyArgs();
