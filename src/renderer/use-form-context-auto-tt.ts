@@ -15,9 +15,11 @@ export function useWatchExpandUnselectedChoiceInputs() {
   return useWatchAutoTT({name: "expand-unselected-choice-inputs"});
 }
 
-export function isValueOrFillmeIsValueMaker() {
+export function isValueOrFILLMEIsValueMaker(debugName?: string) {
   const expandUnselectedChoiceInputs = useWatchExpandUnselectedChoiceInputs();
-
+  if (debugName !== undefined) {
+    console.log(`Making isValueOrFILLMEIsValue for ${debugName}`);
+  }
   return function(value: string | boolean | "<FILLME>", expectedValue: string | boolean) {
     return value === expectedValue || (expandUnselectedChoiceInputs && value === "<FILLME>");
   }

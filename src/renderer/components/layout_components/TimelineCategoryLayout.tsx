@@ -23,7 +23,7 @@ function doesNoTop10CategoryNeedsToAdjustToGhostonly(formComplexity: FormComplex
   }
 }
 
-export function TimelineCategoryLayout(props: {isAutoTTRecRunning: boolean, formComplexity: FormComplexity, importToggle: boolean}) {
+export function TimelineCategoryLayout(props: {isAutoTTRecRunning: boolean, formComplexity: FormComplexity, unrenderFormToggle: boolean}) {
   const {register, setValue, getValues} = useFormContextAutoTT();
   const timelineCategory = useWatchAutoTT({name: "timeline-category"});
   const renderCounter = useRenderCounter(false, "TimelineCategoryInput");
@@ -45,7 +45,7 @@ export function TimelineCategoryLayout(props: {isAutoTTRecRunning: boolean, form
       {renderCounter}
       <hr style={{height: "2px", borderWidth: 0, color: "gray", backgroundColor: "gray"}}/>
       {
-        !props.importToggle ? (
+        !props.unrenderFormToggle ? (
           timelineCategory === "notop10" ? <NoTop10CategoryLayout isAutoTTRecRunning={props.isAutoTTRecRunning} formComplexity={props.formComplexity} noTop10Category={noTop10Category}/>
           : timelineCategory === "top10chadsoft" ? <Top10ChadsoftLayout isAutoTTRecRunning={props.isAutoTTRecRunning} formComplexity={props.formComplexity}/>
           : timelineCategory === "top10gecko" ? <Top10GeckoCodeLayout isAutoTTRecRunning={props.isAutoTTRecRunning} formComplexity={props.formComplexity}/>

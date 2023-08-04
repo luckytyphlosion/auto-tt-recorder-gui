@@ -109,7 +109,7 @@ export function AutoTTRecConfigForm(
   const formMethods = useForm<AutoTTRecConfigFormFields>({
     criteriaMode: "all",
     reValidateMode: "onSubmit",
-    defaultValues: DEFAULT_FORM_VALUES
+    defaultValues: shallowCopy(DEFAULT_FORM_VALUES)
   });
   console.log("AutoTTRecConfigForm formState:", formMethods.formState.errors);
   //console.trace();
@@ -141,7 +141,7 @@ export function AutoTTRecConfigForm(
   // }, []);
 
   const [submittedToggle, setSubmittedToggle] = useState(false);
-  const [importToggle, setImportToggle] = useState(false);
+  const [unrenderFormToggle, setUnrenderFormToggle] = useState(false);
   const [expandUnselectedChoiceInputs, setExpandUnselectedChoiceInputs] = useState(false);
 
   function updateExpandUnselectedChoiceInputs(event: React.ChangeEvent<HTMLInputElement>) {
@@ -187,13 +187,13 @@ export function AutoTTRecConfigForm(
   return (
     <div>
       <form onSubmit={formOnSubmitCallbackRef.current()}>
-        <ImportTemplate_Memo disabled={props.isAutoTTRecRunning} formMethods={formMethods} setImportToggle={setImportToggle} onError={onError}/>
-        <ClearAllFields_Memo disabled={props.isAutoTTRecRunning} formMethods={formMethods} submittedToggle={submittedToggle} setSubmittedToggle={setSubmittedToggle}/>
+        <ImportTemplate_Memo disabled={props.isAutoTTRecRunning} formMethods={formMethods} setUnrenderFormToggle={setUnrenderFormToggle} onError={onError}/>
+        <ClearAllFields_Memo disabled={props.isAutoTTRecRunning} formMethods={formMethods} setUnrenderFormToggle={setUnrenderFormToggle}/>
         {/*<label htmlFor="expand-unselected-choice-inputs">Expand unselected "choice" inputs (advanced)</label>
         <input id="expand-unselected-choice-inputs" type="checkbox" checked={expandUnselectedChoiceInputs} onChange={updateExpandUnselectedChoiceInputs}/>*/}
         <ExpandUnselectedChoiceInputs_Memo disabled={props.isAutoTTRecRunning} formMethods={formMethods}/>
         <fieldset disabled={props.isAutoTTRecRunning}>
-          <AutoTTRecConfigFormComponents_Memo formMethods={formMethods} forceUpdate={submittedToggle} importToggle={importToggle} isAutoTTRecRunning={props.isAutoTTRecRunning} expandUnselectedChoiceInputs={expandUnselectedChoiceInputs}/>
+          <AutoTTRecConfigFormComponents_Memo formMethods={formMethods} forceUpdate={submittedToggle} unrenderFormToggle={unrenderFormToggle} isAutoTTRecRunning={props.isAutoTTRecRunning} expandUnselectedChoiceInputs={expandUnselectedChoiceInputs}/>
         </fieldset>
         <AutoTTRecSubmitAbortButtons_Memo isAutoTTRecRunning={props.isAutoTTRecRunning} onAbortCallback={props.onAbortCallback} setRunAutoTTRecOnSubmitCallback={(() => {}) as any}/>
       </form>

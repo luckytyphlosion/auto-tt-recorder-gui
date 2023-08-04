@@ -4,6 +4,7 @@ import { AutoTTRecArgs } from "../auto-tt-rec-args-types";
 import { AutoTTRecStatus } from "./AutoTTRecStatus";
 import { IpcRendererEvent } from "electron";
 import { DEFAULT_FORM_VALUES } from "../auto-tt-rec-form-field-types";
+import { shallowCopy } from "../../shared/util-shared";
 
 import { AutoTTRecResponse } from "../../shared/shared-types";
 
@@ -29,7 +30,6 @@ export function AutoTTRecManager() {
   const [programStatusHeader, setProgramStatusHeader] = useState("Ready");
   const [programStatusDetails, setProgramStatusDetails] = useState("");
   const [isAutoTTRecRunning, setAutoTTRecRunning] = useState(false);
-  const [formDefaultValues, setFormDefaultValues] = useState(DEFAULT_FORM_VALUES);
 
   console.log("AutoTTRecManager programStatusDetails:", programStatusDetails);
   const renderCounter = useRenderCounter(false, "AutoTTRecManager");
@@ -90,8 +90,6 @@ export function AutoTTRecManager() {
   const abortAutoTTRec = useCallback(async function (event: React.MouseEvent<HTMLButtonElement>) {
     await window.api.terminateAutoTTRec();
   }, []);
-
-  console.log("AutoTTRecManager formDefaultValues['youtube-settings']:", formDefaultValues['youtube-settings']);
 
   return (
     <div>

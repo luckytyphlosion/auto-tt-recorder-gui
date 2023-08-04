@@ -19,7 +19,7 @@ import "../styles/ImportTemplate.css";
 
 export function ImportTemplate(props: {
   formMethods: UseFormReturn<AutoTTRecConfigFormFields, any, undefined>,
-  setImportToggle: React.Dispatch<React.SetStateAction<boolean>>,
+  setUnrenderFormToggle: React.Dispatch<React.SetStateAction<boolean>>,
   onError: (errors: Object) => Promise<void> | void,
   disabled: boolean
 }) {
@@ -66,7 +66,7 @@ export function ImportTemplate(props: {
           newImportErrorWarningTitle = "Imported template successfully!";
         }
         newImportErrorWarningData = errorsAndWarningsStr;
-        props.setImportToggle(true);
+        props.setUnrenderFormToggle(true);
         props.formMethods.reset(newFormData);
         console.log("newFormData:", newFormData);
       } else {
@@ -114,7 +114,7 @@ export function ImportTemplate(props: {
 
   function importExportTemplateModal_cancel(event: React.MouseEvent<HTMLButtonElement>) {
     if (isImporting) {
-      props.setImportToggle(false);
+      props.setUnrenderFormToggle(false);
       setNewFormDataToggle((formDataToggle) => !formDataToggle);  
     }
     setModalOpen(false);

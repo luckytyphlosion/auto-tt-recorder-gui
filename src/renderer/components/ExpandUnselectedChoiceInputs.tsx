@@ -9,10 +9,15 @@ export function ExpandUnselectedChoiceInputs(props: {
   disabled: boolean,
   formMethods: UseFormReturn<AutoTTRecConfigFormFields, any, undefined>,
 }) {
+
+  function updateExpandUnselectedChoiceInputs(event: React.ChangeEvent<HTMLInputElement>) {
+    props.formMethods.setValue("expand-unselected-choice-inputs", event.target.checked);
+  }
+
   return (
     <div>
       <label htmlFor="expand-unselected-choice-inputs">Expand unselected choice inputs (advanced): </label>
-      <input type="checkbox" disabled={props.disabled} {...props.formMethods.register("expand-unselected-choice-inputs")}/>
+      <input type="checkbox" disabled={props.disabled} onChange={updateExpandUnselectedChoiceInputs}/>
     </div>
   );
 }

@@ -23,6 +23,7 @@ export function makeMinimalFormData(formComplexity: FormComplexity, timelineCate
   formData["no-top-10-category"] = noTop10Category;
   formData["extra-gecko-codes-unsaved"] = false;
   formData["top-10-gecko-code-unsaved"] = false;
+  console.log("makeMinimalFormData expandUnselectedChoiceInputs:", expandUnselectedChoiceInputs);
   formData["expand-unselected-choice-inputs"] = expandUnselectedChoiceInputs;
   let errorsAndWarnings = new AutoTTRecConfigErrorsAndWarnings();
 
@@ -44,6 +45,7 @@ export function makeDefaultFormData(formComplexity: FormComplexity, timelineCate
   formData["timeline-category"] = timelineCategory;
   formData["no-top-10-category"] = noTop10Category;
   formData["expand-unselected-choice-inputs"] = expandUnselectedChoiceInputs;
+  console.log("makeDefaultFormData formData:", formData);
   return formData;
 }
 

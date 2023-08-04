@@ -22,7 +22,7 @@ const FormComplexityLayout_Memo = memo(FormComplexityLayout);
 export function AutoTTRecConfigFormComponents(props: {
     formMethods: UseFormReturn<AutoTTRecConfigFormFields, any, undefined>,
     forceUpdate: boolean,
-    importToggle: boolean,
+    unrenderFormToggle: boolean,
     isAutoTTRecRunning: boolean,
     expandUnselectedChoiceInputs: boolean}) {  
   const renderCounter = useRenderCounter(false, "AutoTTRecConfigFormComponents");
@@ -31,8 +31,9 @@ export function AutoTTRecConfigFormComponents(props: {
   return (
     <div className="auto-tt-rec-config-form">
       <FormProvider {...props.formMethods}>
+        <input type="hidden" {...props.formMethods.register("expand-unselected-choice-inputs")}/>
         <ISOWBFSFileInput_Memo/>
-        <FormComplexityLayout_Memo isAutoTTRecRunning={props.isAutoTTRecRunning} importToggle={props.importToggle}/>
+        <FormComplexityLayout_Memo isAutoTTRecRunning={props.isAutoTTRecRunning} unrenderFormToggle={props.unrenderFormToggle}/>
         {renderCounter}
       </FormProvider>
     </div>

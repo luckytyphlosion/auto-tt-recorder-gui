@@ -1,6 +1,6 @@
 
 import React from "react";
-import { useFormContextAutoTT, useWatchAutoTT } from "../../use-form-context-auto-tt";
+import { useFormContextAutoTT, useWatchAutoTT, isValueOrFILLMEIsValueMaker } from "../../use-form-context-auto-tt";
 
 import { ChadsoftWriteCacheInput } from "./ChadsoftWriteCacheInput";
 import { ChadsoftCacheExpiryInput } from "./ChadsoftCacheExpiryInput";
@@ -10,6 +10,7 @@ import { TriCheckbox } from "../TriCheckbox";
 export function ChadsoftReadCacheAndSettingsInput() {
   const {register} = useFormContextAutoTT();
   const chadsoftReadCache = useWatchAutoTT({name: "chadsoft-read-cache"});
+  const isValueOrFILLMEIsValue = isValueOrFILLMEIsValueMaker();
 
   return (
     <div>
@@ -17,7 +18,7 @@ export function ChadsoftReadCacheAndSettingsInput() {
       <TriCheckbox name="chadsoft-read-cache"/>
       <ChadsoftWriteCacheInput/>
       {
-        chadsoftReadCache === true || chadsoftReadCache === "<FILLME>" ? <ChadsoftCacheExpiryInput/> : ""
+        isValueOrFILLMEIsValue(chadsoftReadCache, true) ? <ChadsoftCacheExpiryInput/> : ""
       }
     </div>
   );

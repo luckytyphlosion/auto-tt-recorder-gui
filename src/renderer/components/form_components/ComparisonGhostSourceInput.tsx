@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
+import { useFormContextAutoTT, isValueOrFILLMEIsValueMaker } from "../../use-form-context-auto-tt";
 import useRenderCounter from "../../RenderCounter";
 
 import { ChadsoftComparisonGhostPageInput } from "./ChadsoftComparisonGhostPageInput";
@@ -15,6 +15,7 @@ export type ComparisonGhostSource = ValidValues<typeof COMPARISON_GHOST_SOURCES>
 export function ComparisonGhostSourceInput() {
   const {register, getValues} = useFormContextAutoTT();
   const [comparisonGhostSource, setComparisonGhostSource] = useState(getValues("comparison-ghost-source"));
+  const isValueOrFILLMEIsValue = isValueOrFILLMEIsValueMaker();
   const renderCounter = useRenderCounter(true);
 
   function updateComparisonGhostSource() {
@@ -33,10 +34,10 @@ export function ComparisonGhostSourceInput() {
 
       {renderCounter}
       {
-        comparisonGhostSource === "chadsoft" || comparisonGhostSource === "<FILLME>" ? <ChadsoftComparisonGhostPageInput/> : ""
+        isValueOrFILLMEIsValue(comparisonGhostSource, "chadsoft") ? <ChadsoftComparisonGhostPageInput/> : ""
       }
       {
-        comparisonGhostSource === "rkg" || comparisonGhostSource === "<FILLME>" ? <ComparisonGhostFilenameInput/> : ""
+        isValueOrFILLMEIsValue(comparisonGhostSource, "rkg") ? <ComparisonGhostFilenameInput/> : ""
       }
     </div>
   );

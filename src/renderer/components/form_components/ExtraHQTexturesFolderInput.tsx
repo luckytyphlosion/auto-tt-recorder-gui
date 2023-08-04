@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import useRenderCounter from "../../RenderCounter";
-import { useFormContextAutoTT, useWatchAutoTT } from "../../use-form-context-auto-tt";
+import { useFormContextAutoTT, useWatchAutoTT, isValueOrFILLMEIsValueMaker } from "../../use-form-context-auto-tt";
 import { FileFilter } from "electron";
 
 import { UseFormRegister, UseFormSetValue, ValidateResult } from "react-hook-form";
@@ -16,6 +16,7 @@ export function ExtraHQTexturesFolderInput() {
   const {register, setValue, getValues} = useFormContextAutoTT();
   const renderCounter = useRenderCounter(false, "ExtraHQTexturesFolderInput");
   const extraHQTexturesFolderEnable = useWatchAutoTT({name: "extra-hq-textures-folder-enable"});
+  const isValueOrFILLMEIsValue = isValueOrFILLMEIsValueMaker();
 
   async function queueOpenFolderDialog(event: React.MouseEvent<HTMLButtonElement>) {
     let response = await window.api.openFolderDialog(getValues("extra-hq-textures-folder"), "extra-hq-textures");
@@ -41,7 +42,7 @@ export function ExtraHQTexturesFolderInput() {
       <label htmlFor="extra-hq-textures-folder-enable">Add extra HQ Textures? </label>
       <TriCheckbox name="extra-hq-textures-folder-enable" noErrorMessage={true}/>
       {
-        extraHQTexturesFolderEnable === true || extraHQTexturesFolderEnable === "<FILLME>" ? <>
+        isValueOrFILLMEIsValue(extraHQTexturesFolderEnable, true) ? <>
           <ClearableReadonlyTextInput name="extra-hq-textures-folder" notRequired={true} validate={validateExtraHQTexturesFolder}/>
           <button onClick={event => {
             queueOpenFolderDialog(event);
