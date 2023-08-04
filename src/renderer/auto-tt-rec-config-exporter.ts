@@ -10,7 +10,7 @@ import { Top10LocationRegional, REGIONAL_LOCATIONS, TOP_10_LOCATION_REGIONAL_TO_
 import { INPUT_DISPLAYS } from "./components/form_components/InputDisplayInput";
 import { SPEEDOMETER_STYLES } from "./components/form_components/SpeedometerInput";
 import { SPEEDOMETER_METRICS } from "./components/form_components/SpeedometerMetricInput";
-import { SPEEDOMETER_DECIMAL_PLACES } from "./components/form_components/SpeedometerDecimalPlacesInput";
+import { SPEEDOMETER_DECIMAL_PLACES, SPEEDOMETER_DECIMAL_PLACES_NUMERIC } from "./components/form_components/SpeedometerDecimalPlacesInput";
 
 import { ENCODE_TYPES } from "./components/layout_components/choice_layouts/EncodeSettingsLayout";
 import { OutputVideoFileFormat, OUTPUT_VIDEO_FILE_FORMATS } from "./components/form_components/OutputVideoFileFormatInput";
@@ -326,6 +326,22 @@ export class AutoTTRecConfigExporter {
 
   private exportSpeedometerStyle() {
     this.exportArg("speedometer", this.getFormDataValue("speedometer-style"));
+  }
+
+  private exportSpeedometerDecimalPlacesStr() {
+    let speedometerDecimalPlacesStr = this.getFormDataValue("speedometer-decimal-places-str");
+
+    if (speedometerDecimalPlacesStr === "<FILLME>") {
+      this.exportArg("speedometer-decimal-places", "<FILLME>");
+    } else {
+      let speedometerDecimalPlaces = Number(speedometerDecimalPlacesStr);
+      if (isInSet(SPEEDOMETER_DECIMAL_PLACES_NUMERIC.set, speedometerDecimalPlaces)) {
+        this.exportArg("speedometer-decimal-places", speedometerDecimalPlaces);
+      } else {
+        this.errorsAndWarnings.addWarning("speedometer-decimal-places-str", `formData["speedometer-decimal-places-str"] was somehow not "0", "1", "2", or <FILLME>! this is an error within the program itself and not your fault, please contact the developer!`);
+        this.exportArg("speedometer-decimal-places", 1);
+      }
+    }
   }
 
   public async export(): Promise<AutoTTRecExportArgs> {
