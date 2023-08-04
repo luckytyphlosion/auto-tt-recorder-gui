@@ -324,7 +324,9 @@ export class AutoTTRecConfigExporter {
     this.exportArg("output-width", outputWidth);
   }
 
-  
+  private exportSpeedometerStyle() {
+    this.exportArg("speedometer", this.getFormDataValue("speedometer-style"));
+  }
 
   public async export(): Promise<AutoTTRecExportArgs> {
     if (!this.hasExported) {
