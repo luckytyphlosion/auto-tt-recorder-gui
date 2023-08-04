@@ -344,6 +344,15 @@ export class AutoTTRecConfigExporter {
     }
   }
 
+  private exportSZSFilename() {
+    let szsSource = this.getFormDataValue("szs-source");
+    if (szsSource === "automatic") {
+      this.exportArg("szs-filename", null);
+    } else {
+      this.exportSharedStringArg("szs-filename");
+    }
+  }
+
   public async export(): Promise<AutoTTRecExportArgs> {
     if (!this.hasExported) {
       this.exportStraightCopyArgs();
