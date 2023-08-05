@@ -9,15 +9,12 @@ export function GUIHeader() {
         <li>All regions are supported, including NTSC-K.</li>
         <li>Supports almost all features from the non-GUI program</li>
         <li>I will fix the visual layout later.</li>
-        <li>Links below aren't hyperlinks yet because of time issues, this will be fixed in the next version</li>
       </ul>
       <h3 className="troubleshooting-header">Troubleshooting below:</h3>
       <ul className="auto-tt-rec-troubleshooting">
-        <li>Download VLC to fix audio problems with the video: https://www.videolan.org/</li>
-        <li>If Dolphin gives error code -1073741515, install Visual C++ Redistributable Packages for Visual Studio 2013: https://www.microsoft.com/en-us/download/details.aspx?id=40784</li>
-        <li>ISO loading times shouldn't matter anymore, but if Dolphin gets stuck in a menu, contact me below</li>
-        <li>Join the Discord for any questions: https://discord.gg/6FqfpnqP57</li>
-        <li>Source Code (for GUI): https://github.com/luckytyphlosion/auto-tt-recorder-gui</li>
+        <li>Download VLC to fix audio problems with the video: <a href="https://www.videolan.org/">https://www.videolan.org</a></li>
+        <li>Join the <a href=" https://discord.gg/6FqfpnqP57">Discord</a> for any questions:</li>
+        <li>Source Code (for GUI): <a href="https://github.com/luckytyphlosion/auto-tt-recorder-gui">https://github.com/luckytyphlosion/auto-tt-recorder-gui</a></li>
       </ul>
     </div>
   );

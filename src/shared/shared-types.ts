@@ -8,9 +8,23 @@ export interface FilenameAndContents {
   contents: string
 }
 
-export enum AutoTTRecResponse {
+export enum AutoTTRecResponseStatus {
+  INDETERMINATE = -1,
   COMPLETED = 1,
-  ABORTED
+  ABORTED,
+  ERROR
+}
+
+
+export interface AutoTTRecError {
+  message: string;
+  code?: number;
+  signal?: string;
+}
+
+export interface AutoTTRecResponse {
+  status: AutoTTRecResponseStatus,
+  error: AutoTTRecError
 }
 
 export enum ImportTemplateStatus {

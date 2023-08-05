@@ -6,7 +6,7 @@ import { IpcRendererEvent } from "electron";
 import { DEFAULT_FORM_VALUES } from "../auto-tt-rec-form-field-types";
 import { shallowCopy } from "../../shared/util-shared";
 
-import { AutoTTRecResponse } from "../../shared/shared-types";
+import { AutoTTRecResponse, AutoTTRecResponseStatus, AutoTTRecError } from "../../shared/shared-types";
 
 import useRenderCounter from "../RenderCounter";
 
@@ -27,7 +27,7 @@ function appendAccountingForCarriage(base: string, line: string) {
 const AutoTTRecConfigForm_Memo = memo(AutoTTRecConfigForm);
 
 export function AutoTTRecManager() {
-  const [programStatusHeader, setProgramStatusHeader] = useState("Ready");
+  const [programStatusHeader, setProgramStatusHeader] = useState<string | JSX.Element>("Ready");
   const [programStatusDetails, setProgramStatusDetails] = useState("");
   const [isAutoTTRecRunning, setAutoTTRecRunning] = useState(false);
 
@@ -66,19 +66,24 @@ export function AutoTTRecManager() {
       window.api.handleSendStdout(handleSendStdoutListener);
       window.api.handleSendStderr(handleSendStderrListener);
 
-      const autoTTRecResponse = await window.api.waitAutoTTRec()
-        .catch((err) => {
-          setAutoTTRecRunning(false);
-          setProgramStatusHeader("Error");
-          setProgramStatusDetails((programStatusDetails) => (programStatusDetails + err.message));
-        });
-
-      if (autoTTRecResponse === AutoTTRecResponse.COMPLETED) {
+      const autoTTRecResponse = await window.api.waitAutoTTRec();
+      if (autoTTRecResponse.status === AutoTTRecResponseStatus.COMPLETED) {
         setAutoTTRecRunning(false);
         setProgramStatusHeader("Done!");
-      } else if (autoTTRecResponse === AutoTTRecResponse.ABORTED) {
+      } else if (autoTTRecResponse.status === AutoTTRecResponseStatus.ABORTED) {
         setAutoTTRecRunning(false);
         setProgramStatusHeader("Aborted");
+      } else {
+        if (autoTTRecResponse.error.code === 0xc0000135) {
+          setProgramStatusHeader(<>
+            Error: Please install <a href="https://www.microsoft.com/en-us/download/details.aspx?id=40784">Visual C++ Redistributable Packages for Visual Studio 2013</a> in order to run Dolphin.
+          </>);
+        } else {
+          setProgramStatusHeader("Error");
+        }
+        setAutoTTRecRunning(false);
+
+        setProgramStatusDetails((programStatusDetails) => (`${programStatusDetails}${autoTTRecResponse.error.message}`));
       }
 
       console.log("Removing std handlers!");

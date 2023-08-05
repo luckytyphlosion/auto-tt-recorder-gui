@@ -15,7 +15,7 @@
 //var console = global.console = new Console(process.stdout, process.stderr);
 //console.log("console");
 
-import { dialog, ipcMain, app, BrowserWindow } from "electron";
+import { dialog, shell, ipcMain, app, BrowserWindow, HandlerDetails } from "electron";
 import { autoUpdater, UpdateCheckResult, UpdateInfo } from "electron-updater";
 import fsPromises from "fs/promises";
 
@@ -153,6 +153,16 @@ async function createWindow() {
       ? 'http://localhost:3000'
       : `file://${path.join(__dirname, '../renderer/index.html')}`
   );
+
+  // mainWindow.webContents.setWindowOpenHandler((details: HandlerDetails) => {
+  //   shell.openExternal(details.url);
+  //   return {action: "deny"};
+  // });
+  mainWindow.webContents.on("will-navigate", (details: Electron.Event, url: string) => {
+    shell.openExternal(url);
+    //console.log("will-navigate details:", details);
+    details.preventDefault();
+  });
 
   if (isDev) {
     mainWindow.webContents.openDevTools({ mode: 'detach' });

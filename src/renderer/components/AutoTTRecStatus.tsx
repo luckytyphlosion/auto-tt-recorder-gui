@@ -3,7 +3,7 @@ import "../styles/AutoTTRecStatus.css";
 
 import useRenderCounter from "../RenderCounter";
 
-export function AutoTTRecStatus(props: {programStatusHeader: string, programStatusDetails: string}) {
+export function AutoTTRecStatus(props: {programStatusHeader: string | JSX.Element, programStatusDetails: string}) {
   const renderCounter = useRenderCounter(false, "AutoTTRecStatus");
 
   return (

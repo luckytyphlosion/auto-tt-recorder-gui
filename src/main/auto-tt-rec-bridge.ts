@@ -10,7 +10,7 @@ import * as versions from "../shared/versions";
 import { mainWindow } from "./electron";
 import { globalConfig } from "./confighandler";
 
-import { AutoTTRecConfig, AutoTTRecResponse } from "../shared/shared-types";
+import { AutoTTRecConfig, AutoTTRecResponse, AutoTTRecError, AutoTTRecResponseStatus } from "../shared/shared-types";
 
 interface ReadStreamResponse {
   hasData: boolean;
@@ -119,7 +119,7 @@ export async function waitAutoTTRec(event: IpcMainInvokeEvent) {
   autoTTRecProcess.stdout.on("data", onReceiveAutoTTRecStdout);
   autoTTRecProcess.stderr.on("data", onReceiveAutoTTRecStderr);
 
-  return new Promise(function (resolve, reject) {
+  return new Promise(function (resolve: (response: AutoTTRecResponse) => void, reject) {
     function removeAutoTTRecProcessListeners() {
       autoTTRecProcessNonNull.stdout.removeListener("data", onReceiveAutoTTRecStdout);
       autoTTRecProcessNonNull.stderr.removeListener("data", onReceiveAutoTTRecStderr);
@@ -127,16 +127,25 @@ export async function waitAutoTTRec(event: IpcMainInvokeEvent) {
       autoTTRecProcessNonNull.removeListener("error", onAutoTTRecErrorAfterSpawn);
     }
 
-    async function onAutoTTRecExit(code: number, signal: string) {
+    async function onAutoTTRecExit(code: number | null, signal: string | null) {
       console.log("Process exited!");
       removeAutoTTRecProcessListeners();
+      let autoTTRecResponse: AutoTTRecResponse = {
+        status: AutoTTRecResponseStatus.INDETERMINATE,
+        error: {message: ""}
+      }
+      let errorObj: AutoTTRecError | undefined = undefined;
+
       if (signal !== null) {
         if (terminatedAutoTTRecViaGui) {
           terminatedAutoTTRecViaGui = false;
-          resolve(AutoTTRecResponse.ABORTED);
+          autoTTRecResponse.status = AutoTTRecResponseStatus.ABORTED;
+        } else {
+          autoTTRecProcess = null;
+          autoTTRecResponse.status = AutoTTRecResponseStatus.ERROR;
+          autoTTRecResponse.error.message = `Auto-TT-Recorder was unexpectedly closed. (signal: ${signal})`;
+          autoTTRecResponse.error.signal = signal;
         }
-        autoTTRecProcess = null;
-        reject(new Error(`Auto-TT-Recorder was unexpectedly closed. (signal: ${signal})`));
       } else if (code !== 0) {
         console.log(`error code ${code}`);
         let errorMsg: string;
@@ -152,12 +161,26 @@ export async function waitAutoTTRec(event: IpcMainInvokeEvent) {
           errorMsg = (err as Error).message;
         }
         autoTTRecProcess = null;
-        reject(new Error(`An error occurred in Auto-TT-Recorder (code: ${code}): ${errorMsg}`));
+        let codeFormatted: string;
+        if (code === null) {
+          codeFormatted = "UNKNOWN";
+        } else {
+          codeFormatted = code.toString();
+        }
+        autoTTRecResponse.status = AutoTTRecResponseStatus.ERROR;
+        autoTTRecResponse.error.message = `An error occurred in Auto-TT-Recorder (code: ${codeFormatted}): ${errorMsg}`;
+        if (code === null) {
+          autoTTRecResponse.error.code = 1;
+        } else {
+          autoTTRecResponse.error.code = code;
+        }
       } else {
         console.log("resolved running auto-tt-rec");
         autoTTRecProcess = null;
-        resolve(AutoTTRecResponse.COMPLETED);
+        autoTTRecResponse.status = AutoTTRecResponseStatus.COMPLETED;
       }
+
+      resolve(autoTTRecResponse);
     }
 
     async function onAutoTTRecErrorAfterSpawn(err: Error) {
