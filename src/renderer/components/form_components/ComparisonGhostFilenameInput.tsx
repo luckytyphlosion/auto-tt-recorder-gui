@@ -7,7 +7,7 @@ import { isFileReadable } from "../../util-renderer"
 import { ClearableReadonlyTextInput } from "../ClearableReadonlyTextInput";
 
 export function ComparisonGhostFilenameInput() {
-  const {register, setValue, getValues} = useFormContextAutoTT();
+  const {register, setValue, getValues, formState, trigger} = useFormContextAutoTT();
 
   async function queueOpenDialog(event: React.MouseEvent<HTMLButtonElement>, fileFilters: FileFilter[]) {
     let response = await window.api.openFileDialog(fileFilters, getValues("comparison-ghost-filename"), "rkgs");

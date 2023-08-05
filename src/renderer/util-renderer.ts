@@ -2,6 +2,7 @@ import { IsFileWritableResult, IsFileWritableResultCode } from "../shared/shared
 import { getIndefiniteArticleForFileExtension } from "../shared/util-shared";
 
 async function isFileOrFolderReadable(filename: string, fileOrFolderStr: string): Promise<string | boolean> {
+  console.log("isFileOrFolderReadable:", filename);
   let isReadable = await window.api.isFileReadable(filename);
   if (isReadable) {
     return true;

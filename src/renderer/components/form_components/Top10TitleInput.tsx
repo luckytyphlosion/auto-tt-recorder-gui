@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useFormContextAutoTT, isValueOrFILLMEIsValueMaker } from "../../use-form-context-auto-tt";
-import { SimpleErrorMessage, MultipleErrorMessage } from "../SimpleErrorMessage";
+import { SimpleErrorMessage, DoubleErrorMessage } from "../SimpleErrorMessage";
 
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
 
@@ -19,9 +19,8 @@ export function Top10TitleInput() {
   }
 
   function validateTop10Title(top10Title: string) {
-    if (top10TitleType === "<FILLME>") {
-      return "Top 10 Title type (auto vs manual) is required.";
-    } else if (top10Title === "") {
+    console.log("top10TitleType:", top10TitleType);
+    if (top10Title === "") {
       return "Top 10 Title is required.";
     } else {
       return true;
@@ -31,18 +30,18 @@ export function Top10TitleInput() {
   return (
     <div>
       <label htmlFor="top-10-title">Top 10 Title: </label>
-      <DeselectableRadioButtonGroup name="top-10-title-type" noErrorMessage={true}>
+      <DeselectableRadioButtonGroup name="top-10-title-type" noErrorMessage={true} inputRequiredMessage="Top 10 Title type (auto vs manual) is required.">
         <DeselectableRadioButton labelValue="Autogenerate:" id="top-10-title-type-auto" value="auto" onChange={updateTop10TitleType}/>
         <DeselectableRadioButton labelValue="Supply manually:" id="top-10-title-type-manual" value="manual" onChange={updateTop10TitleType}/>
       </DeselectableRadioButtonGroup>
       {
-        <>
-          <input type="text" {...isValueOrFILLMEIsValue(top10TitleType, "manual") ? {} : {style: {display: "none"}}}
+        isValueOrFILLMEIsValue(top10TitleType, "manual") ? <>
+          <input type="text"
             {...register("top-10-title", {validate: validateTop10Title})}
           ></input>
-          <MultipleErrorMessage names={["top-10-title-type", "top-10-title"]}/>
-        </>
+        </> : ""
       }
+      <DoubleErrorMessage enablerName="top-10-title-type" enablerEnabledValue="manual" textName="top-10-title"/>
       
     </div>
   );

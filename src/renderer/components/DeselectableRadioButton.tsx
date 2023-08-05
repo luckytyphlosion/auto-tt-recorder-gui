@@ -38,12 +38,17 @@ function useDeselectableRadioButtonsGroupContext() {
   return lastElement;
 }*/
 
-export function DeselectableRadioButtonGroup<K extends AutoTTRecConfigFormChoiceArgName>(props: {name: K, noErrorMessage?: boolean, customValidate?: (value: AutoTTRecConfigFormChoiceArgs[AutoTTRecConfigFormChoiceArgName]) => ValidateResult, notDeselectable?: boolean, children?: React.ReactNode}) {
+export function DeselectableRadioButtonGroup<K extends AutoTTRecConfigFormChoiceArgName>(props: {name: K, noErrorMessage?: boolean, inputRequiredMessage?: string, notDeselectable?: boolean, children?: React.ReactNode}) {
   const {register} = useFormContextAutoTT();
   const renderCounter = useRenderCounter(true, `DeselectableRadioButtonGroup ${props.name}`);
   function validateDeselectableRadioButton(value: AutoTTRecConfigFormChoiceArgs[AutoTTRecConfigFormChoiceArgName]): ValidateResult {
+    console.log(`validateDeselectableRadioButton ${props.name}:`, value);
     if (value === "<FILLME>") {
-      return "This input is required.";
+      if (props.inputRequiredMessage !== undefined) {
+        return props.inputRequiredMessage;
+      } else {
+        return "This input is required.";
+      }
     } else {
       return true;
     }
@@ -57,7 +62,7 @@ export function DeselectableRadioButtonGroup<K extends AutoTTRecConfigFormChoice
       }}>
         {props.children}
         <input type="radio" id={`${props.name}-FILLME`} value="<FILLME>" style={{display: "none"}} {...register(props.name, {
-          validate: props.customValidate !== undefined ? props.customValidate : validateDeselectableRadioButton
+          validate: validateDeselectableRadioButton
         })}/>
       </DeselectableRadioButtonsGroupContext.Provider>
       {
@@ -95,7 +100,7 @@ export function DeselectableRadioButton<K extends AutoTTRecConfigFormChoiceArgNa
                   props.onChange();
                 }
               }
-              //console.log("DeselectableRadioButton formState:", formState);
+              console.log("DeselectableRadioButton formState:", formState);
               if (formState.isSubmitted) {
                 trigger(context.name);
               }
