@@ -17,6 +17,7 @@ import { H26xPreset } from "./components/form_components/H26xPresetInput";
 
 import { Timeline } from "./components/layout_components/choice_layouts/NoTop10CategoryLayout";
 import { AspectRatio16By9 } from "./components/form_components/AspectRatio16By9Input";
+import { PurgeAutoAdd } from "./components/form_components/PurgeAutoAddInput";
 
 import { FormComplexity } from "./components/layout_components/FormComplexityLayout";
 
@@ -50,6 +51,7 @@ class AutoTTRecArgsClass {
   "game-volume"?: number = 1.0;
   "h26x-preset"?: H26xPreset = "slow";
   "hq-textures"?: boolean = true;
+  "ignore-auto-add-missing-files"?: boolean = false;
   "input-display"?: InputDisplay = "auto";
   "input-display-dont-create"?: boolean = false;
   "iso-filename"?: string = "";
@@ -67,6 +69,7 @@ class AutoTTRecArgsClass {
   "output-width"?: number = 2560;
   "output-width-custom"?: void;
   "pixel-format"?: string = "yuv420p";
+  "purge-auto-add"?: PurgeAutoAdd = "onerror";
   "set-200cc"?: void;
   "speedometer"?: SpeedometerStyle = "fancy";
   "speedometer-style"?: void;

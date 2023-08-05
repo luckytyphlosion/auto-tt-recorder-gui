@@ -241,6 +241,8 @@ export function convertFormDataToAutoTTRecArgs(formData: AutoTTRecConfigFormFiel
   }
   argsBuilder.add("ending-message");
   argsBuilder.add("top-10-censors");
+  argsBuilder.add("ignore-auto-add-missing-files");
+  argsBuilder.add("purge-auto-add");
   argsBuilder.add("output-video-filename");
   
 

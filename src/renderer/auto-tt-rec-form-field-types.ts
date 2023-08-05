@@ -38,6 +38,7 @@ import { TrackNameType } from "./components/form_components/TrackNameInput";
 import { MusicPresentation } from "./components/form_components/MusicPresentationInput";
 import { FormComplexity } from "./components/layout_components/FormComplexityLayout";
 import { Top10TitleType } from "./components/form_components/Top10TitleInput";
+import { PurgeAutoAdd } from "./components/form_components/PurgeAutoAddInput";
 
 import { Set200cc } from "./components/form_components/Set200ccInput";
 
@@ -92,6 +93,7 @@ class AutoTTRecConfigFormFieldsSomeFILLMEClass {
   "game-volume-numberinput": number = 100; // number
   "h26x-preset": H26xPreset = DEBUG_PREFILLED_DEFAULTS ? "ultrafast" : "slow";
   "hq-textures": boolean = true; // checkbox
+  "ignore-auto-add-missing-files": boolean = false; // checkbox
   "input-display": InputDisplay = "auto"; // choice
   "input-display-dont-create": boolean = false; // checkbox
   "iso-filename": string = DEBUG_PREFILLED_DEFAULTS ? "C:\\Users\\User\\Documents\\RMCE 01\\RMCE01.iso" : "";
@@ -112,6 +114,7 @@ class AutoTTRecConfigFormFieldsSomeFILLMEClass {
   "output-width-custom": number = NaN; // number
   "output-width-preset": OutputWidthPreset = DEBUG_PREFILLED_DEFAULTS ? "none" : "2560"; // choice
   "pixel-format": string = "yuv420p"; // arbitrary
+  "purge-auto-add": PurgeAutoAdd = "onerror"; // choice
   "set-200cc": Set200cc = "no-200cc"; // choice
   "speedometer-decimal-places-str": SpeedometerDecimalPlaces = "1"; // choice
   "speedometer-style": SpeedometerStyle = "fancy"; // choice
@@ -287,6 +290,7 @@ export const MINIMAL_FORM_VALUES: AutoTTRecConfigFormMinimalFields = {
   "game-volume-numberinput": NaN,
   "h26x-preset": "<FILLME>",
   "hq-textures": "<FILLME>",
+  "ignore-auto-add-missing-files": "<FILLME>",
   "input-display": "<FILLME>",
   "input-display-dont-create": "<FILLME>",
   "iso-filename": "",
@@ -307,6 +311,7 @@ export const MINIMAL_FORM_VALUES: AutoTTRecConfigFormMinimalFields = {
   "output-width-custom": NaN,
   "output-width-preset": "<FILLME>",
   "pixel-format": "",
+  "purge-auto-add": "<FILLME>",
   "set-200cc": "<FILLME>",
   "speedometer-decimal-places-str": "<FILLME>",
   "speedometer-style": "<FILLME>",

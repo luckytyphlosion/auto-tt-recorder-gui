@@ -178,6 +178,8 @@ export class AutoTTRecConfigExporter {
     this.exportSharedChoiceArg("video-codec");
     this.exportSharedBooleanArg("youtube-settings");
     this.exportSharedStringArg("top-10-censors");
+    this.exportSharedBooleanArg("ignore-auto-add-missing-files");
+    this.exportSharedChoiceArg("purge-auto-add");
   }
 
   private exportGhostPageAndFilename(isMainGhost: boolean) {

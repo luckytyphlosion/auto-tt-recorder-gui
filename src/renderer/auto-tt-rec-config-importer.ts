@@ -35,6 +35,7 @@ import { MusicPresentation } from "./components/form_components/MusicPresentatio
 import { FormComplexity } from "./components/layout_components/FormComplexityLayout";
 import { Top10TitleType } from "./components/form_components/Top10TitleInput";
 
+import { PURGE_AUTO_ADD_VALUES } from "./components/form_components/PurgeAutoAddInput";
 import { SET_200CC_VALUES } from "./components/form_components/Set200ccInput";
 
 import { AutoTTRecConfig, StringOrError, BooleanFILLME } from "../shared/shared-types";
@@ -434,6 +435,9 @@ export class AutoTTRecConfigImporter {
     this.importSharedNumberArg("top-10-highlight");    
 
     this.importSharedStringArg("chadsoft-cache-expiry");
+    this.importSharedStringArg("top-10-censors");
+    this.importSharedBooleanArg("ignore-auto-add-missing-files");
+    this.importSharedChoiceArg("purge-auto-add", PURGE_AUTO_ADD_VALUES);
     this.importSharedStringArg("ending-message");
 
   }

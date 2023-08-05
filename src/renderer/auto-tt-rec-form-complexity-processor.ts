@@ -128,6 +128,10 @@ export class AutoTTRecFormDataFormComplexityProcessor {
     this.formData["chadsoft-write-cache"] = true;
     this.formData["chadsoft-cache-expiry"] = "24h";
     this.formData["top-10-censors"] = "";
+    if (this.formComplexity === FormComplexity.SIMPLE) {
+      this.formData["ignore-auto-add-missing-files"] = true;
+    }
+    this.formData["purge-auto-add"] = "onerror";
   }
 
   public get formData() {
