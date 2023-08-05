@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useFormContextAutoTT, isValueOrFILLMEIsValueMaker } from "../../use-form-context-auto-tt";
-import { SimpleErrorMessage } from "../SimpleErrorMessage";
+import { SimpleErrorMessage, MultipleErrorMessage } from "../SimpleErrorMessage";
 
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
 
@@ -36,12 +36,12 @@ export function Top10TitleInput() {
         <DeselectableRadioButton labelValue="Supply manually:" id="top-10-title-type-manual" value="manual" onChange={updateTop10TitleType}/>
       </DeselectableRadioButtonGroup>
       {
-        isValueOrFILLMEIsValue(top10TitleType, "manual") ? <>
-          <input type="text"
+        <>
+          <input type="text" {...isValueOrFILLMEIsValue(top10TitleType, "manual") ? {} : {style: {display: "none"}}}
             {...register("top-10-title", {validate: validateTop10Title})}
           ></input>
-          <SimpleErrorMessage name="top-10-title"/>
-        </> : ""
+          <MultipleErrorMessage names={["top-10-title-type", "top-10-title"]}/>
+        </>
       }
       
     </div>

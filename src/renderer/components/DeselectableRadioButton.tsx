@@ -38,7 +38,7 @@ function useDeselectableRadioButtonsGroupContext() {
   return lastElement;
 }*/
 
-export function DeselectableRadioButtonGroup<K extends AutoTTRecConfigFormChoiceArgName>(props: {name: K, noErrorMessage?: boolean, notDeselectable?: boolean, children?: React.ReactNode}) {
+export function DeselectableRadioButtonGroup<K extends AutoTTRecConfigFormChoiceArgName>(props: {name: K, noErrorMessage?: boolean, customValidate?: (value: AutoTTRecConfigFormChoiceArgs[AutoTTRecConfigFormChoiceArgName]) => ValidateResult, notDeselectable?: boolean, children?: React.ReactNode}) {
   const {register} = useFormContextAutoTT();
   const renderCounter = useRenderCounter(true, `DeselectableRadioButtonGroup ${props.name}`);
   function validateDeselectableRadioButton(value: AutoTTRecConfigFormChoiceArgs[AutoTTRecConfigFormChoiceArgName]): ValidateResult {
@@ -57,7 +57,7 @@ export function DeselectableRadioButtonGroup<K extends AutoTTRecConfigFormChoice
       }}>
         {props.children}
         <input type="radio" id={`${props.name}-FILLME`} value="<FILLME>" style={{display: "none"}} {...register(props.name, {
-          validate: validateDeselectableRadioButton
+          validate: props.customValidate !== undefined ? props.customValidate : validateDeselectableRadioButton
         })}/>
       </DeselectableRadioButtonsGroupContext.Provider>
       {
@@ -69,7 +69,7 @@ export function DeselectableRadioButtonGroup<K extends AutoTTRecConfigFormChoice
 }
 
 export function DeselectableRadioButton<K extends AutoTTRecConfigFormChoiceArgName, V extends AutoTTRecConfigFormChoiceArgs[K]>(props: {labelValue: string, id: string, value: V, onChange?: ((event?: Event) => void) | (() => void), isLast?: boolean}) {
-  const {register, setValue, getValues} = useFormContextAutoTT();
+  const {register, setValue, getValues, trigger, formState} = useFormContextAutoTT();
   const context = useDeselectableRadioButtonsGroupContext();
   const renderCounter = useRenderCounter(true, `DeselectableRadioButton ${props.value}`);
 
@@ -94,6 +94,10 @@ export function DeselectableRadioButton<K extends AutoTTRecConfigFormChoiceArgNa
                 } else {
                   props.onChange();
                 }
+              }
+              //console.log("DeselectableRadioButton formState:", formState);
+              if (formState.isSubmitted) {
+                trigger(context.name);
               }
               e.preventDefault();
               return false;
