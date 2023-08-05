@@ -20,7 +20,7 @@ export function LoadFormInputsTypeSelect(props: {
 
   return (
     <div>
-      <label htmlFor="load-form-inputs-select">When opening the program, pre-fill options from: </label>
+      <label htmlFor="load-form-inputs-select"><strong>When opening the program, pre-fill options from: </strong></label>
       <div id="load-form-inputs-select">
         <label htmlFor="load-form-inputs-select-last-recorded">Last recorded options: </label>
         <input type="radio" id="load-form-inputs-select-last-recorded" name="load-form-inputs-select" value="load-form-inputs-select-last-recorded" checked={loadFormInputsType === "load-form-inputs-select-last-recorded"} onChange={updateLoadFormInputsSelect} disabled={props.disabled}/>

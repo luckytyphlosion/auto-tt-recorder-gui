@@ -151,6 +151,8 @@ async function createWindow() {
   ipcMain.handle("get-last-opened-template-filename", confighandler.getLastOpenedTemplateFilename);
   ipcMain.handle("get-expand-unselected-choice-inputs", confighandler.getExpandUnselectedChoiceInputs);
   ipcMain.handle("set-and-save-expand-unselected-choice-inputs", confighandler.setAndSaveExpandUnselectedChoiceInputs);
+  ipcMain.handle("get-validate-form-on-open", confighandler.getValidateFormOnOpen);
+  ipcMain.handle("set-and-save-validate-form-on-open", confighandler.setAndSaveValidateFormOnOpen);
 
   // and load the index.html of the app.
   // win.loadFile("index.html");

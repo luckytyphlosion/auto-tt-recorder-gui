@@ -35,7 +35,8 @@ declare global {
       getLastOpenedTemplateFilename: () => Promise<string>;
       getExpandUnselectedChoiceInputs: () => Promise<boolean>;
       setAndSaveExpandUnselectedChoiceInputs: (expandUnselectedChoiceInputs: boolean) => Promise<void>;
-
+      getValidateFormOnOpen: () => Promise<boolean>;
+      setAndSaveValidateFormOnOpen: (validateFormOnOpen: boolean) => Promise<void>;
     }
   }
 }

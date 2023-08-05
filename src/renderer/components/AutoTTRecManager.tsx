@@ -28,7 +28,8 @@ const AutoTTRecConfigForm_Memo = memo(AutoTTRecConfigForm);
 
 export function AutoTTRecManager(props: {
   initialLoadFormInputsType: LoadFormInputsType,
-  INITIAL_FORM_DATA: AutoTTRecConfigFormFields
+  INITIAL_FORM_DATA: AutoTTRecConfigFormFields,
+  validateFormOnOpen: boolean
 }) {
   const [programStatusHeader, setProgramStatusHeader] = useState<string | JSX.Element>("Ready");
   const [programStatusDetails, setProgramStatusDetails] = useState("");
@@ -102,7 +103,7 @@ export function AutoTTRecManager(props: {
   return (
     <div>
       <AutoTTRecConfigForm_Memo whichUI={true} onSubmitCallback={runAutoTTRec}
-        onAbortCallback={abortAutoTTRec} isAutoTTRecRunning={isAutoTTRecRunning} initialLoadFormInputsType={props.initialLoadFormInputsType} INITIAL_FORM_DATA={props.INITIAL_FORM_DATA}/>
+        onAbortCallback={abortAutoTTRec} isAutoTTRecRunning={isAutoTTRecRunning} initialLoadFormInputsType={props.initialLoadFormInputsType} INITIAL_FORM_DATA={props.INITIAL_FORM_DATA} validateFormOnOpen={props.validateFormOnOpen}/>
       {renderCounter}
       <AutoTTRecStatus programStatusHeader={programStatusHeader}
         programStatusDetails={programStatusDetails}/>

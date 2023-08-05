@@ -53,6 +53,7 @@ import { ClearAllFields } from "./ClearAllFields";
 import { ImportTemplate } from "./ImportTemplate";
 import { ExpandUnselectedChoiceInputs } from "./ExpandUnselectedChoiceInputs";
 import { LoadFormInputsTypeSelect } from "./LoadFormInputsTypeSelect";
+import { ValidateFormOnOpen } from "./ValidateFormOnOpen";
 
 import { shallowCopy } from "../../shared/util-shared";
 import { LoadFormInputsType } from "../../shared/shared-types";
@@ -95,7 +96,8 @@ type AutoTTRecConfigFormProps = {
   onAbortCallback: (event: React.MouseEvent<HTMLButtonElement>) => void,
   isAutoTTRecRunning: boolean,
   initialLoadFormInputsType: LoadFormInputsType,
-  INITIAL_FORM_DATA: AutoTTRecConfigFormFields
+  INITIAL_FORM_DATA: AutoTTRecConfigFormFields,
+  validateFormOnOpen: boolean
   //setFormDefaultValues: React.Dispatch<React.SetStateAction<AutoTTRecConfigFormFields>>
 }
 
@@ -116,7 +118,7 @@ export function AutoTTRecConfigForm(
     reValidateMode: "onSubmit",
     defaultValues: props.INITIAL_FORM_DATA
   });
-  console.log("AutoTTRecConfigForm formState:", formMethods.formState.errors);
+  //console.log("AutoTTRecConfigForm formState.isSubmitted:", formMethods.formState.isSubmitted);
   //console.trace();
   //console.log("props:", props);
 
@@ -127,10 +129,6 @@ export function AutoTTRecConfigForm(
   let formState = formMethods.formState;
   const getRunAutoTTRecOnSubmitCallback = () => {
     return formMethods.handleSubmit(onSubmit, onError);
-  };
-
-  const getValidateFormArgsOnlyOnSubmitCallback = () => {
-    return formMethods.handleSubmit(onSubmitValidateOnly, onError);
   };
 
   const formOnSubmitCallbackRef = useRef<() => React.FormEventHandler<HTMLFormElement>>(getRunAutoTTRecOnSubmitCallback);
@@ -179,10 +177,6 @@ export function AutoTTRecConfigForm(
     await props.onSubmitCallback(autoTTRecArgs, setSubmittedToggle);
   }
 
-  function onSubmitValidateOnly(formData: AutoTTRecConfigFormFields) {
-
-  }
-
   function onError(errors: Object) {
     console.log("errors:", errors);
     console.log("formState.dirtyFields:", formState.dirtyFields);
@@ -196,13 +190,17 @@ export function AutoTTRecConfigForm(
     <div>
       <form onSubmit={formOnSubmitCallbackRef.current()}>
         <LoadFormInputsTypeSelect disabled={props.isAutoTTRecRunning} initialValue={props.initialLoadFormInputsType}/>
+        <br/>
+        <strong>Other program settings:</strong>
+        <ValidateFormOnOpen disabled={props.isAutoTTRecRunning} initialValue={props.validateFormOnOpen}/>
         <ExpandUnselectedChoiceInputs_Memo disabled={props.isAutoTTRecRunning} formMethods={formMethods}/>
+        <br/>
         <ImportTemplate_Memo disabled={props.isAutoTTRecRunning} formMethods={formMethods} setUnrenderFormToggle={setUnrenderFormToggle} onError={onError}/>
         <ClearAllFields_Memo disabled={props.isAutoTTRecRunning} formMethods={formMethods} setUnrenderFormToggle={setUnrenderFormToggle}/>
         {/*<label htmlFor="expand-unselected-choice-inputs">Expand unselected "choice" inputs (advanced)</label>
         <input id="expand-unselected-choice-inputs" type="checkbox" checked={expandUnselectedChoiceInputs} onChange={updateExpandUnselectedChoiceInputs}/>*/}
         <fieldset disabled={props.isAutoTTRecRunning}>
-          <AutoTTRecConfigFormComponents_Memo formMethods={formMethods} forceUpdate={submittedToggle} unrenderFormToggle={unrenderFormToggle} isAutoTTRecRunning={props.isAutoTTRecRunning} expandUnselectedChoiceInputs={expandUnselectedChoiceInputs}/>
+          <AutoTTRecConfigFormComponents_Memo formMethods={formMethods} forceUpdate={submittedToggle} unrenderFormToggle={unrenderFormToggle} isAutoTTRecRunning={props.isAutoTTRecRunning} expandUnselectedChoiceInputs={expandUnselectedChoiceInputs} initialValidateFormOnOpen={props.validateFormOnOpen} onError={onError}/>
         </fieldset>
         <AutoTTRecSubmitAbortButtons_Memo isAutoTTRecRunning={props.isAutoTTRecRunning} onAbortCallback={props.onAbortCallback} setRunAutoTTRecOnSubmitCallback={(() => {}) as any}/>
       </form>

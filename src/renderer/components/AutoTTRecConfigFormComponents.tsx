@@ -1,4 +1,4 @@
-import React, { memo, useState } from "react";
+import React, { memo, useState, useEffect } from "react";
 
 
 
@@ -20,13 +20,23 @@ const ISOWBFSFileInput_Memo = memo(ISOWBFSFileInput);
 const FormComplexityLayout_Memo = memo(FormComplexityLayout);
 
 export function AutoTTRecConfigFormComponents(props: {
-    formMethods: UseFormReturn<AutoTTRecConfigFormFields, any, undefined>,
-    forceUpdate: boolean,
-    unrenderFormToggle: boolean,
-    isAutoTTRecRunning: boolean,
-    expandUnselectedChoiceInputs: boolean}) {  
+  formMethods: UseFormReturn<AutoTTRecConfigFormFields, any, undefined>,
+  forceUpdate: boolean,
+  unrenderFormToggle: boolean,
+  isAutoTTRecRunning: boolean,
+  expandUnselectedChoiceInputs: boolean,
+  initialValidateFormOnOpen: boolean,
+  onError: (errors: Object) => Promise<void> | void,
+}) {  
   const renderCounter = useRenderCounter(false, "AutoTTRecConfigFormComponents");
   console.log("Rendering AutoTTRecConfigFormComponents. forceUpdate: ", props.forceUpdate);
+
+  useEffect(() => {
+    if (props.initialValidateFormOnOpen) {
+      console.log("ValidateFormOnOpen formMethods.formState:", props.formMethods.formState);
+      props.formMethods.handleSubmit(() => {}, props.onError)();
+    }
+  }, [props.initialValidateFormOnOpen]);
 
   return (
     <div className="auto-tt-rec-config-form">

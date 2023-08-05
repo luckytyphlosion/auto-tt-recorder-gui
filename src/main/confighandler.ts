@@ -19,7 +19,8 @@ interface ConfigOptions {
   dolphinVersion: string,
   savedDialogPathnames: SavedDialogPathnames,
   loadFormInputsType: LoadFormInputsType,
-  expandUnselectedChoiceInputs: boolean
+  expandUnselectedChoiceInputs: boolean,
+  validateFormOnOpen: boolean
 }
 
 export class Config {
@@ -74,7 +75,8 @@ export class Config {
         "template": "",
       },
       loadFormInputsType: "load-form-inputs-select-last-recorded",
-      expandUnselectedChoiceInputs: false
+      expandUnselectedChoiceInputs: false,
+      validateFormOnOpen: false
     };
   }
 
@@ -183,5 +185,14 @@ export async function getExpandUnselectedChoiceInputs(event: IpcMainInvokeEvent)
 
 export async function setAndSaveExpandUnselectedChoiceInputs(event: IpcMainInvokeEvent, expandUnselectedChoiceInputs: boolean) {
   globalConfig.options.expandUnselectedChoiceInputs = expandUnselectedChoiceInputs;
+  await globalConfig.writeConfig();
+}
+
+export async function getValidateFormOnOpen(event: IpcMainInvokeEvent) {
+  return globalConfig.options.validateFormOnOpen;
+}
+
+export async function setAndSaveValidateFormOnOpen(event: IpcMainInvokeEvent, validateFormOnOpen: boolean) {
+  globalConfig.options.validateFormOnOpen = validateFormOnOpen;
   await globalConfig.writeConfig();
 }
