@@ -14,7 +14,7 @@ export const VIDEO_CODECS = makeReadonlyArraySet(["libx264", "libx265", "libvpx-
 export type VideoCodec = ValidValues<typeof VIDEO_CODECS>;
 
 export function VideoCodecInput(props: {encodeType: EncodeType, formComplexity: FormComplexity}) {
-  const {register, setValue, getValues} = useFormContextAutoTT();
+  const {setValue, getValues} = useFormContextAutoTT();
   const [videoCodec, setVideoCodec] = useState(getValues("video-codec"))
   const renderCounter = useRenderCounter(false);
   const isValueOrFILLMEIsValue = isValueOrFILLMEIsValueMaker();

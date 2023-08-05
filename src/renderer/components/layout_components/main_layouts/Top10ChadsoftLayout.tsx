@@ -40,7 +40,7 @@ import { FormComplexity } from "../FormComplexityLayout";
 import { QualitySettingsLayout } from "../sub_layouts/QualitySettingsLayout";
 import { ExtraSettingsLayout } from "../sub_layouts/ExtraSettingsLayout";
 import { PresentationSettingsLayout } from "../sub_layouts/PresentationSettingsLayout";
-import { CRFValueInput } from "../../form_components/CRFValueInput";
+import { Top10CensorsInput } from "../../form_components/Top10CensorsInput";
 
 import useRenderCounter from "../../../RenderCounter";
 
@@ -59,6 +59,9 @@ export function Top10ChadsoftLayout(props: {isAutoTTRecRunning: boolean, formCom
         props.formComplexity > FormComplexity.SIMPLE ? <>
           <Top10HighlightEnableInput/>
         </> : ""
+      }
+      {
+        props.formComplexity === FormComplexity.ALL ? <Top10CensorsInput/> : ""
       }
       <ComparisonGhostSourceInput/>
       <SZSSourceInput/>

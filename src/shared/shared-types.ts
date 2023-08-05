@@ -89,4 +89,4 @@ export interface IsFileWritableResult {
   fileExtensionMinusDot: string
 }
 
-export type LoadFormInputsType = "load-form-inputs-select-last-recorded" | "load-form-inputs-select-last-template";
+export type LoadFormInputsType = "load-form-inputs-select-last-recorded" | "load-form-inputs-select-last-template" | "load-form-inputs-select-default";

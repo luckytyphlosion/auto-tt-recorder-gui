@@ -544,13 +544,9 @@ export class AutoTTRecConfigImporter {
     if (timeline === "top10") {
       let top10Chadsoft = this.getFormDataStringOrChoiceArg_verifyNotUndefined_nullIfWasNull("top-10-chadsoft");
       let top10GeckoCodeFilename = this.getFormDataStringOrChoiceArg_verifyNotUndefined_nullIfWasNull("top-10-gecko-code-filename");
-      if (top10Chadsoft === "") {
+      if (top10Chadsoft === "" || top10Chadsoft !== null) {
         timelineCategory = "top10chadsoft";
-      } else if (top10GeckoCodeFilename === "") {
-        timelineCategory = "top10gecko";
-      } else if (top10Chadsoft !== null) {
-        timelineCategory = "top10chadsoft";
-      } else if (top10GeckoCodeFilename !== null) {
+      } else if (top10GeckoCodeFilename === "" || top10GeckoCodeFilename !== null) {
         timelineCategory = "top10gecko";
       } else {
         timelineCategory = "<FILLME>";

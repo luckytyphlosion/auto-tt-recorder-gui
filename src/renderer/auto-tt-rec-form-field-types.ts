@@ -119,6 +119,7 @@ class AutoTTRecConfigFormFieldsSomeFILLMEClass {
   "szs-filename": string = ""; // arbitrary
   "szs-source": SZSSource = "automatic"; // choice
   "timeline-category": TimelineCategory = "notop10"; // choice
+  "top-10-censors": string = ""; // arbitrary (really shouldn't be but no more time to make this a proper input)
   "top-10-chadsoft": string = ""; // arbitrary
   "top-10-gecko-code-location-region": Top10GeckoCodeLocationRegion = "worldwide"; // choice
   "top-10-gecko-code-contents": string = ""; // arbitrary
@@ -313,6 +314,7 @@ export const MINIMAL_FORM_VALUES: AutoTTRecConfigFormMinimalFields = {
   "szs-filename": "",
   "szs-source": "<FILLME>",
   "timeline-category": "<FILLME>",
+  "top-10-censors": "",
   "top-10-chadsoft": "",
   "top-10-gecko-code-location-region": "<FILLME>",
   "top-10-gecko-code-contents": "",

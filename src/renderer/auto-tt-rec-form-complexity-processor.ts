@@ -127,6 +127,7 @@ export class AutoTTRecFormDataFormComplexityProcessor {
     this.formData["chadsoft-read-cache"] = true;
     this.formData["chadsoft-write-cache"] = true;
     this.formData["chadsoft-cache-expiry"] = "24h";
+    this.formData["top-10-censors"] = "";
   }
 
   public get formData() {

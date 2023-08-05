@@ -240,6 +240,7 @@ export function convertFormDataToAutoTTRecArgs(formData: AutoTTRecConfigFormFiel
     formData["chadsoft-cache-expiry"] = "24h";
   }
   argsBuilder.add("ending-message");
+  argsBuilder.add("top-10-censors");
   argsBuilder.add("output-video-filename");
   
 

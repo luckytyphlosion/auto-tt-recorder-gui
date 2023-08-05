@@ -177,6 +177,7 @@ export class AutoTTRecConfigExporter {
     this.exportSharedBooleanArg("use-ffv1");
     this.exportSharedChoiceArg("video-codec");
     this.exportSharedBooleanArg("youtube-settings");
+    this.exportSharedStringArg("top-10-censors");
   }
 
   private exportGhostPageAndFilename(isMainGhost: boolean) {
