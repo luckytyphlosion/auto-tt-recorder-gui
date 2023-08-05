@@ -28,5 +28,7 @@ contextBridge.exposeInMainWorld("api", {
   getLoadFormInputsType: () => ipcRenderer.invoke("get-load-form-inputs-type"),
   saveLoadFormInputsType: (loadFormInputsType) => ipcRenderer.invoke("save-load-form-inputs-type", loadFormInputsType),
   getLastRecordedTemplateFilename: () => ipcRenderer.invoke("get-last-recorded-template-filename"),
-  getLastOpenedTemplateFilename: () => ipcRenderer.invoke("get-last-opened-template-filename")
+  getLastOpenedTemplateFilename: () => ipcRenderer.invoke("get-last-opened-template-filename"),
+  getExpandUnselectedChoiceInputs: () => ipcRenderer.invoke("get-expand-unselected-choice-inputs"),
+  setAndSaveExpandUnselectedChoiceInputs: (expandUnselectedChoiceInputs) => ipcRenderer.invoke("set-and-save-expand-unselected-choice-inputs", expandUnselectedChoiceInputs)
 });

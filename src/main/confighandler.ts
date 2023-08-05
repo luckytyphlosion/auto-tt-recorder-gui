@@ -18,7 +18,8 @@ interface ConfigOptions {
   guiVersion: string,
   dolphinVersion: string,
   savedDialogPathnames: SavedDialogPathnames,
-  loadFormInputsType: LoadFormInputsType
+  loadFormInputsType: LoadFormInputsType,
+  expandUnselectedChoiceInputs: boolean
 }
 
 export class Config {
@@ -72,7 +73,8 @@ export class Config {
         "top-10-gecko-code": "",
         "template": "",
       },
-      loadFormInputsType: "load-form-inputs-select-last-recorded"
+      loadFormInputsType: "load-form-inputs-select-last-recorded",
+      expandUnselectedChoiceInputs: false
     };
   }
 
@@ -173,4 +175,13 @@ export async function getLastRecordedTemplateFilename(event: IpcMainInvokeEvent)
 
 export async function getLastOpenedTemplateFilename(event: IpcMainInvokeEvent) {
   return globalConfig.options.savedDialogPathnames.template;
+}
+
+export async function getExpandUnselectedChoiceInputs(event: IpcMainInvokeEvent) {
+  return globalConfig.options.expandUnselectedChoiceInputs;
+}
+
+export async function setAndSaveExpandUnselectedChoiceInputs(event: IpcMainInvokeEvent, expandUnselectedChoiceInputs: boolean) {
+  globalConfig.options.expandUnselectedChoiceInputs = expandUnselectedChoiceInputs;
+  await globalConfig.writeConfig();
 }

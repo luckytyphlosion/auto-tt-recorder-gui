@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useEffect } from "react";
 import { FormProvider, UseFormReturn, useWatch } from "react-hook-form";
 import { AutoTTRecConfigFormFields } from "../auto-tt-rec-form-field-types";
 import { ReadTemplateResult, ReadTemplateStatus, AutoTTRecConfig } from "../../shared/shared-types";
@@ -17,6 +17,11 @@ export function ExpandUnselectedChoiceInputs(props: {
   function updateExpandUnselectedChoiceInputs(event: React.ChangeEvent<HTMLInputElement>) {
     props.formMethods.setValue("expand-unselected-choice-inputs", event.target.checked);
   }
+
+  useEffect(() => {
+    const expandUnselectedChoiceInputsNoFILLME = expandUnselectedChoiceInputs === "<FILLME>" ? false : expandUnselectedChoiceInputs;
+    window.api.setAndSaveExpandUnselectedChoiceInputs(expandUnselectedChoiceInputsNoFILLME);
+  }, [expandUnselectedChoiceInputs]);
 
   return (
     <div>

@@ -10,10 +10,11 @@ import { getInitialFormData } from "./import-template-on-program-open";
 import { AutoTTRecConfigFormFields } from "./auto-tt-rec-form-field-types";
 import { LoadFormInputsType } from "../shared/shared-types";
 
-async function getInitialLoadFormInputsTypeAndFormData(): Promise<[LoadFormInputsType, AutoTTRecConfigFormFields]> {
+async function getInitialLoadFormInputsTypeFormDataAndExpandUnselectedChoiceInputs(): Promise<[LoadFormInputsType, AutoTTRecConfigFormFields, boolean]> {
   const initialLoadFormInputsType = await window.api.getLoadFormInputsType();
   const INITIAL_FORM_DATA = await getInitialFormData(initialLoadFormInputsType);
-  return [initialLoadFormInputsType, INITIAL_FORM_DATA];
+  const expandUnselectedChoiceInputs = await window.api.getExpandUnselectedChoiceInputs();
+  return [initialLoadFormInputsType, INITIAL_FORM_DATA, expandUnselectedChoiceInputs];
 }
 
 export function App() {
@@ -22,8 +23,9 @@ export function App() {
   const [INITIAL_FORM_DATA, set_INITIAL_FORM_DATA] = useState<AutoTTRecConfigFormFields | null>(null);
 
   useEffect(() => {
-    getInitialLoadFormInputsTypeAndFormData().then(([fetchedInitialLoadFormInputsType, fetched_INITIAL_FORM_DATA]) => {
+    getInitialLoadFormInputsTypeFormDataAndExpandUnselectedChoiceInputs().then(([fetchedInitialLoadFormInputsType, fetched_INITIAL_FORM_DATA, fetchedExpandUnselectedChoiceInputs]) => {
       setInitialLoadFormInputsType(fetchedInitialLoadFormInputsType);
+      fetched_INITIAL_FORM_DATA["expand-unselected-choice-inputs"] = fetchedExpandUnselectedChoiceInputs;
       set_INITIAL_FORM_DATA(fetched_INITIAL_FORM_DATA);
     });
   }, []);

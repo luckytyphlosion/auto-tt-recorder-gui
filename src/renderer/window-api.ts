@@ -33,6 +33,9 @@ declare global {
       saveLoadFormInputsType: (loadFormInputsType: LoadFormInputsType) => Promise<void>;
       getLastRecordedTemplateFilename: () => Promise<string>;
       getLastOpenedTemplateFilename: () => Promise<string>;
+      getExpandUnselectedChoiceInputs: () => Promise<boolean>;
+      setAndSaveExpandUnselectedChoiceInputs: (expandUnselectedChoiceInputs: boolean) => Promise<void>;
+
     }
   }
 }
