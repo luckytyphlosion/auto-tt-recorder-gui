@@ -4,10 +4,10 @@ import TextareaAutosize from 'react-textarea-autosize';
 import Modal from "react-modal";
 import { FormProvider, UseFormReturn } from "react-hook-form";
 import { AutoTTRecConfigFormFields } from "../auto-tt-rec-form-field-types";
-import { ImportTemplateResult, ImportTemplateStatus, AutoTTRecConfig } from "../../shared/shared-types";
+import { ReadTemplateResult, ReadTemplateStatus, AutoTTRecConfig } from "../../shared/shared-types";
 import { useFormContextAutoTT } from "../use-form-context-auto-tt";
 
-import { convertAutoTTRecConfigToFormData, tryExportAutoTTRecConfigTemplate, ExportTemplateStatus, ExportTemplateResult } from "../auto-tt-rec-form-data-generators";
+import { tryImportAutoTTRecConfigTemplate, tryExportAutoTTRecConfigTemplate, ExportTemplateStatus, ExportTemplateResult, ReadAndImportTemplateResult } from "../auto-tt-rec-form-data-generators";
 
 import { BooleanFILLME } from "../../shared/shared-types";
 
@@ -24,7 +24,7 @@ export function ImportTemplate(props: {
   disabled: boolean
 }) {
   const [isModalOpen, setModalOpen] = useState(false);
-  const [importStatus, setImportStatus] = useState(ImportTemplateStatus.SUCCESS);
+  const [importStatus, setImportStatus] = useState(ReadTemplateStatus.SUCCESS);
   const [readYAMLErrorWarningTitle, setReadYAMLErrorWarningTitle] = useState("");
   const [readYAMLErrorWarningData, setReadYAMLErrorWarningData] = useState("");
   const [importOrExportErrorWarningTitle, setImportOrExportErrorWarningTitle] = useState("");
@@ -43,41 +43,43 @@ export function ImportTemplate(props: {
     if (newAutoTTRecTemplateFilename !== "") {
       setAutoTTRecTemplateFilename(newAutoTTRecTemplateFilename);
 
-      let importTemplateResult: ImportTemplateResult = await window.api.importFormTemplate(newAutoTTRecTemplateFilename);
+      let readAndImportTemplateResult: ReadAndImportTemplateResult = await tryImportAutoTTRecConfigTemplate(newAutoTTRecTemplateFilename, props.formMethods.getValues("form-complexity"));
+      let readTemplateResult = readAndImportTemplateResult.readTemplateResult;
 
       let newReadYAMLErrorWarningTitle: string = "";
       let newReadYAMLErrorWarningData: string = "";
       let newImportErrorWarningTitle: string = "";
       let newImportErrorWarningData: string = "";
 
-      setImportStatus(importTemplateResult.status);
+      if (readTemplateResult.status === ReadTemplateStatus.SUCCESS && readAndImportTemplateResult.importTemplateResult !== undefined) {
+        let importTemplateResult = readAndImportTemplateResult.importTemplateResult;
 
-      if (importTemplateResult.status === ImportTemplateStatus.SUCCESS) {
-        if (importTemplateResult.hasWarnings) {
+        if (readTemplateResult.hasWarnings) {
           newReadYAMLErrorWarningTitle = "Read template successfully, but warnings occurred below";
-          newReadYAMLErrorWarningData = importTemplateResult.errorWarningData;
+          newReadYAMLErrorWarningData = readTemplateResult.errorWarningData;
         }
 
-        let formComplexity = props.formMethods.getValues("form-complexity");
-        let [newFormData, errorsAndWarningsStr] = await convertAutoTTRecConfigToFormData(importTemplateResult.data, newAutoTTRecTemplateFilename, formComplexity);
-        if (errorsAndWarningsStr !== "") {
+        if (importTemplateResult.errorsAndWarningsStr !== "") {
           newImportErrorWarningTitle = "Errors and/or warnings occurred when importing template";
         } else {
           newImportErrorWarningTitle = "Imported template successfully!";
         }
-        newImportErrorWarningData = errorsAndWarningsStr;
+
+        newImportErrorWarningData = importTemplateResult.errorsAndWarningsStr;
+
         props.setUnrenderFormToggle(true);
-        props.formMethods.reset(newFormData);
-        console.log("newFormData:", newFormData);
+        props.formMethods.reset(importTemplateResult.newFormData);
+        console.log("newFormData:", importTemplateResult.newFormData);
       } else {
         newReadYAMLErrorWarningTitle = "Errors and/or warnings occurred when reading template";
-        newReadYAMLErrorWarningData = importTemplateResult.errorWarningData;
+        newReadYAMLErrorWarningData = readTemplateResult.errorWarningData;
       }
 
       setReadYAMLErrorWarningTitle(newReadYAMLErrorWarningTitle);
       setReadYAMLErrorWarningData(newReadYAMLErrorWarningData);
       setImportOrExportErrorWarningTitle(newImportErrorWarningTitle);
       setImportOrExportErrorWarningData(newImportErrorWarningData);
+      setImportStatus(readTemplateResult.status);
       setIsImporting(true);
       setModalOpen(true);
     }
@@ -137,7 +139,7 @@ export function ImportTemplate(props: {
         contentLabel="Import or Export Template Modal"
       >
         <ErrorWarningDisplay title={readYAMLErrorWarningTitle} errorWarningData={readYAMLErrorWarningData}>
-          {importStatus === ImportTemplateStatus.ERROR_ON_PARSE ? <YAMLParseErrorExplanation/> : ""}
+          {importStatus === ReadTemplateStatus.ERROR_ON_PARSE ? <YAMLParseErrorExplanation/> : ""}
         </ErrorWarningDisplay>
         <ErrorWarningDisplay title={importOrExportErrorWarningTitle} errorWarningData={importOrExportErrorWarningData}/>
         <button onClick={importExportTemplateModal_cancel}>Ok</button>

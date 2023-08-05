@@ -1,7 +1,7 @@
 import { IpcMainInvokeEvent } from "electron";
 
-import { AutoTTRecConfig, ImportTemplateStatus, ImportTemplateResult } from "../shared/shared-types";
-import { readFileEnforceUTF8 } from "./gui2";
+import { AutoTTRecConfig, ReadTemplateStatus, ReadTemplateResult, StringOrError } from "../shared/shared-types";
+import { readFileEnforceUTF8_returnError } from "./gui2";
 
 import fsPromises from "fs/promises";
 import path from "path";
@@ -14,23 +14,24 @@ function appendWarning(warnings: string[], warning: string) {
   warnings.push(formattedWarning);
 }
 
-async function loadYAML_formatErrorsIfErrorOrWarnings(filename: string): Promise<ImportTemplateResult> {
+async function loadYAML_formatErrorsIfErrorOrWarnings(filename: string): Promise<ReadTemplateResult> {
   let templateContents: string = "";
   let errorWarningData: string = "";
   let errors: string[] = [];
   let warnings: string[] = [];
-  let status: ImportTemplateStatus = ImportTemplateStatus.INDETERMINATE;
+  let status: ReadTemplateStatus = ReadTemplateStatus.INDETERMINATE;
   let autoTTRecConfig: AutoTTRecConfig = {};
+  let contentsOrError: StringOrError = await readFileEnforceUTF8_returnError(filename, "Provided template file is not a text file!");
 
-  try {
-    templateContents = await readFileEnforceUTF8(filename, "Provided template file is not a text file!");
-    if (templateContents === "") {
+  if (!contentsOrError.hasError) {
+    if (contentsOrError.result === "") {
       errorWarningData += `=== Error ===\nProvided template file is empty!\n`;
-      status = ImportTemplateStatus.ERROR_ON_READ;
+      status = ReadTemplateStatus.ERROR_ON_READ;
+    } else {
+      templateContents = contentsOrError.result;
     }
-  } catch (e) {
-    errorWarningData += `=== Error ===\n${(e as Error).message}\n`;
-    status = ImportTemplateStatus.ERROR_ON_READ;
+  } else {
+    errorWarningData += `=== Error ===\n${contentsOrError.errorMessage}\n`;
   }
 
   if (templateContents !== "") {
@@ -60,11 +61,11 @@ async function loadYAML_formatErrorsIfErrorOrWarnings(filename: string): Promise
       } else {
         errorWarningData += "=== Error ===\nUnknown error occurred.\n"; 
       }
-      status = ImportTemplateStatus.ERROR_ON_PARSE;
+      status = ReadTemplateStatus.ERROR_ON_PARSE;
     } else {
       if (template === null || typeof template !== "object") {
         errorWarningData += "=== Error ===\nProvided file is not a config file.\n"
-        status = ImportTemplateStatus.ERROR_ON_STRUCTURE;
+        status = ReadTemplateStatus.ERROR_ON_STRUCTURE;
       } else {
         let badValueTypeErrorMessages = [];
   
@@ -80,9 +81,9 @@ async function loadYAML_formatErrorsIfErrorOrWarnings(filename: string): Promise
         }
         if (badValueTypeErrorMessages.length !== 0) {
           errorWarningData += `=== Command value errors ===\n${badValueTypeErrorMessages.join()}\n`;
-          status = ImportTemplateStatus.ERROR_ON_VALUES;
+          status = ReadTemplateStatus.ERROR_ON_VALUES;
         } else {
-          status = ImportTemplateStatus.SUCCESS;
+          status = ReadTemplateStatus.SUCCESS;
         }
       }
     }
@@ -92,19 +93,20 @@ async function loadYAML_formatErrorsIfErrorOrWarnings(filename: string): Promise
     }
   }
 
-  if (status === ImportTemplateStatus.INDETERMINATE) {
+  if (status === ReadTemplateStatus.INDETERMINATE) {
     errorWarningData += "=== Impossible error occurred===\n";
   }
 
   return {
     status: status,
+    errorCode: contentsOrError.errorCode,
     errorWarningData: errorWarningData,
     data: autoTTRecConfig,
     hasWarnings: warnings.length !== 0
   }
 }
 
-export async function importFormTemplate(event: IpcMainInvokeEvent, filename: string): Promise<ImportTemplateResult> {
+export async function importFormTemplate(event: IpcMainInvokeEvent, filename: string): Promise<ReadTemplateResult> {
   return await loadYAML_formatErrorsIfErrorOrWarnings(filename);
 }
 

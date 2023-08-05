@@ -1,7 +1,7 @@
 import { FileFilter, IpcRendererEvent } from "electron";
 import { AutoTTRecResponse } from "../shared/shared-types";
 import { AutoTTRecArgs } from "./auto-tt-rec-args-types";
-import { FilenameAndContents, ImportTemplateResult, ExpectedExtensionAndErrorMessage, DialogId, StringOrError, IsFileWritableResult, AutoTTRecConfig } from "../shared/shared-types";
+import { FilenameAndContents, ReadTemplateResult, ExpectedExtensionAndErrorMessage, DialogId, StringOrError, IsFileWritableResult, AutoTTRecConfig, LoadFormInputsType } from "../shared/shared-types";
 
 declare global {
   interface Window {
@@ -27,8 +27,12 @@ declare global {
       removeHandleSendStdout: (callable: (event: IpcRendererEvent, stdoutData: string) => void) => void;
       removeHandleSendStderr: (callable: (event: IpcRendererEvent, stderrData: string) => void) => void;
       terminateAutoTTRec: () => Promise<void>;
-      importFormTemplate: (filename: string) => Promise<ImportTemplateResult>;
+      importFormTemplate: (filename: string) => Promise<ReadTemplateResult>;
       writeObjectToYAML: (autoTTRecConfig: AutoTTRecConfig, filename: string) => Promise<void>;
+      getLoadFormInputsType: () => Promise<LoadFormInputsType>;
+      saveLoadFormInputsType: (loadFormInputsType: LoadFormInputsType) => Promise<void>;
+      getLastRecordedTemplateFilename: () => Promise<string>;
+      getLastOpenedTemplateFilename: () => Promise<string>;
     }
   }
 }

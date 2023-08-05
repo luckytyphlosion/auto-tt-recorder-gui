@@ -3,10 +3,10 @@ import { AutoTTRecConfigForm, areAutoTTRecConfigFormPropsEqual } from "./AutoTTR
 import { AutoTTRecArgs } from "../auto-tt-rec-args-types";
 import { AutoTTRecStatus } from "./AutoTTRecStatus";
 import { IpcRendererEvent } from "electron";
-import { DEFAULT_FORM_VALUES } from "../auto-tt-rec-form-field-types";
+import { DEFAULT_FORM_VALUES, AutoTTRecConfigFormFields } from "../auto-tt-rec-form-field-types";
 import { shallowCopy } from "../../shared/util-shared";
 
-import { AutoTTRecResponse, AutoTTRecResponseStatus, AutoTTRecError } from "../../shared/shared-types";
+import { AutoTTRecResponse, AutoTTRecResponseStatus, AutoTTRecError, LoadFormInputsType } from "../../shared/shared-types";
 
 import useRenderCounter from "../RenderCounter";
 
@@ -26,7 +26,10 @@ function appendAccountingForCarriage(base: string, line: string) {
 
 const AutoTTRecConfigForm_Memo = memo(AutoTTRecConfigForm);
 
-export function AutoTTRecManager() {
+export function AutoTTRecManager(props: {
+  initialLoadFormInputsType: LoadFormInputsType,
+  INITIAL_FORM_DATA: AutoTTRecConfigFormFields
+}) {
   const [programStatusHeader, setProgramStatusHeader] = useState<string | JSX.Element>("Ready");
   const [programStatusDetails, setProgramStatusDetails] = useState("");
   const [isAutoTTRecRunning, setAutoTTRecRunning] = useState(false);
@@ -99,7 +102,7 @@ export function AutoTTRecManager() {
   return (
     <div>
       <AutoTTRecConfigForm_Memo whichUI={true} onSubmitCallback={runAutoTTRec}
-        onAbortCallback={abortAutoTTRec} isAutoTTRecRunning={isAutoTTRecRunning}/>
+        onAbortCallback={abortAutoTTRec} isAutoTTRecRunning={isAutoTTRecRunning} initialLoadFormInputsType={props.initialLoadFormInputsType} INITIAL_FORM_DATA={props.INITIAL_FORM_DATA}/>
       {renderCounter}
       <AutoTTRecStatus programStatusHeader={programStatusHeader}
         programStatusDetails={programStatusDetails}/>

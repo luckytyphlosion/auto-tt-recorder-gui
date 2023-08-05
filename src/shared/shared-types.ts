@@ -27,7 +27,7 @@ export interface AutoTTRecResponse {
   error: AutoTTRecError
 }
 
-export enum ImportTemplateStatus {
+export enum ReadTemplateStatus {
   INDETERMINATE = -1,
   SUCCESS = 0,
   ERROR_ON_READ = 1,
@@ -36,8 +36,9 @@ export enum ImportTemplateStatus {
   ERROR_ON_VALUES = 4,
 }
 
-export interface ImportTemplateResult {
-  status: ImportTemplateStatus,
+export interface ReadTemplateResult {
+  status: ReadTemplateStatus,
+  errorCode: string,
   errorWarningData: string,
   data: AutoTTRecConfig,
   hasWarnings: boolean
@@ -87,3 +88,5 @@ export interface IsFileWritableResult {
   code: IsFileWritableResultCode,
   fileExtensionMinusDot: string
 }
+
+export type LoadFormInputsType = "load-form-inputs-select-last-recorded" | "load-form-inputs-select-last-template";

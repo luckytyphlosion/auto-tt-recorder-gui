@@ -31,10 +31,10 @@ export async function getAbsolutePathRelativeToFilename(event: IpcMainInvokeEven
   return absolutePathname;
 }
 
-export async function readFileEnforceUTF8(filename: string, badEncodingErrorMessage: string, expectedExtensionAndErrorMessage?: ExpectedExtensionAndErrorMessage): Promise<string> {
+async function readFileEnforceUTF8(filename: string, badEncodingErrorMessage: string, expectedExtensionAndErrorMessage?: ExpectedExtensionAndErrorMessage): Promise<string> {
   if (expectedExtensionAndErrorMessage !== undefined && path.extname(filename) !== expectedExtensionAndErrorMessage.extension) {
     throw new Error(expectedExtensionAndErrorMessage.errorMessage);
-  
+    
   }
   const buffer = await fsPromises.readFile(filename);
   if (!Buffer.from(buffer.toString(), "utf8").equals(buffer)) {
@@ -72,7 +72,7 @@ function setStringOrErrorFromUnknown(eAsUnknown: unknown, stringOrError: StringO
   }
 }
 
-export async function ipcReadFileEnforceUTF8(event: IpcMainInvokeEvent, filename: string, badEncodingErrorMessage: string, expectedExtensionAndErrorMessage?: ExpectedExtensionAndErrorMessage): Promise<StringOrError> {
+export async function readFileEnforceUTF8_returnError(filename: string, badEncodingErrorMessage: string, maxFileSize?: number, expectedExtensionAndErrorMessage?: ExpectedExtensionAndErrorMessage): Promise<StringOrError> {
   let stringOrError: StringOrError = {
     result: "",
     hasError: false,
@@ -81,6 +81,7 @@ export async function ipcReadFileEnforceUTF8(event: IpcMainInvokeEvent, filename
   };
 
   let fileSize: number = Infinity;
+  maxFileSize = maxFileSize === undefined ? Infinity : maxFileSize;
 
   try {
     fileSize = (await fsPromises.stat(filename)).size;
@@ -89,13 +90,13 @@ export async function ipcReadFileEnforceUTF8(event: IpcMainInvokeEvent, filename
   }
 
   if (!stringOrError.hasError) {
-    if (fileSize > 10485760) {
+    if (fileSize > maxFileSize) {
       stringOrError.hasError = true;
       stringOrError.errorCode = "SIZE";
       stringOrError.errorMessage = "File is greater than 10MiB (should not require a file greater than that).";
     } else {
       try {
-        stringOrError.result = await readFileEnforceUTF8(filename, badEncodingErrorMessage);
+        stringOrError.result = await readFileEnforceUTF8(filename, badEncodingErrorMessage, expectedExtensionAndErrorMessage);
       } catch (eAsUnknown: unknown) {
         setStringOrErrorFromUnknown(eAsUnknown, stringOrError);
       }
@@ -103,6 +104,10 @@ export async function ipcReadFileEnforceUTF8(event: IpcMainInvokeEvent, filename
   }
 
   return stringOrError;
+}
+
+export async function ipcReadFileEnforceUTF8(event: IpcMainInvokeEvent, filename: string, badEncodingErrorMessage: string, expectedExtensionAndErrorMessage?: ExpectedExtensionAndErrorMessage): Promise<StringOrError> {
+  return await readFileEnforceUTF8_returnError(filename, badEncodingErrorMessage, 10485760, expectedExtensionAndErrorMessage);
 }
 
 export async function openFileDialog(event: IpcMainInvokeEvent, fileFilters: FileFilter[],

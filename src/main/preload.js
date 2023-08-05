@@ -24,5 +24,9 @@ contextBridge.exposeInMainWorld("api", {
   getGlobalConfig: () => ipcRenderer.invoke("get-global-config"),
   importFormTemplate: (filename) => ipcRenderer.invoke("import-form-template", filename),
   convertAutoTTRecConfigToFormData: (autoTTRecConfig) => ipcRenderer.invoke("convert-auto-tt-rec-config-to-form-data", autoTTRecConfig),
-  writeObjectToYAML: (yamlObj, filename) => ipcRenderer.invoke("write-object-to-yaml", yamlObj, filename)
+  writeObjectToYAML: (yamlObj, filename) => ipcRenderer.invoke("write-object-to-yaml", yamlObj, filename),
+  getLoadFormInputsType: () => ipcRenderer.invoke("get-load-form-inputs-type"),
+  saveLoadFormInputsType: (loadFormInputsType) => ipcRenderer.invoke("save-load-form-inputs-type", loadFormInputsType),
+  getLastRecordedTemplateFilename: () => ipcRenderer.invoke("get-last-recorded-template-filename"),
+  getLastOpenedTemplateFilename: () => ipcRenderer.invoke("get-last-opened-template-filename")
 });

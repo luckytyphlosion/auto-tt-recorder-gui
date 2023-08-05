@@ -14,7 +14,17 @@ import { AUTO_TT_REC_CONFIG_FORM_FIELD_NAMES, AutoTTRecConfigFormFields, MINIMAL
 import { AutoTTRecConfigErrorsAndWarnings } from "./auto-tt-rec-errors-and-warnings";
 import { AutoTTRecConfigImportPreprocessor } from "./auto-tt-rec-config-import-preprocessor";
 import { validateNoUnsavedFiles, AutoTTRecConfigExporter } from "./auto-tt-rec-config-exporter";
-import { BooleanFILLME } from "../shared/shared-types";
+import { BooleanFILLME, ReadTemplateResult, ReadTemplateStatus } from "../shared/shared-types";
+
+export interface ImportTemplateResult {
+  newFormData: AutoTTRecConfigFormFields,
+  errorsAndWarningsStr: string
+}
+
+export interface ReadAndImportTemplateResult {
+  readTemplateResult: ReadTemplateResult,
+  importTemplateResult?: ImportTemplateResult
+}
 
 export function makeMinimalFormData(formComplexity: FormComplexity, timelineCategory: TimelineCategory, noTop10Category: NoTop10Category, expandUnselectedChoiceInputs: BooleanFILLME) {
   let formData: AutoTTRecConfigFormFields = shallowCopy(MINIMAL_FORM_VALUES);
@@ -70,6 +80,24 @@ export async function convertAutoTTRecConfigToFormData(autoTTRecConfig: AutoTTRe
   console.log("after import errorsAndWarnings: ", errorsAndWarnings.debug_get_errorsAndWarningsMap());
 
   return [autoTTRecConfigFormFields, errorsAndWarningsStr];
+}
+
+
+export async function tryImportAutoTTRecConfigTemplate(autoTTRecConfigFilename: string, formComplexity: FormComplexity): Promise<ReadAndImportTemplateResult> {
+  let readTemplateResult: ReadTemplateResult = await window.api.importFormTemplate(autoTTRecConfigFilename);
+  let readAndImportTemplateResult: ReadAndImportTemplateResult = {
+    readTemplateResult: readTemplateResult
+  };
+
+  if (readTemplateResult.status === ReadTemplateStatus.SUCCESS) {
+    let [newFormData, errorsAndWarningsStr] = await convertAutoTTRecConfigToFormData(readTemplateResult.data, autoTTRecConfigFilename, formComplexity);
+    readAndImportTemplateResult.importTemplateResult = {
+      newFormData: newFormData,
+      errorsAndWarningsStr: errorsAndWarningsStr
+    };
+  }
+
+  return readAndImportTemplateResult;
 }
 
 export async function tryExportAutoTTRecConfigTemplate(formData: AutoTTRecConfigFormFields, autoTTRecConfigFilename: string): Promise<ExportTemplateResult> {

@@ -2,7 +2,7 @@
 import React from "react";
 import { FormProvider, UseFormReturn, useWatch } from "react-hook-form";
 import { AutoTTRecConfigFormFields } from "../auto-tt-rec-form-field-types";
-import { ImportTemplateResult, ImportTemplateStatus, AutoTTRecConfig } from "../../shared/shared-types";
+import { ReadTemplateResult, ReadTemplateStatus, AutoTTRecConfig } from "../../shared/shared-types";
 
 export function ExpandUnselectedChoiceInputs(props: {
   disabled: boolean,

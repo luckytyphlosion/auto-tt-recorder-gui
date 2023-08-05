@@ -145,6 +145,11 @@ async function createWindow() {
 
   ipcMain.handle("import-form-template", formTemplate.importFormTemplate);
   ipcMain.handle("write-object-to-yaml", formTemplate.writeObjectToYAML);
+  ipcMain.handle("get-load-form-inputs-type", confighandler.getLoadFormInputsType);
+  ipcMain.handle("save-load-form-inputs-type", confighandler.saveLoadFormInputsType);
+  ipcMain.handle("get-last-recorded-template-filename", confighandler.getLastRecordedTemplateFilename);
+  ipcMain.handle("get-last-opened-template-filename", confighandler.getLastOpenedTemplateFilename);
+
   // and load the index.html of the app.
   // win.loadFile("index.html");
   console.log("isDev:", isDev);
