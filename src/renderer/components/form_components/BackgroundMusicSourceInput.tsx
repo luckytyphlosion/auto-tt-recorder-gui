@@ -8,6 +8,7 @@ import { FormComplexity } from "../layout_components/FormComplexityLayout";
 import { Timeline } from "../layout_components/choice_layouts/NoTop10CategoryLayout";
 import { DeselectableDropdown } from "../DeselectableDropdown";
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
+import { SimpleErrorMessage } from "../SimpleErrorMessage";
 
 import useRenderCounter from "../../RenderCounter";
 
@@ -35,7 +36,7 @@ export function BackgroundMusicSourceInput(props: {timeline: Timeline, formCompl
       </DeselectableDropdown>
       {
         musicFilenameInputEnable ? 
-         <MusicFilenameInput/> : ""
+         <MusicFilenameInput/> : <SimpleErrorMessage name="background-music-source"/>
       }
       {
         enableMusicPresentationInput && props.formComplexity > FormComplexity.SIMPLE ?

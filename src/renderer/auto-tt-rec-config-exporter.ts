@@ -253,8 +253,17 @@ export class AutoTTRecConfigExporter {
   }
 
   private exportVolumeInputs() {
-    this.exportArg("game-volume", this.getFormDataNumberValue("game-volume-numberinput"));
-    this.exportArg("music-volume", this.getFormDataNumberValue("music-volume-numberinput"));
+    let gameVolumeNumberinput = this.getFormDataNumberValue("game-volume-numberinput");
+    if (gameVolumeNumberinput !== "<FILLME>") {
+      gameVolumeNumberinput /= 100;
+    }
+    let musicVolumeNumberinput = this.getFormDataNumberValue("music-volume-numberinput");
+    if (musicVolumeNumberinput !== "<FILLME>") {
+      musicVolumeNumberinput /= 100;
+    }
+
+    this.exportArg("game-volume", gameVolumeNumberinput);
+    this.exportArg("music-volume", musicVolumeNumberinput);
   }
 
   private exportMusicFilename() {
