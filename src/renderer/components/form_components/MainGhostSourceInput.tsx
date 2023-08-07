@@ -26,21 +26,18 @@ export function MainGhostSourceInput() {
 
   return (
     <div>
-      <fieldset>
-        <legend>Record from: </legend>
-        <DeselectableRadioButtonGroup name="main-ghost-source">
-        <DeselectableRadioButton labelValue="Chadsoft link: " id="main-ghost-source-chadsoft" value="chadsoft" onChange={updateMainGhostSource}/>
-          <DeselectableRadioButton labelValue="RKG: " id="main-ghost-source-rkg" value="rkg" onChange={updateMainGhostSource}/>
-        </DeselectableRadioButtonGroup>
-        {renderCounter}
-        {
-          isValueOrFILLMEIsValue(mainGhostSource, "chadsoft") ? <ChadsoftGhostPageInput/> : ""
-        }
-        {
-          isValueOrFILLMEIsValue(mainGhostSource, "rkg") ? <MainGhostFilenameInput/> : ""
-        }
-
-      </fieldset>
+      <label>Record from: </label>
+      <DeselectableRadioButtonGroup name="main-ghost-source">
+      <DeselectableRadioButton labelValue="Chadsoft link: " id="main-ghost-source-chadsoft" value="chadsoft" onChange={updateMainGhostSource}/>
+        <DeselectableRadioButton labelValue="RKG: " id="main-ghost-source-rkg" value="rkg" onChange={updateMainGhostSource}/>
+      </DeselectableRadioButtonGroup>
+      {renderCounter}
+      {
+        isValueOrFILLMEIsValue(mainGhostSource, "chadsoft") ? <ChadsoftGhostPageInput/> : ""
+      }
+      {
+        isValueOrFILLMEIsValue(mainGhostSource, "rkg") ? <MainGhostFilenameInput/> : ""
+      }
     </div>
   );
 }
