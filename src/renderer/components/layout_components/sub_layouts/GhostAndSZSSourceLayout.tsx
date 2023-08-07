@@ -10,6 +10,7 @@ export function GhostAndSZSSourceLayout() {
       <MainGhostSourceInput/>
       <ComparisonGhostSourceInput/>
       <SZSSourceInput/>
+      <br/>
     </>
   );
 }

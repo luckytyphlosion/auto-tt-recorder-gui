@@ -102,12 +102,12 @@ export async function tryImportAutoTTRecConfigTemplate(autoTTRecConfigFilename: 
 
 export async function tryExportAutoTTRecConfigTemplate(formData: AutoTTRecConfigFormFields, autoTTRecConfigFilename: string): Promise<ExportTemplateResult> {
   let errorsAndWarnings = new AutoTTRecConfigErrorsAndWarnings();
-  if (validateNoUnsavedFiles(formData, errorsAndWarnings)) {
+  /*if (validateNoUnsavedFiles(formData, errorsAndWarnings)) {
     return {
       status: ExportTemplateStatus.ERROR_UNSAVED,
       errorWarningData: errorsAndWarnings.compile()
     }
-  }
+  }*/
 
   let autoTTRecConfigExporter = new AutoTTRecConfigExporter(formData, errorsAndWarnings);
   let autoTTRecExportArgs = autoTTRecConfigExporter.export();

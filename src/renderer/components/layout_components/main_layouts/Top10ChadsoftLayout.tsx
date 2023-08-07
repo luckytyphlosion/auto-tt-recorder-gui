@@ -41,6 +41,7 @@ import { QualitySettingsLayout } from "../sub_layouts/QualitySettingsLayout";
 import { ExtraSettingsLayout } from "../sub_layouts/ExtraSettingsLayout";
 import { PresentationSettingsLayout } from "../sub_layouts/PresentationSettingsLayout";
 import { Top10CensorsInput } from "../../form_components/Top10CensorsInput";
+import { CustomizationSettingsLayout } from "../sub_layouts/CustomizationSettingsLayout";
 
 import useRenderCounter from "../../../RenderCounter";
 
@@ -54,33 +55,45 @@ export function Top10ChadsoftLayout(props: {isAutoTTRecRunning: boolean, formCom
   return (
     <div>
       <Top10ChadsoftInput/>
+      <ComparisonGhostSourceInput/>
+      <SZSSourceInput/>
       {
         props.formComplexity > FormComplexity.SIMPLE ? <>
+          <br/>
           <Top10HighlightEnableInput/>
         </> : ""
       }
-      <ComparisonGhostSourceInput/>
-      <SZSSourceInput/>
+      <br/>
+
+      {
+        props.formComplexity > FormComplexity.SIMPLE ? 
+        <MKChannelGhostDescriptionInput/> : ""
+      }
 
       <Top10TitleInput/>
+
+      {
+        props.formComplexity > FormComplexity.SIMPLE ? <Top10LocationInput/> : ""
+      }
+
+      {
+        props.formComplexity > FormComplexity.SIMPLE ? <>
+          
+          <TrackNameInput_Memo formComplexity={props.formComplexity}/>
+        </> : <TrackNameInput_Memo formComplexity={props.formComplexity}/>
+      }
       {
         props.formComplexity === FormComplexity.ALL ? <Top10CensorsInput/> : ""
       }
       
-      {
-        props.formComplexity > FormComplexity.SIMPLE ? <>
-          <MKChannelGhostDescriptionInput/>
-          <TrackNameInput_Memo formComplexity={props.formComplexity}/>
-          <Top10LocationInput/>
-        </> : <TrackNameInput_Memo formComplexity={props.formComplexity}/>
-      }
+      <br/>
+
       <BackgroundMusicSourceInput timeline="top10" formComplexity={props.formComplexity}/>
       {
-        props.formComplexity > FormComplexity.SIMPLE ? <>
-          <InputDisplayInput/>
-          <ExtraGeckoCodesEnableInput isAutoTTRecRunning={props.isAutoTTRecRunning}/>
-          <SpeedometerInput/>
-        </> : ""
+        props.formComplexity > FormComplexity.SIMPLE ? <CustomizationSettingsLayout isAutoTTRecRunning={props.isAutoTTRecRunning}/> : ""
+      }
+      {
+        props.formComplexity > FormComplexity.SIMPLE ? <SpeedometerInput/> : ""
       }
       <PresentationSettingsLayout formComplexity={props.formComplexity} enableFadeInAtStart={true}/>
       {

@@ -8,6 +8,8 @@ import { ReadTemplateResult, ReadTemplateStatus, AutoTTRecConfig } from "../../s
 import { useFormContextAutoTT } from "../use-form-context-auto-tt";
 
 import { tryImportAutoTTRecConfigTemplate, tryExportAutoTTRecConfigTemplate, ExportTemplateStatus, ExportTemplateResult, ReadAndImportTemplateResult } from "../auto-tt-rec-form-data-generators";
+import { validateNoUnsavedFiles } from "../auto-tt-rec-config-exporter";
+import { AutoTTRecConfigErrorsAndWarnings } from "../auto-tt-rec-errors-and-warnings";
 
 import { BooleanFILLME } from "../../shared/shared-types";
 
@@ -87,30 +89,38 @@ export function ImportTemplate(props: {
 
   async function onClickExportTemplate(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
-    let newAutoTTRecTemplateFilename = await window.api.saveFileDialog([{name: "YAML files", extensions: ["yml"]}], autoTTRecTemplateFilename, "template");
-    if (newAutoTTRecTemplateFilename !== "") {
-      setAutoTTRecTemplateFilename(newAutoTTRecTemplateFilename);
-
-      let formData: AutoTTRecConfigFormFields = props.formMethods.getValues();
-      let exportTemplateResult = await tryExportAutoTTRecConfigTemplate(formData, newAutoTTRecTemplateFilename);
-
-      setReadYAMLErrorWarningTitle("");
-      setReadYAMLErrorWarningData("");
-
-      let newExportErrorWarningTitle: string = "";
-      let newExportErrorWarningData: string = "";
-
-      if (exportTemplateResult.status === ExportTemplateStatus.SUCCESS) {
-        newExportErrorWarningTitle = "Exported template successfully!";
-      } else {
-        newExportErrorWarningTitle = "Errors and/or occurred while exporting template";
-        newExportErrorWarningData = exportTemplateResult.errorWarningData;
-      }
-
-      setImportOrExportErrorWarningTitle(newExportErrorWarningTitle);
-      setImportOrExportErrorWarningData(newExportErrorWarningData);
+    let errorsAndWarnings = new AutoTTRecConfigErrorsAndWarnings();
+    let formData: AutoTTRecConfigFormFields = props.formMethods.getValues();
+    if (!validateNoUnsavedFiles(formData, errorsAndWarnings)) {
+      setImportOrExportErrorWarningTitle("Not all files were saved!");
+      setImportOrExportErrorWarningData(errorsAndWarnings.compile());
       setIsImporting(false);
       setModalOpen(true);
+    } else {
+      let newAutoTTRecTemplateFilename = await window.api.saveFileDialog([{name: "YAML files", extensions: ["yml"]}], autoTTRecTemplateFilename, "template");
+      if (newAutoTTRecTemplateFilename !== "") {
+        setAutoTTRecTemplateFilename(newAutoTTRecTemplateFilename);
+
+        let exportTemplateResult = await tryExportAutoTTRecConfigTemplate(formData, newAutoTTRecTemplateFilename);
+  
+        setReadYAMLErrorWarningTitle("");
+        setReadYAMLErrorWarningData("");
+  
+        let newExportErrorWarningTitle: string = "";
+        let newExportErrorWarningData: string = "";
+  
+        if (exportTemplateResult.status === ExportTemplateStatus.SUCCESS) {
+          newExportErrorWarningTitle = "Exported template successfully!";
+        } else {
+          newExportErrorWarningTitle = "Errors and/or occurred while exporting template";
+          newExportErrorWarningData = exportTemplateResult.errorWarningData;
+        }
+  
+        setImportOrExportErrorWarningTitle(newExportErrorWarningTitle);
+        setImportOrExportErrorWarningData(newExportErrorWarningData);
+        setIsImporting(false);
+        setModalOpen(true);
+      }
     }
   }
 

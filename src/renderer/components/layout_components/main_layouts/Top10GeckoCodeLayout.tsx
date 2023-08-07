@@ -41,6 +41,7 @@ import { FormComplexity } from "../FormComplexityLayout";
 import { PresentationSettingsLayout } from "../sub_layouts/PresentationSettingsLayout";
 import { CRFValueInput } from "../../form_components/CRFValueInput";
 import { GhostAndSZSSourceLayout } from "../sub_layouts/GhostAndSZSSourceLayout";
+import { CustomizationSettingsLayout } from "../sub_layouts/CustomizationSettingsLayout";
 
 const TrackNameInput_Memo = memo(TrackNameInput);
 
@@ -55,17 +56,17 @@ export function Top10GeckoCodeLayout(props: {isAutoTTRecRunning: boolean, formCo
       {
         props.formComplexity > FormComplexity.SIMPLE ? <>
           <MKChannelGhostDescriptionInput/>
-          <TrackNameInput_Memo formComplexity={props.formComplexity}/>
           <Top10GeckoCodeLocationInput/>
+          <TrackNameInput_Memo formComplexity={props.formComplexity}/>
         </> : <TrackNameInput_Memo formComplexity={props.formComplexity}/>
       }
+      <br/>
       <BackgroundMusicSourceInput timeline="top10" formComplexity={props.formComplexity}/>
       {
-        props.formComplexity > FormComplexity.SIMPLE ? <>
-          <InputDisplayInput/>
-          <ExtraGeckoCodesEnableInput isAutoTTRecRunning={props.isAutoTTRecRunning}/>
-          <SpeedometerInput/>
-        </> : ""
+        props.formComplexity > FormComplexity.SIMPLE ? <CustomizationSettingsLayout isAutoTTRecRunning={props.isAutoTTRecRunning}/> : ""
+      }
+      {
+        props.formComplexity > FormComplexity.SIMPLE ? <SpeedometerInput/> : ""
       }
       <PresentationSettingsLayout formComplexity={props.formComplexity} enableFadeInAtStart={true}/>
       {

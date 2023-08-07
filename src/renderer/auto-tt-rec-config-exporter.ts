@@ -52,17 +52,17 @@ import { AutoTTRecExportArgName, AutoTTRecExportArgs, Top10LocationExport } from
 import { AutoTTRecConfigErrorsAndWarnings } from "./auto-tt-rec-errors-and-warnings";
 
 export function validateNoUnsavedFiles(formData: AutoTTRecConfigFormFields, errorsAndWarnings: AutoTTRecConfigErrorsAndWarnings) {
-  let hasUnsavedFiles: boolean = false;
+  let hasNoUnsavedFiles: boolean = true;
 
   if (formData["extra-gecko-codes-unsaved"]) {
     errorsAndWarnings.addError("extra-gecko-codes-unsaved", "Please save your extra gecko codes file first.");
-    hasUnsavedFiles = true;
+    hasNoUnsavedFiles = false;
   } if (formData["top-10-gecko-code-unsaved"]) {
     errorsAndWarnings.addError("top-10-gecko-code-unsaved", "Please save your top 10 gecko code file first.");
-    hasUnsavedFiles = true;
+    hasNoUnsavedFiles = false;
   }
 
-  return hasUnsavedFiles;
+  return hasNoUnsavedFiles;
 }
 
 export class AutoTTRecConfigExporter {
