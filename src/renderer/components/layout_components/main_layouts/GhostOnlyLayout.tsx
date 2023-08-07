@@ -39,6 +39,7 @@ import { FormComplexity } from "../FormComplexityLayout";
 import { QualitySettingsLayout } from "../sub_layouts/QualitySettingsLayout";
 import { ExtraSettingsLayout } from "../sub_layouts/ExtraSettingsLayout";
 import { CRFValueInput } from "../../form_components/CRFValueInput";
+import { GhostSourceLayout } from "../sub_layouts/GhostSourceLayout";
 
 import useRenderCounter from "../../../RenderCounter";
 
@@ -47,8 +48,7 @@ export function GhostOnlyLayout(props: {isAutoTTRecRunning: boolean, formComplex
 
   return (
     <div>
-      <MainGhostSourceInput/>
-      <ComparisonGhostSourceInput/>
+      <GhostSourceLayout/>
       <SZSSourceInput/>
       <BackgroundMusicSourceInput timeline="ghostonly" formComplexity={props.formComplexity}/>
       {

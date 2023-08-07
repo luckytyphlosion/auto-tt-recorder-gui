@@ -37,6 +37,7 @@ import { FadeInAtStartInput } from "../../form_components/FadeInAtStartInput";
 import { QualitySettingsLayout } from "../sub_layouts/QualitySettingsLayout";
 import { PresentationSettingsLayout } from "../sub_layouts/PresentationSettingsLayout";
 import { FormComplexity } from "../FormComplexityLayout";
+import { GhostSourceLayout } from "../sub_layouts/GhostSourceLayout";
 
 import useRenderCounter from "../../../RenderCounter";
 
@@ -45,8 +46,7 @@ export function NoEncodeLayout(props: {isAutoTTRecRunning: boolean}) {
 
   return (
     <div>
-      <MainGhostSourceInput/>
-      <ComparisonGhostSourceInput/>
+      <GhostSourceLayout/>
       <SZSSourceInput/>
       <NoMusicInput/>
       <ExtraGeckoCodesEnableInput isAutoTTRecRunning={props.isAutoTTRecRunning}/>

@@ -40,6 +40,7 @@ import { EndingDelayInput } from "../../form_components/EndingDelayInput";
 import { FormComplexity } from "../FormComplexityLayout";
 import { PresentationSettingsLayout } from "../sub_layouts/PresentationSettingsLayout";
 import { CRFValueInput } from "../../form_components/CRFValueInput";
+import { GhostSourceLayout } from "../sub_layouts/GhostSourceLayout";
 
 const TrackNameInput_Memo = memo(TrackNameInput);
 
@@ -48,8 +49,7 @@ export function Top10GeckoCodeLayout(props: {isAutoTTRecRunning: boolean, formCo
 
   return (
     <div>
-      <MainGhostSourceInput/>
-      <ComparisonGhostSourceInput/>
+      <GhostSourceLayout/>
       <Top10GeckoCodeInput isAutoTTRecRunning={props.isAutoTTRecRunning}/>
       <SZSSourceInput/>
       {
