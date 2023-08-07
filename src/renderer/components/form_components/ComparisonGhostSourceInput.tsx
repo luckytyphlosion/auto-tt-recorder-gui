@@ -25,7 +25,7 @@ export function ComparisonGhostSourceInput() {
 
   return (
     <div>
-      <fieldset>
+      <fieldset className="fieldset-nontop">
         <legend>Comparison ghost source: </legend>
         <DeselectableRadioButtonGroup name="comparison-ghost-source">
           <DeselectableRadioButton labelValue="Chadsoft link:" id="comparison-ghost-source-chadsoft" value="chadsoft" onChange={updateComparisonGhostSource}/>

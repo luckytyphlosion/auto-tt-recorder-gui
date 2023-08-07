@@ -39,6 +39,8 @@ import { FormComplexity } from "../FormComplexityLayout";
 import { QualitySettingsLayout } from "../sub_layouts/QualitySettingsLayout";
 import { ExtraSettingsLayout } from "../sub_layouts/ExtraSettingsLayout";
 import { PresentationSettingsLayout } from "../sub_layouts/PresentationSettingsLayout";
+import { GhostSourceLayout } from "../sub_layouts/GhostSourceLayout";
+
 import { CRFValueInput } from "../../form_components/CRFValueInput";
 
 import useRenderCounter from "../../../RenderCounter";
@@ -50,8 +52,7 @@ export function MarioKartChannelLayout(props: {isAutoTTRecRunning: boolean, form
 
   return (
     <div>
-      <MainGhostSourceInput/>
-      <ComparisonGhostSourceInput/>
+      <GhostSourceLayout/>
       <SZSSourceInput/>
       {
         props.formComplexity > FormComplexity.SIMPLE ? <>

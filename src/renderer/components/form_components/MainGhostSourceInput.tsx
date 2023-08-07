@@ -26,7 +26,7 @@ export function MainGhostSourceInput() {
 
   return (
     <div>
-      <fieldset>
+      <fieldset className="fieldset-top">
         <legend>Record from: </legend>
         <DeselectableRadioButtonGroup name="main-ghost-source">
         <DeselectableRadioButton labelValue="Chadsoft link: " id="main-ghost-source-chadsoft" value="chadsoft" onChange={updateMainGhostSource}/>
