@@ -25,8 +25,7 @@ export function ComparisonGhostSourceInput() {
 
   return (
     <div>
-      <fieldset>
-        <legend>Comparison ghost source: </legend>
+        <label>Comparison ghost source: </label>
         <DeselectableRadioButtonGroup name="comparison-ghost-source">
           <DeselectableRadioButton labelValue="Chadsoft link:" id="comparison-ghost-source-chadsoft" value="chadsoft" onChange={updateComparisonGhostSource}/>
           <DeselectableRadioButton labelValue="RKG:" id="comparison-ghost-source-rkg" value="rkg" onChange={updateComparisonGhostSource}/>
@@ -40,7 +39,6 @@ export function ComparisonGhostSourceInput() {
         {
           isValueOrFILLMEIsValue(comparisonGhostSource, "rkg") ? <ComparisonGhostFilenameInput/> : ""
         }
-      </fieldset>
     </div>
   );
 }

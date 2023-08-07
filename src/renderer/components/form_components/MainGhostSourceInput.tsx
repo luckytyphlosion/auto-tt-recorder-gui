@@ -26,8 +26,7 @@ export function MainGhostSourceInput() {
 
   return (
     <div>
-      <fieldset>
-        <legend>Record from: </legend>
+        <label>Record from: </label>
         <DeselectableRadioButtonGroup name="main-ghost-source">
         <DeselectableRadioButton labelValue="Chadsoft link: " id="main-ghost-source-chadsoft" value="chadsoft" onChange={updateMainGhostSource}/>
           <DeselectableRadioButton labelValue="RKG: " id="main-ghost-source-rkg" value="rkg" onChange={updateMainGhostSource}/>
@@ -39,8 +38,6 @@ export function MainGhostSourceInput() {
         {
           isValueOrFILLMEIsValue(mainGhostSource, "rkg") ? <MainGhostFilenameInput/> : ""
         }
-
-      </fieldset>
     </div>
   );
 }
