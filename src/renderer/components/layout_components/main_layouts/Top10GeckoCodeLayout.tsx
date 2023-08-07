@@ -50,8 +50,8 @@ export function Top10GeckoCodeLayout(props: {isAutoTTRecRunning: boolean, formCo
   return (
     <div>
       <GhostSourceLayout/>
-      <Top10GeckoCodeInput isAutoTTRecRunning={props.isAutoTTRecRunning}/>
       <SZSSourceInput/>
+      <Top10GeckoCodeInput isAutoTTRecRunning={props.isAutoTTRecRunning}/>
       {
         props.formComplexity > FormComplexity.SIMPLE ? <>
           <MKChannelGhostDescriptionInput/>

@@ -5,9 +5,10 @@ import { ComparisonGhostSourceInput } from "../../form_components/ComparisonGhos
 
 export function GhostSourceLayout() {
   return (
-    <>
+    <section>
+      <h3>Ghost sources</h3>
       <MainGhostSourceInput/>
       <ComparisonGhostSourceInput/>
-    </>
+    </section>
   );
 }
