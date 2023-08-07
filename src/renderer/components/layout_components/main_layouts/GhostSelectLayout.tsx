@@ -40,7 +40,7 @@ import { FormComplexity } from "../FormComplexityLayout";
 import { QualitySettingsLayout } from "../sub_layouts/QualitySettingsLayout";
 import { ExtraSettingsLayout } from "../sub_layouts/ExtraSettingsLayout";
 import { CRFValueInput } from "../../form_components/CRFValueInput";
-import { GhostSourceLayout } from "../sub_layouts/GhostSourceLayout";
+import { GhostAndSZSSourceLayout } from "../sub_layouts/GhostAndSZSSourceLayout";
 
 import useRenderCounter from "../../../RenderCounter";
 
@@ -51,8 +51,7 @@ export function GhostSelectLayout(props: {isAutoTTRecRunning: boolean, formCompl
 
   return (
     <div>
-      <GhostSourceLayout/>
-      <SZSSourceInput/>
+      <GhostAndSZSSourceLayout/>
       <TrackNameInput_Memo formComplexity={props.formComplexity}/>
       <BackgroundMusicSourceInput timeline="ghostselect" formComplexity={props.formComplexity}/>
       {
