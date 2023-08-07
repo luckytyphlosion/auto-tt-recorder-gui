@@ -25,20 +25,22 @@ export function ComparisonGhostSourceInput() {
 
   return (
     <div>
-      <label htmlFor="comparison-ghost-source">Comparison ghost source: </label>
-      <DeselectableRadioButtonGroup name="comparison-ghost-source">
-        <DeselectableRadioButton labelValue="Chadsoft link:" id="comparison-ghost-source-chadsoft" value="chadsoft" onChange={updateComparisonGhostSource}/>
-        <DeselectableRadioButton labelValue="RKG:" id="comparison-ghost-source-rkg" value="rkg" onChange={updateComparisonGhostSource}/>
-        <DeselectableRadioButton labelValue="None:" id="comparison-ghost-source-none" value="none" onChange={updateComparisonGhostSource}/>
-      </DeselectableRadioButtonGroup>
+      <fieldset>
+        <legend>Comparison ghost source: </legend>
+        <DeselectableRadioButtonGroup name="comparison-ghost-source">
+          <DeselectableRadioButton labelValue="Chadsoft link:" id="comparison-ghost-source-chadsoft" value="chadsoft" onChange={updateComparisonGhostSource}/>
+          <DeselectableRadioButton labelValue="RKG:" id="comparison-ghost-source-rkg" value="rkg" onChange={updateComparisonGhostSource}/>
+          <DeselectableRadioButton labelValue="None:" id="comparison-ghost-source-none" value="none" onChange={updateComparisonGhostSource}/>
+        </DeselectableRadioButtonGroup>
 
-      {renderCounter}
-      {
-        isValueOrFILLMEIsValue(comparisonGhostSource, "chadsoft") ? <ChadsoftComparisonGhostPageInput/> : ""
-      }
-      {
-        isValueOrFILLMEIsValue(comparisonGhostSource, "rkg") ? <ComparisonGhostFilenameInput/> : ""
-      }
+        {renderCounter}
+        {
+          isValueOrFILLMEIsValue(comparisonGhostSource, "chadsoft") ? <ChadsoftComparisonGhostPageInput/> : ""
+        }
+        {
+          isValueOrFILLMEIsValue(comparisonGhostSource, "rkg") ? <ComparisonGhostFilenameInput/> : ""
+        }
+      </fieldset>
     </div>
   );
 }

@@ -177,7 +177,10 @@ export function AutoTTRecConfigForm(
     await props.onSubmitCallback(autoTTRecArgs, setSubmittedToggle);
   }
 
-  function onError(errors: Object) {
+  async function onError(errors: Object) {
+    let lastRecordedTemplateFilename = await window.api.getLastRecordedTemplateFilename();
+    let formData = formMethods.getValues();
+    await tryExportAutoTTRecConfigTemplate(formData, lastRecordedTemplateFilename);
     console.log("errors:", errors);
     console.log("formState.dirtyFields:", formState.dirtyFields);
     console.log("formState.touchedFields:", formState.touchedFields);

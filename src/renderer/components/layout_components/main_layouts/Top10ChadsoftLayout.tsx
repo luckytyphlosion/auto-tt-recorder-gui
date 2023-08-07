@@ -54,16 +54,17 @@ export function Top10ChadsoftLayout(props: {isAutoTTRecRunning: boolean, formCom
   return (
     <div>
       <Top10ChadsoftInput/>
-      <Top10TitleInput/>
       {
         props.formComplexity > FormComplexity.SIMPLE ? <>
           <Top10HighlightEnableInput/>
         </> : ""
       }
+      <ComparisonGhostSourceInput/>
+      <Top10TitleInput/>
       {
         props.formComplexity === FormComplexity.ALL ? <Top10CensorsInput/> : ""
       }
-      <ComparisonGhostSourceInput/>
+      
       <SZSSourceInput/>
       {
         props.formComplexity > FormComplexity.SIMPLE ? <>
