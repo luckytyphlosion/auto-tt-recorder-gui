@@ -18,14 +18,18 @@ export function ComparisonGhostFilenameInput() {
 
   return (
     <div>
-      <label htmlFor="comparison-ghost-filename">RKG file to compare against: </label>
-      <ClearableReadonlyTextInput name="comparison-ghost-filename" validate={isFileReadable}/>
-      <button onClick={event => {
-        queueOpenDialog(event, [
-          {name: "RKG files", extensions: ["rkg"]}
-        ]);
-      }} type="button">Browse&#8230;</button>
-      <SimpleErrorMessage name="comparison-ghost-filename"/>
+      <div className="start-label-div">
+        <label htmlFor="comparison-ghost-filename" className="start-label">RKG file to compare against: </label>
+      </div>
+      <div className="start-label-contents">
+        <ClearableReadonlyTextInput name="comparison-ghost-filename" validate={isFileReadable}/>
+        <button onClick={event => {
+          queueOpenDialog(event, [
+            {name: "RKG files", extensions: ["rkg"]}
+          ]);
+        }} type="button">Browse&#8230;</button>
+        <SimpleErrorMessage name="comparison-ghost-filename"/>
+      </div>
     </div>
   );
 }

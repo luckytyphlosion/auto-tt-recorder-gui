@@ -1,4 +1,14 @@
 
+html {
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
 .title-header {
 	font-family: Arial, sans-serif;
 	font-size: 14pt;
@@ -38,3 +48,32 @@
 .option-label {
 	font-weight: bold;
 }
+
+.start-label {
+	width: inherit;
+	max-width: 100%;
+}
+
+.start-label-div {
+	flex: 0 0 16.6667%;
+	min-width: fit-content;
+	max-width: 33.3333%;
+	text-align: right;
+}
+
+
+.start-label-contents {
+	flex: 0 0 66.6667%;
+	max-width: 66.6667%;
+}
+
+.like-input-group {
+	display: flex;
+	flex-flow: row wrap;
+}
+/*
+.fieldset-or {
+	width: fit-content;
+}
+.fieldset-or label {
+}*/

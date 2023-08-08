@@ -22,11 +22,15 @@ export function SZSSourceInput() {
 
   return (
     <div>
-      <label htmlFor="szs-source">Track SZS: </label>
-      <DeselectableRadioButtonGroup name="szs-source">
-        <DeselectableRadioButton labelValue="Download automatically OR vanilla track:" id="szs-source-automatic" value="automatic" onChange={updateSZSSource}/>
-        <DeselectableRadioButton labelValue="Supply from SZS:" id="szs-source-from-file" value="fromfile" onChange={updateSZSSource}/>
-      </DeselectableRadioButtonGroup>
+      <div className="start-label-div">
+        <label htmlFor="szs-source" className="start-label">Track SZS: </label>
+      </div>
+      <div className="start-label-contents">
+        <DeselectableRadioButtonGroup name="szs-source">
+          <DeselectableRadioButton labelValue="Download automatically OR vanilla track:" id="szs-source-automatic" value="automatic" onChange={updateSZSSource}/>
+          <DeselectableRadioButton labelValue="Supply from SZS:" id="szs-source-from-file" value="fromfile" onChange={updateSZSSource}/>
+        </DeselectableRadioButtonGroup>
+      </div>
       {renderCounter}
       {
         isValueOrFILLMEIsValue(szsSource, "fromfile") ? <SZSFilenameInput/> : ''

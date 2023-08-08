@@ -18,14 +18,18 @@ export function SZSFilenameInput() {
 
   return (
     <div>
-      <label htmlFor="szs-filename">SZS Filename: </label>
-      <ClearableReadonlyTextInput name="szs-filename" validate={isFileReadable}/>
-      <button onClick={event => {
-        queueOpenDialog(event, [
-          {name: "SZS files", extensions: ["szs"]}
-        ]);
-      }} type="button">Browse&#8230;</button>
-      <SimpleErrorMessage name="szs-filename"/>
+      <div className="start-label-div">
+        <label htmlFor="szs-filename" className="start-label">SZS Filename: </label>
+      </div>
+      <div className="start-label-contents">
+        <ClearableReadonlyTextInput name="szs-filename" validate={isFileReadable}/>
+        <button onClick={event => {
+          queueOpenDialog(event, [
+            {name: "SZS files", extensions: ["szs"]}
+          ]);
+        }} type="button">Browse&#8230;</button>
+        <SimpleErrorMessage name="szs-filename"/>
+      </div>
     </div>
   );
 }

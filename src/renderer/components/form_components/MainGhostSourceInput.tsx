@@ -26,18 +26,27 @@ export function MainGhostSourceInput() {
 
   return (
     <div>
-      <label>Record from: </label>
-      <DeselectableRadioButtonGroup name="main-ghost-source">
-      <DeselectableRadioButton labelValue="Chadsoft link: " id="main-ghost-source-chadsoft" value="chadsoft" onChange={updateMainGhostSource}/>
-        <DeselectableRadioButton labelValue="RKG: " id="main-ghost-source-rkg" value="rkg" onChange={updateMainGhostSource}/>
-      </DeselectableRadioButtonGroup>
-      {renderCounter}
+      <div className="like-input-group">
+
+        <div className="start-label-div">
+          <label className="start-label">Record from: </label>        
+        </div>
+        <div className="start-label-contents">
+          <DeselectableRadioButtonGroup name="main-ghost-source">
+          <DeselectableRadioButton labelValue="Chadsoft link: " id="main-ghost-source-chadsoft" value="chadsoft" onChange={updateMainGhostSource}/>
+            <DeselectableRadioButton labelValue="RKG: " id="main-ghost-source-rkg" value="rkg" onChange={updateMainGhostSource}/>
+          </DeselectableRadioButtonGroup>
+          {renderCounter}
+        </div>
+      </div>
+      <div className="like-input-group">
       {
         isValueOrFILLMEIsValue(mainGhostSource, "chadsoft") ? <ChadsoftGhostPageInput/> : ""
       }
       {
         isValueOrFILLMEIsValue(mainGhostSource, "rkg") ? <MainGhostFilenameInput/> : ""
       }
+      </div>
     </div>
   );
 }

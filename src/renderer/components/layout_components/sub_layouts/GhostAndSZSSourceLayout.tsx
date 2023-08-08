@@ -11,7 +11,6 @@ export function GhostAndSZSSourceLayout() {
       <FieldsetOr>
         <legend>Ghosts and Track SZS</legend>
         <MainGhostSourceInput/>
-        <br/>
         <ComparisonGhostSourceInput/>
         <br/>
         <SZSSourceInput/>

@@ -2,7 +2,7 @@ import React from "react";
 
 export function FieldsetOr(props: {children?: React.ReactNode}) {
   return (
-    <fieldset>
+    <fieldset className="fieldset-or">
       {props.children}
     </fieldset>
   );
