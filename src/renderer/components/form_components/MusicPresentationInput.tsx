@@ -1,17 +1,17 @@
 
 import React, { useEffect } from "react";
-import { useFormContextAutoTT } from "../../../use-form-context-auto-tt";
-import useRenderCounter from "../../../RenderCounter";
-import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../../DeselectableRadioButton";
+import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
+import useRenderCounter from "../../RenderCounter";
+import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../DeselectableRadioButton";
 
-import { makeReadonlyArraySet, ValidValues } from "../../../../shared/array-set";
+import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
 
 export const MUSIC_PRESENTATIONS = makeReadonlyArraySet(["start-music-at-beginning", "no-music-mkchannel", "normal"] as const);
 export type MusicPresentation = ValidValues<typeof MUSIC_PRESENTATIONS>;
 
-export function MusicPresentationLayout(props: {hasMusic: boolean, isOnMKChannel: boolean}) {
-  const {register, getValues, setValue} = useFormContextAutoTT();
-  const renderCounter = useRenderCounter(false, "MusicPresentationLayout");
+export function MusicPresentationInput(props: {hasMusic: boolean, isOnMKChannel: boolean}) {
+  const {getValues, setValue} = useFormContextAutoTT();
+  const renderCounter = useRenderCounter(false, "MusicPresentationInput");
 
   useEffect(() => {
     let musicPresentation = getValues("music-presentation");

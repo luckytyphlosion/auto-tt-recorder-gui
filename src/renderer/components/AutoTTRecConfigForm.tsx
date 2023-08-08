@@ -46,7 +46,7 @@ import { NoTop10Category } from "./layout_components/choice_layouts/NoTop10Categ
 import { AspectRatio16By9 } from "./form_components/AspectRatio16By9Input";
 import { TrackNameType } from "./form_components/TrackNameInput";
 
-import { MusicPresentation } from "./layout_components/sub_layouts/MusicPresentationLayout";
+import { MusicPresentation } from "./form_components/MusicPresentationInput";
 import { FormComplexity } from "./layout_components/FormComplexityLayout";
 
 import { ClearAllFields } from "./ClearAllFields";
