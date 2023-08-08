@@ -15,7 +15,7 @@ import { Top10ChadsoftInput } from "../../form_components/Top10ChadsoftInput";
 import { Top10TitleInput } from "../../form_components/Top10TitleInput";
 import { PixelFormatInput } from "../../form_components/PixelFormatInput";
 import { EncodeSettingsLayout } from "../choice_layouts/EncodeSettingsLayout";
-import { BackgroundMusicSourceInput } from "../../form_components/BackgroundMusicSourceInput";
+import { BackgroundMusicSourceInputAndMusicLayout } from "../sub_layouts/BackgroundMusicSourceInputAndMusicLayout";
 import { GameVolumeInput } from "../../form_components/GameVolumeInput";
 import { Top10LocationInput } from "../../form_components/Top10LocationInput";
 import { InputDisplayInput } from "../../form_components/InputDisplayInput";
@@ -88,7 +88,7 @@ export function Top10ChadsoftLayout(props: {isAutoTTRecRunning: boolean, formCom
       
       <br/>
 
-      <BackgroundMusicSourceInput timeline="top10" formComplexity={props.formComplexity}/>
+      <BackgroundMusicSourceInputAndMusicLayout timeline="top10" formComplexity={props.formComplexity}/>
       {
         props.formComplexity > FormComplexity.SIMPLE ? <CustomizationSettingsLayout isAutoTTRecRunning={props.isAutoTTRecRunning}/> : ""
       }

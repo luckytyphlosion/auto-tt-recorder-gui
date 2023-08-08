@@ -20,7 +20,7 @@ import { Top10LocationRegion } from "./form_components/Top10LocationInput";
 import { Top10LocationCountry } from "./form_components/Top10LocationCountryInput";
 import { Top10LocationRegional } from "./form_components/Top10LocationRegionalInput";
 
-import { BackgroundMusicSource } from "./form_components/BackgroundMusicSourceInput";
+import { BackgroundMusicSource } from "./layout_components/sub_layouts/BackgroundMusicSourceInputAndMusicLayout";
 
 import { INPUT_DISPLAYS } from "./form_components/InputDisplayInput";
 import { SpeedometerStyle } from "./layout_components/sub_layouts/SpeedometerStyleAndLayout";
