@@ -28,29 +28,31 @@ export function BackgroundMusicSourceInputAndMusicLayout(props: {timeline: Timel
 
   return (
     <div>
-      <label htmlFor="background-music-source">Background Music: </label>
-      <DeselectableDropdown name="background-music-source" noErrorMessage={true}>
-        <option value="music-filename">Music filename</option>
-        <option value="game-bgm">Game BGM</option>
-        <option value="none">None</option>
-      </DeselectableDropdown>
-      {
-        musicFilenameInputEnable ? 
-         <MusicFilenameInput/> : <SimpleErrorMessage name="background-music-source"/>
-      }
-      {
-        enableMusicPresentationInput && props.formComplexity > FormComplexity.SIMPLE ?
-          <MusicPresentationInput hasMusic={musicFilenameInputEnable} isOnMKChannel={isOnMKChannel}/> : ""
-      }
-      {
-        musicFilenameInputEnable ?
-        <>
-          <GameVolumeInput/>
-          <MusicVolumeInput/>
-        </> : ""
-      }
-      {renderCounter}
-
+      <fieldset>
+        <legend>Music</legend>
+        <label htmlFor="background-music-source">Background Music: </label>
+        <DeselectableDropdown name="background-music-source" noErrorMessage={true}>
+          <option value="music-filename">Music filename</option>
+          <option value="game-bgm">Game BGM</option>
+          <option value="none">None</option>
+        </DeselectableDropdown>
+        {
+          musicFilenameInputEnable ? 
+          <MusicFilenameInput/> : <SimpleErrorMessage name="background-music-source"/>
+        }
+        {
+          enableMusicPresentationInput && props.formComplexity > FormComplexity.SIMPLE ?
+            <MusicPresentationInput hasMusic={musicFilenameInputEnable} isOnMKChannel={isOnMKChannel}/> : ""
+        }
+        {
+          musicFilenameInputEnable ?
+          <>
+            <GameVolumeInput/>
+            <MusicVolumeInput/>
+          </> : ""
+        }
+        {renderCounter}
+      </fieldset>
     </div>    
   );
 }
