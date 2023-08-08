@@ -42,6 +42,7 @@ import { ExtraSettingsLayout } from "../sub_layouts/ExtraSettingsLayout";
 import { PresentationSettingsLayout } from "../sub_layouts/PresentationSettingsLayout";
 import { Top10CensorsInput } from "../../form_components/Top10CensorsInput";
 import { CustomizationSettingsLayout } from "../sub_layouts/CustomizationSettingsLayout";
+import { FieldsetOr } from "../../FieldsetOr";
 
 import useRenderCounter from "../../../RenderCounter";
 
@@ -54,39 +55,43 @@ export function Top10ChadsoftLayout(props: {isAutoTTRecRunning: boolean, formCom
 
   return (
     <div>
-      <Top10ChadsoftInput/>
-      <ComparisonGhostSourceInput/>
-      <SZSSourceInput/>
+      <FieldsetOr>
+        <legend>Ghosts and Track SZS</legend>
+        <Top10ChadsoftInput/>
+        <ComparisonGhostSourceInput/>
+        <SZSSourceInput/>
+      
       {
         props.formComplexity > FormComplexity.SIMPLE ? <>
           <br/>
           <Top10HighlightEnableInput/>
         </> : ""
       }
-      <br/>
+      </FieldsetOr>
 
-      {
-        props.formComplexity > FormComplexity.SIMPLE ? 
-        <MKChannelGhostDescriptionInput/> : ""
-      }
+      <FieldsetOr>
+        <legend>Timeline-specific presentation settings</legend>
+        {
+          props.formComplexity > FormComplexity.SIMPLE ? 
+          <MKChannelGhostDescriptionInput/> : ""
+        }
 
-      <Top10TitleInput/>
+        <Top10TitleInput/>
 
-      {
-        props.formComplexity > FormComplexity.SIMPLE ? <Top10LocationInput/> : ""
-      }
+        {
+          props.formComplexity > FormComplexity.SIMPLE ? <Top10LocationInput/> : ""
+        }
 
-      {
-        props.formComplexity > FormComplexity.SIMPLE ? <>
-          
-          <TrackNameInput_Memo formComplexity={props.formComplexity}/>
-        </> : <TrackNameInput_Memo formComplexity={props.formComplexity}/>
-      }
-      {
-        props.formComplexity === FormComplexity.ALL ? <Top10CensorsInput/> : ""
-      }
-      
-      <br/>
+        {
+          props.formComplexity > FormComplexity.SIMPLE ? <>
+            
+            <TrackNameInput_Memo formComplexity={props.formComplexity}/>
+          </> : <TrackNameInput_Memo formComplexity={props.formComplexity}/>
+        }
+        {
+          props.formComplexity === FormComplexity.ALL ? <Top10CensorsInput/> : ""
+        }
+      </FieldsetOr>
 
       <BackgroundMusicSourceInputAndMusicLayout timeline="top10" formComplexity={props.formComplexity}/>
       {
