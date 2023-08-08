@@ -42,6 +42,7 @@ import { PresentationSettingsLayout } from "../sub_layouts/PresentationSettingsL
 import { CRFValueInput } from "../../form_components/CRFValueInput";
 import { GhostAndSZSSourceLayout } from "../sub_layouts/GhostAndSZSSourceLayout";
 import { CustomizationSettingsLayout } from "../sub_layouts/CustomizationSettingsLayout";
+import { FieldsetOr } from "../../FieldsetOr";
 
 const TrackNameInput_Memo = memo(TrackNameInput);
 
@@ -52,14 +53,18 @@ export function Top10GeckoCodeLayout(props: {isAutoTTRecRunning: boolean, formCo
     <div>
       <GhostAndSZSSourceLayout/>
 
-      <Top10GeckoCodeInput isAutoTTRecRunning={props.isAutoTTRecRunning}/>
-      {
-        props.formComplexity > FormComplexity.SIMPLE ? <>
-          <MKChannelGhostDescriptionInput/>
-          <Top10GeckoCodeLocationInput/>
-          <TrackNameInput_Memo formComplexity={props.formComplexity}/>
-        </> : <TrackNameInput_Memo formComplexity={props.formComplexity}/>
-      }
+      <FieldsetOr>
+        <legend>Timeline-specific presentation settings</legend>
+        <Top10GeckoCodeInput isAutoTTRecRunning={props.isAutoTTRecRunning}/>
+        {
+          props.formComplexity > FormComplexity.SIMPLE ? <>
+            <MKChannelGhostDescriptionInput/>
+            <Top10GeckoCodeLocationInput/>
+            <TrackNameInput_Memo formComplexity={props.formComplexity}/>
+          </> : <TrackNameInput_Memo formComplexity={props.formComplexity}/>
+        }
+      </FieldsetOr>
+
       <BackgroundMusicSourceInputAndMusicLayout timeline="top10" formComplexity={props.formComplexity}/>
       {
         props.formComplexity > FormComplexity.SIMPLE ? <CustomizationSettingsLayout isAutoTTRecRunning={props.isAutoTTRecRunning}/> : ""
