@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useFormContextAutoTT, isValueOrFILLMEIsValueMaker } from "../../use-form-context-auto-tt";
-import { SimpleErrorMessage } from "../SimpleErrorMessage";
+import { DoubleErrorMessage } from "../SimpleErrorMessage";
 import { FormComplexity } from "../layout_components/FormComplexityLayout";
 import useRenderCounter from "../../RenderCounter";
 
@@ -42,7 +42,7 @@ export function TrackNameInput(props: {formComplexity: FormComplexity}) {
   return (
     <div>
       <label htmlFor="track-name-type">Track name: </label>
-      <DeselectableRadioButtonGroup name="track-name-type" noErrorMessage={true}>
+      <DeselectableRadioButtonGroup name="track-name-type" noErrorMessage={true} inputRequiredMessage="Track name type (auto vs rkg vs manual) is required.">
         <DeselectableRadioButton labelValue="Auto-detect (recommended):" id="track-name-type-auto" value="auto" onChange={updateTrackNameType}/>
         {
           props.formComplexity === FormComplexity.ALL ? 
@@ -55,9 +55,10 @@ export function TrackNameInput(props: {formComplexity: FormComplexity}) {
       {
         isValueOrFILLMEIsValue(trackNameType, "manual") ? <>
           <input type="text" {...register("track-name", {validate: validateTrackName})}/>
-          <SimpleErrorMessage name="track-name"/>
         </> : ""
       }
+      <DoubleErrorMessage enablerName="track-name-type" enablerEnabledValue="manual" textName="track-name"/>
+
       {renderCounter}
     </div>
   );
