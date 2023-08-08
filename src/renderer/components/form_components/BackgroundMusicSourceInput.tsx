@@ -3,7 +3,7 @@ import { useFormContextAutoTT, useWatchExpandUnselectedChoiceInputs, isValueOrFI
 import { MusicFilenameInput } from "./MusicFilenameInput";
 import { GameVolumeInput } from "./GameVolumeInput";
 import { MusicVolumeInput } from "./MusicVolumeInput";
-import { MusicPresentationInput } from "./MusicPresentationInput";
+import { MusicPresentationLayout } from "../layout_components/sub_layouts/MusicPresentationLayout";
 import { FormComplexity } from "../layout_components/FormComplexityLayout";
 import { Timeline } from "../layout_components/choice_layouts/NoTop10CategoryLayout";
 import { DeselectableDropdown } from "../DeselectableDropdown";
@@ -40,7 +40,7 @@ export function BackgroundMusicSourceInput(props: {timeline: Timeline, formCompl
       }
       {
         enableMusicPresentationInput && props.formComplexity > FormComplexity.SIMPLE ?
-          <MusicPresentationInput hasMusic={musicFilenameInputEnable} isOnMKChannel={isOnMKChannel}/> : ""
+          <MusicPresentationLayout hasMusic={musicFilenameInputEnable} isOnMKChannel={isOnMKChannel}/> : ""
       }
       {
         musicFilenameInputEnable ?

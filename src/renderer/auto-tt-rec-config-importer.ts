@@ -31,7 +31,7 @@ import { NoTop10Category, NO_TOP_10_CATEGORIES, TIMELINES } from "./components/l
 import { ASPECT_RATIO_16_BY_9_VALUES } from "./components/form_components/AspectRatio16By9Input";
 import { TrackNameType } from "./components/form_components/TrackNameInput";
 
-import { MusicPresentation } from "./components/form_components/MusicPresentationInput";
+import { MusicPresentation } from "./components/layout_components/sub_layouts/MusicPresentationLayout";
 import { FormComplexity } from "./components/layout_components/FormComplexityLayout";
 import { Top10TitleType } from "./components/form_components/Top10TitleInput";
 
