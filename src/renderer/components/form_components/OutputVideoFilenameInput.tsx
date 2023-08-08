@@ -62,7 +62,7 @@ export function OutputVideoFilenameInput(props: {noTop10CategoryIsNoEncode: bool
 
   return (
     <div>
-      <fieldset>
+      <FieldsetOr>
         <legend>Output filename:</legend>
         <ClearableReadonlyTextInput className="filename-input" name="output-video-filename" validate={validateOutputVideoFilename}/>
         <button onClick={async (event) => {
@@ -81,7 +81,7 @@ export function OutputVideoFilenameInput(props: {noTop10CategoryIsNoEncode: bool
         }} type="button">Export as&#8230;</button>
         <SimpleErrorMessage name="output-video-filename"/>
         {renderCounter}
-      </fieldset>
+      </FieldsetOr>
     </div>
   );
 }

@@ -1,10 +1,11 @@
 import React from "react";
+import { FieldsetOr } from "../FieldsetOr";
 
 export function TimelineSpecificPresentationSettingsLayoutContainer(props: {children: React.ReactNode}) {
   return (
-    <fieldset>
+    <FieldsetOr>
       <legend>Timeline-specific presentation settings</legend>
       {props.children}
-    </fieldset>
+    </FieldsetOr>
   );
 }

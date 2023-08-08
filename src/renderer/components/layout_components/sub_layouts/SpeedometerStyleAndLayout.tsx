@@ -5,6 +5,7 @@ import useRenderCounter from "../../../RenderCounter";
 import { SpeedometerMetricInput } from "../../form_components/SpeedometerMetricInput";
 import { SpeedometerDecimalPlacesInput } from "../../form_components/SpeedometerDecimalPlacesInput";
 import { makeReadonlyArraySet, ValidValues } from "../../../../shared/array-set";
+import { FieldsetOr } from "../../FieldsetOr";
 
 import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../../DeselectableRadioButton";
 
@@ -27,7 +28,7 @@ export function SpeedometerStyleAndLayout() {
 
   return (
     <div>
-      <fieldset>
+      <FieldsetOr>
         <legend><h3>Speedometer</h3></legend>
         <label htmlFor="speedometer-style">Style: </label>
         <DeselectableRadioButtonGroup name="speedometer-style">
@@ -46,7 +47,7 @@ export function SpeedometerStyleAndLayout() {
               : ""}
           </>) : ""
         }
-      </fieldset>
+      </FieldsetOr>
     </div>
   );
 }

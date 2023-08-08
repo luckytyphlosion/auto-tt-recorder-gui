@@ -9,6 +9,7 @@ import { Timeline } from "../choice_layouts/NoTop10CategoryLayout";
 import { DeselectableDropdown } from "../../DeselectableDropdown";
 import { makeReadonlyArraySet, ValidValues } from "../../../../shared/array-set";
 import { SimpleErrorMessage } from "../../SimpleErrorMessage";
+import { FieldsetOr } from "../../FieldsetOr";
 
 import useRenderCounter from "../../../RenderCounter";
 
@@ -28,7 +29,7 @@ export function BackgroundMusicSourceInputAndMusicLayout(props: {timeline: Timel
 
   return (
     <div>
-      <fieldset>
+      <FieldsetOr>
         <legend>Music</legend>
         <label htmlFor="background-music-source">Background Music: </label>
         <DeselectableDropdown name="background-music-source" noErrorMessage={true}>
@@ -52,7 +53,7 @@ export function BackgroundMusicSourceInputAndMusicLayout(props: {timeline: Timel
           </> : ""
         }
         {renderCounter}
-      </fieldset>
+      </FieldsetOr>
     </div>    
   );
 }
