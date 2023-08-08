@@ -38,12 +38,16 @@ function useDeselectableRadioButtonsGroupContext() {
   return lastElement;
 }*/
 
-export function DeselectableRadioButtonGroup<K extends AutoTTRecConfigFormChoiceArgName>(props: {name: K, noErrorMessage?: boolean, notDeselectable?: boolean, children?: React.ReactNode}) {
+export function DeselectableRadioButtonGroup<K extends AutoTTRecConfigFormChoiceArgName>(props: {name: K, noErrorMessage?: boolean, notDeselectable?: boolean, inputRequiredMessage?: string, children?: React.ReactNode}) {
   const {register} = useFormContextAutoTT();
   const renderCounter = useRenderCounter(true, `DeselectableRadioButtonGroup ${props.name}`);
   function validateDeselectableRadioButton(value: AutoTTRecConfigFormChoiceArgs[AutoTTRecConfigFormChoiceArgName]): ValidateResult {
     if (value === "<FILLME>") {
-      return "This input is required.";
+      if (props.inputRequiredMessage !== undefined) {
+        return props.inputRequiredMessage;
+      } else {
+        return "This input is required.";
+      }
     } else {
       return true;
     }
