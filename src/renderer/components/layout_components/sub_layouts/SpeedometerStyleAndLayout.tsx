@@ -29,7 +29,7 @@ export function SpeedometerStyleAndLayout() {
   return (
     <div>
       <FieldsetOr>
-        <legend><h3>Speedometer</h3></legend>
+        <legend>Speedometer</legend>
         <label htmlFor="speedometer-style">Style: </label>
         <DeselectableRadioButtonGroup name="speedometer-style">
           <DeselectableRadioButton labelValue="Fancy: " id="speedometer-style-fancy" value="fancy" onChange={updateSpeedometerStyle}/>

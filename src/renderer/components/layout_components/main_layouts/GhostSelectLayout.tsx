@@ -57,7 +57,6 @@ export function GhostSelectLayout(props: {isAutoTTRecRunning: boolean, formCompl
       <TimelineSpecificPresentationSettingsLayoutContainer>
         <TrackNameInput_Memo formComplexity={props.formComplexity}/>
       </TimelineSpecificPresentationSettingsLayoutContainer>
-      <br/>
       <BackgroundMusicSourceInputAndMusicLayout timeline="ghostselect" formComplexity={props.formComplexity}/>
       {
         props.formComplexity > FormComplexity.SIMPLE ? <CustomizationSettingsLayout isAutoTTRecRunning={props.isAutoTTRecRunning}/> : ""

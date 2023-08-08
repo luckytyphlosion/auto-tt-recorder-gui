@@ -8,14 +8,15 @@ import { KeepWindowInput } from "../../form_components/KeepWindowInput";
 import { ChadsoftReadCacheAndSettingsInput } from "../../form_components/ChadsoftReadCacheAndSettingsInput";
 import { IgnoreAutoAddMissingFilesInput } from "../../form_components/IgnoreAutoAddMissingFilesInput";
 import { PurgeAutoAddInput } from "../../form_components/PurgeAutoAddInput";
+import { FieldsetOr } from "../../FieldsetOr";
 
 export function ExtraSettingsLayout(props: {formComplexity: FormComplexity}) {
   return (
     <>
       {
         props.formComplexity > FormComplexity.SIMPLE ?
-          <>
-            <h3>Extra settings</h3>
+          <FieldsetOr>
+            <legend>Extra settings</legend>
             <IgnoreAutoAddMissingFilesInput/>
             {
               props.formComplexity === FormComplexity.ALL ?
@@ -28,7 +29,7 @@ export function ExtraSettingsLayout(props: {formComplexity: FormComplexity}) {
                   <ChadsoftReadCacheAndSettingsInput/>
                 </> : ""
             }
-          </> : ""
+          </FieldsetOr> : ""
       }
     </>
   );

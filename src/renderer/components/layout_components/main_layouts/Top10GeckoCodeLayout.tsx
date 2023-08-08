@@ -60,7 +60,6 @@ export function Top10GeckoCodeLayout(props: {isAutoTTRecRunning: boolean, formCo
           <TrackNameInput_Memo formComplexity={props.formComplexity}/>
         </> : <TrackNameInput_Memo formComplexity={props.formComplexity}/>
       }
-      <br/>
       <BackgroundMusicSourceInputAndMusicLayout timeline="top10" formComplexity={props.formComplexity}/>
       {
         props.formComplexity > FormComplexity.SIMPLE ? <CustomizationSettingsLayout isAutoTTRecRunning={props.isAutoTTRecRunning}/> : ""

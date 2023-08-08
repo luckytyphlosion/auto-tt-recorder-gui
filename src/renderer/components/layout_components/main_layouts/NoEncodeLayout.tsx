@@ -38,6 +38,8 @@ import { QualitySettingsLayout } from "../sub_layouts/QualitySettingsLayout";
 import { PresentationSettingsLayout } from "../sub_layouts/PresentationSettingsLayout";
 import { FormComplexity } from "../FormComplexityLayout";
 import { GhostAndSZSSourceLayout } from "../sub_layouts/GhostAndSZSSourceLayout";
+import { CustomizationSettingsLayout } from "../sub_layouts/CustomizationSettingsLayout";
+import { FieldsetOr } from "../../FieldsetOr";
 
 import useRenderCounter from "../../../RenderCounter";
 
@@ -47,8 +49,11 @@ export function NoEncodeLayout(props: {isAutoTTRecRunning: boolean}) {
   return (
     <div>
       <GhostAndSZSSourceLayout/>
-      <NoMusicInput/>
-      <ExtraGeckoCodesEnableInput isAutoTTRecRunning={props.isAutoTTRecRunning}/>
+      <FieldsetOr>
+        <legend>Music</legend>
+        <NoMusicInput/>
+      </FieldsetOr>
+      <CustomizationSettingsLayout isAutoTTRecRunning={props.isAutoTTRecRunning}/>
       <SpeedometerStyleAndLayout/>
       <PresentationSettingsLayout formComplexity={FormComplexity.ALL} enableFadeInAtStart={false}/>
       <QualitySettingsLayout formComplexity={FormComplexity.ALL} isNoEncode={true}/>

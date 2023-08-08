@@ -8,19 +8,22 @@ import { HQTexturesInput } from "../../form_components/HQTexturesInput";
 import { NoBackgroundBlurInput } from "../../form_components/NoBackgroundBlurInput";
 import { NoBloomInput } from "../../form_components/NoBloomInput";
 import { CRFValueInput } from "../../form_components/CRFValueInput";
+import { FieldsetOr } from "../../FieldsetOr";
 
 export function QualitySettingsLayout(props: {formComplexity: FormComplexity, isNoEncode: boolean}) {
   return <>
-    <h3>Quality settings</h3>
-    {
-      props.formComplexity > FormComplexity.SIMPLE ?
-      <>
-        <DolphinResolutionInput enableOutputWidth={!props.isNoEncode} formComplexity={props.formComplexity}/>
-        {!props.isNoEncode && props.formComplexity === FormComplexity.ALL ? <AspectRatio16By9Input/> : ""}
-        <NoBackgroundBlurInput/>
-        <NoBloomInput/>
-      </> : <DolphinResolutionInput enableOutputWidth={false} formComplexity={props.formComplexity}/>
-    }
+    <FieldsetOr>
+      <legend>Quality settings</legend>
+      {
+        props.formComplexity > FormComplexity.SIMPLE ?
+        <>
+          <DolphinResolutionInput enableOutputWidth={!props.isNoEncode} formComplexity={props.formComplexity}/>
+          {!props.isNoEncode && props.formComplexity === FormComplexity.ALL ? <AspectRatio16By9Input/> : ""}
+          <NoBackgroundBlurInput/>
+          <NoBloomInput/>
+        </> : <DolphinResolutionInput enableOutputWidth={false} formComplexity={props.formComplexity}/>
+      }
+    </FieldsetOr>
   </>
 }
 

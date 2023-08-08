@@ -63,7 +63,6 @@ export function MarioKartChannelLayout(props: {isAutoTTRecRunning: boolean, form
           </> : <TrackNameInput_Memo formComplexity={props.formComplexity}/>
         }
       </TimelineSpecificPresentationSettingsLayoutContainer>
-      <br/>
       <BackgroundMusicSourceInputAndMusicLayout timeline="mkchannel" formComplexity={props.formComplexity}/>
       {
         props.formComplexity > FormComplexity.SIMPLE ? <CustomizationSettingsLayout isAutoTTRecRunning={props.isAutoTTRecRunning}/> : ""
