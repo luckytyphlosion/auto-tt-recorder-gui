@@ -1,12 +1,12 @@
 import React, { useState, memo } from "react";
-import { useFormContextAutoTT, isValueOrFILLMEIsValueMaker } from "../../use-form-context-auto-tt";
-import useRenderCounter from "../../RenderCounter";
+import { useFormContextAutoTT, isValueOrFILLMEIsValueMaker } from "../../../use-form-context-auto-tt";
+import useRenderCounter from "../../../RenderCounter";
 
-import { SpeedometerMetricInput } from "./SpeedometerMetricInput";
-import { SpeedometerDecimalPlacesInput } from "./SpeedometerDecimalPlacesInput";
-import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
+import { SpeedometerMetricInput } from "../../form_components/SpeedometerMetricInput";
+import { SpeedometerDecimalPlacesInput } from "../../form_components/SpeedometerDecimalPlacesInput";
+import { makeReadonlyArraySet, ValidValues } from "../../../../shared/array-set";
 
-import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../DeselectableRadioButton";
+import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../../DeselectableRadioButton";
 
 const SpeedometerMetricInput_Memo = memo(SpeedometerMetricInput);
 
@@ -14,10 +14,10 @@ export const SPEEDOMETER_STYLES = makeReadonlyArraySet(["fancy", "regular", "sta
 export type SpeedometerStyle = ValidValues<typeof SPEEDOMETER_STYLES>;
 export const SPEEDOMETER_STYLES2 = makeReadonlyArraySet(["fancy", "regular"] as const);
 
-export function SpeedometerInput() {
+export function SpeedometerStyleAndLayout() {
   const {register, getValues} = useFormContextAutoTT();
   const [speedometerStyle, setSpeedometerStyle] = useState(getValues("speedometer-style"));
-  const renderCounter = useRenderCounter(false, "SpeedometerInput");
+  const renderCounter = useRenderCounter(false, "SpeedometerStyleAndLayout");
   const isValueOrFILLMEIsValue = isValueOrFILLMEIsValueMaker();
 
   function updateSpeedometerStyle(event?: Event) {

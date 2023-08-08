@@ -3,7 +3,7 @@ import { COUNTRY_LOCATIONS } from "./components/form_components/Top10LocationCou
 import { REGIONAL_LOCATIONS } from "./components/form_components/Top10LocationRegionalInput";
 
 import { InputDisplay } from "./components/form_components/InputDisplayInput";
-import { SpeedometerStyle } from "./components/form_components/SpeedometerInput";
+import { SpeedometerStyle } from "./components/layout_components/sub_layouts/SpeedometerStyleAndLayout";
 import { SpeedometerMetric } from "./components/form_components/SpeedometerMetricInput";
 import { SpeedometerDecimalPlacesNumeric } from "./components/form_components/SpeedometerDecimalPlacesInput";
 

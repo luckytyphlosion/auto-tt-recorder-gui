@@ -19,7 +19,7 @@ import { BackgroundMusicSourceInput } from "../../form_components/BackgroundMusi
 import { GameVolumeInput } from "../../form_components/GameVolumeInput";
 import { Top10LocationInput } from "../../form_components/Top10LocationInput";
 import { InputDisplayInput } from "../../form_components/InputDisplayInput";
-import { SpeedometerInput } from "../../form_components/SpeedometerInput";
+import { SpeedometerStyleAndLayout } from "../sub_layouts/SpeedometerStyleAndLayout";
 import { HQTexturesInput } from "../../form_components/HQTexturesInput";
 import { NoBackgroundBlurInput } from "../../form_components/NoBackgroundBlurInput";
 import { NoBloomInput } from "../../form_components/NoBloomInput";
@@ -93,7 +93,7 @@ export function Top10ChadsoftLayout(props: {isAutoTTRecRunning: boolean, formCom
         props.formComplexity > FormComplexity.SIMPLE ? <CustomizationSettingsLayout isAutoTTRecRunning={props.isAutoTTRecRunning}/> : ""
       }
       {
-        props.formComplexity > FormComplexity.SIMPLE ? <SpeedometerInput/> : ""
+        props.formComplexity > FormComplexity.SIMPLE ? <SpeedometerStyleAndLayout/> : ""
       }
       <PresentationSettingsLayout formComplexity={props.formComplexity} enableFadeInAtStart={true}/>
       {

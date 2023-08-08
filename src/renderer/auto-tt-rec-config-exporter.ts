@@ -8,7 +8,7 @@ import { Top10LocationCountry, COUNTRY_LOCATIONS, COUNTRY_LOCATION_NAMES_BY_FLAG
 import { Top10LocationRegional, REGIONAL_LOCATIONS, TOP_10_LOCATION_REGIONAL_TO_FULL_NAME } from "./components/form_components/Top10LocationRegionalInput";
 
 import { INPUT_DISPLAYS } from "./components/form_components/InputDisplayInput";
-import { SPEEDOMETER_STYLES } from "./components/form_components/SpeedometerInput";
+import { SPEEDOMETER_STYLES } from "./components/layout_components/sub_layouts/SpeedometerStyleAndLayout";
 import { SPEEDOMETER_METRICS } from "./components/form_components/SpeedometerMetricInput";
 import { SPEEDOMETER_DECIMAL_PLACES, SPEEDOMETER_DECIMAL_PLACES_NUMERIC } from "./components/form_components/SpeedometerDecimalPlacesInput";
 
