@@ -42,6 +42,7 @@ import { ExtraSettingsLayout } from "../sub_layouts/ExtraSettingsLayout";
 import { CRFValueInput } from "../../form_components/CRFValueInput";
 import { GhostAndSZSSourceLayout } from "../sub_layouts/GhostAndSZSSourceLayout";
 import { CustomizationSettingsLayout } from "../sub_layouts/CustomizationSettingsLayout";
+import { TimelineSpecificPresentationSettingsLayoutContainer } from "../TimelineSpecificPresentationSettingsLayoutContainer";
 
 import useRenderCounter from "../../../RenderCounter";
 
@@ -53,7 +54,9 @@ export function GhostSelectLayout(props: {isAutoTTRecRunning: boolean, formCompl
   return (
     <div>
       <GhostAndSZSSourceLayout/>
-      <TrackNameInput_Memo formComplexity={props.formComplexity}/>
+      <TimelineSpecificPresentationSettingsLayoutContainer>
+        <TrackNameInput_Memo formComplexity={props.formComplexity}/>
+      </TimelineSpecificPresentationSettingsLayoutContainer>
       <br/>
       <BackgroundMusicSourceInput timeline="ghostselect" formComplexity={props.formComplexity}/>
       {

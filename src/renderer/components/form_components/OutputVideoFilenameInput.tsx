@@ -62,24 +62,26 @@ export function OutputVideoFilenameInput(props: {noTop10CategoryIsNoEncode: bool
 
   return (
     <div>
-      <label htmlFor="output-video-filename">Output filename: </label>
-      <ClearableReadonlyTextInput className="filename-input" name="output-video-filename" validate={validateOutputVideoFilename}/>
-      <button onClick={async (event) => {
-        let outputVideoFileFormat = getAllowedOutputVideoFileFormat();
-        let fileFilters: FileFilter[];
-        if (outputVideoFileFormat === "<FILLME>") {
-          fileFilters = [
-            {name: "All video files", extensions: ["mkv", "mp4", "webm"]}
-          ];
-        } else {
-          fileFilters = [
-            {name: `${outputVideoFileFormat} files`, extensions: [outputVideoFileFormat]}
-          ];
-        }
-        await queueSaveDialog(event, fileFilters);  
-      }} type="button">Export as&#8230;</button>
-      <SimpleErrorMessage name="output-video-filename"/>
-      {renderCounter}
+      <fieldset>
+        <legend>Output filename:</legend>
+        <ClearableReadonlyTextInput className="filename-input" name="output-video-filename" validate={validateOutputVideoFilename}/>
+        <button onClick={async (event) => {
+          let outputVideoFileFormat = getAllowedOutputVideoFileFormat();
+          let fileFilters: FileFilter[];
+          if (outputVideoFileFormat === "<FILLME>") {
+            fileFilters = [
+              {name: "All video files", extensions: ["mkv", "mp4", "webm"]}
+            ];
+          } else {
+            fileFilters = [
+              {name: `${outputVideoFileFormat} files`, extensions: [outputVideoFileFormat]}
+            ];
+          }
+          await queueSaveDialog(event, fileFilters);  
+        }} type="button">Export as&#8230;</button>
+        <SimpleErrorMessage name="output-video-filename"/>
+        {renderCounter}
+      </fieldset>
     </div>
   );
 }

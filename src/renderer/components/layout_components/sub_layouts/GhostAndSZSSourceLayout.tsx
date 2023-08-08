@@ -7,10 +7,14 @@ import { SZSSourceInput } from "../../form_components/SZSSourceInput";
 export function GhostAndSZSSourceLayout() {
   return (
     <>
-      <MainGhostSourceInput/>
-      <ComparisonGhostSourceInput/>
-      <SZSSourceInput/>
-      <br/>
+      <fieldset>
+        <legend>Ghosts and Track SZS</legend>
+        <MainGhostSourceInput/>
+        <br/>
+        <ComparisonGhostSourceInput/>
+        <br/>
+        <SZSSourceInput/>
+      </fieldset>
     </>
   );
 }

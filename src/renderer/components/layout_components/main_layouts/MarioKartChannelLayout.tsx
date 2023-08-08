@@ -42,6 +42,7 @@ import { PresentationSettingsLayout } from "../sub_layouts/PresentationSettingsL
 import { CRFValueInput } from "../../form_components/CRFValueInput";
 import { GhostAndSZSSourceLayout } from "../sub_layouts/GhostAndSZSSourceLayout";
 import { CustomizationSettingsLayout } from "../sub_layouts/CustomizationSettingsLayout";
+import { TimelineSpecificPresentationSettingsLayoutContainer } from "../TimelineSpecificPresentationSettingsLayoutContainer";
 
 import useRenderCounter from "../../../RenderCounter";
 
@@ -53,13 +54,15 @@ export function MarioKartChannelLayout(props: {isAutoTTRecRunning: boolean, form
   return (
     <div>
       <GhostAndSZSSourceLayout/>
-      {
-        props.formComplexity > FormComplexity.SIMPLE ? <>
-          <MKChannelGhostDescriptionInput/>
-          <Top10LocationInput/>
-          <TrackNameInput_Memo formComplexity={props.formComplexity}/>
-        </> : <TrackNameInput_Memo formComplexity={props.formComplexity}/>
-      }
+      <TimelineSpecificPresentationSettingsLayoutContainer>
+        {
+          props.formComplexity > FormComplexity.SIMPLE ? <>
+            <MKChannelGhostDescriptionInput/>
+            <Top10LocationInput/>
+            <TrackNameInput_Memo formComplexity={props.formComplexity}/>
+          </> : <TrackNameInput_Memo formComplexity={props.formComplexity}/>
+        }
+      </TimelineSpecificPresentationSettingsLayoutContainer>
       <br/>
       <BackgroundMusicSourceInput timeline="mkchannel" formComplexity={props.formComplexity}/>
       {
