@@ -7,6 +7,7 @@ import { isFileWritableAndHasCorrectExtension } from "../../util-renderer"
 
 import { FormComplexity } from "../layout_components/FormComplexityLayout";
 import { ClearableReadonlyTextInput } from "../ClearableReadonlyTextInput";
+import { FieldsetOr } from "../FieldsetOr";
 
 import useRenderCounter from "../../RenderCounter";
 
