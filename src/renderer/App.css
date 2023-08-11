@@ -1,14 +1,4 @@
 
-html {
-  box-sizing: border-box;
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: inherit;
-}
-
 .title-header {
 	font-family: Arial, sans-serif;
 	font-size: 14pt;
@@ -50,26 +40,26 @@ html {
 }
 
 .start-label {
-	width: inherit;
-	max-width: 100%;
+	
 }
 
 .start-label-div {
-	flex: 0 0 16.6667%;
-	min-width: fit-content;
-	max-width: 33.3333%;
-	text-align: right;
+	width: 200px;
+	text-align: right;	
+
+	/*flex: 1 1 0;
+	text-align: right;*/
 }
 
 
 .start-label-contents {
-	flex: 0 0 66.6667%;
-	max-width: 66.6667%;
+	flex: 1 1 0;
 }
 
 .like-input-group {
 	display: flex;
 	flex-flow: row wrap;
+	align-content: flex-start;
 }
 /*
 .fieldset-or {
