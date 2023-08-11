@@ -35,37 +35,33 @@
 	display: contents;
 }
 
-.grid-contents2 {
+.grid-sub-contents {
   display: contents;
 }
 
-.start-label2 {
-  text-align: right;
-}
+@media (max-width: 640px) {
+  .like-input-group {
+    display: block;
+  }
 
-@media (max-width: 500px) {
   .grid-contents {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
-    grid-column: 1 / span 2;
+    display: flex;
+    flex-flow: row wrap;
   }
 
   .start-label {
+    
+    width: 243px;
     text-align: left;
+  }
+
+  .start-label-contents {
+    
   }
 }
 
-@media (max-width: 600px) {
-  .grid-contents2 {
-    display: grid;
-    grid-template-columns: 1fr;
+/*
+grid-template-columns: 1fr;
     grid-template-rows: auto;
     grid-column: 1 / span 2;
-  }
-
-  .start-label2 {
-    text-align: left;
-  }
-}
-
+  */

@@ -8,8 +8,8 @@ export function ChadsoftComparisonGhostPageInput() {
   const {register, formState} = useFormContextAutoTT();
 
   return (
-    <div className="grid-contents2">
-      <label htmlFor="chadsoft-comparison-ghost-page" className="start-label2">Chadsoft comparison ghost page link: </label>
+    <div className="grid-contents">
+      <label htmlFor="chadsoft-comparison-ghost-page" className="start-label">Chadsoft comparison ghost page link: </label>
       <div className="start-label-contents">
         <input type="text"
           {...register("chadsoft-comparison-ghost-page", {
