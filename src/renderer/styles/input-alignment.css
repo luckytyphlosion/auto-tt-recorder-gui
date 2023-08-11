@@ -2,7 +2,7 @@
 .like-input-group {
 	display: grid;
 	grid-template-columns: auto 1fr;
-  grid-template-rows: auto;
+  grid-template-rows: auto auto;
 	row-gap: 2px;
   column-gap: 5px;
 }
@@ -34,3 +34,38 @@
 .grid-contents {
 	display: contents;
 }
+
+.grid-contents2 {
+  display: contents;
+}
+
+.start-label2 {
+  text-align: right;
+}
+
+@media (max-width: 500px) {
+  .grid-contents {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    grid-column: 1 / span 2;
+  }
+
+  .start-label {
+    text-align: left;
+  }
+}
+
+@media (max-width: 600px) {
+  .grid-contents2 {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    grid-column: 1 / span 2;
+  }
+
+  .start-label2 {
+    text-align: left;
+  }
+}
+
