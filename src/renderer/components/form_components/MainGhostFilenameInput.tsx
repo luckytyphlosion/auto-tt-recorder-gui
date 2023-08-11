@@ -20,7 +20,7 @@ export function MainGhostFilenameInput() {
   }
 
   return (
-    <>
+    <div className="grid-contents">
       <div className="grid-contents">
         <label htmlFor="main-ghost-filename" className="start-label">RKG file to record:</label>
         <div className="start-label-contents">
@@ -33,9 +33,7 @@ export function MainGhostFilenameInput() {
         </div>
         <SimpleErrorMessage name="main-ghost-filename"/>
       </div>
-      <div className="grid-contents">
-        <Set200ccInput/>
-      </div>
-    </>
+      <Set200ccInput/>
+    </div>
   );
 }

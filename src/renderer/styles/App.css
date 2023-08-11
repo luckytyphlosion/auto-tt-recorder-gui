@@ -38,31 +38,3 @@
 .option-label {
 	font-weight: bold;
 }
-
-.like-input-group {
-	display: grid;
-	grid-template-columns: auto 1fr;
-	gap: 10px;
-}
-
-.start-label {
-	text-align: right;
-}
-
-.start-label-contents {
-
-}
-
-@media (max-width: 600px) {
-  .form-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .start-label {
-    text-align: left;
-  }
-}
-
-.grid-contents {
-	display: contents;
-}
