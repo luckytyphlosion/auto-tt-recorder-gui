@@ -12,7 +12,8 @@ export function Set200ccInput() {
 
   return (
     <div className="like-input-subgroup">
-      <div className="start-input">
+      <label className="start-label">CC:</label>
+      <div className="start-contents">
         <DeselectableRadioButtonGroup name="set-200cc">
           <DeselectableRadioButton labelValue="150cc: " id="no-200cc" value="no-200cc"/>
           <DeselectableRadioButton labelValue="200cc: " id="on-200cc" value="on-200cc"/>

@@ -20,6 +20,7 @@ export function MainGhostFilenameInput() {
   }
 
   return (
+    <>
     <div className="like-input-subgroup">
       <label htmlFor="main-ghost-filename" className="start-label">RKG file to record:</label>
       <div className="start-label-contents">
@@ -31,7 +32,8 @@ export function MainGhostFilenameInput() {
         }} type="button">Browse&#8230;</button>
         <SimpleErrorMessage name="main-ghost-filename"/>
       </div>
-      <Set200ccInput/>
     </div>
+    <Set200ccInput/>
+    </>
   );
 }
