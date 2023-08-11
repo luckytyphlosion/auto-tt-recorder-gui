@@ -9,9 +9,7 @@ export function ChadsoftComparisonGhostPageInput() {
 
   return (
     <div>
-      <div className="start-label-div">
-        <label htmlFor="chadsoft-comparison-ghost-page" className="start-label">Chadsoft comparison ghost page link: </label>
-      </div>
+      <label htmlFor="chadsoft-comparison-ghost-page" className="start-label">Chadsoft comparison ghost page link: </label>
       <div className="start-label-contents">
         <input type="text"
           {...register("chadsoft-comparison-ghost-page", {

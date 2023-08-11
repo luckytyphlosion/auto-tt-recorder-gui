@@ -40,12 +40,12 @@
 }
 
 .start-label {
-	
+	width: 200px;
+	text-align: right;	
 }
 
 .start-label-div {
-	width: 200px;
-	text-align: right;	
+
 
 	/*flex: 1 1 0;
 	text-align: right;*/

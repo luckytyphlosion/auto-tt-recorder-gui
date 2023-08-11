@@ -13,25 +13,23 @@ export function ChadsoftGhostPageInput() {
 
   return (
     <>
-      <div className="start-label-div">
-        <label className="start-label">Chadsoft ghost page link: </label>
+      <label className="start-label">Chadsoft ghost page link: </label>
+      <div className="start-label-contents">
+        <input type="text"
+          {...register("chadsoft-ghost-page", {
+            required: {
+              value: true,
+              message: "This input is required."
+            },
+            pattern: {
+              value: chadsoftGhostPageLinkRegex,
+              message: "Must be a valid chadsoft ghost link."
+            }
+          })}
+        ></input>
+        <SimpleErrorMessage name="chadsoft-ghost-page"/>
+        {renderCounter}
       </div>
-        <div className="start-label-contents">
-          <input type="text"
-            {...register("chadsoft-ghost-page", {
-              required: {
-                value: true,
-                message: "This input is required."
-              },
-              pattern: {
-                value: chadsoftGhostPageLinkRegex,
-                message: "Must be a valid chadsoft ghost link."
-              }
-            })}
-          ></input>
-          <SimpleErrorMessage name="chadsoft-ghost-page"/>
-          {renderCounter}
-        </div>
     </>
   );
 }

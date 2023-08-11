@@ -27,10 +27,7 @@ export function MainGhostSourceInput() {
   return (
     <div>
       <div className="like-input-group">
-
-        <div className="start-label-div">
-          <label className="start-label">Record from: </label>        
-        </div>
+        <label className="start-label">Record from: </label>        
         <div className="start-label-contents">
           <DeselectableRadioButtonGroup name="main-ghost-source">
           <DeselectableRadioButton labelValue="Chadsoft link: " id="main-ghost-source-chadsoft" value="chadsoft" onChange={updateMainGhostSource}/>
