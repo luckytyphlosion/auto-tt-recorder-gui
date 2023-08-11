@@ -20,20 +20,22 @@ export function MainGhostFilenameInput() {
   }
 
   return (
-    <div>
-      <div className="start-label-div">
+    <>
+      <div className="grid-contents">
         <label htmlFor="main-ghost-filename" className="start-label">RKG file to record:</label>
+        <div className="start-label-contents">
+          <ClearableReadonlyTextInput name="main-ghost-filename" validate={isFileReadable}/>
+          <button onClick={event => {
+            queueOpenDialog(event, [
+              {name: "RKG files", extensions: ["rkg"]}
+            ]);
+          }} type="button">Browse&#8230;</button>
+        </div>
+        <SimpleErrorMessage name="main-ghost-filename"/>
       </div>
-      <div className="start-label-contents">
-      <ClearableReadonlyTextInput name="main-ghost-filename" validate={isFileReadable}/>
-      <button onClick={event => {
-        queueOpenDialog(event, [
-          {name: "RKG files", extensions: ["rkg"]}
-        ]);
-      }} type="button">Browse&#8230;</button>
+      <div className="grid-contents">
+        <Set200ccInput/>
       </div>
-      <SimpleErrorMessage name="main-ghost-filename"/>
-      <Set200ccInput/>
-    </div>
+    </>
   );
 }

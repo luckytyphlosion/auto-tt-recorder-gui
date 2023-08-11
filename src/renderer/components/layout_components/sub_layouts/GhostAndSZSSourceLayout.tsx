@@ -10,10 +10,12 @@ export function GhostAndSZSSourceLayout() {
     <>
       <FieldsetOr>
         <legend>Ghosts and Track SZS</legend>
-        <MainGhostSourceInput/>
-        <ComparisonGhostSourceInput/>
-        <br/>
-        <SZSSourceInput/>
+        <div className="like-input-group">
+          <MainGhostSourceInput/>
+          <ComparisonGhostSourceInput/>
+        </div>
+          <br/>
+          <SZSSourceInput/>
       </FieldsetOr>
     </>
   );

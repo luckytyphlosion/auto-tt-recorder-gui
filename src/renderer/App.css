@@ -39,31 +39,30 @@
 	font-weight: bold;
 }
 
+.like-input-group {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	gap: 10px;
+}
+
 .start-label {
-	width: 200px;
-	text-align: right;	
+	text-align: right;
 }
-
-.start-label-div {
-
-
-	/*flex: 1 1 0;
-	text-align: right;*/
-}
-
 
 .start-label-contents {
-	flex: 1 1 0;
+
 }
 
-.like-input-group {
-	display: flex;
-	flex-flow: row wrap;
-	align-content: flex-start;
+@media (max-width: 600px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .start-label {
+    text-align: left;
+  }
 }
-/*
-.fieldset-or {
-	width: fit-content;
+
+.grid-contents {
+	display: contents;
 }
-.fieldset-or label {
-}*/

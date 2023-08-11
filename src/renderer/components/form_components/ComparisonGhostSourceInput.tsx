@@ -24,7 +24,7 @@ export function ComparisonGhostSourceInput() {
   }
 
   return (
-    <>
+    <div className="grid-contents">
       <label className="start-label">Comparison ghost source: </label>
       <div className="start-label-contents">
         <DeselectableRadioButtonGroup name="comparison-ghost-source">
@@ -40,6 +40,6 @@ export function ComparisonGhostSourceInput() {
       {
         isValueOrFILLMEIsValue(comparisonGhostSource, "rkg") ? <ComparisonGhostFilenameInput/> : ""
       }
-    </>
+    </div>
   );
 }

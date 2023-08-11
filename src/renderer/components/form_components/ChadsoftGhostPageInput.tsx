@@ -12,7 +12,7 @@ export function ChadsoftGhostPageInput() {
   const renderCounter = useRenderCounter(true, "ChadsoftGhostPageInput");
 
   return (
-    <>
+    <div className="grid-contents">
       <label className="start-label">Chadsoft ghost page link: </label>
       <div className="start-label-contents">
         <input type="text"
@@ -30,6 +30,6 @@ export function ChadsoftGhostPageInput() {
         <SimpleErrorMessage name="chadsoft-ghost-page"/>
         {renderCounter}
       </div>
-    </>
+    </div>
   );
 }
