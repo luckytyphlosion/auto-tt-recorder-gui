@@ -38,32 +38,3 @@
 .option-label {
 	font-weight: bold;
 }
-
-.start-label {
-	
-}
-
-.start-label-div {
-	width: 200px;
-	text-align: right;	
-
-	/*flex: 1 1 0;
-	text-align: right;*/
-}
-
-
-.start-label-contents {
-	flex: 1 1 0;
-}
-
-.like-input-group {
-	display: flex;
-	flex-flow: row wrap;
-	align-content: flex-start;
-}
-/*
-.fieldset-or {
-	width: fit-content;
-}
-.fieldset-or label {
-}*/

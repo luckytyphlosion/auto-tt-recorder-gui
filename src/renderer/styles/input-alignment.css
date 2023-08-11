@@ -1,0 +1,55 @@
+
+.like-input-group {
+	display: flex;
+	flex-flow: row wrap;
+	align-content: flex-start;
+}
+
+.like-input-subgroup {
+  display: contents;
+}
+
+.start-label {
+  text-align: left;
+  flex: 0 1 100%;
+}
+
+.start-input {
+  flex: 0 1 100%;
+  display: block;
+}
+
+.start-label-contents {
+  flex: 0 1 100%;
+}
+
+@media (min-width: 393px) { /* TODO have to use absolute px */
+  .start-label {
+    flex: 0 0 33%; /* TODO have to use absolute px */
+    text-align: right;
+  }
+
+  .start-input {
+    flex: 0 0 33%;
+  }
+
+  .start-label-contents {
+    flex: 1 0 fit-content;
+  }
+}
+
+/*
+.start-label-div {
+	width: 200px;
+	text-align: right;	
+
+	/*flex: 1 1 0;
+	text-align: right;
+}*/
+
+/*
+.fieldset-or {
+	width: fit-content;
+}
+.fieldset-or label {
+}*/

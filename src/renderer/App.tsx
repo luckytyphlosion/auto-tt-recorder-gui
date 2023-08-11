@@ -1,6 +1,8 @@
 
 import React, { useEffect, useState } from "react";
-import "./App.css";
+import "./styles/App.css";
+import "./styles/input-alignment.css";
+
 import useRenderCounter from "./RenderCounter";
 
 import { GUIHeader } from "./components/GUIHeader";
