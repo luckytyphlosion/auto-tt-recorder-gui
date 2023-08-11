@@ -1,18 +1,19 @@
 
 .like-input-group {
 	display: grid;
-	grid-template-columns: auto 1fr;
-  grid-template-rows: auto auto;
+	grid-template-columns: auto auto;
 	row-gap: 2px;
   column-gap: 5px;
+  width: fit-content;
 }
 
 .start-label {
+  width: 243px;
 	text-align: right;
 }
 
 .start-label-contents {
-
+  width: fit-content;
 }
 /*
 .start-input {
@@ -21,7 +22,7 @@
 }
 */
 
-@media (max-width: 0px) {
+@media (max-width: 1px) {
   .like-input-group {
     grid-template-columns: 1fr;
   }
@@ -50,13 +51,12 @@
   }
 
   .start-label {
-    
-    width: 243px;
     text-align: left;
+    padding-right: 5px;
   }
 
   .start-label-contents {
-    
+
   }
 }
 
