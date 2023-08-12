@@ -30,8 +30,8 @@ export function MainGhostFilenameInput() {
               {name: "RKG files", extensions: ["rkg"]}
             ]);
           }} type="button">Browse&#8230;</button>
+          <SimpleErrorMessage name="main-ghost-filename"/>
         </div>
-        <SimpleErrorMessage name="main-ghost-filename"/>
       </div>
       <Set200ccInput/>
     </div>
