@@ -294,13 +294,15 @@ export function Top10LocationCountryInput(props: {top10LocationRegion: Top10Loca
   const isValueOrFILLMEIsValue = isValueOrFILLMEIsValueMaker();
 
   return (
-    <>
-      <label htmlFor="top-10-location-country-location">{isValueOrFILLMEIsValue(props.top10LocationRegion) ? "(Country) " : ""}Location: </label>
-      <DeselectableDropdown name="top-10-location-country-location">
-        {COUNTRY_LOCATIONS_NO_FILLME.map((countryLocation) => (
-          <option value={countryLocation} key={countryLocation}>{countryLocation}</option>
-        ))}
-      </DeselectableDropdown>
-    </>
+    <div className="grid-contents">
+      <label className="start-label" htmlFor="top-10-location-country-location">Country Location: </label>
+      <div className="start-label-contents">
+        <DeselectableDropdown name="top-10-location-country-location">
+          {COUNTRY_LOCATIONS_NO_FILLME.map((countryLocation) => (
+            <option value={countryLocation} key={countryLocation}>{countryLocation}</option>
+          ))}
+        </DeselectableDropdown>
+      </div>
+    </div>
   );
 }

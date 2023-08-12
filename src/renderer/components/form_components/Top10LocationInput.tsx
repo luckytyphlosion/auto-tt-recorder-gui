@@ -41,20 +41,13 @@ export function Top10LocationInput() {
         {
           showErrorMessage ? <SimpleErrorMessage name="top-10-location-region"/> : ""
         }
-              {
-        isValueOrFILLMEIsValue(top10LocationRegion) ? <EmptyGridRow/> : ""
-      }
+      </div>
       {
         isValueOrFILLMEIsValue(top10LocationRegion, "regional") ? <Top10LocationRegionalInput top10LocationRegion={top10LocationRegion}/> : ""
       }
       {
-        isValueOrFILLMEIsValue(top10LocationRegion) ? <EmptyGridRow/> : ""
-      }
-      {
         isValueOrFILLMEIsValue(top10LocationRegion, "country") ? <Top10LocationCountryInput top10LocationRegion={top10LocationRegion}/> : ""
       }
-      </div>
-
     </div>
   );
 }

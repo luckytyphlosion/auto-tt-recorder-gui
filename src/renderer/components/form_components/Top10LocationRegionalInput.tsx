@@ -40,13 +40,15 @@ export function Top10LocationRegionalInput(props: {top10LocationRegion: Top10Loc
   const isValueOrFILLMEIsValue = isValueOrFILLMEIsValueMaker();
 
   return (
-    <>
-      <label htmlFor="top-10-location-regional-location">{isValueOrFILLMEIsValue(props.top10LocationRegion) ? "(Regional) " : ""}Location: </label>
-      <DeselectableDropdown name="top-10-location-regional-location">
-        {REGIONAL_LOCATION_NAMES.map((regionalLocation) => (
-          <option value={regionalLocation} key={regionalLocation}>{regionalLocation}</option>
-        ))}
-      </DeselectableDropdown>
-    </>
+    <div className="grid-contents">
+      <label className="start-label" htmlFor="top-10-location-regional-location">Regional Location: </label>
+      <div className="start-label-contents">
+        <DeselectableDropdown name="top-10-location-regional-location">
+          {REGIONAL_LOCATION_NAMES.map((regionalLocation) => (
+            <option value={regionalLocation} key={regionalLocation}>{regionalLocation}</option>
+          ))}
+        </DeselectableDropdown>
+      </div>
+    </div>
   );
 }
