@@ -12,32 +12,16 @@
 	text-align: right;
 }
 
+.timeline-specific-presentation-settings .start-label  {
+  width: 128px;
+}
+
 .start-label-contents {
   width: fit-content;
-}
-/*
-.start-input {
-  grid-column-start: 1;
-  grid-column-end: 2;
-}
-*/
-
-@media (max-width: 1px) {
-  .like-input-group {
-    grid-template-columns: 1fr;
-  }
-
-  .start-label {
-    text-align: left;
-  }
 }
 
 .grid-contents {
 	display: contents;
-}
-
-.top-gap {
-  margin-top: 10px;
 }
 
 .grid-sub-contents {
@@ -68,9 +52,3 @@
 .empty-grid-row-padding {
   padding-top: 1em;
 }
-
-/*
-grid-template-columns: 1fr;
-    grid-template-rows: auto;
-    grid-column: 1 / span 2;
-  */

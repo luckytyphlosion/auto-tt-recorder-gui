@@ -5,7 +5,9 @@ export function TimelineSpecificPresentationSettingsLayoutContainer(props: {chil
   return (
     <FieldsetOr>
       <legend>Timeline-specific presentation settings</legend>
-      {props.children}
+      <div className="like-input-group timeline-specific-presentation-settings">
+        {props.children}
+      </div>
     </FieldsetOr>
   );
 }

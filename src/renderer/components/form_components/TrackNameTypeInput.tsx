@@ -42,18 +42,20 @@ export function TrackNameTypeInput(props: {formComplexity: FormComplexity}) {
   }
 
   return (
-    <div>
-      <label htmlFor="track-name-type">Track name: </label>
-      <DeselectableRadioButtonGroup name="track-name-type">
-        <DeselectableRadioButton labelValue="Auto-detect (recommended):" id="track-name-type-auto" value="auto" onChange={updateTrackNameType}/>
-        {
-          props.formComplexity === FormComplexity.ALL ? 
-          <>
-            <DeselectableRadioButton labelValue="Use rkg slot name:" id="track-name-type-rkg-slot" value="rkg-slot" onChange={updateTrackNameType}/>
-          </> : ""
-        }
-        <DeselectableRadioButton labelValue="Supply manually:" id="track-name-type-manual" value="manual" onChange={updateTrackNameType}/>
-      </DeselectableRadioButtonGroup>
+    <div className="grid-contents">
+      <label className="start-label">Track name: </label>
+      <div className="start-label-contents">
+        <DeselectableRadioButtonGroup name="track-name-type">
+          <DeselectableRadioButton labelValue="Auto-detect (recommended):" id="track-name-type-auto" value="auto" onChange={updateTrackNameType}/>
+          {
+            props.formComplexity === FormComplexity.ALL ? 
+            <>
+              <DeselectableRadioButton labelValue="Use rkg slot name:" id="track-name-type-rkg-slot" value="rkg-slot" onChange={updateTrackNameType}/>
+            </> : ""
+          }
+          <DeselectableRadioButton labelValue="Supply manually:" id="track-name-type-manual" value="manual" onChange={updateTrackNameType}/>
+        </DeselectableRadioButtonGroup>
+      </div>
       {
         isValueOrFILLMEIsValue(trackNameType, "manual") ? <TrackNameManualInput/> : ""
       }

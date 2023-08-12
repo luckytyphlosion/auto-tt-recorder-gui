@@ -10,13 +10,15 @@ export function TrackNameManualInput() {
   }
 
   return (
-    <div>
-      <label htmlFor="track-name">Manual track name:</label>
-      <input type="text" id="track-name" {...register("track-name", {required: {
-        value: true,
-        message: "This input is required."
-      }})}/>
-      <SimpleErrorMessage name="track-name"/>
+    <div className="grid-contents">
+      <label className="start-label" htmlFor="track-name">Manual track name:</label>
+      <div className="start-label-contents">
+        <input type="text" id="track-name" {...register("track-name", {required: {
+          value: true,
+          message: "This input is required."
+        }})}/>
+        <SimpleErrorMessage name="track-name"/>
+      </div>
     </div>
   );
 }

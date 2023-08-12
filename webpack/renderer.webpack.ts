@@ -45,6 +45,14 @@ const config: Configuration = {
           /auto-tt-recorder-gui-v[^-]+-win32-x64/,
         ],
         use: ["style-loader", "css-loader"],
+      },
+      {
+        test: /\.scss$/i,
+        exclude: [
+          /node_modules/,
+          /auto-tt-recorder-gui-v[^-]+-win32-x64/,
+        ],
+        use: ["style-loader", "css-loader", "sass-loader"],
       }
     ],
   },
