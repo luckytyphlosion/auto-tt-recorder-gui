@@ -5,6 +5,7 @@ import { Top10LocationRegionalInput } from "./Top10LocationRegionalInput";
 import { Top10LocationCountryInput } from "./Top10LocationCountryInput";
 import { DeselectableDropdown } from "../DeselectableDropdown";
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
+import { EmptyGridRow } from "../EmptyGridRow";
 
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
 
@@ -29,28 +30,31 @@ export function Top10LocationInput() {
   }
 
   return (
-    <div>
-      <label htmlFor="top-10-location-region">Region: </label>
-      <DeselectableDropdown name="top-10-location-region" noErrorMessage={true} onChange={updateTop10LocationRegion}>
-        <option value="worldwide">Worldwide</option>
-        <option value="regional">Regional</option>
-        <option value="country">Country</option>
-      </DeselectableDropdown>
-      {
-        showErrorMessage ? <SimpleErrorMessage name="top-10-location-region"/> : ""
-      }
-      {
-        isValueOrFILLMEIsValue(top10LocationRegion) ? <br/> : ""
+    <div className="grid-contents">
+      <label className="start-label" htmlFor="top-10-location-region">Region: </label>
+      <div className="start-label-contents">
+        <DeselectableDropdown name="top-10-location-region" noErrorMessage={true} onChange={updateTop10LocationRegion}>
+          <option value="worldwide">Worldwide</option>
+          <option value="regional">Regional</option>
+          <option value="country">Country</option>
+        </DeselectableDropdown>
+        {
+          showErrorMessage ? <SimpleErrorMessage name="top-10-location-region"/> : ""
+        }
+              {
+        isValueOrFILLMEIsValue(top10LocationRegion) ? <EmptyGridRow/> : ""
       }
       {
         isValueOrFILLMEIsValue(top10LocationRegion, "regional") ? <Top10LocationRegionalInput top10LocationRegion={top10LocationRegion}/> : ""
       }
       {
-        isValueOrFILLMEIsValue(top10LocationRegion) ? <br/> : ""
+        isValueOrFILLMEIsValue(top10LocationRegion) ? <EmptyGridRow/> : ""
       }
       {
         isValueOrFILLMEIsValue(top10LocationRegion, "country") ? <Top10LocationCountryInput top10LocationRegion={top10LocationRegion}/> : ""
       }
+      </div>
+
     </div>
   );
 }
