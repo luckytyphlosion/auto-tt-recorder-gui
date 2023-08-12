@@ -33,7 +33,7 @@ import { TimelineCategory } from "./components/layout_components/TimelineCategor
 
 import { NoTop10Category } from "./components/layout_components/choice_layouts/NoTop10CategoryLayout";
 import { AspectRatio16By9 } from "./components/form_components/AspectRatio16By9Input";
-import { TrackNameType } from "./components/form_components/TrackNameInput";
+import { TrackNameType } from "./components/form_components/TrackNameTypeInput";
 
 import { MusicPresentation } from "./components/form_components/MusicPresentationInput";
 import { FormComplexity } from "./components/layout_components/FormComplexityLayout";

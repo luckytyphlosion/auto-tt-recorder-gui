@@ -4,7 +4,7 @@ import { useForm, FormProvider, UseFormRegister, UseFormSetValue, FieldValues, F
 
 import { ISOWBFSFileInput } from "./form_components/ISOWBFSFileInput";
 import { ChadsoftGhostPageInput } from "./form_components/ChadsoftGhostPageInput";
-import { TrackNameInput } from "./form_components/TrackNameInput";
+import { TrackNameTypeInput } from "./form_components/TrackNameTypeInput";
 import { OutputVideoFilenameInput } from "./form_components/OutputVideoFilenameInput";
 import AutoTTRecSubmitAbortButtons from "./AutoTTRecSubmitAbortButtons";
 import { AutoTTRecConfigFormComponents } from "./AutoTTRecConfigFormComponents";
@@ -44,7 +44,7 @@ import { TimelineCategory } from "./layout_components/TimelineCategoryLayout";
 
 import { NoTop10Category } from "./layout_components/choice_layouts/NoTop10CategoryLayout";
 import { AspectRatio16By9 } from "./form_components/AspectRatio16By9Input";
-import { TrackNameType } from "./form_components/TrackNameInput";
+import { TrackNameType } from "./form_components/TrackNameTypeInput";
 
 import { MusicPresentation } from "./form_components/MusicPresentationInput";
 import { FormComplexity } from "./layout_components/FormComplexityLayout";

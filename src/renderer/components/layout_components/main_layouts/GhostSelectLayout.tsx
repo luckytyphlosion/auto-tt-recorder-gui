@@ -9,7 +9,7 @@ import { ChadsoftGhostPageInput } from "../../form_components/ChadsoftGhostPageI
 import { ComparisonGhostSourceInput } from "../../form_components/ComparisonGhostSourceInput";
 import { SZSSourceInput } from "../../form_components/SZSSourceInput";
 import { MKChannelGhostDescriptionInput } from "../../form_components/MKChannelGhostDescriptionInput";
-import { TrackNameInput } from "../../form_components/TrackNameInput";
+import { TrackNameTypeInput } from "../../form_components/TrackNameTypeInput";
 import { OutputVideoFilenameInput } from "../../form_components/OutputVideoFilenameInput";
 import { Set200ccInput } from "../../form_components/Set200ccInput";
 import { Top10ChadsoftInput } from "../../form_components/Top10ChadsoftInput";
@@ -46,7 +46,7 @@ import { TimelineSpecificPresentationSettingsLayoutContainer } from "../Timeline
 
 import useRenderCounter from "../../../RenderCounter";
 
-const TrackNameInput_Memo = memo(TrackNameInput);
+const TrackNameInput_Memo = memo(TrackNameTypeInput);
 
 export function GhostSelectLayout(props: {isAutoTTRecRunning: boolean, formComplexity: FormComplexity}) {
   const renderCounter = useRenderCounter(false, "GhostSelectLayout");
