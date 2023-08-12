@@ -17,10 +17,8 @@ export function SZSFilenameInput() {
   }
 
   return (
-    <div>
-      <div className="start-label-div">
-        <label htmlFor="szs-filename" className="start-label">SZS Filename: </label>
-      </div>
+    <div className="grid-contents">
+      <label htmlFor="szs-filename" className="start-label">SZS Filename: </label>
       <div className="start-label-contents">
         <ClearableReadonlyTextInput name="szs-filename" validate={isFileReadable}/>
         <button onClick={event => {

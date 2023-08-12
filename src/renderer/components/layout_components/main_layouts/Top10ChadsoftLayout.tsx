@@ -59,6 +59,7 @@ export function Top10ChadsoftLayout(props: {isAutoTTRecRunning: boolean, formCom
         <legend>Ghosts and Track SZS</legend>
         <Top10ChadsoftInput/>
         <ComparisonGhostSourceInput/>
+        <br/>
         <SZSSourceInput/>
       
       {

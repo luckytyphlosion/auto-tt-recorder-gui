@@ -3,6 +3,8 @@ import React from "react";
 import { MainGhostSourceInput } from "../../form_components/MainGhostSourceInput";
 import { ComparisonGhostSourceInput } from "../../form_components/ComparisonGhostSourceInput";
 import { SZSSourceInput } from "../../form_components/SZSSourceInput";
+import { EmptyGridRow } from "../../EmptyGridRow";
+
 import { FieldsetOr } from "../../FieldsetOr";
 
 export function GhostAndSZSSourceLayout() {
@@ -13,9 +15,9 @@ export function GhostAndSZSSourceLayout() {
           <div className="like-input-group">
             <MainGhostSourceInput/>
             <ComparisonGhostSourceInput/>
+            <EmptyGridRow/>
+            <SZSSourceInput/>
           </div>
-          <br/>
-          <SZSSourceInput/>
       </FieldsetOr>
     </>
   );

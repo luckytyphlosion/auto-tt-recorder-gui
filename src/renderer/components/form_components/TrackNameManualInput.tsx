@@ -5,6 +5,10 @@ import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 export function TrackNameManualInput() {
   const {register} = useFormContextAutoTT();
 
+  function inlineValidateTrackNameManual(event: React.ChangeEvent<HTMLInputElement>) {
+
+  }
+
   return (
     <div>
       <label htmlFor="track-name">Manual track name:</label>
