@@ -53,6 +53,7 @@
   .start-label {
     text-align: left;
     padding-right: 5px;
+    width: fit-content;
   }
 
   .start-label-contents {
