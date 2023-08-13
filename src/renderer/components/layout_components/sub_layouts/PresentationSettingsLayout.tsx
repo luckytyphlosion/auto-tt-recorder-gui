@@ -10,16 +10,20 @@ import { FieldsetOr } from "../../FieldsetOr";
 export function PresentationSettingsLayout(props: {formComplexity: FormComplexity, enableFadeInAtStart: boolean}) {
   return <>{
     props.formComplexity > FormComplexity.SIMPLE ?
-    <>
+    <div>
       <FieldsetOr>
         <legend>Presentation settings</legend>
-        <InputDisplayInput/>
-        {
-          props.enableFadeInAtStart ? <FadeInAtStartInput/> : ""
-        }
-        <EndingDelayInput/>
-        <EndingMessageInput/>
+        <div>
+          <div className="like-input-group">
+            <InputDisplayInput/>
+            {
+              props.enableFadeInAtStart ? <FadeInAtStartInput/> : ""
+            }
+            <EndingDelayInput/>
+            <EndingMessageInput/>
+          </div>
+        </div>
       </FieldsetOr>
-    </> : ""
+    </div> : ""
   }</>
 }

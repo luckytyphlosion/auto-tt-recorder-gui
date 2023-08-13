@@ -11,15 +11,17 @@ export function EndingMessageInput() {
   const renderCounter = useRenderCounter(false, "EndingMessageInput");
 
   return (
-    <div>
-      <label htmlFor="ending-message">Ending message: </label>
-      <input type="text" {...register("ending-message", {required: {
-          value: true,
-          message: "This input is required."
-        }})}
-      ></input>
-      <SimpleErrorMessage name="ending-message"/>
-      {renderCounter}
+    <div className="grid-contents">
+      <label className="start-label" htmlFor="ending-message">Ending message:</label>
+      <div className="start-label-contents">
+        <input type="text" id="ending-message" {...register("ending-message", {required: {
+            value: true,
+            message: "This input is required."
+          }})}
+        ></input>
+        <SimpleErrorMessage name="ending-message"/>
+        {renderCounter}
+      </div>
     </div>
   );
 }

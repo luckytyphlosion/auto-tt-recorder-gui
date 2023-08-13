@@ -32,7 +32,7 @@ export function SpeedometerStyleAndLayout() {
         <legend>Speedometer</legend>
         <div className="like-input-group">
           <div className="grid-contents">
-            <label className="start-label" htmlFor="speedometer-style">Style: </label>
+            <label className="start-label" htmlFor="speedometer-style">SOM style: </label>
             <div className="start-label-contents">
               <DeselectableRadioButtonGroup name="speedometer-style">
                 <DeselectableRadioButton labelValue="Fancy: " id="speedometer-style-fancy" value="fancy" onChange={updateSpeedometerStyle}/>

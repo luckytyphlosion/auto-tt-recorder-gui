@@ -20,7 +20,7 @@ export function SpeedometerDecimalPlacesInput(props: {twoDecimalPlaces: boolean}
 
   return (
     <div className="grid-contents">
-      <label className="start-label">Decimal places: </label>
+      <label className="start-label">SOM decimal places: </label>
       <div className="start-label-contents">
         <DeselectableRadioButtonGroup name="speedometer-decimal-places-str">
           <DeselectableRadioButton labelValue="0: " id="speedometer-decimal-places-str-0" value="0"/>

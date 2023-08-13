@@ -15,7 +15,7 @@ export function ExtraGeckoCodesEnableInput(props: {isAutoTTRecRunning: boolean})
       <div className="like-input-group">
         <label className="start-label" htmlFor="extra-gecko-codes-enable">Add extra gecko codes?</label>
         <div className="start-label-contents">
-          <TriCheckbox name="extra-gecko-codes-enable"/>
+          <TriCheckbox name="extra-gecko-codes-enable" nameAsId={true}/>
         </div>
       </div>
       {

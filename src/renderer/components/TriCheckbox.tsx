@@ -22,6 +22,7 @@ function TriCheckboxInternal(props: {
   refCallback: RefCallBack,
   onChange: (...event: any[]) => void,
   userOnChange?: TriCheckboxUserOnChangeDecl,
+  id?: string
 }) {
   const checkboxRef = useRef<HTMLInputElement | null>(null);
   const renderCounter = useRenderCounter(true, "TriCheckboxInternal");
@@ -42,7 +43,7 @@ function TriCheckboxInternal(props: {
 
   return (
     <>
-      <input type="checkbox" ref={(inputRef) => {
+      <input type="checkbox" id={props.id} ref={(inputRef) => {
         checkboxRef.current = inputRef;
         props.refCallback(inputRef);
       }} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,6 +79,7 @@ export function TriCheckbox<K extends keyof AutoTTRecConfigFormBooleanArgs>(
     name: K,
     onChange?: TriCheckboxUserOnChangeDecl,
     noErrorMessage?: boolean
+    nameAsId?: boolean
   }
 ) {
   const {control, setValue, getValues} = useFormContextAutoTT();
@@ -100,6 +102,7 @@ export function TriCheckbox<K extends keyof AutoTTRecConfigFormBooleanArgs>(
           onChange={onChange}
           userOnChange={props.onChange}
           refCallback={ref}
+          id={props.nameAsId ? props.name : undefined}
         />
         
         </span>
