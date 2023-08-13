@@ -30,10 +30,12 @@ export function HQTexturesInput(props: {isDolphinResolution480p: boolean, dolphi
   }
 
   return (
-    <div>
-      <label htmlFor="hq-textures">HQ Textures: </label>
-      <TriCheckbox name="hq-textures" onChange={updateHQTexturesEnabled}/>
-      {renderCounter}
+    <div className="grid-contents">
+      <label className="start-label" htmlFor="hq-textures">HQ Textures: </label>
+      <div className="start-label-contents">
+        <TriCheckbox name="hq-textures" nameAsId={true} onChange={updateHQTexturesEnabled}/>
+        {renderCounter}
+      </div>
       {
         isValueOrFILLMEIsValue(hqTexturesEnabled, true) ? <ExtraHQTexturesFolderInput/> : ""
       }

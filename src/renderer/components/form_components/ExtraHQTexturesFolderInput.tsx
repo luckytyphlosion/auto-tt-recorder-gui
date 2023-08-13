@@ -38,20 +38,22 @@ export function ExtraHQTexturesFolderInput() {
   }
 
   return (
-    <div>
-      <label htmlFor="extra-hq-textures-folder-enable">Add extra HQ Textures? </label>
-      <TriCheckbox name="extra-hq-textures-folder-enable" noErrorMessage={true}/>
-      {
-        isValueOrFILLMEIsValue(extraHQTexturesFolderEnable, true) ? <>
-          <ClearableReadonlyTextInput name="extra-hq-textures-folder" notRequired={true} validate={validateExtraHQTexturesFolder}/>
-          <button onClick={event => {
-            queueOpenFolderDialog(event);
-          }} type="button">Browse&#8230;</button>
-          <SimpleErrorMessage name="extra-hq-textures-folder"/>
-        </> : ""
-      }
+    <div className="grid-contents">
+      <label className="start-label" htmlFor="extra-hq-textures-folder-enable">Add extra HQ Textures? </label>
+      <div className="start-label-contents">
+        <TriCheckbox name="extra-hq-textures-folder-enable" nameAsId={true} noErrorMessage={true}/>
+        {
+          isValueOrFILLMEIsValue(extraHQTexturesFolderEnable, true) ? <>
+            <ClearableReadonlyTextInput name="extra-hq-textures-folder" notRequired={true} validate={validateExtraHQTexturesFolder}/>
+            <button onClick={event => {
+              queueOpenFolderDialog(event);
+            }} type="button">Browse&#8230;</button>
+            <SimpleErrorMessage name="extra-hq-textures-folder"/>
+          </> : ""
+        }
 
-      {renderCounter}
+        {renderCounter}
+      </div>
     </div>
   );
 }

@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { useFormContextAutoTT, isValueOrFILLMEIsValueMaker } from "../../use-form-context-auto-tt";
-import { MusicFilenameInput } from "./MusicFilenameInput";
-import { Top10LocationRegionalInput } from "./Top10LocationRegionalInput";
 import { OutputWidthCustomInput } from "./OutputWidthCustomInput";
 import { DeselectableDropdown } from "../DeselectableDropdown";
 
@@ -23,7 +21,7 @@ export const recommendedOutputWidths: {[k in DolphinResolution]: OutputWidthPres
 } as const;
 
 export function OutputWidthInput(props: {dolphinResolution: DolphinResolution, dolphinResolutionToggle: boolean}) {
-  const {register, setValue, getValues} = useFormContextAutoTT();
+  const {setValue, getValues} = useFormContextAutoTT();
   const [outputWidthPreset, setOutputWidthPreset] = useState(getValues("output-width-preset"));
   const [dolphinResolutionToggle, setDolphinResolutionToggle] = useState(props.dolphinResolutionToggle);
   const renderCounter = useRenderCounter(false, "OutputWidthInput");
@@ -33,8 +31,6 @@ export function OutputWidthInput(props: {dolphinResolution: DolphinResolution, d
     setOutputWidthPreset(getValues("output-width-preset"));
   }
 
-  //console.log("props.dolphinResolutionToggle:", props.dolphinResolutionToggle);
-
   if (dolphinResolutionToggle != props.dolphinResolutionToggle) {
     let newOutputWidthPreset = recommendedOutputWidths[props.dolphinResolution];
     setValue("output-width-preset", newOutputWidthPreset, {shouldTouch: true});
@@ -43,18 +39,20 @@ export function OutputWidthInput(props: {dolphinResolution: DolphinResolution, d
   }
 
   return (
-    <div>
-      <label htmlFor="output-width-preset">Output video width: </label>
-      <DeselectableDropdown name="output-width-preset" onChange={updateOutputWidthPreset}>
-        <option value="none">Don't rescale</option>
-        <option value="3840">3840 (2160p/4k)</option>
-        <option value="2560">2560 (1440p/2k)</option>
-        <option value="1920">1920 (1080p)</option>
-        <option value="1280">1280 (720p)</option>
-        <option value="854">854 (480p)</option>
-        <option value="custom">Custom...</option>
-      </DeselectableDropdown>
-      {renderCounter}
+    <div className="grid-contents">
+      <label className="start-label" htmlFor="output-width-preset">Output video width: </label>
+      <div>
+        <DeselectableDropdown name="output-width-preset" onChange={updateOutputWidthPreset}>
+          <option value="none">Don't rescale</option>
+          <option value="3840">3840 (2160p/4k)</option>
+          <option value="2560">2560 (1440p/2k)</option>
+          <option value="1920">1920 (1080p)</option>
+          <option value="1280">1280 (720p)</option>
+          <option value="854">854 (480p)</option>
+          <option value="custom">Custom...</option>
+        </DeselectableDropdown>
+        {renderCounter}
+      </div>
       {
         isValueOrFILLMEIsValue(outputWidthPreset, "custom") ? <OutputWidthCustomInput outputWidthPreset={outputWidthPreset}/> : ""
       }

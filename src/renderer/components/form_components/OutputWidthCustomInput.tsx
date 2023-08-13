@@ -9,23 +9,22 @@ export function OutputWidthCustomInput(props: {outputWidthPreset: OutputWidthPre
   const {register, getValues} = useFormContextAutoTT();
   const renderCounter = useRenderCounter();
   console.log("output-width-custom:", getValues("output-width-custom"));
-  const isValueOrFILLMEIsValue = isValueOrFILLMEIsValueMaker();
 
   return (
-    <div>
-      {
-        isValueOrFILLMEIsValue(props.outputWidthPreset) ? <label htmlFor="output-width-custom">(Custom output width) </label> : ""
-      }
-      <input type="number"
-        {...register("output-width-custom", {valueAsNumber: true, required: {
-          value: true,
-          message: "This input is required."
-        },
-        validate: (value) => (value >= 2) || "Custom output width must be equal or greater than 2."
-        })}
-      ></input>
-      <SimpleErrorMessage name="output-width-custom"/>
-      {renderCounter}
+    <div className="grid-contents">
+      <label className="start-label" htmlFor="output-width-custom">Custom output width:</label>
+      <div className="start-label-contents">
+        <input type="number" id="output-width-custom"
+          {...register("output-width-custom", {valueAsNumber: true, required: {
+            value: true,
+            message: "This input is required."
+          },
+          validate: (value) => (value >= 2) || "Custom output width must be equal or greater than 2."
+          })}
+        ></input>
+        <SimpleErrorMessage name="output-width-custom"/>
+        {renderCounter}
+      </div>
     </div>
   );
 }

@@ -4,11 +4,12 @@ import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { TriCheckbox } from "../TriCheckbox";
 
 export function NoBloomInput() {
-  const {register} = useFormContextAutoTT();
   return (
-    <div>
-      <label htmlFor="no-bloom">No bloom: </label>
-      <TriCheckbox name="no-bloom"/>
+    <div className="grid-contents">
+      <label className="start-label" htmlFor="no-bloom">No bloom: </label>
+      <div className="start-label-contents">
+        <TriCheckbox name="no-bloom" nameAsId={true}/>
+      </div>
     </div>
   );
 }
