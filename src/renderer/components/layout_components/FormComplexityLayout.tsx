@@ -19,7 +19,7 @@ export function FormComplexityLayout(props: {isAutoTTRecRunning: boolean, unrend
   const renderCounter = useRenderCounter(false, "FormComplexityLayout");
   const formComplexity = useWatchAutoTT({name: "form-complexity"});
 
-  console.log("FormComplexityLayout form-complexity:", getValues("form-complexity"), ", formComplexity", formComplexity);
+  //console.log("FormComplexityLayout form-complexity:", getValues("form-complexity"), ", formComplexity", formComplexity);
 
   return (
     <div>

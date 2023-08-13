@@ -8,7 +8,7 @@ import { SimpleErrorMessage } from "../SimpleErrorMessage";
 export function OutputWidthCustomInput(props: {outputWidthPreset: OutputWidthPreset}) {
   const {register, getValues} = useFormContextAutoTT();
   const renderCounter = useRenderCounter();
-  console.log("output-width-custom:", getValues("output-width-custom"));
+  //console.log("output-width-custom:", getValues("output-width-custom"));
 
   return (
     <div className="grid-contents">

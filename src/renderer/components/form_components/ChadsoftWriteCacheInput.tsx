@@ -1,14 +1,14 @@
 
 import React from "react";
-import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { TriCheckbox } from "../TriCheckbox";
 
 export function ChadsoftWriteCacheInput() {
-  const {register} = useFormContextAutoTT();
   return (
-    <div>
-      <label htmlFor="chadsoft-write-cache">Cache downloaded Chadsoft files (chadsoft-write-cache): </label>
-      <TriCheckbox name="chadsoft-write-cache"/>
+    <div className="grid-contents">
+      <label className="start-label" htmlFor="chadsoft-write-cache">Cache downloaded Chadsoft files (chadsoft-write-cache): </label>
+      <div className="start-label-contents">
+        <TriCheckbox name="chadsoft-write-cache" nameAsId={true}/>
+      </div>
     </div>
   );
 }

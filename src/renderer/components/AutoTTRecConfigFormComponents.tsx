@@ -29,7 +29,7 @@ export function AutoTTRecConfigFormComponents(props: {
   onError: (errors: Object) => Promise<void> | void,
 }) {  
   const renderCounter = useRenderCounter(false, "AutoTTRecConfigFormComponents");
-  console.log("Rendering AutoTTRecConfigFormComponents. forceUpdate: ", props.forceUpdate);
+  //console.log("Rendering AutoTTRecConfigFormComponents. forceUpdate: ", props.forceUpdate);
 
   useEffect(() => {
     if (props.initialValidateFormOnOpen) {

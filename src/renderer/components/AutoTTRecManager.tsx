@@ -35,20 +35,20 @@ export function AutoTTRecManager(props: {
   const [programStatusDetails, setProgramStatusDetails] = useState("");
   const [isAutoTTRecRunning, setAutoTTRecRunning] = useState(false);
 
-  console.log("AutoTTRecManager programStatusDetails:", programStatusDetails);
+  //console.log("AutoTTRecManager programStatusDetails:", programStatusDetails);
   const renderCounter = useRenderCounter(false, "AutoTTRecManager");
 
   const handleSendStdoutListener = useCallback(function (event: IpcRendererEvent, stdoutData: string) {
-    console.log("stdoutData:", stdoutData);
-    console.log("old programStatusDetails:", programStatusDetails);
+    //console.log("stdoutData:", stdoutData);
+    //console.log("old programStatusDetails:", programStatusDetails);
     //let newProgramStatusDetails = appendAccountingForCarriage(programStatusDetails, stdoutData);
     //console.log("newProgramStatusDetails:", newProgramStatusDetails);
     setProgramStatusDetails((programStatusDetails) => appendAccountingForCarriage(programStatusDetails, stdoutData));
   }, []);
 
   const handleSendStderrListener = useCallback(function (event: IpcRendererEvent, stderrData: string) {
-    console.log("stderrData:", stderrData);
-    console.log("old programStatusDetails:", programStatusDetails);
+    //console.log("stderrData:", stderrData);
+    //console.log("old programStatusDetails:", programStatusDetails);
     //let newProgramStatusDetails = appendAccountingForCarriage(programStatusDetails, stderrData);
     //console.log("newProgramStatusDetails:", newProgramStatusDetails);
     setProgramStatusDetails((programStatusDetails) => appendAccountingForCarriage(programStatusDetails, stderrData));

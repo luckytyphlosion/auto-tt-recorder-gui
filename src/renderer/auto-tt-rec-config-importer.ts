@@ -310,7 +310,7 @@ export class AutoTTRecConfigImporter {
     let pathnameAbsoluteArgValue: string;
 
     if (enableArgName !== undefined) {
-      console.log("setPathnameArgEnable_resolvePathname_returnOriginalAndResolvedFilename enableArgName:", enableArgName, ", pathnameArgValue: ", pathnameArgValue);
+      //console.log("setPathnameArgEnable_resolvePathname_returnOriginalAndResolvedFilename enableArgName:", enableArgName, ", pathnameArgValue: ", pathnameArgValue);
       if (pathnameArgValue === "") {
         enableArgValue = "<FILLME>";
       } else if (pathnameArgValue !== null) {
@@ -324,10 +324,10 @@ export class AutoTTRecConfigImporter {
       enableArgValue = true;
     }
 
-    console.log("enableArgValue: ", enableArgValue, ", pathnameArgName:", pathnameArgName);
+    //console.log("enableArgValue: ", enableArgValue, ", pathnameArgName:", pathnameArgName);
   
     if (enableArgValue === true && typeof pathnameArgValue === "string" && pathnameArgValue !== "") {
-      console.log("setPathnameArgEnable_resolvePathname_returnOriginalAndResolvedFilename pathnameArgValue: ", pathnameArgValue);
+      //console.log("setPathnameArgEnable_resolvePathname_returnOriginalAndResolvedFilename pathnameArgValue: ", pathnameArgValue);
       pathnameAbsoluteArgValue = await window.api.getAbsolutePathRelativeToFilename(pathnameArgValue, this.autoTTRecConfigFilename);
     } else {
       pathnameAbsoluteArgValue = "";

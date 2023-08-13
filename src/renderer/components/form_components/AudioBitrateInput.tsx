@@ -63,14 +63,14 @@ export function AudioBitrateInput(props: {encodeType: EncodeType, audioCodec: Au
       audioBitrate = audioBitrateDisplayed;
     }
     setValue("audio-bitrate", audioBitrate, {shouldTouch: true});
-    console.log("audioBitrate:", audioBitrate);
+    //console.log("audioBitrate:", audioBitrate);
   }
 
   function updateAudioBitrateUnit(event?: Event) {
     let audioBitrateUnit = getValues("audio-bitrate-unit");
     let audioBitrate = getValues("audio-bitrate");
-    console.log("updateAudioBitrateUnit audioBitrateUnit:", audioBitrateUnit);
-    console.log("updateAudioBitrateUnit audioBitrate:", audioBitrate);
+    //console.log("updateAudioBitrateUnit audioBitrateUnit:", audioBitrateUnit);
+    //console.log("updateAudioBitrateUnit audioBitrate:", audioBitrate);
     let useDefaultAudioBitrate = false;
     const unmodifiedAudioBitrateDisplayed = getDefaultAudioBitrateDisplayed(props.encodeType, props.audioCodec, audioBitrateUnit);
     let audioBitrateDisplayed = unmodifiedAudioBitrateDisplayed;
@@ -108,7 +108,7 @@ export function AudioBitrateInput(props: {encodeType: EncodeType, audioCodec: Au
   useEffect(() => {
     let lastEncodeType = getValues("audio-bitrate-last-encode-type");
     let lastAudioCodec = getValues("audio-bitrate-last-audio-codec");
-    console.log("lastEncodeType:", lastEncodeType, ", props.encodeType:", props.encodeType, ", lastAudioCodec:", lastAudioCodec, ", props.audioCodec:", props.audioCodec);
+    //console.log("lastEncodeType:", lastEncodeType, ", props.encodeType:", props.encodeType, ", lastAudioCodec:", lastAudioCodec, ", props.audioCodec:", props.audioCodec);
     if (lastEncodeType !== props.encodeType || lastAudioCodec !== props.audioCodec) {
       let audioBitrate = getDefaultAudioBitrate(props.encodeType, props.audioCodec);
       let audioBitrateDisplayed = getDefaultAudioBitrateDisplayed(props.encodeType, props.audioCodec, getValues("audio-bitrate-unit"));

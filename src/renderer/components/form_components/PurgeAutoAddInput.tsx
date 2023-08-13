@@ -9,17 +9,19 @@ export const PURGE_AUTO_ADD_VALUES = makeReadonlyArraySet(["never", "onerror", "
 export type PurgeAutoAdd = ValidValues<typeof PURGE_AUTO_ADD_VALUES>;
 
 export function PurgeAutoAddInput() {
-  const renderCounter = useRenderCounter(true);
+  const renderCounter = useRenderCounter(false, "PurgeAutoAddInput");
 
   return (
-    <div>
-      <label htmlFor="purge-auto-add">Purge auto add directory: </label>
-      <DeselectableRadioButtonGroup name="purge-auto-add">
-        <DeselectableRadioButton labelValue="On WBZ patch error: " id="purge-auto-add-onerror" value="onerror"/>
-        <DeselectableRadioButton labelValue="Never: " id="purge-auto-add-never" value="never"/>
-        <DeselectableRadioButton labelValue="Always: " id="purge-auto-add-always" value="always"/>
-      </DeselectableRadioButtonGroup>
-      {renderCounter}
+    <div className="grid-contents">
+      <label className="start-label">Purge auto add directory: </label>
+      <div className="start-label-contents">
+        <DeselectableRadioButtonGroup name="purge-auto-add">
+          <DeselectableRadioButton labelValue="On WBZ patch error: " id="purge-auto-add-onerror" value="onerror"/>
+          <DeselectableRadioButton labelValue="Never: " id="purge-auto-add-never" value="never"/>
+          <DeselectableRadioButton labelValue="Always: " id="purge-auto-add-always" value="always"/>
+        </DeselectableRadioButtonGroup>
+        {renderCounter}
+      </div>
     </div>
   );
 }

@@ -22,7 +22,7 @@ export function MainGhostSourceInput() {
     setMainGhostSource(getValues("main-ghost-source"));
   }
 
-  console.log("mainGhostSource:", mainGhostSource);
+  //console.log("mainGhostSource:", mainGhostSource);
 
   return (
     <div className="grid-contents">

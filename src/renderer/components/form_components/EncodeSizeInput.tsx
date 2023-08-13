@@ -1,6 +1,8 @@
 import React from "react";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import useRenderCounter from "../../RenderCounter";
+import { ValidateResult } from "react-hook-form";
+import { SimpleErrorMessage } from "../SimpleErrorMessage";
 
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
 
@@ -19,8 +21,12 @@ function getDefaultEncodeSizeDisplayed(encodeSizeUnit: EncodeSizeUnit) {
   }
 }
 
+const MIB_BYTES_SIZE = 1048576;
+
 const MIN_ENCODE_SIZE = 1;
+const MIN_ENCODE_SIZE_MIB = MIN_ENCODE_SIZE / MIB_BYTES_SIZE;
 const MAX_ENCODE_SIZE = 274877906944; // 256GiB, max that youtube allows
+const MAX_ENCODE_SIZE_MIB = MAX_ENCODE_SIZE / MIB_BYTES_SIZE;
 
 export function EncodeSizeInput(props: {addSizeBasedReminderToLabel: boolean}) {
   const {register, setValue, getValues} = useFormContextAutoTT();
@@ -77,22 +83,46 @@ export function EncodeSizeInput(props: {addSizeBasedReminderToLabel: boolean}) {
     updateEncodeSizeDisplayed(event);
   }
 
+
+  function validateEncodeSize(value: number) : ValidateResult {
+    let encodeSizeUnit = getValues("encode-size-unit");
+    console.log("encodeSizeUnit: ", encodeSizeUnit);
+    if (encodeSizeUnit === "<FILLME>") {
+      return "Must select a file size unit."
+    } else if (Number.isNaN(value)) {
+      return "Output video size is required.";
+    } else if (value >= MIN_ENCODE_SIZE && value <= MAX_ENCODE_SIZE) {
+      return true;
+    } else {
+      if (encodeSizeUnit === "mib") {
+        return `Output video size must be between ${MIN_ENCODE_SIZE} bytes and ${MAX_ENCODE_SIZE_MIB} MiB.`
+      } else {
+        return `Output video size must be between ${MIN_ENCODE_SIZE} bytes and ${MAX_ENCODE_SIZE} bytes.`;
+      }
+    }
+  }
+
   return (
     <div className="grid-contents">
       <label className="start-label" htmlFor="encode-size-displayed">Output video size{props.addSizeBasedReminderToLabel ? " (For size-based)" : ""}:</label>
       <div className="start-label-contents">
-        <input type="hidden" {...register("encode-size")}/>
-        <input type="number" id="encode-size-displayed" onKeyPress={(e: React.KeyboardEvent<HTMLInputElement>) => {
+        <input type="hidden" {...register("encode-size", {required: {
+            value: true,
+            message: "This input is required."
+          }, validate: validateEncodeSize
+        })}/>
+        <input type="number" id="encode-size-displayed" step="any" onKeyPress={(e: React.KeyboardEvent<HTMLInputElement>) => {
           if (e.key.match(/[^\d\.]/g)) {
             e.preventDefault();
           }
-        }} min={MIN_ENCODE_SIZE} max={MAX_ENCODE_SIZE}
+        }}
           {...register("encode-size-displayed", {required: false, onChange: updateEncodeSizeDisplayed, valueAsNumber: true})}
         ></input>
-        <DeselectableRadioButtonGroup name="encode-size-unit">
+        <DeselectableRadioButtonGroup name="encode-size-unit" noErrorMessage={true}>
           <DeselectableRadioButton labelValue="MiB" id="encode-size-unit-mib" value="mib" onChange={updateEncodeSizeUnit}/>
           <DeselectableRadioButton labelValue="bytes" id="encode-size-unit-bytes" value="bytes" onChange={updateEncodeSizeUnit}/>
         </DeselectableRadioButtonGroup>
+        <SimpleErrorMessage name="encode-size"/>
         {renderCounter}
       </div>
     </div>

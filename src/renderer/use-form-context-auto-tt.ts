@@ -17,9 +17,9 @@ export function useWatchExpandUnselectedChoiceInputs() {
 
 export function isValueOrFILLMEIsValueMaker(debugName?: string) {
   const expandUnselectedChoiceInputs = useWatchExpandUnselectedChoiceInputs();
-  if (debugName !== undefined) {
+  /*if (debugName !== undefined) {
     console.log(`Making isValueOrFILLMEIsValue for ${debugName}`);
-  }
+  }*/
   return function(value: string | boolean | "<FILLME>", ...expectedValues: Array<string | boolean>) {
     return expectedValues.includes(value) || (expandUnselectedChoiceInputs && value === "<FILLME>");
   }

@@ -47,9 +47,10 @@ export function ChadsoftCacheExpiryInput() {
   }
 
   return (
-    <div>
-        <label htmlFor="chadsoft-cache-expiry">How long until cached files should be purged (chadsoft-cache-expiry): </label>
-        <input type="text"
+    <div className="grid-contents">
+      <label className="start-label" htmlFor="chadsoft-cache-expiry">How long until cached files should be purged (chadsoft-cache-expiry): </label>
+      <div className="start-label-contents">
+        <input type="text" id="chadsoft-cache-expiry"
           {...register("chadsoft-cache-expiry", {
             required: {
               value: true,
@@ -60,6 +61,7 @@ export function ChadsoftCacheExpiryInput() {
         ></input>
         <SimpleErrorMessage name="chadsoft-cache-expiry"/>
         {renderCounter}
+      </div>
     </div>
   );
 }

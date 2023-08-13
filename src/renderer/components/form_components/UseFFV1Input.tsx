@@ -1,14 +1,14 @@
 
 import React from "react";
-import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { TriCheckbox } from "../TriCheckbox";
 
 export function UseFFV1Input() {
-  const {register} = useFormContextAutoTT();
   return (
-    <div>
-      <label htmlFor="use-ffv1">Use FFV1 (Lossless dumps): </label>
-      <TriCheckbox name="use-ffv1"/>
+    <div className="grid-contents">
+      <label className="start-label" htmlFor="use-ffv1">Use FFV1 (Lossless dumps): </label>
+      <div className="start-label-contents">
+        <TriCheckbox name="use-ffv1" nameAsId={true}/>
+      </div>
     </div>
   );
 }

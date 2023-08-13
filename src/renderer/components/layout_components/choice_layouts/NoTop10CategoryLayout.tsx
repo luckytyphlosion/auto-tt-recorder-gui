@@ -24,7 +24,7 @@ export function NoTop10CategoryLayout(props: {isAutoTTRecRunning: boolean, formC
   const {register, getValues} = useFormContextAutoTT();
   const renderCounter = useRenderCounter(false, "NoTop10CategoryLayout");
 
-  console.log("noTop10Category:", props.noTop10Category, `, getValues("no-top-10-category"):`, getValues("no-top-10-category"));
+  //console.log("noTop10Category:", props.noTop10Category, `, getValues("no-top-10-category"):`, getValues("no-top-10-category"));
   return (
     <div>
       <DeselectableRadioButtonGroup name="no-top-10-category" notDeselectable={true}>
