@@ -175,7 +175,6 @@ export function ExtraGeckoCodesInput(props: {isAutoTTRecRunning: boolean}) {
   return (
     <div>
       <div>
-        <h3>Extra gecko codes</h3>
         <input type="hidden" {...register("extra-gecko-codes-unsaved")}/>
         <Modal
           overlayClassName="extra-gecko-codes-save-modal"
@@ -196,30 +195,36 @@ export function ExtraGeckoCodesInput(props: {isAutoTTRecRunning: boolean}) {
           <button onClick={saveModal_cancel}>Cancel</button>
         </Modal>
 
-        <label htmlFor="extra-gecko-codes-filename">Filename:</label>
-        <ClearableReadonlyTextInput name="extra-gecko-codes-filename" notRequired={true} validate={geckoCodeValidator} setState={updateExtraGeckoCodesFilenameAfterRightClick}/>
+        <div className="like-input-group">
+          <label className="start-label" htmlFor="extra-gecko-codes-filename">Gecko codes filename:</label>
+          <div className="start-label-contents">
+            <ClearableReadonlyTextInput name="extra-gecko-codes-filename" notRequired={true} validate={geckoCodeValidator} setState={updateExtraGeckoCodesFilenameAfterRightClick}/>
 
-        <button onClick={event => {
-          createNewFile(event);
-        }} type="button">New</button>
+            <button onClick={event => {
+            createNewFile(event);
+            }} type="button">New</button>
+
+
+            <button onClick={event => {
+            openFile(event);
+            }} type="button">Open&#8230;</button>
+
+            <button onClick={event => {
+            queueSaveDialogAndWriteText(event, [
+              {name: "ini files", extensions: ["ini"]}
+            ]);
+            }} type="button">Save as&#8230;</button>
+          </div>
+        </div>
         
 
-        <button onClick={event => {
-          openFile(event);
-        }} type="button">Open&#8230;</button>
-
-        <button onClick={event => {
-          queueSaveDialogAndWriteText(event, [
-            {name: "ini files", extensions: ["ini"]}
-          ]);
-        }} type="button">Save as&#8230;</button>
       </div>
       <div>
         {
           (isGeckoCodeUnsaved || extraGeckoCodesFilename === "") ?
             <SimpleErrorMessage name="extra-gecko-codes-filename"/> : ""
         }
-        <h4>Gecko code {isGeckoCodeUnsaved ? "(Unsaved)" : ""}</h4>
+        <h4>Extra gecko codes {isGeckoCodeUnsaved ? "(Unsaved)" : ""}</h4>
         <Controller
           render={({
             field: {onChange, onBlur, value, ref},

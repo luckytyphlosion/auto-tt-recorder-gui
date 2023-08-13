@@ -7,7 +7,7 @@ export function MKChannelGhostDescriptionInput() {
 
   return (
     <div className="grid-contents">
-      <label className="start-label" htmlFor="mk-channel-ghost-description">Ghost Description (top left at start of video): </label>
+      <label className="start-label" htmlFor="mk-channel-ghost-description">Ghost Description: </label>
       <div className="start-label-contents">
         <input id="mk-channel-ghost-description" type="text"
           {...register("mk-channel-ghost-description", {

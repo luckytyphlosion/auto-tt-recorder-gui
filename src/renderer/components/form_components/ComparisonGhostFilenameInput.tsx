@@ -18,7 +18,7 @@ export function ComparisonGhostFilenameInput() {
 
   return (
     <div className="grid-contents">
-      <label htmlFor="comparison-ghost-filename" className="start-label">RKG file to compare against: </label>
+      <label htmlFor="comparison-ghost-filename" className="start-label">Comparison RKG file: </label>
       <div className="start-label-contents">
         <ClearableReadonlyTextInput name="comparison-ghost-filename" validate={isFileReadable}/>
         <button onClick={event => {

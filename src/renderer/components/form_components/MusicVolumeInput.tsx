@@ -19,24 +19,26 @@ export function MusicVolumeInput() {
   }
 
   return (
-    <div>
-      <label htmlFor="music-volume-slider">Music volume: </label>
-      <input type="range" min={0} max={125} step={1} {...register("music-volume-slider", {
-        onChange: updateMusicVolumeNumberInputFromSlider})}/>
-      <span className="percent-input">
-        <input type="number" style={{width: "4em"}}
-          {...register("music-volume-numberinput", {required: {
-            value: true,
-            message: "This input is required."
-          }, valueAsNumber: true,
-          min: {
-            value: 0,
-            message: "Music volume cannot be less than zero."
-          }, onChange: updateMusicVolumeSliderFromNumberInput})}
-        ></input>%
-      </span>
-      <SimpleErrorMessage name="music-volume-numberinput"/>
-      {renderCounter}
+    <div className="grid-contents">
+      <label className="start-label" htmlFor="music-volume-slider">Music volume: </label>
+      <div className="start-label-contents">
+        <input type="range" min={0} max={125} step={1} {...register("music-volume-slider", {
+          onChange: updateMusicVolumeNumberInputFromSlider})}/>
+        <span className="percent-input">
+          <input type="number" style={{width: "4em"}}
+            {...register("music-volume-numberinput", {required: {
+              value: true,
+              message: "This input is required."
+            }, valueAsNumber: true,
+            min: {
+              value: 0,
+              message: "Music volume cannot be less than zero."
+            }, onChange: updateMusicVolumeSliderFromNumberInput})}
+          ></input>%
+        </span>
+        <SimpleErrorMessage name="music-volume-numberinput"/>
+        {renderCounter}
+      </div>
     </div>
   );
 }

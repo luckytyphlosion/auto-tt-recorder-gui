@@ -79,7 +79,6 @@ export function MarioKartChannelLayout(props: {isAutoTTRecRunning: boolean, form
       <ExtraSettingsLayout formComplexity={props.formComplexity}/>
 
       {renderCounter}
-
     </div>
   );
 }

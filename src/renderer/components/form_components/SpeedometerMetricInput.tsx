@@ -9,17 +9,18 @@ export const SPEEDOMETER_METRICS = makeReadonlyArraySet(["engine", "xz", "xyz"] 
 export type SpeedometerMetric = ValidValues<typeof SPEEDOMETER_METRICS>;
 
 export function SpeedometerMetricInput() {
-  const {register} = useFormContextAutoTT();
-  const renderCounter = useRenderCounter(true);
+  const renderCounter = useRenderCounter(false, "SpeedometerMetricInput");
 
   return (
-    <div>
-      <label htmlFor="speedometer-metric">Metric: </label>
-      <DeselectableRadioButtonGroup name="speedometer-metric">
-        <DeselectableRadioButton labelValue="Engine: " id="speedometer-metric-engine" value="engine"/>
-        <DeselectableRadioButton labelValue="XZ: " id="speedometer-metric-xz" value="xz"/>
-        <DeselectableRadioButton labelValue="XYZ: " id="speedometer-metric-xyz" value="xyz"/>
-      </DeselectableRadioButtonGroup>
+    <div className="grid-contents">
+      <label className="start-label">Metric: </label>
+      <div className="start-label-contents">
+        <DeselectableRadioButtonGroup name="speedometer-metric">
+          <DeselectableRadioButton labelValue="Engine: " id="speedometer-metric-engine" value="engine"/>
+          <DeselectableRadioButton labelValue="XZ: " id="speedometer-metric-xz" value="xz"/>
+          <DeselectableRadioButton labelValue="XYZ: " id="speedometer-metric-xyz" value="xyz"/>
+        </DeselectableRadioButtonGroup>
+      </div>
       {renderCounter}
     </div>
   );

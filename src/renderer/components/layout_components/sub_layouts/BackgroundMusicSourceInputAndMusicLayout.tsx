@@ -31,29 +31,33 @@ export function BackgroundMusicSourceInputAndMusicLayout(props: {timeline: Timel
     <div>
       <FieldsetOr>
         <legend>Music</legend>
-        <label htmlFor="background-music-source">Background Music: </label>
-        <DeselectableDropdown name="background-music-source" noErrorMessage={true}>
-          <option value="music-filename">Music filename</option>
-          <option value="game-bgm">Game BGM</option>
-          <option value="none">None</option>
-        </DeselectableDropdown>
-        {
-          musicFilenameInputEnable ? 
-          <MusicFilenameInput/> : <SimpleErrorMessage name="background-music-source"/>
-        }
-        {
-          enableMusicPresentationInput && props.formComplexity > FormComplexity.SIMPLE ?
-            <MusicPresentationInput hasMusic={musicFilenameInputEnable} isOnMKChannel={isOnMKChannel}/> : ""
-        }
-        {
-          musicFilenameInputEnable ?
-          <>
-            <GameVolumeInput/>
-            <MusicVolumeInput/>
-          </> : ""
-        }
-        {renderCounter}
+        <div className="like-input-group">
+          <label className="start-label" htmlFor="background-music-source">Background Music: </label>
+          <div className="start-label-contents">
+            <DeselectableDropdown name="background-music-source" noErrorMessage={true}>
+              <option value="music-filename">Music filename</option>
+              <option value="game-bgm">Game BGM</option>
+              <option value="none">None</option>
+            </DeselectableDropdown>
+            {
+              musicFilenameInputEnable ? 
+              <MusicFilenameInput/> : <SimpleErrorMessage name="background-music-source"/>
+            }
+          </div>
+          {
+              enableMusicPresentationInput && props.formComplexity > FormComplexity.SIMPLE ?
+                <MusicPresentationInput hasMusic={musicFilenameInputEnable} isOnMKChannel={isOnMKChannel}/> : ""
+            }
+            {
+              musicFilenameInputEnable ?
+              <div className="grid-contents">
+                <GameVolumeInput/>
+                <MusicVolumeInput/>
+              </div> : ""
+            }
+        </div>
       </FieldsetOr>
+      {renderCounter}
     </div>    
   );
 }

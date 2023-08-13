@@ -13,7 +13,7 @@ export function ChadsoftGhostPageInput() {
 
   return (
     <div className="grid-contents">
-      <label className="start-label">Chadsoft ghost page link: </label>
+      <label className="start-label">Ghost page link: </label>
       <div className="start-label-contents">
         <input type="text"
           {...register("chadsoft-ghost-page", {

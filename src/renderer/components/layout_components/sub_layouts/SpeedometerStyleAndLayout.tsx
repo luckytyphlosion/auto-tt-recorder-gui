@@ -30,23 +30,29 @@ export function SpeedometerStyleAndLayout() {
     <div>
       <FieldsetOr>
         <legend>Speedometer</legend>
-        <label htmlFor="speedometer-style">Style: </label>
-        <DeselectableRadioButtonGroup name="speedometer-style">
-          <DeselectableRadioButton labelValue="Fancy: " id="speedometer-style-fancy" value="fancy" onChange={updateSpeedometerStyle}/>
-          <DeselectableRadioButton labelValue="Regular: " id="speedometer-style-regular" value="regular" onChange={updateSpeedometerStyle}/>
-          <DeselectableRadioButton labelValue="Standard: " id="speedometer-style-standard" value="standard" onChange={updateSpeedometerStyle}/>
-          <DeselectableRadioButton labelValue="None: " id="speedometer-style-none" value="none" onChange={updateSpeedometerStyle}/>
-        </DeselectableRadioButtonGroup>
-        {renderCounter}
-        {
-          speedometerStyle !== "none" ? 
-          (<>
-            <SpeedometerMetricInput_Memo/>
-            {speedometerStyle !== "standard" ?
-              <SpeedometerDecimalPlacesInput twoDecimalPlaces={isValueOrFILLMEIsValue(speedometerStyle, "regular")}/>
-              : ""}
-          </>) : ""
-        }
+        <div className="like-input-group">
+          <div className="grid-contents">
+            <label className="start-label" htmlFor="speedometer-style">Style: </label>
+            <div className="start-label-contents">
+              <DeselectableRadioButtonGroup name="speedometer-style">
+                <DeselectableRadioButton labelValue="Fancy: " id="speedometer-style-fancy" value="fancy" onChange={updateSpeedometerStyle}/>
+                <DeselectableRadioButton labelValue="Regular: " id="speedometer-style-regular" value="regular" onChange={updateSpeedometerStyle}/>
+                <DeselectableRadioButton labelValue="Standard: " id="speedometer-style-standard" value="standard" onChange={updateSpeedometerStyle}/>
+                <DeselectableRadioButton labelValue="None: " id="speedometer-style-none" value="none" onChange={updateSpeedometerStyle}/>
+              </DeselectableRadioButtonGroup>
+            </div>
+          </div>
+          {renderCounter}
+          {
+            speedometerStyle !== "none" ? 
+            (<>
+              <SpeedometerMetricInput_Memo/>
+              {speedometerStyle !== "standard" ?
+                <SpeedometerDecimalPlacesInput twoDecimalPlaces={isValueOrFILLMEIsValue(speedometerStyle, "regular")}/>
+                : ""}
+            </>) : ""
+          }
+        </div>
       </FieldsetOr>
     </div>
   );

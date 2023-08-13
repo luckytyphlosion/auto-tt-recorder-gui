@@ -18,9 +18,10 @@ export function GameVolumeInput() {
   }
 
   return (
-    <div>
-      <label htmlFor="game-volume-slider">Game volume: </label>
-      <input type="range" min={0} max={125} step={1} {...register("game-volume-slider", {
+    <div className="grid-contents">
+      <label className="start-label" htmlFor="game-volume-slider">Game volume: </label>
+      <div className="start-label-contents">
+      <input id="game-volume-slider" type="range" min={0} max={125} step={1} {...register("game-volume-slider", {
         onChange: updateGameVolumeNumberInputFromSlider})}/>
       <span className="percent-input">
         <input type="number" style={{width: "4em"}}
@@ -36,6 +37,7 @@ export function GameVolumeInput() {
       </span>
       <SimpleErrorMessage name="game-volume-numberinput"/>
       {renderCounter}
+      </div>
     </div>
   );
 }

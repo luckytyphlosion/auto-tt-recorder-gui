@@ -23,22 +23,24 @@ export function MusicPresentationInput(props: {hasMusic: boolean, isOnMKChannel:
   }, [props.hasMusic, props.isOnMKChannel]);
 
   return (
-    <div>
-      <label htmlFor="music-presentation">Music presentation: </label>
-      <DeselectableRadioButtonGroup name="music-presentation">
-        <DeselectableRadioButton labelValue="Normal: " id="music-presentation-normal" value="normal"/>
-        {
-          props.hasMusic ? <>
-            <DeselectableRadioButton labelValue="Start music at beginning: " id="music-presentation-start-music-at-beginning" value="start-music-at-beginning"/>
-          </> : ""
-        }
-        {
-          props.isOnMKChannel ? <>
-            <DeselectableRadioButton labelValue="No music on the Mario Kart Channel: " id="music-presentation-no-music-mkchannel" value="no-music-mkchannel"/>
-          </> : ""
-        }
-      </DeselectableRadioButtonGroup>
-      {renderCounter}
+    <div className="grid-contents">
+      <label className="start-label">Music presentation: </label>
+      <div className="start-label-contents">
+        <DeselectableRadioButtonGroup name="music-presentation">
+          <DeselectableRadioButton labelValue="Normal: " id="music-presentation-normal" value="normal"/>
+          {
+            props.hasMusic ? <>
+              <DeselectableRadioButton labelValue="Start music at beginning: " id="music-presentation-start-music-at-beginning" value="start-music-at-beginning"/>
+            </> : ""
+          }
+          {
+            props.isOnMKChannel ? <>
+              <DeselectableRadioButton labelValue="No music on the Mario Kart Channel: " id="music-presentation-no-music-mkchannel" value="no-music-mkchannel"/>
+            </> : ""
+          }
+        </DeselectableRadioButtonGroup>
+        {renderCounter}
+      </div>
     </div>
   );
 }

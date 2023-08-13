@@ -12,8 +12,12 @@ export function ExtraGeckoCodesEnableInput(props: {isAutoTTRecRunning: boolean})
 
   return (
     <div>
-      <label htmlFor="extra-gecko-codes-enable">Add extra gecko codes?</label>
-      <TriCheckbox name="extra-gecko-codes-enable"/>
+      <div className="like-input-group">
+        <label className="start-label" htmlFor="extra-gecko-codes-enable">Add extra gecko codes?</label>
+        <div className="start-label-contents">
+          <TriCheckbox name="extra-gecko-codes-enable"/>
+        </div>
+      </div>
       {
         isValueOrFILLMEIsValue(extraGeckoCodesEnable, true) ? <ExtraGeckoCodesInput isAutoTTRecRunning={props.isAutoTTRecRunning}/> : ""
       }
