@@ -11,14 +11,16 @@ export function PixelFormatInput() {
   const renderCounter = useRenderCounter(false, "PixelFormatInput");
 
   return (
-    <div>
-      <label htmlFor="pixel-format">Pixel format: </label>
-      <input type="text" {...register("pixel-format", {required: {
-          value: true,
-          message: "This input is required. (Enter yuv420p if unsure)"
-        }})}
-      ></input>
-      <SimpleErrorMessage name="pixel-format"/>
+    <div className="grid-contents">
+      <label className="start-label" htmlFor="pixel-format">Pixel format: </label>
+      <div className="start-label-contents">
+        <input type="text" id="pixel-format" {...register("pixel-format", {required: {
+            value: true,
+            message: "This input is required. (Enter yuv420p if unsure)"
+          }})}
+        ></input>
+        <SimpleErrorMessage name="pixel-format"/>
+      </div>
       {renderCounter}
     </div>
   );

@@ -25,13 +25,15 @@ export function AudioCodecAndBitrateInput(props: {encodeType: EncodeType}) {
   }
 
   return (
-    <div>
-      <label htmlFor="audio-codec">Audio codec: </label>
-      <DeselectableDropdown name="audio-codec" onChange={updateAudioCodec}>
-        <option value="libopus">libopus</option>
-        <option value="aac">aac</option>
-      </DeselectableDropdown>
-      {renderCounter}
+    <div className="grid-contents">
+      <label className="start-label" htmlFor="audio-codec">Audio codec: </label>
+      <div className="start-label-contents">
+        <DeselectableDropdown name="audio-codec" nameAsId={true} onChange={updateAudioCodec}>
+          <option value="libopus">libopus</option>
+          <option value="aac">aac</option>
+        </DeselectableDropdown>
+        {renderCounter}
+      </div>
       <AudioBitrateInput encodeType={props.encodeType} audioCodec={audioCodec}/>
     </div>
   );

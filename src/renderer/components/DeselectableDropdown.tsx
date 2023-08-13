@@ -7,7 +7,7 @@ import { SimpleErrorMessage } from "./SimpleErrorMessage";
 
 import useRenderCounter from "../RenderCounter";
 
-export function DeselectableDropdown<K extends AutoTTRecConfigFormChoiceArgName>(props: {name: K, noErrorMessage?: boolean, onChange?: ((event?: Event) => void) | (() => void), children?: React.ReactNode}) {
+export function DeselectableDropdown<K extends AutoTTRecConfigFormChoiceArgName>(props: {name: K, noErrorMessage?: boolean, onChange?: ((event?: Event) => void) | (() => void), nameAsId?: boolean, children?: React.ReactNode}) {
   const {register, setValue} = useFormContextAutoTT();
   const renderCounter = useRenderCounter(false, `DeselectableDropdown ${props.name}`);
   function validateDeselectableDropdown(value: AutoTTRecConfigFormChoiceArgs[AutoTTRecConfigFormChoiceArgName]): ValidateResult {
@@ -20,7 +20,7 @@ export function DeselectableDropdown<K extends AutoTTRecConfigFormChoiceArgName>
 
   return (
     <>
-      <select {...register(props.name, {
+      <select id={props.nameAsId ? props.name : undefined} {...register(props.name, {
         onChange: props.onChange,
         validate: validateDeselectableDropdown
       })} onContextMenu={(e: React.MouseEvent<HTMLSelectElement>) => {

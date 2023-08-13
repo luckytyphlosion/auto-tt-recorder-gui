@@ -29,16 +29,22 @@ export function EncodeSettingsLayout(props: {formComplexity: FormComplexity}) {
     <div>
       <FieldsetOr>
         <legend>Encoding settings</legend>
-        <label htmlFor="encode-type">Encode type: </label>
-        <DeselectableRadioButtonGroup name="encode-type">
-        <DeselectableRadioButton labelValue="CRF (For YouTube or offline): " id="encode-type-crf" value="crf" onChange={updateEncodeType}/>
-          <DeselectableRadioButton labelValue="Size based (for Discord uploads): " id="encode-type-size" value="size" onChange={updateEncodeType}/>
-        </DeselectableRadioButtonGroup>
-        {renderCounter}
-        <EncodeSettingsContentsLayout formComplexity={props.formComplexity} encodeType={encodeType}/>
-        {
-          props.formComplexity === FormComplexity.ALL ? <PixelFormatInput_Memo/> : ""
-        }
+        <div className="like-input-group">
+          <div className="grid-contents">
+          <label className="start-label">Encode type: </label>
+          <div className="start-label-contents">
+            <DeselectableRadioButtonGroup name="encode-type">
+            <DeselectableRadioButton labelValue="CRF (For YouTube or offline): " id="encode-type-crf" value="crf" onChange={updateEncodeType}/>
+              <DeselectableRadioButton labelValue="Size based (for Discord uploads): " id="encode-type-size" value="size" onChange={updateEncodeType}/>
+            </DeselectableRadioButtonGroup>
+            {renderCounter}
+          </div>
+          <EncodeSettingsContentsLayout formComplexity={props.formComplexity} encodeType={encodeType}/>
+          {
+            props.formComplexity === FormComplexity.ALL ? <PixelFormatInput_Memo/> : ""
+          }
+          </div>
+        </div>
       </FieldsetOr>
     </div>
   );

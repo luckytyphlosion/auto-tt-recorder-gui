@@ -1,11 +1,6 @@
-import React, { useState } from "react";
-import { UseFormRegister, FieldValues, UseFormRegisterReturn, Controller } from "react-hook-form";
+import React from "react";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import useRenderCounter from "../../RenderCounter";
-
-import { AudioCodec } from "./AudioCodecAndBitrateInput";
-
-import { EncodeType } from "../layout_components/choice_layouts/EncodeSettingsLayout";
 
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
 
@@ -13,30 +8,6 @@ import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../Desele
 
 export const ENCODE_SIZE_UNITS = makeReadonlyArraySet(["mib", "bytes"] as const);
 export type EncodeSizeUnit = ValidValues<typeof ENCODE_SIZE_UNITS>;
-
-/*
-const defaultEncodeSizes = {
-  crf: {
-    libopus: 128000,
-    aac: 384000
-  },
-  size: {
-    libopus: 64000,
-    aac: 128000
-  }
-}
-
-function getDefaultEncodeSize(encodeType: EncodeType, audioCodec: AudioCodec): number {
-  return defaultEncodeSizes[encodeType][audioCodec];
-}
-
-function getDefaultEncodeSizeDisplayed(encodeType: EncodeType, audioCodec: AudioCodec, bitrateUnit: EncodeSizeUnit): number {
-  let bitrate = getDefaultEncodeSize(encodeType, audioCodec);
-  if (bitrateUnit === "kbps") {
-    bitrate /= 1000;
-  }
-  return bitrate;
-}*/
 
 function getDefaultEncodeSizeDisplayed(encodeSizeUnit: EncodeSizeUnit) {
   if (encodeSizeUnit === "mib") {
@@ -52,7 +23,7 @@ const MIN_ENCODE_SIZE = 1;
 const MAX_ENCODE_SIZE = 274877906944; // 256GiB, max that youtube allows
 
 export function EncodeSizeInput(props: {addSizeBasedReminderToLabel: boolean}) {
-  const {register, setValue, getValues, control} = useFormContextAutoTT();
+  const {register, setValue, getValues} = useFormContextAutoTT();
   const renderCounter = useRenderCounter(true);
 
   function updateEncodeSizeDisplayed(event?: Event) {
@@ -107,21 +78,23 @@ export function EncodeSizeInput(props: {addSizeBasedReminderToLabel: boolean}) {
   }
 
   return (
-    <div>
-      <label htmlFor="encode-size">Output video size{props.addSizeBasedReminderToLabel ? " (For size-based)" : ""}:</label>
-      <input type="hidden" {...register("encode-size")}/>
-      <input type="number" onKeyPress={(e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (e.key.match(/[^\d\.]/g)) {
-          e.preventDefault();
-        }
-      }} min={MIN_ENCODE_SIZE} max={MAX_ENCODE_SIZE}
-        {...register("encode-size-displayed", {required: false, onChange: updateEncodeSizeDisplayed, valueAsNumber: true})}
-      ></input>
-      <DeselectableRadioButtonGroup name="encode-size-unit">
-        <DeselectableRadioButton labelValue="MiB" id="encode-size-unit-mib" value="mib" onChange={updateEncodeSizeUnit}/>
-        <DeselectableRadioButton labelValue="bytes" id="encode-size-unit-bytes" value="bytes" onChange={updateEncodeSizeUnit}/>
-      </DeselectableRadioButtonGroup>
-      {renderCounter}
+    <div className="grid-contents">
+      <label className="start-label" htmlFor="encode-size-displayed">Output video size{props.addSizeBasedReminderToLabel ? " (For size-based)" : ""}:</label>
+      <div className="start-label-contents">
+        <input type="hidden" {...register("encode-size")}/>
+        <input type="number" id="encode-size-displayed" onKeyPress={(e: React.KeyboardEvent<HTMLInputElement>) => {
+          if (e.key.match(/[^\d\.]/g)) {
+            e.preventDefault();
+          }
+        }} min={MIN_ENCODE_SIZE} max={MAX_ENCODE_SIZE}
+          {...register("encode-size-displayed", {required: false, onChange: updateEncodeSizeDisplayed, valueAsNumber: true})}
+        ></input>
+        <DeselectableRadioButtonGroup name="encode-size-unit">
+          <DeselectableRadioButton labelValue="MiB" id="encode-size-unit-mib" value="mib" onChange={updateEncodeSizeUnit}/>
+          <DeselectableRadioButton labelValue="bytes" id="encode-size-unit-bytes" value="bytes" onChange={updateEncodeSizeUnit}/>
+        </DeselectableRadioButtonGroup>
+        {renderCounter}
+      </div>
     </div>
   );
 }

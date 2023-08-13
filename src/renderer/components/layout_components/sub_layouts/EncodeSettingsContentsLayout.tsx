@@ -20,7 +20,7 @@ export function EncodeSettingsContentsLayout(props: {formComplexity: FormComplex
   const encodeTypeIsSizeBased = isValueOrFILLMEIsValue(props.encodeType, "size");
 
   return (
-    <div>
+    <div className="grid-contents">
       {
         props.formComplexity === FormComplexity.ALL ? <VideoCodecInput encodeType={props.encodeType} formComplexity={props.formComplexity}/> : ""
       }

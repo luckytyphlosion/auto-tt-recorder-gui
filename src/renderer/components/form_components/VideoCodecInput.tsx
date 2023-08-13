@@ -25,15 +25,17 @@ export function VideoCodecInput(props: {encodeType: EncodeType, formComplexity: 
   }
 
   return (
-    <div>
-      <label htmlFor="video-codec">Video codec: </label>
-      <DeselectableDropdown name="video-codec">
-        <option value="libx264">libx264</option>
-        {isValueOrFILLMEIsValue(props.encodeType, "crf") ? <option value="libx265">libx265</option> : ""}
-        {isValueOrFILLMEIsValue(props.encodeType, "size") ? <option value="libvpx-vp9">libvpx-vp9</option> : ""}
-      </DeselectableDropdown>
-      {renderCounter}
+    <div className="grid-contents">
+      <label className="start-label" htmlFor="video-codec">Video codec: </label>
+      <div className="start-label-contents">
+        <DeselectableDropdown name="video-codec" nameAsId={true}>
+          <option value="libx264">libx264</option>
+          {isValueOrFILLMEIsValue(props.encodeType, "crf") ? <option value="libx265">libx265</option> : ""}
+          {isValueOrFILLMEIsValue(props.encodeType, "size") ? <option value="libvpx-vp9">libvpx-vp9</option> : ""}
+        </DeselectableDropdown>
+        {renderCounter}
+      </div>
       <OutputVideoFileFormatInput videoCodec={videoCodec} addSizeBasedReminderToLabel={false} formComplexity={props.formComplexity}/>
-    </div>
+   </div>
   );
 }

@@ -9,24 +9,25 @@ export const H26X_PRESETS = makeReadonlyArraySet(["ultrafast", "superfast", "ver
 export type H26xPreset = ValidValues<typeof H26X_PRESETS>;
 
 export function H26xPresetInput(props: {addCRFReminderToLabel: boolean}) {
-  const {register} = useFormContextAutoTT();
   const renderCounter = useRenderCounter(true);
 
   return (
-    <div>
-      <label htmlFor="h26x-preset">Encode speed ({props.addCRFReminderToLabel ? "For CRF; " : ""}faster &#8594; larger filesize, slightly less quality): </label>
-      <DeselectableDropdown name="h26x-preset">
-        <option value="ultrafast">ultrafast</option>
-        <option value="superfast">superfast</option>
-        <option value="veryfast">veryfast</option>
-        <option value="faster">faster</option>
-        <option value="fast">fast</option>
-        <option value="medium">medium</option>
-        <option value="slow">slow</option>
-        <option value="slower">slower</option>
-        <option value="veryslow">veryslow</option>
-        <option value="placebo">placebo</option>
-      </DeselectableDropdown>
+    <div className="grid-contents">
+      <label className="start-label" htmlFor="h26x-preset">Encode speed ({props.addCRFReminderToLabel ? "For CRF; " : ""}faster &#8594; larger filesize, slightly less quality): </label>
+      <div className="start-label-contents">
+        <DeselectableDropdown name="h26x-preset" nameAsId={true}>
+          <option value="ultrafast">ultrafast</option>
+          <option value="superfast">superfast</option>
+          <option value="veryfast">veryfast</option>
+          <option value="faster">faster</option>
+          <option value="fast">fast</option>
+          <option value="medium">medium</option>
+          <option value="slow">slow</option>
+          <option value="slower">slower</option>
+          <option value="veryslow">veryslow</option>
+          <option value="placebo">placebo</option>
+        </DeselectableDropdown>
+      </div>
       {renderCounter}
     </div>
   );

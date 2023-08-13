@@ -50,26 +50,28 @@ export function OutputVideoFileFormatInput(props: {videoCodec: VideoCodec, formC
   }
 
   return (
-    <div> 
-      <label htmlFor="output-video-file-format">Video format{props.addSizeBasedReminderToLabel ? " (For size-based)" : ""}: </label>
-      <DeselectableDropdown name="output-video-file-format" onChange={props.formComplexity === FormComplexity.ADVANCED ? updateVideoCodecForAdvancedForm : () => {}}>
-        {
-          props.formComplexity === FormComplexity.ALL ? 
-          (
-            <>
-              {isValueOrFILLMEIsValue(props.videoCodec, "libvpx-vp9") ? <option value="webm">webm</option> : ""}
-              {isValueOrFILLMEIsValue(props.videoCodec, "libx264", "libx265") ? <option value="mp4">mp4</option> : ""}
-              <option value="mkv">mkv</option>
-            </>
-          ) : (
-            <>
-              <option value="mp4">mp4</option>
-              <option value="webm">webm</option>
-            </>
-          )
-        }
-      </DeselectableDropdown>
-      {renderCounter}
+    <div className="grid-contents">
+      <label className="start-label" htmlFor="output-video-file-format">Video format{props.addSizeBasedReminderToLabel ? " (For size-based)" : ""}: </label>
+      <div className="start-label-contents">
+        <DeselectableDropdown name="output-video-file-format" nameAsId={true} onChange={props.formComplexity === FormComplexity.ADVANCED ? updateVideoCodecForAdvancedForm : () => {}}>
+          {
+            props.formComplexity === FormComplexity.ALL ? 
+            (
+              <>
+                {isValueOrFILLMEIsValue(props.videoCodec, "libvpx-vp9") ? <option value="webm">webm</option> : ""}
+                {isValueOrFILLMEIsValue(props.videoCodec, "libx264", "libx265") ? <option value="mp4">mp4</option> : ""}
+                <option value="mkv">mkv</option>
+              </>
+            ) : (
+              <>
+                <option value="mp4">mp4</option>
+                <option value="webm">webm</option>
+              </>
+            )
+          }
+        </DeselectableDropdown>
+        {renderCounter}
+      </div>
     </div>
   );
 }
