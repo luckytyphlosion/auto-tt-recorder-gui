@@ -104,26 +104,34 @@ export function EncodeSizeInput(props: {addSizeBasedReminderToLabel: boolean}) {
 
   return (
     <div className="grid-contents">
-      <label className="start-label" htmlFor="encode-size-displayed">Output video size{props.addSizeBasedReminderToLabel ? " (For size-based)" : ""}:</label>
-      <div className="start-label-contents">
-        <input type="hidden" {...register("encode-size", {required: {
-            value: true,
-            message: "This input is required."
-          }, validate: validateEncodeSize
-        })}/>
-        <input type="number" id="encode-size-displayed" step="any" onKeyPress={(e: React.KeyboardEvent<HTMLInputElement>) => {
-          if (e.key.match(/[^\d\.]/g)) {
-            e.preventDefault();
-          }
-        }}
-          {...register("encode-size-displayed", {required: false, onChange: updateEncodeSizeDisplayed, valueAsNumber: true})}
-        ></input>
-        <DeselectableRadioButtonGroup name="encode-size-unit" noErrorMessage={true}>
-          <DeselectableRadioButton labelValue="MiB" id="encode-size-unit-mib" value="mib" onChange={updateEncodeSizeUnit}/>
-          <DeselectableRadioButton labelValue="bytes" id="encode-size-unit-bytes" value="bytes" onChange={updateEncodeSizeUnit}/>
-        </DeselectableRadioButtonGroup>
-        <SimpleErrorMessage name="encode-size"/>
-        {renderCounter}
+      <div className="grid-contents">
+        <label className="start-label" htmlFor="encode-size-displayed">Output video size{props.addSizeBasedReminderToLabel ? " (For size-based)" : ""}:</label>
+        <div className="start-label-contents">
+          <input type="hidden" {...register("encode-size", {required: {
+              value: true,
+              message: "This input is required."
+            }, validate: validateEncodeSize
+          })}/>
+          <input type="number" id="encode-size-displayed" step="any" onKeyPress={(e: React.KeyboardEvent<HTMLInputElement>) => {
+            if (e.key.match(/[^\d\.]/g)) {
+              e.preventDefault();
+            }
+          }}
+            {...register("encode-size-displayed", {required: false, onChange: updateEncodeSizeDisplayed, valueAsNumber: true})}
+          ></input>
+          <DeselectableRadioButtonGroup name="encode-size-unit" noErrorMessage={true}>
+            <DeselectableRadioButton labelValue="MiB" id="encode-size-unit-mib" value="mib" onChange={updateEncodeSizeUnit}/>
+            <DeselectableRadioButton labelValue="bytes" id="encode-size-unit-bytes" value="bytes" onChange={updateEncodeSizeUnit}/>
+          </DeselectableRadioButtonGroup>
+          
+          {renderCounter}
+        </div>
+      </div>
+      <div className="grid-contents">
+        <div className="start-label"></div>
+        <div className="start-label-contents">
+          <SimpleErrorMessage name="encode-size"/>
+        </div>
       </div>
     </div>
   );
