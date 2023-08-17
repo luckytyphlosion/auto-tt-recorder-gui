@@ -22,13 +22,13 @@ export function SpeedometerDecimalPlacesInput(props: {twoDecimalPlaces: boolean}
     <div className="grid-contents">
       <label className="start-label">SOM decimal places: </label>
       <div className="start-label-contents">
-        <DeselectableRadioButtonGroup name="speedometer-decimal-places-str">
-          <DeselectableRadioButton labelValue="0: " id="speedometer-decimal-places-str-0" value="0"/>
-          <DeselectableRadioButton labelValue="1: " id="speedometer-decimal-places-str-1" value="1"/>
+        <DeselectableRadioButtonGroup name="speedometer-decimal-places-str" blockDisplay={false}>
+          <DeselectableRadioButton labelValue="0" id="speedometer-decimal-places-str-0" value="0"/>
+          <DeselectableRadioButton labelValue="1" id="speedometer-decimal-places-str-1" value="1"/>
           {
             props.twoDecimalPlaces ? (
               <>
-                <DeselectableRadioButton labelValue="2: " id="speedometer-decimal-places-str-2" value="2"/>
+                <DeselectableRadioButton labelValue="2" id="speedometer-decimal-places-str-2" value="2"/>
               </>
             ) : ''
           }

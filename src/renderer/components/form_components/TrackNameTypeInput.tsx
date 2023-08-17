@@ -45,7 +45,7 @@ export function TrackNameTypeInput(props: {formComplexity: FormComplexity}) {
     <div className="grid-contents">
       <label className="start-label">Track name: </label>
       <div className="start-label-contents">
-        <DeselectableRadioButtonGroup name="track-name-type">
+        <DeselectableRadioButtonGroup name="track-name-type" blockDisplay={true}>
           <DeselectableRadioButton labelValue="Auto-detect (recommended):" id="track-name-type-auto" value="auto" onChange={updateTrackNameType}/>
           {
             props.formComplexity === FormComplexity.ALL ? 

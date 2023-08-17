@@ -15,7 +15,7 @@ export function GhostAndSZSSourceLayout() {
         <div className="like-input-group">
           <MainGhostSourceInput/>
           <ComparisonGhostSourceInput/>
-          <EmptyGridRow/>
+          <EmptyGridRow padding="0.75em"/>
           <SZSSourceInput/>
         </div>
       </FieldsetOr>

@@ -26,16 +26,16 @@ export function MusicPresentationInput(props: {hasMusic: boolean, isOnMKChannel:
     <div className="grid-contents">
       <label className="start-label">Music presentation: </label>
       <div className="start-label-contents">
-        <DeselectableRadioButtonGroup name="music-presentation">
-          <DeselectableRadioButton labelValue="Normal: " id="music-presentation-normal" value="normal"/>
+        <DeselectableRadioButtonGroup name="music-presentation" blockDisplay={true}>
+          <DeselectableRadioButton labelValue="Normal" id="music-presentation-normal" value="normal"/>
           {
             props.hasMusic ? <>
-              <DeselectableRadioButton labelValue="Start music at beginning: " id="music-presentation-start-music-at-beginning" value="start-music-at-beginning"/>
+              <DeselectableRadioButton labelValue="Start music at beginning" id="music-presentation-start-music-at-beginning" value="start-music-at-beginning"/>
             </> : ""
           }
           {
             props.isOnMKChannel ? <>
-              <DeselectableRadioButton labelValue="No music on the Mario Kart Channel: " id="music-presentation-no-music-mkchannel" value="no-music-mkchannel"/>
+              <DeselectableRadioButton labelValue="No music on the Mario Kart Channel" id="music-presentation-no-music-mkchannel" value="no-music-mkchannel"/>
             </> : ""
           }
         </DeselectableRadioButtonGroup>

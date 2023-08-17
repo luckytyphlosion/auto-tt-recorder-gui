@@ -13,7 +13,7 @@ export function H26xPresetInput(props: {addCRFReminderToLabel: boolean}) {
 
   return (
     <div className="grid-contents">
-      <label className="start-label" htmlFor="h26x-preset">Encode speed ({props.addCRFReminderToLabel ? "For CRF; " : ""}faster &#8594; larger filesize, slightly less quality): </label>
+      <label className="start-label" htmlFor="h26x-preset">Encode speed{props.addCRFReminderToLabel ? " (For CRF)" : ""}: </label>
       <div className="start-label-contents">
         <DeselectableDropdown name="h26x-preset" nameAsId={true}>
           <option value="ultrafast">ultrafast</option>
@@ -27,6 +27,10 @@ export function H26xPresetInput(props: {addCRFReminderToLabel: boolean}) {
           <option value="veryslow">veryslow</option>
           <option value="placebo">placebo</option>
         </DeselectableDropdown>
+      </div>
+      <div className="start-label"></div>
+      <div className="start-label-contents" style={{marginBottom: "1em"}}>
+        Faster option &#8594; larger filesize. Ultrafast/superfast have slightly less quality
       </div>
       {renderCounter}
     </div>

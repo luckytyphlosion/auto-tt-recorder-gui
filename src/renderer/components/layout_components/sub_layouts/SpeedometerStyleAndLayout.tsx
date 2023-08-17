@@ -34,11 +34,11 @@ export function SpeedometerStyleAndLayout() {
           <div className="grid-contents">
             <label className="start-label" htmlFor="speedometer-style">SOM style: </label>
             <div className="start-label-contents">
-              <DeselectableRadioButtonGroup name="speedometer-style">
-                <DeselectableRadioButton labelValue="Fancy: " id="speedometer-style-fancy" value="fancy" onChange={updateSpeedometerStyle}/>
-                <DeselectableRadioButton labelValue="Regular: " id="speedometer-style-regular" value="regular" onChange={updateSpeedometerStyle}/>
-                <DeselectableRadioButton labelValue="Standard: " id="speedometer-style-standard" value="standard" onChange={updateSpeedometerStyle}/>
-                <DeselectableRadioButton labelValue="None: " id="speedometer-style-none" value="none" onChange={updateSpeedometerStyle}/>
+              <DeselectableRadioButtonGroup name="speedometer-style" blockDisplay={false}>
+                <DeselectableRadioButton labelValue="Fancy" id="speedometer-style-fancy" value="fancy" onChange={updateSpeedometerStyle}/>
+                <DeselectableRadioButton labelValue="Regular" id="speedometer-style-regular" value="regular" onChange={updateSpeedometerStyle}/>
+                <DeselectableRadioButton labelValue="Standard" id="speedometer-style-standard" value="standard" onChange={updateSpeedometerStyle}/>
+                <DeselectableRadioButton labelValue="None" id="speedometer-style-none" value="none" onChange={updateSpeedometerStyle}/>
               </DeselectableRadioButtonGroup>
             </div>
           </div>

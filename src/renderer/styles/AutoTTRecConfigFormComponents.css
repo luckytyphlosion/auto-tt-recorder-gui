@@ -1,5 +1,10 @@
 
-input[type="radio"] {
+input[type="radio"]:not(.long-radio-button-group__input) {
   margin-left: 5px;
   margin-right: 25px;
+}
+
+.long-radio-button-group__input {
+  margin-left: 5px;
+  margin-right: 10px;
 }
