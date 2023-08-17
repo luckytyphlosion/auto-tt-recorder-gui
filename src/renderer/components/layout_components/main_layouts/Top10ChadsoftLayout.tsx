@@ -73,26 +73,28 @@ export function Top10ChadsoftLayout(props: {isAutoTTRecRunning: boolean, formCom
 
       <FieldsetOr>
         <legend>Timeline-specific presentation settings</legend>
-        {
-          props.formComplexity > FormComplexity.SIMPLE ? 
-          <MKChannelGhostDescriptionInput/> : ""
-        }
+        <div className="like-input-group">
+          {
+            props.formComplexity > FormComplexity.SIMPLE ? 
+            <MKChannelGhostDescriptionInput/> : ""
+          }
 
-        <Top10TitleInput/>
+          <Top10TitleInput/>
 
-        {
-          props.formComplexity > FormComplexity.SIMPLE ? <Top10LocationInput/> : ""
-        }
+          {
+            props.formComplexity > FormComplexity.SIMPLE ? <Top10LocationInput/> : ""
+          }
 
-        {
-          props.formComplexity > FormComplexity.SIMPLE ? <>
-            
-            <TrackNameInput_Memo formComplexity={props.formComplexity}/>
-          </> : <TrackNameInput_Memo formComplexity={props.formComplexity}/>
-        }
-        {
-          props.formComplexity === FormComplexity.ALL ? <Top10CensorsInput/> : ""
-        }
+          {
+            props.formComplexity > FormComplexity.SIMPLE ? <>
+              
+              <TrackNameInput_Memo formComplexity={props.formComplexity}/>
+            </> : <TrackNameInput_Memo formComplexity={props.formComplexity}/>
+          }
+          {
+            props.formComplexity === FormComplexity.ALL ? <Top10CensorsInput/> : ""
+          }
+        </div>
       </FieldsetOr>
 
       <BackgroundMusicSourceInputAndMusicLayout timeline="top10" formComplexity={props.formComplexity}/>
