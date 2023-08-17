@@ -4,6 +4,7 @@ import { ValidateResult, Control, Controller, RefCallBack, UseFormSetValue, UseF
 import { useFormContextAutoTT } from "../use-form-context-auto-tt";
 import { AutoTTRecConfigFormChoiceArgName, AutoTTRecConfigFormChoiceArgs } from "../auto-tt-rec-form-field-types";
 import { SimpleErrorMessage } from "./SimpleErrorMessage";
+import { EmptyGridRow } from "./EmptyGridRow";
 
 import useRenderCounter from "../RenderCounter";
 
@@ -68,6 +69,7 @@ export function DeselectableRadioButtonGroup<K extends AutoTTRecConfigFormChoice
         props.noErrorMessage ? "" : <div className="grid-contents">
             <div className="start-label"></div>
             <div className="start-label-contents"><SimpleErrorMessage name={props.name}/></div>
+            <EmptyGridRow padding="0.25em"/>
           </div>
       }
       {renderCounter}
