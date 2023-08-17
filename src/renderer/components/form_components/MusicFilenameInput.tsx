@@ -38,7 +38,12 @@ export function MusicFilenameInput() {
           {name: "Music files", extensions: ["*"]}
         ]);
       }} type="button">Browse&#8230;</button>
-      <SimpleErrorMessage name="music-filename"/>
+      <div className="grid-contents">
+        <div className="start-label"></div>
+        <div className="start-label-contents">
+          <SimpleErrorMessage name="music-filename"/>
+        </div>
+      </div>
     </>
   );
 }
