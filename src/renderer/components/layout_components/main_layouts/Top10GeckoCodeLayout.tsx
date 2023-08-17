@@ -56,13 +56,15 @@ export function Top10GeckoCodeLayout(props: {isAutoTTRecRunning: boolean, formCo
       <FieldsetOr>
         <legend>Timeline-specific presentation settings</legend>
         <Top10GeckoCodeInput isAutoTTRecRunning={props.isAutoTTRecRunning}/>
-        {
-          props.formComplexity > FormComplexity.SIMPLE ? <>
-            <MKChannelGhostDescriptionInput/>
-            <Top10GeckoCodeLocationInput/>
-            <TrackNameInput_Memo formComplexity={props.formComplexity}/>
-          </> : <TrackNameInput_Memo formComplexity={props.formComplexity}/>
-        }
+        <div className="like-input-group">
+          {
+            props.formComplexity > FormComplexity.SIMPLE ? <>
+              <MKChannelGhostDescriptionInput/>
+              <Top10GeckoCodeLocationInput/>
+              <TrackNameInput_Memo formComplexity={props.formComplexity}/>
+            </> : <TrackNameInput_Memo formComplexity={props.formComplexity}/>
+          }
+        </div>
       </FieldsetOr>
 
       <BackgroundMusicSourceInputAndMusicLayout timeline="top10" formComplexity={props.formComplexity}/>

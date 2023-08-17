@@ -172,14 +172,24 @@ export class AutoTTRecConfigExporter {
     this.exportSharedBooleanArg("no-music");
     this.exportSharedStringArg("pixel-format");
     this.exportSharedChoiceArg("speedometer-metric");
-    this.exportSharedStringArg("top-10-chadsoft");
-    this.exportSharedStringArg("top-10-gecko-code-filename");
+
     this.exportSharedBooleanArg("use-ffv1");
     this.exportSharedChoiceArg("video-codec");
     this.exportSharedBooleanArg("youtube-settings");
     this.exportSharedStringArg("top-10-censors");
     this.exportSharedBooleanArg("ignore-auto-add-missing-files");
     this.exportSharedChoiceArg("purge-auto-add");
+  }
+
+  private exportTop10ChadsoftAndGeckoCodeFilename() {
+    let timelineCategory = this.getFormDataChoiceValue("timeline-category");
+    if (timelineCategory === "top10chadsoft") {
+      this.exportSharedStringArg("top-10-chadsoft");
+    } else if (timelineCategory == "top10gecko") {
+      this.exportArg("top-10-chadsoft", null);
+    }
+
+    this.exportSharedStringArg("top-10-gecko-code-filename");
   }
 
   private exportGhostPageAndFilename(isMainGhost: boolean) {
@@ -464,6 +474,7 @@ export class AutoTTRecConfigExporter {
   public export(): AutoTTRecExportArgs {
     if (!this.hasExported) {
       this.exportStraightCopyArgs();
+      this.exportTop10ChadsoftAndGeckoCodeFilename();
       this.exportGhostPageAndFilename(true);
       this.exportGhostPageAndFilename(false);
       this.exportAudioBitrate();
@@ -483,6 +494,7 @@ export class AutoTTRecConfigExporter {
       this.exportOutputVideoFilename();
       this.exportOutputWidth();
       this.exportSpeedometerStyle();
+      this.exportSpeedometerDecimalPlacesStr();
       this.exportSZSFilename();
       this.exportTimeline();
       this.exportTop10Highlight();

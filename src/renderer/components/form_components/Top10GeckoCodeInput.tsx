@@ -228,7 +228,7 @@ export function Top10GeckoCodeInput(props: {isAutoTTRecRunning: boolean}) {
   return (
     <div>
       <div>
-        <h3>Gecko code (create using <a href="https://tt-rec.com/customtop10">https://tt-rec.com/customtop10</a>)</h3>
+        {/*<h4>Top 10 Gecko code (create using <a href="https://tt-rec.com/customtop10">https://tt-rec.com/customtop10</a>)</h4>*/}
         <input type="hidden" {...register("top-10-gecko-code-unsaved")}/>
         <Modal
           overlayClassName="top-10-gecko-code-save-modal"
@@ -247,52 +247,66 @@ export function Top10GeckoCodeInput(props: {isAutoTTRecRunning: boolean}) {
           <button onClick={saveModal_cancel}>Cancel</button>
         </Modal>
 
-        <label htmlFor="top-10-gecko-code-filename">Filename:</label>
-        <ClearableReadonlyTextInput name="top-10-gecko-code-filename" notRequired={true} validate={geckoCodeValidator} setState={updateTop10GeckoCodeFilenameAfterRightClick}/>
+        <div className="like-input-group">
+          <div className="grid-contents">
+            <label className="start-label" htmlFor="top-10-gecko-code-filename">Top 10 Gecko Code Filename:</label>
+            <div className="start-label-contents">
+              <ClearableReadonlyTextInput name="top-10-gecko-code-filename" notRequired={true} validate={geckoCodeValidator} setState={updateTop10GeckoCodeFilenameAfterRightClick}/>
+              <button onClick={event => {
+                createNewFile(event);
+              }} type="button">New</button>
 
-        <button onClick={event => {
-          createNewFile(event);
-        }} type="button">New</button>
-        
 
-        <button onClick={event => {
-          openFile(event);
-        }} type="button">Open&#8230;</button>
+              <button onClick={event => {
+                openFile(event);
+              }} type="button">Open&#8230;</button>
 
-        <button onClick={event => {
-          queueSaveDialogAndWriteText(event, [
-            {name: "Text files", extensions: ["txt"]}
-          ]);
-        }} type="button">Save as&#8230;</button>
+              <button onClick={event => {
+                queueSaveDialogAndWriteText(event, [
+                  {name: "Text files", extensions: ["txt"]}
+                ]);
+              }} type="button">Save as&#8230;</button>
+            </div>
+            <div className="start-label"></div>
+            <div className="start-label-contents">
+            {
+              (isGeckoCodeUnsaved || top10GeckoCodeFilename === "" || top10GeckoCodeInvalid) ?
+                <SimpleErrorMessage name="top-10-gecko-code-filename"/>
+                : ""
+            }
+            </div>
+          </div>
+        </div>
       </div>
-      <div>
-        {
-          (isGeckoCodeUnsaved || top10GeckoCodeFilename === "" || top10GeckoCodeInvalid) ?
-            <SimpleErrorMessage name="top-10-gecko-code-filename"/> : ""
-        }
-        <h4>Gecko code {isGeckoCodeUnsaved ? "(Unsaved)" : ""}</h4>
-        <Controller
-          render={({
-            field: {onChange, onBlur, value, ref},
-            fieldState: {invalid, isTouched, isDirty, error},
-          }) => (
-            <CodeMirror
-              value={value}
-              height="16em"
-              width="15em"
-              theme={borderTheme}
-              editable={!props.isAutoTTRecRunning}
-              onChange={(event) => {
-                updateGeckoCodeUnsaved(true);
-                onChange(event);
-              }}
-              onBlur={onBlur}
-              ref={ref}
-            />
-          )}
-          name="top-10-gecko-code-contents"
-          control={control}
-        />
+      <div className="like-input-group">
+        <div className="grid-contents">
+        <label className="start-label">Gecko code contents{isGeckoCodeUnsaved ? " (Unsaved)" : ""}:<br/><strong>Create using:<br/><a href="https://tt-rec.com/customtop10">https://tt-rec.com/customtop10</a></strong></label>
+        <div className="start-label-contents">
+          <Controller
+            render={({
+              field: {onChange, onBlur, value, ref},
+              fieldState: {invalid, isTouched, isDirty, error},
+            }) => (
+              <CodeMirror
+                value={value}
+                height="16em"
+                width="15em"
+                theme={borderTheme}
+                editable={!props.isAutoTTRecRunning}
+                onChange={(event) => {
+                  updateGeckoCodeUnsaved(true);
+                  onChange(event);
+                }}
+                onBlur={onBlur}
+                ref={ref}
+              />
+            )}
+            name="top-10-gecko-code-contents"
+            control={control}
+          />
+        </div>
+      </div>
+
 
           
         {/*<textarea id="top-10-gecko-code-contents"

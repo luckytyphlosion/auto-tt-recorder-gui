@@ -219,10 +219,8 @@ export function ExtraGeckoCodesInput(props: {isAutoTTRecRunning: boolean}) {
           </div>
           {
             (isGeckoCodeUnsaved || extraGeckoCodesFilename === "") ?
-              <div className="like-input-group">
-                <div className="start-label">
-                  <SimpleErrorMessage name="extra-gecko-codes-filename"/>
-                </div>
+              <div className="start-label">
+                <SimpleErrorMessage name="extra-gecko-codes-filename"/>
               </div>
             : ""
           }
