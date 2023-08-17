@@ -11,9 +11,11 @@ export function Top10HighlightEnableInput() {
   const isValueOrFILLMEIsValue = isValueOrFILLMEIsValueMaker();
 
   return (
-    <div>
-      <label htmlFor="top-10-highlight-enable">Highlight Entry in Top 10 Leaderboard: </label>
-      <TriCheckbox name="top-10-highlight-enable"/>
+    <div className="grid-contents">
+      <label className="start-label" htmlFor="top-10-highlight-enable">Highlight Entry in Top 10 Leaderboard: </label>
+      <div className="start-label-contents">
+        <TriCheckbox name="top-10-highlight-enable" nameAsId={true}/>
+      </div>
       {
         isValueOrFILLMEIsValue(top10HighlightEnable, true) ? <Top10HighlightInput/> : ""
       }

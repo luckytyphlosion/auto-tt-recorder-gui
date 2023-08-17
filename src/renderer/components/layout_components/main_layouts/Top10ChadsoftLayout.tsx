@@ -43,6 +43,7 @@ import { PresentationSettingsLayout } from "../sub_layouts/PresentationSettingsL
 import { Top10CensorsInput } from "../../form_components/Top10CensorsInput";
 import { CustomizationSettingsLayout } from "../sub_layouts/CustomizationSettingsLayout";
 import { FieldsetOr } from "../../FieldsetOr";
+import { EmptyGridRow } from "../../EmptyGridRow";
 
 import useRenderCounter from "../../../RenderCounter";
 
@@ -57,17 +58,17 @@ export function Top10ChadsoftLayout(props: {isAutoTTRecRunning: boolean, formCom
     <div>
       <FieldsetOr>
         <legend>Ghosts and Track SZS</legend>
-        <Top10ChadsoftInput/>
-        <ComparisonGhostSourceInput/>
-        <br/>
-        <SZSSourceInput/>
-      
-      {
-        props.formComplexity > FormComplexity.SIMPLE ? <>
-          <br/>
-          <Top10HighlightEnableInput/>
-        </> : ""
-      }
+        <div className="like-input-group">
+          <Top10ChadsoftInput/>
+          <ComparisonGhostSourceInput/>
+          <SZSSourceInput/>
+          {
+            props.formComplexity > FormComplexity.SIMPLE ? <>
+              <EmptyGridRow padding="0.25em"/>
+              <Top10HighlightEnableInput/>
+            </> : ""
+          }
+        </div>
       </FieldsetOr>
 
       <FieldsetOr>

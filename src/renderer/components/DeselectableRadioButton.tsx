@@ -66,11 +66,7 @@ export function DeselectableRadioButtonGroup<K extends AutoTTRecConfigFormChoice
         })}/>
       </DeselectableRadioButtonsGroupContext.Provider>
       {
-        props.noErrorMessage ? "" : <div className="grid-contents">
-            <div className="start-label"></div>
-            <div className="start-label-contents"><SimpleErrorMessage name={props.name}/></div>
-            <EmptyGridRow padding="0.25em"/>
-          </div>
+        props.noErrorMessage ? "" : <SimpleErrorMessage name={props.name}/>
       }
       {renderCounter}
     </>
