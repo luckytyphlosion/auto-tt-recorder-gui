@@ -5,7 +5,7 @@ import useRenderCounter from "../../RenderCounter";
 import { ChadsoftComparisonGhostPageInput } from "./ChadsoftComparisonGhostPageInput";
 import { ComparisonGhostFilenameInput } from "./ComparisonGhostFilenameInput";
 
-import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../DeselectableRadioButton";
+import { DeselectableRadioButton, DeselectableRadioButtonGroupInGrid } from "../DeselectableRadioButton";
 
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
 
@@ -25,15 +25,11 @@ export function ComparisonGhostSourceInput() {
 
   return (
     <div className="grid-contents">
-      <label className="start-label">Comparison ghost source: </label>
-      <div className="start-label-contents">
-        <DeselectableRadioButtonGroup name="comparison-ghost-source">
-          <DeselectableRadioButton labelValue="Chadsoft link:" id="comparison-ghost-source-chadsoft" value="chadsoft" onChange={updateComparisonGhostSource}/>
-          <DeselectableRadioButton labelValue="RKG:" id="comparison-ghost-source-rkg" value="rkg" onChange={updateComparisonGhostSource}/>
-          <DeselectableRadioButton labelValue="None:" id="comparison-ghost-source-none" value="none" onChange={updateComparisonGhostSource}/>
-        </DeselectableRadioButtonGroup>
-      </div>
-      {renderCounter}
+      <DeselectableRadioButtonGroupInGrid name="comparison-ghost-source" startLabel="Comparison ghost source: " extraThirdColElements={renderCounter}>
+        <DeselectableRadioButton labelValue="Chadsoft link:" id="comparison-ghost-source-chadsoft" value="chadsoft" onChange={updateComparisonGhostSource}/>
+        <DeselectableRadioButton labelValue="RKG:" id="comparison-ghost-source-rkg" value="rkg" onChange={updateComparisonGhostSource}/>
+        <DeselectableRadioButton labelValue="None:" id="comparison-ghost-source-none" value="none" onChange={updateComparisonGhostSource}/>
+      </DeselectableRadioButtonGroupInGrid>
       {
         isValueOrFILLMEIsValue(comparisonGhostSource, "chadsoft") ? <ChadsoftComparisonGhostPageInput/> : ""
       }

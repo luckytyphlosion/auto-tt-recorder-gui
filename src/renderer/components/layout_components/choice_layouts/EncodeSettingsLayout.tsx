@@ -7,6 +7,7 @@ import { makeReadonlyArraySet, ValidValues } from "../../../../shared/array-set"
 
 import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../../DeselectableRadioButton";
 import { FieldsetOr } from "../../FieldsetOr";
+import { SimpleErrorMessage } from "../../SimpleErrorMessage";
 
 import useRenderCounter from "../../../RenderCounter";
 
@@ -33,12 +34,19 @@ export function EncodeSettingsLayout(props: {formComplexity: FormComplexity}) {
           <div className="grid-contents">
           <label className="start-label">Encode type: </label>
           <div className="start-label-contents">
-            <DeselectableRadioButtonGroup name="encode-type">
+            <DeselectableRadioButtonGroup name="encode-type" noErrorMessage={true}>
             <DeselectableRadioButton labelValue="CRF (For YouTube or offline): " id="encode-type-crf" value="crf" onChange={updateEncodeType}/>
               <DeselectableRadioButton labelValue="Size based (for Discord uploads): " id="encode-type-size" value="size" onChange={updateEncodeType}/>
             </DeselectableRadioButtonGroup>
             {renderCounter}
           </div>
+          <div className="grid-contents">
+            <div className="start-label"></div>
+            <div className="start-label-contents">
+              <SimpleErrorMessage name="encode-type"/>
+            </div>
+          </div>
+      
           <EncodeSettingsContentsLayout formComplexity={props.formComplexity} encodeType={encodeType}/>
           {
             props.formComplexity === FormComplexity.ALL ? <PixelFormatInput_Memo/> : ""

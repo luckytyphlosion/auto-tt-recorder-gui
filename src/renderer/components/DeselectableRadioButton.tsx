@@ -41,6 +41,23 @@ function useDeselectableRadioButtonsGroupContext() {
   return lastElement;
 }*/
 
+export function DeselectableRadioButtonGroupInGrid<K extends AutoTTRecConfigFormChoiceArgName>(props: {name: K, startLabel: string, notDeselectable?: boolean, inputRequiredMessage?: string, blockDisplay?: boolean, extraThirdColElements?: React.ReactNode, children?: React.ReactNode}) {
+  return (
+    <>
+      <label className="start-label">{props.startLabel}</label>
+      <div className="start-label-contents">
+        <DeselectableRadioButtonGroup name={props.name} noErrorMessage={true} blockDisplay={props.blockDisplay} notDeselectable={props.notDeselectable} inputRequiredMessage={props.inputRequiredMessage}>
+          {props.children}
+        </DeselectableRadioButtonGroup>
+      </div>
+      <div className="start-label-error">
+        <SimpleErrorMessage name={props.name}/>
+        {props.extraThirdColElements}
+      </div>
+    </>
+  );
+}
+
 export function DeselectableRadioButtonGroup<K extends AutoTTRecConfigFormChoiceArgName>(props: {name: K, noErrorMessage?: boolean, notDeselectable?: boolean, inputRequiredMessage?: string, blockDisplay?: boolean, children?: React.ReactNode}) {
   const {register} = useFormContextAutoTT();
   const renderCounter = useRenderCounter(true, `DeselectableRadioButtonGroup ${props.name}`);

@@ -26,6 +26,8 @@ export function SZSFilenameInput() {
             {name: "SZS files", extensions: ["szs"]}
           ]);
         }} type="button">Browse&#8230;</button>
+      </div>
+      <div className="start-label-error">
         <SimpleErrorMessage name="szs-filename"/>
       </div>
     </div>

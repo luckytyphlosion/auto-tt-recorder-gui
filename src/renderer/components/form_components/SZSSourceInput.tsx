@@ -8,7 +8,7 @@ import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
 export const SZS_SOURCES = makeReadonlyArraySet(["automatic", "fromfile"] as const);
 export type SZSSource = ValidValues<typeof SZS_SOURCES>;
 
-import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../DeselectableRadioButton";
+import { DeselectableRadioButton, DeselectableRadioButtonGroupInGrid } from "../DeselectableRadioButton";
 
 export function SZSSourceInput() {
   const {getValues} = useFormContextAutoTT();
@@ -22,14 +22,10 @@ export function SZSSourceInput() {
 
   return (
     <div className="grid-contents">
-      <label className="start-label">Track SZS: </label>
-      <div className="start-label-contents">
-        <DeselectableRadioButtonGroup name="szs-source" blockDisplay={true}>
-          <DeselectableRadioButton labelValue="Auto-download OR vanilla track:" id="szs-source-automatic" value="automatic" onChange={updateSZSSource}/>
-          <DeselectableRadioButton labelValue="Supply from SZS:" id="szs-source-from-file" value="fromfile" onChange={updateSZSSource}/>
-        </DeselectableRadioButtonGroup>
-      </div>
-      {renderCounter}
+      <DeselectableRadioButtonGroupInGrid name="szs-source" startLabel="Track SZS:" blockDisplay={true} extraThirdColElements={renderCounter}>
+        <DeselectableRadioButton labelValue="Auto-download OR vanilla track:" id="szs-source-automatic" value="automatic" onChange={updateSZSSource}/>
+        <DeselectableRadioButton labelValue="Supply from SZS:" id="szs-source-from-file" value="fromfile" onChange={updateSZSSource}/>
+      </DeselectableRadioButtonGroupInGrid>
       {
         isValueOrFILLMEIsValue(szsSource, "fromfile") ? <SZSFilenameInput/> : ''
       }

@@ -27,6 +27,8 @@ export function ChadsoftGhostPageInput() {
             }
           })}
         ></input>
+      </div>
+      <div className="start-label-error">
         <SimpleErrorMessage name="chadsoft-ghost-page"/>
         {renderCounter}
       </div>

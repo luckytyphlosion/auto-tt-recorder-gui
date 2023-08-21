@@ -1,7 +1,7 @@
 
 .like-input-group{
 	display: grid;
-	grid-template-columns: auto auto;
+	grid-template-columns: auto auto auto;
 	row-gap: 2px;
   column-gap: 5px;
   width: fit-content;
@@ -42,7 +42,7 @@
   }
 
   .start-label-contents {
-
+    width: fit-content;
   }
 }
 

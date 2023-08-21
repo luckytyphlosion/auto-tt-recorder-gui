@@ -26,6 +26,8 @@ export function ComparisonGhostFilenameInput() {
             {name: "RKG files", extensions: ["rkg"]}
           ]);
         }} type="button">Browse&#8230;</button>
+      </div>
+      <div className="start-label-error">
         <SimpleErrorMessage name="comparison-ghost-filename"/>
       </div>
     </div>

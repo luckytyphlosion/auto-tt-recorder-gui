@@ -30,6 +30,8 @@ export function MainGhostFilenameInput() {
               {name: "RKG files", extensions: ["rkg"]}
             ]);
           }} type="button">Browse&#8230;</button>
+        </div>
+        <div className="start-label-error">
           <SimpleErrorMessage name="main-ghost-filename"/>
         </div>
       </div>

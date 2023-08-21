@@ -23,6 +23,8 @@ export function ChadsoftComparisonGhostPageInput() {
             }
           })}
         ></input>
+      </div>
+      <div className="start-label-error">
         <SimpleErrorMessage name="chadsoft-comparison-ghost-page"/>
       </div>
     </div>
