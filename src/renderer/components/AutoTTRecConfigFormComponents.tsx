@@ -29,7 +29,7 @@ export function AutoTTRecConfigFormComponents(props: {
   onError: (errors: Object) => Promise<void> | void,
 }) {  
   const renderCounter = useRenderCounter(false, "AutoTTRecConfigFormComponents");
-  //console.log("Rendering AutoTTRecConfigFormComponents. forceUpdate: ", props.forceUpdate);
+  console.log("Rendering AutoTTRecConfigFormComponents. forceUpdate: ", props.forceUpdate);
 
   useEffect(() => {
     if (props.initialValidateFormOnOpen) {
@@ -37,11 +37,11 @@ export function AutoTTRecConfigFormComponents(props: {
       props.formMethods.handleSubmit(() => {}, props.onError)();
     }
   }, [props.initialValidateFormOnOpen]);
-
+  
   return (
     <div className="auto-tt-rec-config-form">
       <FormProvider {...props.formMethods}>
-        <input type="hidden" {...props.formMethods.register("expand-unselected-choice-inputs")}/>
+        {/*<input type="hidden" {...props.formMethods.register("expand-unselected-choice-inputs")}/>*/}
         <ISOWBFSFileInput_Memo/>
         <FormComplexityLayout_Memo isAutoTTRecRunning={props.isAutoTTRecRunning} unrenderFormToggle={props.unrenderFormToggle}/>
         {renderCounter}

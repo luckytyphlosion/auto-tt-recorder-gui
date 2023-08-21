@@ -10,6 +10,8 @@ import { AutoTTRecConfigErrorsAndWarnings } from "./auto-tt-rec-errors-and-warni
 
 import { FormComplexity } from "./components/layout_components/FormComplexityLayout";
 
+import { Set200cc } from "./components/form_components/Set200ccInput";
+
 function isFILLMEOrEmptyOrNull(x: any): x is "<FILLME>" | "" | null {
   return x === null || x === "" || x === "<FILLME>";
 }
@@ -43,12 +45,14 @@ export class AutoTTRecConfigImportPreprocessor {
     }
   }
 
-  private isAutoTTRecArgValueBoolean_ignoreNull<K extends AutoTTRecArgNameExtended>(argName: K): (boolean | null) {
+  private isAutoTTRecArgValueBoolean_ignoreNull<K extends AutoTTRecArgNameExtended>(argName: K): (boolean | null | "<FILLME>") {
     let value = this.autoTTRecConfig[argName];
     if (value === null) {
       return null;
     } else {
-      if (typeof value === "boolean") {
+      if (value === "<FILLME>") {
+        return "<FILLME>";
+      } else if (typeof value === "boolean") {
         return value;
       } else {
         this.errorsAndWarnings.addError(argName, `${argName} should be a boolean, but got ${typeof value} instead.`);
@@ -105,7 +109,9 @@ export class AutoTTRecConfigImportPreprocessor {
 
   private convertNo200cc() {
     let no200cc = this.isAutoTTRecArgValueBoolean_ignoreNull("no-200cc");
-    if (no200cc !== null) {
+    console.log("convertNo200cc no200cc:", no200cc);
+
+    if (no200cc !== null && no200cc !== "<FILLME>") {
       let on200cc = this.autoTTRecConfig["on-200cc"];
       if (on200cc !== null) {
         if (typeof on200cc === "boolean") {
@@ -120,11 +126,16 @@ export class AutoTTRecConfigImportPreprocessor {
       } else {
         this.autoTTRecConfig["on-200cc"] = !no200cc;
       }
-    } else {
-      this.autoTTRecConfig["on-200cc"] = false;
     }
 
-    this.autoTTRecConfig["set-200cc"] = this.autoTTRecConfig["on-200cc"] ? "on-200cc" : "no-200cc";
+    let on200cc = this.isAutoTTRecArgValueBoolean_ignoreNull("on-200cc");
+    let set200cc: Set200cc | null;
+    if (on200cc === "<FILLME>" || on200cc === null) {
+      set200cc = on200cc;
+    } else {
+      set200cc = on200cc ? "on-200cc" : "no-200cc";
+    }
+    this.autoTTRecConfig["set-200cc"] = set200cc;
   }
 
   private fixAspectRatio16By9Type() {

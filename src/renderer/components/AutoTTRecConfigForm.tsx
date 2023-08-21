@@ -122,16 +122,16 @@ export function AutoTTRecConfigForm(
   //console.trace();
   //console.log("props:", props);
 
-  //console.log("formMethods:", formMethods);
+  console.log("formMethods:", formMethods);
   //const isoWbfsFileInput = <ISOWBFSFileInput/>;
   //const mainGhostFilenameInput = <MainGhostFilenameInput arg={1}/>;
 
   let formState = formMethods.formState;
-  const getRunAutoTTRecOnSubmitCallback = () => {
+  /*const getRunAutoTTRecOnSubmitCallback = () => {
     return formMethods.handleSubmit(onSubmit, onError);
-  };
+  };*/
 
-  const formOnSubmitCallbackRef = useRef<() => React.FormEventHandler<HTMLFormElement>>(getRunAutoTTRecOnSubmitCallback);
+  //const formOnSubmitCallbackRef = useRef<() => React.FormEventHandler<HTMLFormElement>>(getRunAutoTTRecOnSubmitCallback);
 
   //
 
@@ -146,18 +146,17 @@ export function AutoTTRecConfigForm(
   const [submittedToggle, setSubmittedToggle] = useState(false);
   const [unrenderFormToggle, setUnrenderFormToggle] = useState(false);
   const [expandUnselectedChoiceInputs, setExpandUnselectedChoiceInputs] = useState(false);
+  //const [doNotTriggerRendersDueToErrors, setDoNotTriggerRendersDueToErrors] = useState(false);
 
   function updateExpandUnselectedChoiceInputs(event: React.ChangeEvent<HTMLInputElement>) {
     setExpandUnselectedChoiceInputs(event.target.checked);
   }
 
-/*
-  useEffect(() => {
-    //setTimeout(() => {
-      formMethods.reset(undefined, {keepValues: true, keepErrors: false});
-    //}, 1000);
-  }, [doNotTriggerRendersDueToErrors]);
-*/
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     formMethods.reset(undefined, {keepValues: true, keepErrors: false});
+  //   }, 1000);
+  // }, [doNotTriggerRendersDueToErrors]);
 
   async function onSubmit(formData: AutoTTRecConfigFormFields) {
     //setSubmittedToggle((submittedToggle) => !submittedToggle);
@@ -191,13 +190,13 @@ export function AutoTTRecConfigForm(
 
   return (
     <div>
-      <form onSubmit={formOnSubmitCallbackRef.current()}>
-        <LoadFormInputsTypeSelect disabled={props.isAutoTTRecRunning} initialValue={props.initialLoadFormInputsType}/>
+      <form onSubmit={formMethods.handleSubmit(onSubmit, onError)}>
+        {/*<LoadFormInputsTypeSelect disabled={props.isAutoTTRecRunning} initialValue={props.initialLoadFormInputsType}/>
         <br/>
         <strong>Other program settings:</strong>
         <ValidateFormOnOpen disabled={props.isAutoTTRecRunning} initialValue={props.validateFormOnOpen}/>
         <ExpandUnselectedChoiceInputs_Memo disabled={props.isAutoTTRecRunning} formMethods={formMethods}/>
-        <br/>
+  <br/>*/}
         <ImportTemplate_Memo disabled={props.isAutoTTRecRunning} formMethods={formMethods} setUnrenderFormToggle={setUnrenderFormToggle} onError={onError}/>
         <ClearAllFields_Memo disabled={props.isAutoTTRecRunning} formMethods={formMethods} setUnrenderFormToggle={setUnrenderFormToggle}/>
         {/*<label htmlFor="expand-unselected-choice-inputs">Expand unselected "choice" inputs (advanced)</label>

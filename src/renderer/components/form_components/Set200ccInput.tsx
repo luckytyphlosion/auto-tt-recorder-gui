@@ -14,7 +14,7 @@ export function Set200ccInput() {
     <div className="grid-contents">
       <label className="start-label">CC:</label>
       <div className="start-contents">
-        <DeselectableRadioButtonGroup name="set-200cc">
+        <DeselectableRadioButtonGroup name="set-200cc" errorBelow={true}>
           <DeselectableRadioButton labelValue="150cc: " id="no-200cc" value="no-200cc"/>
           <DeselectableRadioButton labelValue="200cc: " id="on-200cc" value="on-200cc"/>
         </DeselectableRadioButtonGroup>

@@ -41,7 +41,7 @@ function useDeselectableRadioButtonsGroupContext() {
   return lastElement;
 }*/
 
-export function DeselectableRadioButtonGroup<K extends AutoTTRecConfigFormChoiceArgName>(props: {name: K, noErrorMessage?: boolean, notDeselectable?: boolean, inputRequiredMessage?: string, blockDisplay?: boolean, children?: React.ReactNode}) {
+export function DeselectableRadioButtonGroup<K extends AutoTTRecConfigFormChoiceArgName>(props: {name: K, noErrorMessage?: boolean, errorBelow?: boolean, notDeselectable?: boolean, inputRequiredMessage?: string, blockDisplay?: boolean, children?: React.ReactNode}) {
   const {register} = useFormContextAutoTT();
   const renderCounter = useRenderCounter(true, `DeselectableRadioButtonGroup ${props.name}`);
   function validateDeselectableRadioButton(value: AutoTTRecConfigFormChoiceArgs[AutoTTRecConfigFormChoiceArgName]): ValidateResult {
@@ -69,7 +69,13 @@ export function DeselectableRadioButtonGroup<K extends AutoTTRecConfigFormChoice
         })}/>
       </DeselectableRadioButtonsGroupContext.Provider>
       {
-        props.noErrorMessage ? "" : <SimpleErrorMessage name={props.name}/>
+        props.noErrorMessage ? "" : 
+          props.errorBelow ? <div className="grid-contents">
+            <div className="start-label"></div>
+            <div className="start-label-contents">
+              <SimpleErrorMessage name={props.name}/>
+            </div>
+          </div> : <SimpleErrorMessage name={props.name}/>
       }
       {renderCounter}
     </>
