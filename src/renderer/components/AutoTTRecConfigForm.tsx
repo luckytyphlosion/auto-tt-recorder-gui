@@ -176,7 +176,7 @@ export function AutoTTRecConfigForm(
     await props.onSubmitCallback(autoTTRecArgs, setSubmittedToggle);
   }
 
-  async function onError(errors: Object) {
+  const onError = useCallback(async function (errors: Object) {
     let lastRecordedTemplateFilename = await window.api.getLastRecordedTemplateFilename();
     let formData = formMethods.getValues();
     await tryExportAutoTTRecConfigTemplate(formData, lastRecordedTemplateFilename);
@@ -186,7 +186,7 @@ export function AutoTTRecConfigForm(
     setSubmittedToggle((submittedToggle) => !submittedToggle);
     //setDoNotTriggerRendersDueToErrors((doNotTriggerRendersDueToErrors) => !doNotTriggerRendersDueToErrors);
     formMethods.reset(undefined, {keepValues: true, keepErrors: true});
-  }
+  }, []);
 
   return (
     <div>
