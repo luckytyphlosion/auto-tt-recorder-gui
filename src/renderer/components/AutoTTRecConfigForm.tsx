@@ -191,16 +191,16 @@ export function AutoTTRecConfigForm(
   return (
     <div>
       <form onSubmit={formMethods.handleSubmit(onSubmit, onError)}>
-        {/*<LoadFormInputsTypeSelect disabled={props.isAutoTTRecRunning} initialValue={props.initialLoadFormInputsType}/>
+        <LoadFormInputsTypeSelect disabled={props.isAutoTTRecRunning} initialValue={props.initialLoadFormInputsType}/>
         <br/>
         <strong>Other program settings:</strong>
         <ValidateFormOnOpen disabled={props.isAutoTTRecRunning} initialValue={props.validateFormOnOpen}/>
         <ExpandUnselectedChoiceInputs_Memo disabled={props.isAutoTTRecRunning} formMethods={formMethods}/>
-  <br/>*/}
+  <br/>
         <ImportTemplate_Memo disabled={props.isAutoTTRecRunning} formMethods={formMethods} setUnrenderFormToggle={setUnrenderFormToggle} onError={onError}/>
         <ClearAllFields_Memo disabled={props.isAutoTTRecRunning} formMethods={formMethods} setUnrenderFormToggle={setUnrenderFormToggle}/>
-        {/*<label htmlFor="expand-unselected-choice-inputs">Expand unselected "choice" inputs (advanced)</label>
-        <input id="expand-unselected-choice-inputs" type="checkbox" checked={expandUnselectedChoiceInputs} onChange={updateExpandUnselectedChoiceInputs}/>*/}
+        <label htmlFor="expand-unselected-choice-inputs">Expand unselected "choice" inputs (advanced)</label>
+        <input id="expand-unselected-choice-inputs" type="checkbox" checked={expandUnselectedChoiceInputs} onChange={updateExpandUnselectedChoiceInputs}/>
         <fieldset disabled={props.isAutoTTRecRunning}>
           <AutoTTRecConfigFormComponents_Memo formMethods={formMethods} forceUpdate={submittedToggle} unrenderFormToggle={unrenderFormToggle} isAutoTTRecRunning={props.isAutoTTRecRunning} expandUnselectedChoiceInputs={expandUnselectedChoiceInputs} initialValidateFormOnOpen={props.validateFormOnOpen} onError={onError}/>
         </fieldset>

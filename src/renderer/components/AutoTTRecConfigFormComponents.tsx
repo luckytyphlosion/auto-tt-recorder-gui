@@ -41,7 +41,7 @@ export function AutoTTRecConfigFormComponents(props: {
   return (
     <div className="auto-tt-rec-config-form">
       <FormProvider {...props.formMethods}>
-        {/*<input type="hidden" {...props.formMethods.register("expand-unselected-choice-inputs")}/>*/}
+        <input type="hidden" {...props.formMethods.register("expand-unselected-choice-inputs")}/>
         <ISOWBFSFileInput_Memo/>
         <FormComplexityLayout_Memo isAutoTTRecRunning={props.isAutoTTRecRunning} unrenderFormToggle={props.unrenderFormToggle}/>
         {renderCounter}
