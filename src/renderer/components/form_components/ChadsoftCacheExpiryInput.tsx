@@ -1,9 +1,6 @@
 import React from "react";
-import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
-import { SimpleErrorMessage } from "../SimpleErrorMessage";
 import { ValidateResult } from "react-hook-form";
-
-import useRenderCounter from "../../RenderCounter";
+import { TextInput } from "../TextInput";
 
 const durationRegex = /^(?:([0-9]+)h)?(?:([0-9]+)m)?(?:([0-9]+)s?)?(?<=.)$/;
 
@@ -16,16 +13,12 @@ function isNotNaNAndInfinite(num: number) {
 }
 
 export function ChadsoftCacheExpiryInput() {
-  const {register} = useFormContextAutoTT();
-
-  const renderCounter = useRenderCounter(false, "ChadsoftCacheExpiryInput");
-
   async function validateChadsoftCacheExpiry(chadsoftCacheExpiry: string): Promise<ValidateResult> {
     const matchObj = chadsoftCacheExpiry.trim().match(durationRegex);
     let errorMessage = "";
 
     if (matchObj !== null) {
-      console.log("ChadsoftCacheExpiryInput matchObj", matchObj);
+      //console.log("ChadsoftCacheExpiryInput matchObj", matchObj);
       let hours = Number(matchObj[1]);
       let minutes = Number(matchObj[2]);
       let seconds = Number(matchObj[3]);
@@ -47,21 +40,6 @@ export function ChadsoftCacheExpiryInput() {
   }
 
   return (
-    <div className="grid-contents">
-      <label className="start-label" htmlFor="chadsoft-cache-expiry">How long until cached files should be purged (chadsoft-cache-expiry): </label>
-      <div className="start-label-contents">
-        <input type="text" id="chadsoft-cache-expiry"
-          {...register("chadsoft-cache-expiry", {
-            required: {
-              value: true,
-              message: "This input is required."
-            },
-            validate: validateChadsoftCacheExpiry
-          })}
-        ></input>
-        <SimpleErrorMessage name="chadsoft-cache-expiry"/>
-        {renderCounter}
-      </div>
-    </div>
+    <TextInput name="chadsoft-cache-expiry" startLabel="How long until cached files should be purged (chadsoft-cache-expiry): " validate={validateChadsoftCacheExpiry}/>
   );
 }
