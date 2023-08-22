@@ -36,7 +36,7 @@ export function OutputVideoFilenameInput(props: {noTop10CategoryIsNoEncode: bool
       outputVideoFileFormat = getValues("output-video-file-format");
     }
   
-    console.log("getAllowedOutputVideoFileFormat outputVideoFileFormat: ", outputVideoFileFormat);
+    //console.log("getAllowedOutputVideoFileFormat outputVideoFileFormat: ", outputVideoFileFormat);
     return outputVideoFileFormat;
   }
 

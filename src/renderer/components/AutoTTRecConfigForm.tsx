@@ -122,9 +122,15 @@ export function AutoTTRecConfigForm(
   //console.trace();
   //console.log("props:", props);
 
-  console.log("formMethods:", formMethods);
+  //console.log("formMethods:", formMethods);
   //const isoWbfsFileInput = <ISOWBFSFileInput/>;
   //const mainGhostFilenameInput = <MainGhostFilenameInput arg={1}/>;
+  const [submittedToggle, setSubmittedToggle] = useState(false);
+  const [unrenderFormToggle, setUnrenderFormToggle] = useState(false);
+  const [forceUpdateToggle, setForceUpdateToggle] = useState(false);
+  const renderCount = useRef(0);
+  renderCount.current = renderCount.current + 1;
+  //console.log("AutoTTRecConfigForm renderCount:", renderCount.current, ", forceUpdateToggle:", forceUpdateToggle);
 
   let formState = formMethods.formState;
   /*const getRunAutoTTRecOnSubmitCallback = () => {
@@ -143,9 +149,11 @@ export function AutoTTRecConfigForm(
   //   formOnSubmitCallbackRef.current = validateFormArgsOnlyOnSubmitCallback;
   // }, []);
 
-  const [submittedToggle, setSubmittedToggle] = useState(false);
-  const [unrenderFormToggle, setUnrenderFormToggle] = useState(false);
+
+
   //const [doNotTriggerRendersDueToErrors, setDoNotTriggerRendersDueToErrors] = useState(false);
+
+  //console.log("submittedToggle: ", submittedToggle);
 
   // useEffect(() => {
   //   setTimeout(() => {
@@ -153,13 +161,22 @@ export function AutoTTRecConfigForm(
   //   }, 1000);
   // }, [doNotTriggerRendersDueToErrors]);
 
+  if (props.validateFormOnOpen) {
+    useEffect(() => {
+      // very unstable hack. figure out how to fix this
+      if (formState.submitCount === 2) {
+        console.log("in AutoTTRecConfigForm useEffect, formState.submitCount:", formState.submitCount);
+        setForceUpdateToggle((forceUpdateToggle) => (!forceUpdateToggle));        
+      }
+    }, [formState.submitCount]);  
+  }
+
   async function onSubmit(formData: AutoTTRecConfigFormFields) {
-    //setSubmittedToggle((submittedToggle) => !submittedToggle);
     let lastRecordedTemplateFilename = await window.api.getLastRecordedTemplateFilename();
     await tryExportAutoTTRecConfigTemplate(formData, lastRecordedTemplateFilename);
 
     console.log("onSubmit");
-    formMethods.reset(undefined, {keepValues: true, keepIsValid: true});
+    formMethods.reset(undefined, {keepValues: true, keepIsValid: true, keepSubmitCount: true});
     console.log(formData);
     console.log("formState.dirtyFields:", formState.dirtyFields);
     console.log("formState.touchedFields:", formState.touchedFields);
@@ -168,19 +185,31 @@ export function AutoTTRecConfigForm(
     console.log("autoTTRecArgs:", autoTTRecArgs);
     console.log("formState.isSubmitSuccessful:", formState.isSubmitSuccessful);
     console.log("formState.isSubmitted:", formState.isSubmitted);
-    await props.onSubmitCallback(autoTTRecArgs, setSubmittedToggle);
+    await props.onSubmitCallback(autoTTRecArgs, setSubmittedToggleWrapper);
   }
+
+  const setSubmittedToggleWrapper = useCallback(function (setStateValue: React.SetStateAction<boolean>) {
+    console.log("In setSubmittedToggleWrapper");
+    console.trace();
+    setSubmittedToggle(setStateValue);
+    console.log("In setSubmittedToggleWrapper after calling setStateValue");
+  }, []);
 
   const onError = useCallback(async function (errors: Object) {
     let lastRecordedTemplateFilename = await window.api.getLastRecordedTemplateFilename();
     let formData = formMethods.getValues();
     await tryExportAutoTTRecConfigTemplate(formData, lastRecordedTemplateFilename);
-    console.log("errors:", errors);
-    console.log("formState.dirtyFields:", formState.dirtyFields);
-    console.log("formState.touchedFields:", formState.touchedFields);
-    setSubmittedToggle((submittedToggle) => !submittedToggle);
+    console.log("errors in onError:", errors);
+    setForceUpdateToggle((forceUpdateToggle) => (!forceUpdateToggle));
+    //console.log("formState.dirtyFields:", formState.dirtyFields);
+    //console.log("formState.touchedFields:", formState.touchedFields);
+    //console.log("onError outside of setSubmittedToggle submittedToggle:", submittedToggle);
+    /*setSubmittedToggleWrapper((submittedToggle2) => {
+      console.log("onError in setSubmittedToggle submittedToggle:", submittedToggle2);
+      return !submittedToggle2;
+    });*/
     //setDoNotTriggerRendersDueToErrors((doNotTriggerRendersDueToErrors) => !doNotTriggerRendersDueToErrors);
-    formMethods.reset(undefined, {keepValues: true, keepErrors: true});
+    formMethods.reset(undefined, {keepValues: true, keepErrors: true, keepSubmitCount: true});
   }, []);
 
   return (
@@ -195,7 +224,7 @@ export function AutoTTRecConfigForm(
         <ImportTemplate_Memo disabled={props.isAutoTTRecRunning} formMethods={formMethods} setUnrenderFormToggle={setUnrenderFormToggle} onError={onError}/>
         <ClearAllFields_Memo disabled={props.isAutoTTRecRunning} formMethods={formMethods} setUnrenderFormToggle={setUnrenderFormToggle}/>
         <fieldset disabled={props.isAutoTTRecRunning}>
-          <AutoTTRecConfigFormComponents_Memo formMethods={formMethods} forceUpdate={submittedToggle} unrenderFormToggle={unrenderFormToggle} isAutoTTRecRunning={props.isAutoTTRecRunning} initialValidateFormOnOpen={props.validateFormOnOpen} onError={onError}/>
+          <AutoTTRecConfigFormComponents_Memo formMethods={formMethods} forceUpdate={forceUpdateToggle} unrenderFormToggle={unrenderFormToggle} isAutoTTRecRunning={props.isAutoTTRecRunning} initialValidateFormOnOpen={props.validateFormOnOpen}/>
         </fieldset>
         <AutoTTRecSubmitAbortButtons_Memo isAutoTTRecRunning={props.isAutoTTRecRunning} onAbortCallback={props.onAbortCallback} setRunAutoTTRecOnSubmitCallback={(() => {}) as any}/>
       </form>

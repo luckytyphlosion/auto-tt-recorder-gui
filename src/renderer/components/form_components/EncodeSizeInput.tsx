@@ -43,7 +43,6 @@ export function EncodeSizeInput(props: {addSizeBasedReminderToLabel: boolean}) {
       encodeSize = encodeSizeDisplayed;
     }
     setValue("encode-size", encodeSize, {shouldTouch: true});
-    console.log("encodeSize:", encodeSize);
   }
 
   function updateEncodeSizeUnit(event?: Event) {
@@ -55,8 +54,8 @@ export function EncodeSizeInput(props: {addSizeBasedReminderToLabel: boolean}) {
       encodeSizeDisplayed = NaN;
     } else {
       let encodeSize = getValues("encode-size");
-      console.log("updateEncodeSizeUnit encodeSizeUnit:", encodeSizeUnit);
-      console.log("updateEncodeSizeUnit encodeSize:", encodeSize);
+      //console.log("updateEncodeSizeUnit encodeSizeUnit:", encodeSizeUnit);
+      //console.log("updateEncodeSizeUnit encodeSize:", encodeSize);
       let useDefaultEncodeSize = false;
   
   
@@ -86,7 +85,7 @@ export function EncodeSizeInput(props: {addSizeBasedReminderToLabel: boolean}) {
 
   function validateEncodeSize(value: number) : ValidateResult {
     let encodeSizeUnit = getValues("encode-size-unit");
-    console.log("encodeSizeUnit: ", encodeSizeUnit);
+    //console.log("encodeSizeUnit: ", encodeSizeUnit);
     if (encodeSizeUnit === "<FILLME>") {
       return "Must select a file size unit."
     } else if (Number.isNaN(value)) {

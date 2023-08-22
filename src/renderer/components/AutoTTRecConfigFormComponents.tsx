@@ -1,4 +1,4 @@
-import React, { memo, useState, useEffect } from "react";
+import React, { memo, useState, useCallback, useEffect, useRef } from "react";
 
 
 
@@ -24,16 +24,28 @@ export function AutoTTRecConfigFormComponents(props: {
   forceUpdate: boolean,
   unrenderFormToggle: boolean,
   isAutoTTRecRunning: boolean,
-  initialValidateFormOnOpen: boolean,
-  onError: (errors: Object) => Promise<void> | void,
+  initialValidateFormOnOpen: boolean
 }) {  
   const renderCounter = useRenderCounter(false, "AutoTTRecConfigFormComponents");
   console.log("Rendering AutoTTRecConfigFormComponents. forceUpdate: ", props.forceUpdate);
+  //const [validateFormOnOpenForceUpdate, setValidateFormOnOpenForceUpdate] = useState(false);
+
+  const onErrorNoExport = useCallback(function (errors: Object) {
+    console.log("onErrorNoExport props.formMethods:", props.formMethods);
+    props.formMethods.reset(undefined, {keepValues: true, keepErrors: true, keepSubmitCount: true});
+    console.log("onErrorNoExport after reset");
+  }, []);
+
+  const initialValidateFormOnOpenHandleSubmit = useCallback(props.formMethods.handleSubmit(() => {}, onErrorNoExport), []);
+
+
 
   useEffect(() => {
-    if (props.initialValidateFormOnOpen) {
-      console.log("ValidateFormOnOpen formMethods.formState:", props.formMethods.formState);
-      props.formMethods.handleSubmit(() => {}, props.onError)();
+    //console.log("AutoTTRecConfigFormComponents useEffect renderCount:", renderCount.current);
+    if (props.initialValidateFormOnOpen && props.formMethods.formState.submitCount === 0) {
+      console.log("ValidateFormOnOpen formMethods.formState:", props.formMethods.formState, ", submitCount:", props.formMethods.formState.submitCount);
+      initialValidateFormOnOpenHandleSubmit();
+      //setValidateFormOnOpenForceUpdate((validateFormOnOpenForceUpdate) => (!validateFormOnOpenForceUpdate));
     }
   }, [props.initialValidateFormOnOpen]);
   

@@ -59,7 +59,7 @@ export function AutoTTRecManager(props: {
       .catch((err: Error) => {
         setProgramStatusHeader("Error");
         setProgramStatusDetails(err.message);
-        setSubmittedToggle((submittedToggle) => (!submittedToggle));
+        //setSubmittedToggle((submittedToggle) => (!submittedToggle));
       });
 
     if (spawnSuccessful) {

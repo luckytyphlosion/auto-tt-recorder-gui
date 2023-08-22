@@ -19,7 +19,7 @@ export function MusicFilenameInput() {
 
   async function validateBackgroundMusicSourceAndCheckIsFileReadable(value: string) {
     let backgroundMusicSource = getValues("background-music-source");
-    console.log("validateBackgroundMusicSourceAndCheckIsFileReadable backgroundMusicSource:", backgroundMusicSource);
+    //console.log("validateBackgroundMusicSourceAndCheckIsFileReadable backgroundMusicSource:", backgroundMusicSource);
     if (backgroundMusicSource === "<FILLME>") {
       return "Background music source (dropdown) is required.";
     } else if (value === "") {
