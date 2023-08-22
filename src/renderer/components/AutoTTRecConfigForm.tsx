@@ -115,6 +115,7 @@ export function AutoTTRecConfigForm(
   const renderCounter = useRenderCounter(false, "AutoTTRecConfigForm");
   const formMethods = useForm<AutoTTRecConfigFormFields>({
     criteriaMode: "all",
+    mode: "onSubmit",
     reValidateMode: "onSubmit",
     defaultValues: props.INITIAL_FORM_DATA
   });
@@ -122,7 +123,7 @@ export function AutoTTRecConfigForm(
   //console.trace();
   //console.log("props:", props);
 
-  //console.log("formMethods:", formMethods);
+  console.log("formMethods:", formMethods);
   //const isoWbfsFileInput = <ISOWBFSFileInput/>;
   //const mainGhostFilenameInput = <MainGhostFilenameInput arg={1}/>;
   const [unrenderFormToggle, setUnrenderFormToggle] = useState(false);

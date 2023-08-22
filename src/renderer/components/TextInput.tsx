@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useFormContextAutoTT, useTriggerAndRerenderAutoTT } from "../use-form-context-auto-tt";
 import { SimpleErrorMessage } from "./SimpleErrorMessage";
 import { AutoTTRecConfigFormStringArgName, AutoTTRecConfigFormFields } from "../auto-tt-rec-form-field-types";
@@ -8,14 +8,16 @@ import useRenderCounter from "../RenderCounter";
 
 export function TextInput<K extends AutoTTRecConfigFormStringArgName>(props: {name: K, startLabel: string, notRequired?: boolean, requiredMessage?: string, pattern?: ValidationRule<RegExp>, validate?: Validate<string, AutoTTRecConfigFormFields>}) {
   const {register} = useFormContextAutoTT();
-  const triggerAndRerender = useTriggerAndRerenderAutoTT();
-
+  const triggerAndRerender = useTriggerAndRerenderAutoTT(props.name);
+  const textInputCounterRef = useRef(0);
+  textInputCounterRef.current = textInputCounterRef.current + 1;
+  console.log(`TextInput-${props.name}: ${textInputCounterRef.current}`);
   //console.log("formState.isSubmitted:", formState.isSubmitted);
   const renderCounter = useRenderCounter(false, `${props.name}-Input`);
 
   async function onBlur(e: React.FocusEvent<HTMLInputElement>) {
     //console.log(e);
-    await triggerAndRerender(props.name);
+    await triggerAndRerender();
   }
 
   return (
