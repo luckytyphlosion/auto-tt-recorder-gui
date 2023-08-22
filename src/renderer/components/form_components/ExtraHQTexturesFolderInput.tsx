@@ -45,9 +45,9 @@ export function ExtraHQTexturesFolderInput() {
         {
           isValueOrFILLMEIsValue(extraHQTexturesFolderEnable, true) ? <>
             <ClearableReadonlyTextInput name="extra-hq-textures-folder" notRequired={true} validate={validateExtraHQTexturesFolder}/>
-            <button onClick={event => {
+            <button type="button" onClick={event => {
               queueOpenFolderDialog(event);
-            }} type="button">Browse&#8230;</button>
+            }}>Browse&#8230;</button>
             <SimpleErrorMessage name="extra-hq-textures-folder"/>
           </> : ""
         }

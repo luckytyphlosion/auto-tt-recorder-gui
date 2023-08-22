@@ -75,8 +75,8 @@ export function ClearAllFields(props: {
 
   return (
     <div>
-    <button disabled={props.disabled} onClick={onClickClearAllFields}>Clear all fields...</button>
-    <button disabled={props.disabled} onClick={onClickResetAllFields}>Reset all fields to defaults...</button>
+    <button type="button" disabled={props.disabled} onClick={onClickClearAllFields}>Clear all fields...</button>
+    <button type="button" disabled={props.disabled} onClick={onClickResetAllFields}>Reset all fields to defaults...</button>
     <Modal
       overlayClassName="extra-gecko-codes-save-modal"
       className="extra-gecko-codes-save-modal-contents"
@@ -92,15 +92,15 @@ export function ClearAllFields(props: {
             "Are you SURE you want to reset all input fields to defaults?" : 
             "Are you SURE you want to clear all input fields?"
           }</h3>
-          <button onClick={clearOrResetAllFieldsModal_confirm}>Yes</button>
-          <button onClick={clearOrResetAllFieldsModal_cancel}>No</button>
+          <button type="button" onClick={clearOrResetAllFieldsModal_confirm}>Yes</button>
+          <button type="button" onClick={clearOrResetAllFieldsModal_cancel}>No</button>
         </> : modalState === ClearAllFieldsModalState.RESET_OR_CLEAR_HAPPENED ? <>
           <h3>{
             isFormWipeTypeReset ?
             "All input fields have been reset to default." : 
             "All input fields have been cleared."
           }</h3>
-          <button onClick={clearOrResetAllFieldsModal_closeAndToggleUnrenderForm}>Ok</button>
+          <button type="button" onClick={clearOrResetAllFieldsModal_closeAndToggleUnrenderForm}>Ok</button>
         </> : ""
       }
     </Modal>

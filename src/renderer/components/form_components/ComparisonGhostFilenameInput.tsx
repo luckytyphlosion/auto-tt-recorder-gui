@@ -21,11 +21,11 @@ export function ComparisonGhostFilenameInput() {
       <label htmlFor="comparison-ghost-filename" className="start-label">Comparison RKG file: </label>
       <div className="start-label-contents">
         <ClearableReadonlyTextInput name="comparison-ghost-filename" validate={isFileReadable}/>
-        <button onClick={event => {
+        <button type="button" onClick={event => {
           queueOpenDialog(event, [
             {name: "RKG files", extensions: ["rkg"]}
           ]);
-        }} type="button">Browse&#8230;</button>
+        }}>Browse&#8230;</button>
         <SimpleErrorMessage name="comparison-ghost-filename"/>
       </div>
     </div>

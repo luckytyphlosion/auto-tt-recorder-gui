@@ -21,11 +21,11 @@ export function SZSFilenameInput() {
       <label htmlFor="szs-filename" className="start-label">SZS Filename: </label>
       <div className="start-label-contents">
         <ClearableReadonlyTextInput name="szs-filename" validate={isFileReadable}/>
-        <button onClick={event => {
+        <button type="button" onClick={event => {
           queueOpenDialog(event, [
             {name: "SZS files", extensions: ["szs"]}
           ]);
-        }} type="button">Browse&#8230;</button>
+        }}>Browse&#8230;</button>
         <SimpleErrorMessage name="szs-filename"/>
       </div>
     </div>

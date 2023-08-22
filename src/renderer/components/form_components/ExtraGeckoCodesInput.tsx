@@ -190,9 +190,9 @@ export function ExtraGeckoCodesInput(props: {isAutoTTRecRunning: boolean}) {
 
             </h4>
           }
-          <button onClick={saveModal_saveChanges}>Yes</button>
-          <button onClick={saveModal_discardChanges}>No</button>
-          <button onClick={saveModal_cancel}>Cancel</button>
+          <button type="button" onClick={saveModal_saveChanges}>Yes</button>
+          <button type="button" onClick={saveModal_discardChanges}>No</button>
+          <button type="button" onClick={saveModal_cancel}>Cancel</button>
         </Modal>
 
         <div className="like-input-group">
@@ -201,20 +201,20 @@ export function ExtraGeckoCodesInput(props: {isAutoTTRecRunning: boolean}) {
             <div className="start-label-contents">
               <ClearableReadonlyTextInput name="extra-gecko-codes-filename" notRequired={true} validate={geckoCodeValidator} setState={updateExtraGeckoCodesFilenameAfterRightClick}/>
 
-              <button onClick={event => {
-              createNewFile(event);
-              }} type="button">New</button>
+              <button type="button" onClick={event => {
+                createNewFile(event);
+              }}>New</button>
 
 
-              <button onClick={event => {
-              openFile(event);
-              }} type="button">Open&#8230;</button>
+              <button type="button" onClick={event => {
+                openFile(event);
+              }}>Open&#8230;</button>
 
-              <button onClick={event => {
+              <button type="button" onClick={event => {
               queueSaveDialogAndWriteText(event, [
                 {name: "ini files", extensions: ["ini"]}
               ]);
-              }} type="button">Save as&#8230;</button>
+              }}>Save as&#8230;</button>
             </div>
           </div>
           {

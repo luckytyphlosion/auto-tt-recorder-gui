@@ -242,9 +242,9 @@ export function Top10GeckoCodeInput(props: {isAutoTTRecRunning: boolean}) {
             <h4>Save gecko code file "{top10GeckoCodeFilename}"?</h4>
             : <h4>Save Untitled gecko code file?</h4>
           }
-          <button onClick={saveModal_saveChanges}>Yes</button>
-          <button onClick={saveModal_discardChanges}>No</button>
-          <button onClick={saveModal_cancel}>Cancel</button>
+          <button type="button" onClick={saveModal_saveChanges}>Yes</button>
+          <button type="button" onClick={saveModal_discardChanges}>No</button>
+          <button type="button" onClick={saveModal_cancel}>Cancel</button>
         </Modal>
 
         <div className="like-input-group">
@@ -252,20 +252,20 @@ export function Top10GeckoCodeInput(props: {isAutoTTRecRunning: boolean}) {
             <label className="start-label" htmlFor="top-10-gecko-code-filename">Top 10 Gecko Code Filename:</label>
             <div className="start-label-contents">
               <ClearableReadonlyTextInput name="top-10-gecko-code-filename" notRequired={true} validate={geckoCodeValidator} setState={updateTop10GeckoCodeFilenameAfterRightClick}/>
-              <button onClick={event => {
+              <button type="button" onClick={event => {
                 createNewFile(event);
-              }} type="button">New</button>
+              }}>New</button>
 
 
-              <button onClick={event => {
+              <button type="button" onClick={event => {
                 openFile(event);
-              }} type="button">Open&#8230;</button>
+              }}>Open&#8230;</button>
 
-              <button onClick={event => {
+              <button type="button" onClick={event => {
                 queueSaveDialogAndWriteText(event, [
                   {name: "Text files", extensions: ["txt"]}
                 ]);
-              }} type="button">Save as&#8230;</button>
+              }}>Save as&#8230;</button>
             </div>
             <div className="start-label"></div>
             <div className="start-label-contents">

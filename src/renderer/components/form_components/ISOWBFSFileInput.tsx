@@ -26,11 +26,11 @@ export function ISOWBFSFileInput() {
     <div>
       <label htmlFor="iso-filename">ISO or WBFS: </label>
       <ClearableReadonlyTextInput name="iso-filename" validate={isFileReadable}/>
-      <button onClick={event => {
+      <button type="button" onClick={event => {
         queueOpenDialog(event, [
           {name: "ISO/WBFS files", extensions: ["iso", "wbfs"]}
         ]);
-      }} type="button">Browse&#8230;</button>
+      }}>Browse&#8230;</button>
       <SimpleErrorMessage name="iso-filename"/>
       {renderCounter}
     </div>

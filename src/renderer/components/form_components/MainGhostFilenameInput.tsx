@@ -25,11 +25,11 @@ export function MainGhostFilenameInput() {
         <label htmlFor="main-ghost-filename" className="start-label">RKG file to record:</label>
         <div className="start-label-contents">
           <ClearableReadonlyTextInput name="main-ghost-filename" validate={isFileReadable}/>
-          <button onClick={event => {
+          <button type="button" onClick={event => {
             queueOpenDialog(event, [
               {name: "RKG files", extensions: ["rkg"]}
             ]);
-          }} type="button">Browse&#8230;</button>
+          }}>Browse&#8230;</button>
           <SimpleErrorMessage name="main-ghost-filename"/>
         </div>
       </div>

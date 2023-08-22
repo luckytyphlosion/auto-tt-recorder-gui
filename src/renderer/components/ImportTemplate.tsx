@@ -40,6 +40,7 @@ export function ImportTemplate(props: {
   //const formDataRef = useRef<AutoTTRecConfigFormFields | null>(null);
 
   async function onClickImportTemplate(event: React.MouseEvent<HTMLButtonElement>) {
+    console.log("In onClickImportTemplate");
     event.preventDefault();
     let newAutoTTRecTemplateFilename = await window.api.openFileDialog([{name: "YAML files", extensions: ["yml"]}], autoTTRecTemplateFilename, "template");
     if (newAutoTTRecTemplateFilename !== "") {
@@ -155,8 +156,8 @@ export function ImportTemplate(props: {
         <button onClick={importExportTemplateModal_cancel}>Ok</button>
       </Modal>
 
-      <button disabled={props.disabled} onClick={onClickImportTemplate}>Import template...</button>
-      <button disabled={props.disabled} onClick={onClickExportTemplate}>Export template...</button>
+      <button type="button" disabled={props.disabled} onClick={onClickImportTemplate}>Import template...</button>
+      <button type="button" disabled={props.disabled} onClick={onClickExportTemplate}>Export template...</button>
     </div>
   )
 }

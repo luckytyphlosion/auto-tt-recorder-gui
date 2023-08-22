@@ -66,7 +66,7 @@ export function OutputVideoFilenameInput(props: {noTop10CategoryIsNoEncode: bool
       <FieldsetOr>
         <legend>Output filename:</legend>
         <ClearableReadonlyTextInput className="filename-input" name="output-video-filename" validate={validateOutputVideoFilename}/>
-        <button onClick={async (event) => {
+        <button type="button" onClick={async (event) => {
           let outputVideoFileFormat = getAllowedOutputVideoFileFormat();
           let fileFilters: FileFilter[];
           if (outputVideoFileFormat === "<FILLME>") {
@@ -79,7 +79,7 @@ export function OutputVideoFilenameInput(props: {noTop10CategoryIsNoEncode: bool
             ];
           }
           await queueSaveDialog(event, fileFilters);  
-        }} type="button">Export as&#8230;</button>
+        }}>Export as&#8230;</button>
         <SimpleErrorMessage name="output-video-filename"/>
         {renderCounter}
       </FieldsetOr>

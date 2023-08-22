@@ -33,11 +33,11 @@ export function MusicFilenameInput() {
     <>
       <label htmlFor="music-filename"> </label>
       <ClearableReadonlyTextInput name="music-filename" notRequired={true} validate={validateBackgroundMusicSourceAndCheckIsFileReadable}/>
-      <button onClick={event => {
+      <button type="button" onClick={event => {
         queueOpenDialog(event, [
           {name: "Music files", extensions: ["*"]}
         ]);
-      }} type="button">Browse&#8230;</button>
+      }}>Browse&#8230;</button>
       <div className="grid-contents">
         <div className="start-label"></div>
         <div className="start-label-contents">
