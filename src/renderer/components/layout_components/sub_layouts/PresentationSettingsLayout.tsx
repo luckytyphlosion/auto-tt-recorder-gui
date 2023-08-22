@@ -7,7 +7,7 @@ import { InputDisplayInput } from "../../form_components/InputDisplayInput";
 import { EndingMessageInput } from "../../form_components/EndingMessageInput";
 import { FieldsetOr } from "../../FieldsetOr";
 
-export function PresentationSettingsLayout(props: {formComplexity: FormComplexity, enableFadeInAtStart: boolean}) {
+export function PresentationSettingsLayout(props: {formComplexity: FormComplexity, enableFadeInAtStart: boolean, noInputDisplay?: boolean}) {
   return <>{
     props.formComplexity > FormComplexity.SIMPLE ?
     <div>
@@ -15,7 +15,9 @@ export function PresentationSettingsLayout(props: {formComplexity: FormComplexit
         <legend>Presentation settings</legend>
         <div>
           <div className="like-input-group">
-            <InputDisplayInput/>
+            {
+              !props.noInputDisplay ? <InputDisplayInput/> : ""
+            }
             {
               props.enableFadeInAtStart ? <FadeInAtStartInput/> : ""
             }
