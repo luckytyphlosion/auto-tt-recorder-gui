@@ -24,7 +24,6 @@ export function AutoTTRecConfigFormComponents(props: {
   forceUpdate: boolean,
   unrenderFormToggle: boolean,
   isAutoTTRecRunning: boolean,
-  expandUnselectedChoiceInputs: boolean,
   initialValidateFormOnOpen: boolean,
   onError: (errors: Object) => Promise<void> | void,
 }) {  

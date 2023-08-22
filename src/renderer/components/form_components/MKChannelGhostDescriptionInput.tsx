@@ -9,7 +9,7 @@ export function MKChannelGhostDescriptionInput() {
     <div className="grid-contents">
       <label className="start-label" htmlFor="mk-channel-ghost-description">Ghost Description: </label>
       <div className="start-label-contents">
-        <input id="mk-channel-ghost-description" type="text"
+        <input type="text" id="mk-channel-ghost-description"
           {...register("mk-channel-ghost-description", {
             required: {
               value: true,

@@ -1,9 +1,28 @@
 import { useWatch, useFormContext } from "react-hook-form";
+import { useState } from "react";
 
 import { AutoTTRecConfigFormFields, AutoTTRecConfigFormBooleanArgName, AutoTTRecConfigFormChoiceArgName } from "./auto-tt-rec-form-field-types";
 
 export function useFormContextAutoTT() {
   return useFormContext<AutoTTRecConfigFormFields>();
+}
+
+export function useTriggerAndRerenderAutoTT<K extends keyof AutoTTRecConfigFormFields>(atCreationName?: K) {
+  const [forceUpdate, setForceUpdate] = useState<number>(0);
+  const {trigger} = useFormContextAutoTT();
+
+  return async function(atCallName?: K) {
+    let name: K | undefined;
+    if (atCallName !== undefined) {
+      name = atCallName;
+    } else if (atCreationName !== undefined) {
+      name = atCreationName;
+    }
+    if (name !== undefined) {
+      await trigger(name);
+    }
+    setForceUpdate((forceUpdate: number) => (forceUpdate + 1));
+  }
 }
 
 export function useWatchAutoTT<K extends keyof AutoTTRecConfigFormFields>(props: {name: K}) {

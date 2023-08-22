@@ -145,12 +145,7 @@ export function AutoTTRecConfigForm(
 
   const [submittedToggle, setSubmittedToggle] = useState(false);
   const [unrenderFormToggle, setUnrenderFormToggle] = useState(false);
-  const [expandUnselectedChoiceInputs, setExpandUnselectedChoiceInputs] = useState(false);
   //const [doNotTriggerRendersDueToErrors, setDoNotTriggerRendersDueToErrors] = useState(false);
-
-  function updateExpandUnselectedChoiceInputs(event: React.ChangeEvent<HTMLInputElement>) {
-    setExpandUnselectedChoiceInputs(event.target.checked);
-  }
 
   // useEffect(() => {
   //   setTimeout(() => {
@@ -199,10 +194,8 @@ export function AutoTTRecConfigForm(
   <br/>
         <ImportTemplate_Memo disabled={props.isAutoTTRecRunning} formMethods={formMethods} setUnrenderFormToggle={setUnrenderFormToggle} onError={onError}/>
         <ClearAllFields_Memo disabled={props.isAutoTTRecRunning} formMethods={formMethods} setUnrenderFormToggle={setUnrenderFormToggle}/>
-        <label htmlFor="expand-unselected-choice-inputs">Expand unselected "choice" inputs (advanced)</label>
-        <input id="expand-unselected-choice-inputs" type="checkbox" checked={expandUnselectedChoiceInputs} onChange={updateExpandUnselectedChoiceInputs}/>
         <fieldset disabled={props.isAutoTTRecRunning}>
-          <AutoTTRecConfigFormComponents_Memo formMethods={formMethods} forceUpdate={submittedToggle} unrenderFormToggle={unrenderFormToggle} isAutoTTRecRunning={props.isAutoTTRecRunning} expandUnselectedChoiceInputs={expandUnselectedChoiceInputs} initialValidateFormOnOpen={props.validateFormOnOpen} onError={onError}/>
+          <AutoTTRecConfigFormComponents_Memo formMethods={formMethods} forceUpdate={submittedToggle} unrenderFormToggle={unrenderFormToggle} isAutoTTRecRunning={props.isAutoTTRecRunning} initialValidateFormOnOpen={props.validateFormOnOpen} onError={onError}/>
         </fieldset>
         <AutoTTRecSubmitAbortButtons_Memo isAutoTTRecRunning={props.isAutoTTRecRunning} onAbortCallback={props.onAbortCallback} setRunAutoTTRecOnSubmitCallback={(() => {}) as any}/>
       </form>
