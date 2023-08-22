@@ -8,8 +8,8 @@ export function useFormContextAutoTT() {
 }
 
 export function useTriggerAndRerenderAutoTT<K extends keyof AutoTTRecConfigFormFields>(atCreationName?: K) {
-  const [forceUpdate, setForceUpdate] = useState<number>(0);
-  const {trigger} = useFormContextAutoTT();
+  const [fieldErrorMessage, setFieldErrorMessage] = useState<string>("");
+  const {trigger, formState} = useFormContextAutoTT();
 
   return async function(atCallName?: K) {
     let name: K | undefined;
@@ -19,9 +19,16 @@ export function useTriggerAndRerenderAutoTT<K extends keyof AutoTTRecConfigFormF
       name = atCreationName;
     }
     if (name !== undefined) {
+      //console.log(`before trigger ${name} formState:`, formState);
       await trigger(name);
+      //console.log(`after trigger ${name} formState:`, formState);
+      let newFieldErrorMessage = formState.errors[name]?.message;
+      if (newFieldErrorMessage === undefined) {
+        newFieldErrorMessage = "";
+      }
+      //console.log("newFieldErrorMessage:", newFieldErrorMessage);
+      setFieldErrorMessage(newFieldErrorMessage);
     }
-    setForceUpdate((forceUpdate: number) => (forceUpdate + 1));
   }
 }
 

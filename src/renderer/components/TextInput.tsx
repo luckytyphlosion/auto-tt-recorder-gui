@@ -28,7 +28,7 @@ export function TextInput<K extends AutoTTRecConfigFormStringArgName>(props: {na
               value: true,
               message: props.requiredMessage !== undefined ? props.requiredMessage : "This input is required."
             },
-            onBlur: onBlur,
+            onBlur: props.notRequired ? undefined : onBlur,
             pattern: props.pattern,
             validate: props.validate
           })}

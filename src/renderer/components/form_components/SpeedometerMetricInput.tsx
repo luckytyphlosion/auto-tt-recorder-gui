@@ -20,8 +20,8 @@ export function SpeedometerMetricInput() {
           <DeselectableRadioButton labelValue="XZ" id="speedometer-metric-xz" value="xz"/>
           <DeselectableRadioButton labelValue="XYZ" id="speedometer-metric-xyz" value="xyz"/>
         </DeselectableRadioButtonGroup>
+        {renderCounter}
       </div>
-      {renderCounter}
     </div>
   );
 }

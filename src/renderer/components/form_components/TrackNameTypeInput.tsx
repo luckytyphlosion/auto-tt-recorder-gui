@@ -55,11 +55,11 @@ export function TrackNameTypeInput(props: {formComplexity: FormComplexity}) {
           }
           <DeselectableRadioButton labelValue="Supply manually:" id="track-name-type-manual" value="manual" onChange={updateTrackNameType}/>
         </DeselectableRadioButtonGroup>
+        {renderCounter}
       </div>
       {
         isValueOrFILLMEIsValue(trackNameType, "manual") ? <TrackNameManualInput/> : ""
       }
-      {renderCounter}
     </div>
   );
 }

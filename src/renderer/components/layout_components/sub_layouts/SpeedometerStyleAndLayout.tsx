@@ -40,9 +40,9 @@ export function SpeedometerStyleAndLayout() {
                 <DeselectableRadioButton labelValue="Standard" id="speedometer-style-standard" value="standard" onChange={updateSpeedometerStyle}/>
                 <DeselectableRadioButton labelValue="None" id="speedometer-style-none" value="none" onChange={updateSpeedometerStyle}/>
               </DeselectableRadioButtonGroup>
+              {renderCounter}
             </div>
           </div>
-          {renderCounter}
           {
             speedometerStyle !== "none" ? 
             (<>
