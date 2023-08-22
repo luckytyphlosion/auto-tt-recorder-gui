@@ -125,7 +125,6 @@ export function AutoTTRecConfigForm(
   //console.log("formMethods:", formMethods);
   //const isoWbfsFileInput = <ISOWBFSFileInput/>;
   //const mainGhostFilenameInput = <MainGhostFilenameInput arg={1}/>;
-  const [submittedToggle, setSubmittedToggle] = useState(false);
   const [unrenderFormToggle, setUnrenderFormToggle] = useState(false);
   const [forceUpdateToggle, setForceUpdateToggle] = useState(false);
   const renderCount = useRef(0);
@@ -185,15 +184,8 @@ export function AutoTTRecConfigForm(
     console.log("autoTTRecArgs:", autoTTRecArgs);
     console.log("formState.isSubmitSuccessful:", formState.isSubmitSuccessful);
     console.log("formState.isSubmitted:", formState.isSubmitted);
-    await props.onSubmitCallback(autoTTRecArgs, setSubmittedToggleWrapper);
+    await props.onSubmitCallback(autoTTRecArgs, setForceUpdateToggle);
   }
-
-  const setSubmittedToggleWrapper = useCallback(function (setStateValue: React.SetStateAction<boolean>) {
-    console.log("In setSubmittedToggleWrapper");
-    console.trace();
-    setSubmittedToggle(setStateValue);
-    console.log("In setSubmittedToggleWrapper after calling setStateValue");
-  }, []);
 
   const onError = useCallback(async function (errors: Object) {
     let lastRecordedTemplateFilename = await window.api.getLastRecordedTemplateFilename();
@@ -203,12 +195,6 @@ export function AutoTTRecConfigForm(
     setForceUpdateToggle((forceUpdateToggle) => (!forceUpdateToggle));
     //console.log("formState.dirtyFields:", formState.dirtyFields);
     //console.log("formState.touchedFields:", formState.touchedFields);
-    //console.log("onError outside of setSubmittedToggle submittedToggle:", submittedToggle);
-    /*setSubmittedToggleWrapper((submittedToggle2) => {
-      console.log("onError in setSubmittedToggle submittedToggle:", submittedToggle2);
-      return !submittedToggle2;
-    });*/
-    //setDoNotTriggerRendersDueToErrors((doNotTriggerRendersDueToErrors) => !doNotTriggerRendersDueToErrors);
     formMethods.reset(undefined, {keepValues: true, keepErrors: true, keepSubmitCount: true});
   }, []);
 
