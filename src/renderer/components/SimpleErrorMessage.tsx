@@ -94,15 +94,7 @@ export function SimpleErrorMessage(props: {name: AutoTTRecConfigFormFieldName}) 
   const formContext = useFormContextAutoTT();
   const formState = formContext.formState;
 
-  const simpleErrorMessageFormContextRef = useRef(formContext);
-  const counterRef = useRef(0);
-  counterRef.current = counterRef.current + 1;
-  console.log(`SimpleErrorMessage ${props.name} ${counterRef.current}: `, formState.errors[props.name]?.message);
-
-  /*useEffect(() => {
-    console.log(`SimpleErrorMessage formContext diff ${counterRef.current}:`, deepDiffMapper.map(simpleErrorMessageFormContextRef.current, formState));
-    simpleErrorMessageFormContextRef.current = formContext;
-  }, [formContext]);*/
+  console.log(`SimpleErrorMessage ${props.name}: `, formState.errors[props.name]?.message);
 
   return (<ErrorMessage2
     errors={formState.errors}

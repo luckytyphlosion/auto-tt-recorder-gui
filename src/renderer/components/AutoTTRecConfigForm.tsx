@@ -161,7 +161,7 @@ export function AutoTTRecConfigForm(
   //   }, 1000);
   // }, [doNotTriggerRendersDueToErrors]);
 
-  if (props.validateFormOnOpen) {
+  //if (props.validateFormOnOpen) {
     useEffect(() => {
       // very unstable hack. figure out how to fix this
       if (formState.submitCount === 2) {
@@ -169,7 +169,7 @@ export function AutoTTRecConfigForm(
         setForceUpdateToggle((forceUpdateToggle) => (!forceUpdateToggle));        
       }
     }, [formState.submitCount]);  
-  }
+  //}
 
   async function onSubmit(formData: AutoTTRecConfigFormFields) {
     let lastRecordedTemplateFilename = await window.api.getLastRecordedTemplateFilename();

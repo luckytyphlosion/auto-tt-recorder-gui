@@ -31,21 +31,23 @@ export function AutoTTRecConfigFormComponents(props: {
   //const [validateFormOnOpenForceUpdate, setValidateFormOnOpenForceUpdate] = useState(false);
 
   const onErrorNoExport = useCallback(function (errors: Object) {
-    console.log("onErrorNoExport props.formMethods:", props.formMethods);
-    props.formMethods.reset(undefined, {keepValues: true, keepErrors: true, keepSubmitCount: true});
-    console.log("onErrorNoExport after reset");
-  }, []);
+    //console.log("onErrorNoExport props.formMethods:", props.formMethods);
+    // I tried figuring out why a form reset had to be done for error messages to show up
+    // before submitting the form
+    // but I was unable to
+    // so we have to submit the form on open so that error messages show
+    // validate form on open just controls whether to show the errors
+    props.formMethods.reset(undefined, {keepValues: true, keepErrors: props.initialValidateFormOnOpen, keepSubmitCount: true});
+    //console.log("onErrorNoExport after reset");
+  }, [props.initialValidateFormOnOpen]);
 
   const initialValidateFormOnOpenHandleSubmit = useCallback(props.formMethods.handleSubmit(() => {}, onErrorNoExport), []);
 
-
-
   useEffect(() => {
     //console.log("AutoTTRecConfigFormComponents useEffect renderCount:", renderCount.current);
-    if (props.initialValidateFormOnOpen && props.formMethods.formState.submitCount === 0) {
-      console.log("ValidateFormOnOpen formMethods.formState:", props.formMethods.formState, ", submitCount:", props.formMethods.formState.submitCount);
+    if (props.formMethods.formState.submitCount === 0) {
+      console.log("Do form submission at start:", props.formMethods.formState, ", submitCount:", props.formMethods.formState.submitCount);
       initialValidateFormOnOpenHandleSubmit();
-      //setValidateFormOnOpenForceUpdate((validateFormOnOpenForceUpdate) => (!validateFormOnOpenForceUpdate));
     }
   }, [props.initialValidateFormOnOpen]);
   
