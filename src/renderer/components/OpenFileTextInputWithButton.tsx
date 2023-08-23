@@ -9,7 +9,7 @@ import { DialogId } from "../../shared/shared-types";
 
 import { ClearableReadonlyTextInput } from "./ClearableReadonlyTextInput";
 
-export function ComparisonGhostFilenameInput<K extends AutoTTRecConfigFormStringArgName>(props: {name: K, startLabel: string, dialogId: DialogId, fileFilters: FileFilter[],
+export function OpenFileTextInputWithButton<K extends AutoTTRecConfigFormStringArgName>(props: {name: K, startLabel: string, dialogId: DialogId, fileFilters: FileFilter[],
   notInGrid?: boolean,
   noStartLabelClass?: boolean,
   errorMessageOnBottom?: boolean,
