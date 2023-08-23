@@ -2,6 +2,8 @@ import { dialog, IpcMainInvokeEvent, FileFilter, OpenDialogOptions, SaveDialogOp
 
 import { mainWindow } from "./electron";
 import { FilenameAndContents, StringOrError, DialogId, ExpectedExtensionAndErrorMessage, IsFileReadableResult, IsFileReadableResultCode, IsFileWritableResult, IsFileWritableResultCode } from "../shared/shared-types";
+import { getIndefiniteArticleForFileExtension } from "../shared/util-shared";
+
 import fsPromises from "fs/promises";
 import fs from "fs";
 
@@ -31,16 +33,54 @@ export async function getAbsolutePathRelativeToFilename(event: IpcMainInvokeEven
   return absolutePathname;
 }
 
-async function readFileEnforceUTF8(filename: string, badEncodingErrorMessage: string, expectedExtensionAndErrorMessage?: ExpectedExtensionAndErrorMessage): Promise<string> {
+enum ReadFileEnforceUTF8ResultCode {
+  SUCCESS = 0,
+  ERROR_THROWN,
+  WRONG_EXTENSION
+}
+
+interface ReadFileEnforceUTF8Result {
+  code: ReadFileEnforceUTF8ResultCode,
+  contents: string,
+  errorMessage: string,
+}
+
+async function readFileEnforceUTF8(filename: string, badEncodingErrorMessage: string, expectedExtensionAndErrorMessage?: ExpectedExtensionAndErrorMessage, readFileEvenOnWrongExtension?: boolean): Promise<ReadFileEnforceUTF8Result> {
+  let result: ReadFileEnforceUTF8Result = {
+    code: ReadFileEnforceUTF8ResultCode.ERROR_THROWN,
+    contents: "",
+    errorMessage: "This should not occur! Please contact the developer"
+  }
+
+  let wrongExtension: boolean = false;
+  let wrongExtensionErrorMessage: string = "";
+
   if (expectedExtensionAndErrorMessage !== undefined && path.extname(filename) !== expectedExtensionAndErrorMessage.extension) {
-    throw new Error(expectedExtensionAndErrorMessage.errorMessage);
-    
+    if (readFileEvenOnWrongExtension) {
+      wrongExtension = true;
+      wrongExtensionErrorMessage = expectedExtensionAndErrorMessage.errorMessage;
+    } else {
+      throw new Error(expectedExtensionAndErrorMessage.errorMessage);
+    }
   }
   const buffer = await fsPromises.readFile(filename);
   if (!Buffer.from(buffer.toString(), "utf8").equals(buffer)) {
-    throw new Error(badEncodingErrorMessage);
+    if (wrongExtension) {
+      throw new Error(wrongExtensionErrorMessage);
+    } else {
+      throw new Error(badEncodingErrorMessage);
+    }
   }
-  return buffer.toString();
+
+  result.contents = buffer.toString();
+  if (wrongExtension) {
+    result.code = ReadFileEnforceUTF8ResultCode.WRONG_EXTENSION;
+    result.errorMessage = wrongExtensionErrorMessage;
+  } else {
+    result.code = ReadFileEnforceUTF8ResultCode.SUCCESS;
+    result.errorMessage = "";
+  }
+  return result
 }
 
 function cloneError(oldError: NodeJS.ErrnoException): NodeJS.ErrnoException {
@@ -72,7 +112,7 @@ function setStringOrErrorFromUnknown(eAsUnknown: unknown, stringOrError: StringO
   }
 }
 
-export async function readFileEnforceUTF8_returnError(filename: string, badEncodingErrorMessage: string, maxFileSize?: number, expectedExtensionAndErrorMessage?: ExpectedExtensionAndErrorMessage): Promise<StringOrError> {
+export async function readFileEnforceUTF8_returnError(filename: string, badEncodingErrorMessage: string, limitFileSizeTo10MB?: boolean, expectedExtensionAndErrorMessage?: ExpectedExtensionAndErrorMessage, readFileEvenOnWrongExtension?: boolean): Promise<StringOrError> {
   let stringOrError: StringOrError = {
     result: "",
     hasError: false,
@@ -81,7 +121,12 @@ export async function readFileEnforceUTF8_returnError(filename: string, badEncod
   };
 
   let fileSize: number = Infinity;
-  maxFileSize = maxFileSize === undefined ? Infinity : maxFileSize;
+  let maxFileSize: number;
+  if (limitFileSizeTo10MB) {
+    maxFileSize = 10485760;
+  } else {
+    maxFileSize = Infinity;
+  }
 
   try {
     fileSize = (await fsPromises.stat(filename)).size;
@@ -96,7 +141,17 @@ export async function readFileEnforceUTF8_returnError(filename: string, badEncod
       stringOrError.errorMessage = "File is greater than 10MiB (should not require a file greater than that).";
     } else {
       try {
-        stringOrError.result = await readFileEnforceUTF8(filename, badEncodingErrorMessage, expectedExtensionAndErrorMessage);
+        let readFileEnforceUTF8Result = await readFileEnforceUTF8(filename, badEncodingErrorMessage, expectedExtensionAndErrorMessage, readFileEvenOnWrongExtension);
+        stringOrError.result = readFileEnforceUTF8Result.contents;
+        stringOrError.errorMessage = readFileEnforceUTF8Result.errorMessage;
+        if (readFileEnforceUTF8Result.code !== ReadFileEnforceUTF8ResultCode.SUCCESS) {
+          stringOrError.hasError = true;
+          if (readFileEnforceUTF8Result.code === ReadFileEnforceUTF8ResultCode.WRONG_EXTENSION) {
+            stringOrError.errorCode = "BADEXT";
+          } else {
+            stringOrError.errorCode = "IMPOSSIBLE";
+          }
+        }
       } catch (eAsUnknown: unknown) {
         setStringOrErrorFromUnknown(eAsUnknown, stringOrError);
       }
@@ -107,7 +162,7 @@ export async function readFileEnforceUTF8_returnError(filename: string, badEncod
 }
 
 export async function ipcReadFileEnforceUTF8(event: IpcMainInvokeEvent, filename: string, badEncodingErrorMessage: string, expectedExtensionAndErrorMessage?: ExpectedExtensionAndErrorMessage): Promise<StringOrError> {
-  return await readFileEnforceUTF8_returnError(filename, badEncodingErrorMessage, 10485760, expectedExtensionAndErrorMessage);
+  return await readFileEnforceUTF8_returnError(filename, badEncodingErrorMessage, true, expectedExtensionAndErrorMessage);
 }
 
 export async function openFileDialog(event: IpcMainInvokeEvent, fileFilters: FileFilter[],
@@ -151,7 +206,7 @@ export async function openFolderDialog(event: IpcMainInvokeEvent,
 }
 
 export async function openFileDialogAndRead(event: IpcMainInvokeEvent, fileFilters: FileFilter[],
-    lastFilename: string | undefined, dialogId: DialogId) : Promise<FilenameAndContents> {
+    lastFilename: string | undefined, dialogId: DialogId, errorMessageFilePrefix?: string) : Promise<FilenameAndContents> {
   let dialogProperties: OpenDialogOptions["properties"] = ["openFile"];
   lastFilename = retrieveLastPathname(lastFilename, dialogId);
   let response = await dialog.showOpenDialog(mainWindow, {
@@ -159,26 +214,62 @@ export async function openFileDialogAndRead(event: IpcMainInvokeEvent, fileFilte
     filters: fileFilters,
     defaultPath: lastFilename
   });
+
+  let filenameAndContents: FilenameAndContents = {
+    filename: "",
+    contents: "",
+    errorMessage: ""
+  };
+
   if (!response.canceled) {
     let filename = response.filePaths[0];
-    let contents: string;
 
     try {
-      contents = await readFileEnforceUTF8(filename, `Provided file ${filename} is not a text file!`);
+      let expectedExtensionMinusDot = fileFilters[0].extensions[0];
+      let expectedExtension = `.${expectedExtensionMinusDot}`;
+      let expectedFileExtensionIndefiniteParticle = getIndefiniteArticleForFileExtension(expectedExtensionMinusDot);
+      if (errorMessageFilePrefix === undefined) {
+        errorMessageFilePrefix = "file";
+      }
+
+      let stringOrError: StringOrError = await readFileEnforceUTF8_returnError(
+        filename,
+        `Provided ${errorMessageFilePrefix} ${filename} is not a text file!`,
+        true,
+        {
+          extension: expectedExtension,
+          errorMessage: `Provided ${errorMessageFilePrefix} ${path.basename(filename)} should be ${expectedFileExtensionIndefiniteParticle} ${expectedExtensionMinusDot}!`
+        },
+        true
+      );
+      if (stringOrError.hasError) {
+        if (stringOrError.errorCode === "BADEXT") {
+          filenameAndContents.filename = filename;
+          filenameAndContents.contents = stringOrError.result;
+          filenameAndContents.errorMessage = stringOrError.errorMessage;
+        } else {
+          filenameAndContents.filename = "";
+          filenameAndContents.contents = "";
+          filenameAndContents.errorMessage = stringOrError.errorMessage;
+        }
+      } else {
+        filenameAndContents.filename = filename;
+        filenameAndContents.contents = stringOrError.result;
+        filenameAndContents.errorMessage = "";
+      }
     } catch (e) {
-      contents = `Error: ${(e as Error).message}`;
-      filename = "";
+      filenameAndContents.filename = "";
+      filenameAndContents.contents = "";
+      filenameAndContents.errorMessage = (e as Error).message;
     }
 
     //const contents = await fsPromises.readFile(filename, "utf8");
-    globalConfig.setNewDialogPathnameAndSave(dialogId, filename);
-    return {
-      filename: filename,
-      contents: contents
-    };
-  } else {
-    return {filename: "", contents: ""};
+    if (filenameAndContents.filename !== "") {
+      globalConfig.setNewDialogPathnameAndSave(dialogId, filenameAndContents.filename);
+    }
   }
+
+  return filenameAndContents;
 }
 
 export async function saveFileDialog(
@@ -211,6 +302,12 @@ export async function saveFileDialogAndWriteText(event: IpcMainInvokeEvent, file
     output: string, lastFilename: string | undefined, dialogId: DialogId): Promise<string> {
   let dialogProperties: SaveDialogOptions["properties"] = [];
   lastFilename = retrieveLastPathname(lastFilename, dialogId);
+  if (lastFilename !== undefined) {
+    let parsedPath = path.parse(lastFilename);
+    parsedPath.ext = `.${fileFilters[0].extensions[0]}`;
+    parsedPath.base = "";
+    lastFilename = path.format(parsedPath);
+  }
   console.log("saveFileDialogAndWriteText output:", output);
   let response = await dialog.showSaveDialog(mainWindow, {
     properties: dialogProperties,

@@ -9,6 +9,8 @@ import { EditorView } from "@codemirror/view";
 
 import { ClearableReadonlyTextInput } from "../ClearableReadonlyTextInput";
 
+import { isFileReadableAndHasCorrectExtension } from "../../util-renderer";
+
 import CodeMirror from '@uiw/react-codemirror';
 
 import Modal from "react-modal";
@@ -34,7 +36,7 @@ const top10RegionDependentGeckoCodes = new Set(["C260BFAC", "C26414CC", "C260B72
 
 // 
 export function Top10GeckoCodeInput(props: {isAutoTTRecRunning: boolean}) {
-  const {register, getValues, setValue, control} = useFormContextAutoTT();
+  const {register, getValues, setValue, control, setError} = useFormContextAutoTT();
   const renderCounter = useRenderCounter(false, "Top10GeckoCodeInput");
   const [isModalOpen, setModalOpen] = useState(false);
   const [isGeckoCodeUnsaved, setGeckoCodeUnsaved] = useState(getValues("top-10-gecko-code-unsaved"));
@@ -89,16 +91,42 @@ export function Top10GeckoCodeInput(props: {isAutoTTRecRunning: boolean}) {
   }
 
   async function queueOpenDialogAndRead(event: React.MouseEvent<HTMLButtonElement>, fileFilters: FileFilter[]) {
-    let filenameAndContents: FilenameAndContents = await window.api.openFileDialogAndRead(fileFilters, getValues("top-10-gecko-code-filename"), "top-10-gecko-code");
-    if (filenameAndContents.filename !== "") {
-      updateTop10GeckoCodeFilename(filenameAndContents.filename);
-      setValue("top-10-gecko-code-contents", filenameAndContents.contents, {shouldTouch: true});
-      updateGeckoCodeUnsaved(false);
-    } else if (filenameAndContents.contents !== "") {
-      // read error occurred
-      updateTop10GeckoCodeFilename("");
-      setValue("top-10-gecko-code-contents", filenameAndContents.contents, {shouldTouch: true});
-      updateGeckoCodeUnsaved(true);
+    let filenameAndContents: FilenameAndContents = await window.api.openFileDialogAndRead(fileFilters, getValues("top-10-gecko-code-filename"), "top-10-gecko-code", "Top 10 Gecko Code file");
+    let newTop10GeckoCodeFilename: string | undefined;
+    let newTop10GeckoCodeContents: string | undefined;
+    let newGeckoCodeUnsaved: boolean | undefined;
+
+    if (filenameAndContents.errorMessage !== "") {
+      // error message that still allows reading in contents
+      if (filenameAndContents.contents !== "") {
+        newTop10GeckoCodeFilename = "";
+        newTop10GeckoCodeContents = filenameAndContents.contents;
+        newGeckoCodeUnsaved = true;
+      } else {
+        newTop10GeckoCodeFilename = "";
+        newTop10GeckoCodeContents = "";
+        newGeckoCodeUnsaved = true;
+      }
+      setError("top-10-gecko-code-filename", {
+        type: "custom",
+        message: filenameAndContents.errorMessage
+      });
+    } else if (filenameAndContents.filename !== "") {
+      newTop10GeckoCodeFilename = filenameAndContents.filename;
+      newTop10GeckoCodeContents = filenameAndContents.contents;
+      newGeckoCodeUnsaved = false;
+    }
+
+    if (newTop10GeckoCodeFilename !== undefined) {
+      updateTop10GeckoCodeFilename(newTop10GeckoCodeFilename);
+    }
+
+    if (newTop10GeckoCodeContents !== undefined) {
+      setValue("top-10-gecko-code-contents", newTop10GeckoCodeContents, {shouldTouch: true});
+    }
+
+    if (newGeckoCodeUnsaved !== undefined) {
+      updateGeckoCodeUnsaved(newGeckoCodeUnsaved);
     }
   }
 
@@ -163,11 +191,16 @@ export function Top10GeckoCodeInput(props: {isAutoTTRecRunning: boolean}) {
     if (isGeckoCodeUnsaved || top10GeckoCodeFilename === "") {
       return "Please save your gecko code first.";
     } else {
-      let isGeckoCodeFilenameReadable = await window.api.isFileReadable(top10GeckoCodeFilename);
-      console.log("isGeckoCodeFilenameReadable:", isGeckoCodeFilenameReadable);
-      if (!isGeckoCodeFilenameReadable) {
+      let isGeckoCodeFilenameReadableAndHasCorrectExtensionValidateResult = await isFileReadableAndHasCorrectExtension(
+        top10GeckoCodeFilename, ["txt"],
+        { 
+          wrongExtensionErrorMessageSingularPrefix: "Top 10 Gecko Code file",
+          unreadableErrorMessagePrefix: "Top 10 Gecko Code file"
+        }
+      );
+      if (isGeckoCodeFilenameReadableAndHasCorrectExtensionValidateResult !== true) {
         updateGeckoCodeUnsaved(true);
-        return "Top 10 Gecko Code file does not exist (deleted or renamed outside of the program) or is not readable."
+        return isGeckoCodeFilenameReadableAndHasCorrectExtensionValidateResult;
       }
 
       let top10GeckoCodeContents = getValues("top-10-gecko-code-contents");

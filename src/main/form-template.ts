@@ -21,7 +21,7 @@ async function loadYAML_formatErrorsIfErrorOrWarnings(filename: string): Promise
   let warnings: string[] = [];
   let status: ReadTemplateStatus = ReadTemplateStatus.INDETERMINATE;
   let autoTTRecConfig: AutoTTRecConfig = {};
-  let contentsOrError: StringOrError = await readFileEnforceUTF8_returnError(filename, "Provided template file is not a text file!");
+  let contentsOrError: StringOrError = await readFileEnforceUTF8_returnError(filename, "Provided template file is not a text file!", true);
 
   if (!contentsOrError.hasError) {
     if (contentsOrError.result === "") {

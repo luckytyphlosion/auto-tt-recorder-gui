@@ -6,6 +6,7 @@ import { FileFilter } from "electron";
 import { FilenameAndContents } from "../../../shared/shared-types"
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
 import { EditorView } from "@codemirror/view";
+import { isFileReadableAndHasCorrectExtension } from "../../util-renderer";
 
 import { ClearableReadonlyTextInput } from "../ClearableReadonlyTextInput";
 
@@ -31,7 +32,7 @@ const borderTheme = EditorView.theme({
 });
 
 export function ExtraGeckoCodesInput(props: {isAutoTTRecRunning: boolean}) {
-  const {register, getValues, setValue, control, formState} = useFormContextAutoTT();
+  const {register, getValues, setValue, control, formState, setError} = useFormContextAutoTT();
   const renderCounter = useRenderCounter(false, "ExtraGeckoCodesInput");
   const [isModalOpen, setModalOpen] = useState(false);
   const [isGeckoCodeUnsaved, setGeckoCodeUnsaved] = useState(getValues("extra-gecko-codes-unsaved"));
@@ -86,16 +87,43 @@ export function ExtraGeckoCodesInput(props: {isAutoTTRecRunning: boolean}) {
   }
 
   async function queueOpenDialogAndRead(event: React.MouseEvent<HTMLButtonElement>, fileFilters: FileFilter[]) {
-    let filenameAndContents: FilenameAndContents = await window.api.openFileDialogAndRead(fileFilters, getValues("extra-gecko-codes-filename"), "extra-gecko-codes");
-    if (filenameAndContents.filename !== "") {
-      updateExtraGeckoCodesFilename(filenameAndContents.filename);
-      setValue("extra-gecko-codes-contents", filenameAndContents.contents, {shouldTouch: true});
-      updateGeckoCodeUnsaved(false);
-    } else if (filenameAndContents.contents !== "") {
-      // read error occurred
-      updateExtraGeckoCodesFilename("");
-      setValue("extra-gecko-codes-contents", filenameAndContents.contents, {shouldTouch: true});
-      updateGeckoCodeUnsaved(true);
+    let filenameAndContents: FilenameAndContents = await window.api.openFileDialogAndRead(fileFilters, getValues("extra-gecko-codes-filename"), "extra-gecko-codes", "Extra Gecko Codes file");
+
+    let newExtraGeckoCodesFilename: string | undefined;
+    let newExtraGeckoCodesContents: string | undefined;
+    let newGeckoCodeUnsaved: boolean | undefined;
+
+    if (filenameAndContents.errorMessage !== "") {
+      // error message that still allows reading in contents
+      if (filenameAndContents.contents !== "") {
+        newExtraGeckoCodesFilename = "";
+        newExtraGeckoCodesContents = filenameAndContents.contents;
+        newGeckoCodeUnsaved = true;
+      } else {
+        newExtraGeckoCodesFilename = "";
+        newExtraGeckoCodesContents = "";
+        newGeckoCodeUnsaved = true;
+      }
+      setError("extra-gecko-codes-filename", {
+        type: "custom",
+        message: filenameAndContents.errorMessage
+      });
+    } else if (filenameAndContents.filename !== "") {
+      newExtraGeckoCodesFilename = filenameAndContents.filename;
+      newExtraGeckoCodesContents = filenameAndContents.contents;
+      newGeckoCodeUnsaved = false;
+    }
+
+    if (newExtraGeckoCodesFilename !== undefined) {
+      updateExtraGeckoCodesFilename(newExtraGeckoCodesFilename);
+    }
+
+    if (newExtraGeckoCodesContents !== undefined) {
+      setValue("extra-gecko-codes-contents", newExtraGeckoCodesContents, {shouldTouch: true});
+    }
+
+    if (newGeckoCodeUnsaved !== undefined) {
+      updateGeckoCodeUnsaved(newGeckoCodeUnsaved);
     }
   }
 
@@ -163,11 +191,20 @@ export function ExtraGeckoCodesInput(props: {isAutoTTRecRunning: boolean}) {
       return "Gecko code file can't be empty!";
     } else {
       let geckoCodeFilename = getValues("extra-gecko-codes-filename");
-      if (await window.api.isFileReadable(geckoCodeFilename)) {
-        return true;
-      } else {
+
+      let isGeckoCodeFilenameReadableAndHasCorrectExtensionValidateResult = await isFileReadableAndHasCorrectExtension(
+        geckoCodeFilename, ["ini"],
+        { 
+          wrongExtensionErrorMessageSingularPrefix: "Extra Gecko Codes file",
+          unreadableErrorMessagePrefix: "Extra Gecko Codes file"
+        }
+      );
+
+      if (isGeckoCodeFilenameReadableAndHasCorrectExtensionValidateResult !== true) {
         updateGeckoCodeUnsaved(true);
-        return "Gecko code file does not exist (deleted or renamed outside of the program) or is not readable."
+        return isGeckoCodeFilenameReadableAndHasCorrectExtensionValidateResult;
+      } else {
+        return true;
       }
     }
   }

@@ -8,7 +8,7 @@ declare global {
     api: {
       openFileDialog: (fileFilters: FileFilter[], lastFilename: string | undefined, dialogId: DialogId) => Promise<string>;
       openFolderDialog: (lastFolderName: string | undefined, dialogId: DialogId) => Promise<string>;
-      openFileDialogAndRead: (fileFilters: FileFilter[], lastFilename: string | undefined, dialogId: DialogId) => Promise<FilenameAndContents>;
+      openFileDialogAndRead: (fileFilters: FileFilter[], lastFilename: string | undefined, dialogId: DialogId, errorMessageFilePrefix?: string) => Promise<FilenameAndContents>;
       saveFileDialog: (fileFilters: FileFilter[], lastFilename: string | undefined, dialogId: DialogId) => Promise<string>;
       saveFileDialogAndWriteText: (fileFilters: FileFilter[], output: string, lastFilename: string | undefined, dialogId: DialogId) => Promise<string>;
       overwriteTextFile: (outputFilename: string, output: string) => Promise<void>;

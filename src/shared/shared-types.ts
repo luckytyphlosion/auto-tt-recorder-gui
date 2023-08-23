@@ -3,11 +3,6 @@ export interface AutoTTRecConfig {
   [key: string]: string | number | boolean | null;
 }
 
-export interface FilenameAndContents {
-  filename: string,
-  contents: string
-}
-
 export enum AutoTTRecResponseStatus {
   INDETERMINATE = -1,
   COMPLETED = 1,
@@ -63,6 +58,12 @@ export interface StringOrError {
   hasError: boolean,
   errorCode: string,
   errorMessage: string
+}
+
+export interface FilenameAndContents {
+  filename: string,
+  contents: string,
+  errorMessage: string,
 }
 
 export interface ExpectedExtensionAndErrorMessage {
