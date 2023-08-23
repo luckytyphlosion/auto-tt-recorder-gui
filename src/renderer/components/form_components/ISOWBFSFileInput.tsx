@@ -1,38 +1,12 @@
-import React, { useState } from "react";
-import useRenderCounter from "../../RenderCounter";
-import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
-import { FileFilter } from "electron";
+import React from "react";
 
-import { UseFormRegister, UseFormSetValue } from "react-hook-form";
-
-import { ClearableReadonlyTextInput } from "../ClearableReadonlyTextInput";
-
-import { isFileReadable } from "../../util-renderer";
-
-import { SimpleErrorMessage } from "../SimpleErrorMessage";
+import { OpenFileTextInputWithButton } from "../OpenFileTextInputWithButton";
 
 export function ISOWBFSFileInput() {
-  const {register, setValue, getValues} = useFormContextAutoTT();
-  const renderCounter = useRenderCounter(false, "ISOWBFSFileInput");
-
-  async function queueOpenDialog(event: React.MouseEvent<HTMLButtonElement>, fileFilters: FileFilter[]) {
-    let response = await window.api.openFileDialog(fileFilters, getValues("iso-filename"), "iso-wbfs");
-    if (response !== "") {
-      setValue("iso-filename", response, {shouldTouch: true});
-    }
-  }
-
-  return (
-    <div>
-      <label htmlFor="iso-filename">ISO or WBFS: </label>
-      <ClearableReadonlyTextInput name="iso-filename" validate={isFileReadable}/>
-      <button type="button" onClick={event => {
-        queueOpenDialog(event, [
-          {name: "ISO/WBFS files", extensions: ["iso", "wbfs"]}
-        ]);
-      }}>Browse&#8230;</button>
-      <SimpleErrorMessage name="iso-filename"/>
-      {renderCounter}
-    </div>
-  );
+  return <OpenFileTextInputWithButton name="iso-filename" startLabel="ISO or WBFS: " dialogId="iso-wbfs" fileFilters={[
+    {name: "ISO/WBFS files", extensions: ["iso", "wbfs"]}
+  ]}
+    notInGrid={true}
+    noStartLabelClass={true}
+  />
 }

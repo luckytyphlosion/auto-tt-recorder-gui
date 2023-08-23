@@ -9,12 +9,23 @@ import { DialogId } from "../../shared/shared-types";
 
 import { ClearableReadonlyTextInput } from "./ClearableReadonlyTextInput";
 
-export function OpenFileTextInputWithButton<K extends AutoTTRecConfigFormStringArgName>(props: {name: K, startLabel: string, dialogId: DialogId, fileFilters: FileFilter[],
+import useRenderCounter from "../RenderCounter";
+
+export function OpenFileTextInputWithButton<K extends AutoTTRecConfigFormStringArgName>(props: {
+  name: K,
+  startLabel: string,
+  dialogId: DialogId,
+  fileFilters: FileFilter[],
+  // optional custom validation function, defaults to isFileReadable
+  validate?: Validate<string, AutoTTRecConfigFormStringArgs>
+  // layout flags
   notInGrid?: boolean,
   noStartLabelClass?: boolean,
   errorMessageOnBottom?: boolean,
-  inline?: boolean, notRequired?: boolean, requiredMessage?: string, validate?: Validate<string, AutoTTRecConfigFormStringArgs>}) {
+  inline?: boolean,
+}) {
   const {setValue, getValues} = useFormContextAutoTT();
+  const renderCounter = useRenderCounter(false, `${props.name}-FileInput`);
 
   const queueOpenDialog = useCallback(async function (event: React.MouseEvent<HTMLButtonElement>) {
     let response: string = await window.api.openFileDialog(props.fileFilters, getValues(props.name), props.dialogId);
@@ -49,6 +60,7 @@ export function OpenFileTextInputWithButton<K extends AutoTTRecConfigFormStringA
         {labelElement}
         {textInputAndButtonElements}
         {errorMessageElement}
+        {renderCounter}
       </>;
     } else {
       if (props.errorMessageOnBottom) {
@@ -56,6 +68,7 @@ export function OpenFileTextInputWithButton<K extends AutoTTRecConfigFormStringA
           {labelElement}
           <div className="start-label-contents">
             {textInputAndButtonElements}
+            {renderCounter}
           </div>
           {errorMessageElement}
         </>;
@@ -65,6 +78,7 @@ export function OpenFileTextInputWithButton<K extends AutoTTRecConfigFormStringA
           <div className="start-label-contents">
             {textInputAndButtonElements}
             {errorMessageElement}
+            {renderCounter}
           </div>        
         </>;
       }
