@@ -15,6 +15,8 @@ export function OpenFileTextInputWithButton<K extends AutoTTRecConfigFormStringA
   name: K,
   startLabel: string,
   dialogId: DialogId,
+  // optional folder/file dialog specifier, defaults to "open-file"
+  dialogType?: "open-file" | "open-folder" | "save-file"
   fileFilters: FileFilter[],
   // optional custom validation function, defaults to isFileReadable
   validate?: Validate<string, AutoTTRecConfigFormStringArgs>
@@ -23,24 +25,35 @@ export function OpenFileTextInputWithButton<K extends AutoTTRecConfigFormStringA
   noStartLabelClass?: boolean,
   errorMessageOnBottom?: boolean,
   inline?: boolean,
+  // other flags
+  notRequired?: boolean
 }) {
   const {setValue, getValues} = useFormContextAutoTT();
   const renderCounter = useRenderCounter(false, `${props.name}-FileInput`);
+  const dialogType = props.dialogType !== undefined ? props.dialogType : "open-file";
 
-  const queueOpenDialog = useCallback(async function (event: React.MouseEvent<HTMLButtonElement>) {
-    let response: string = await window.api.openFileDialog(props.fileFilters, getValues(props.name), props.dialogId);
+  const queueFileFolderDialog = useCallback(async function (event: React.MouseEvent<HTMLButtonElement>) {
+    let response: string = "";
+    if (dialogType === "open-file") {
+      response = await window.api.openFileDialog(props.fileFilters, getValues(props.name), props.dialogId);
+    } else if (dialogType === "open-folder") {
+      response = await window.api.openFolderDialog(getValues(props.name), props.dialogId);
+    } else if (dialogType === "save-file") {
+      response = await window.api.saveFileDialog(props.fileFilters, getValues(props.name), props.dialogId);
+    }
+
     if (response !== "") {
       // what type is response expected to be here?
       setValue(props.name, response as any, {shouldTouch: true});
     }
-  }, [props.name, props.fileFilters, props.dialogId]);
+  }, [props.name, props.dialogId, dialogType, props.fileFilters]);
 
   const errorMessageElement_memoed = useMemo(() => {
     let errorMessageElement;
-    const labelElement = <label htmlFor={props.name} {...props.noStartLabelClass ? {} : {className: "start-label"}}>{props.startLabel}</label>;
+    const labelElement = props.startLabel !== " " ? (<label htmlFor={props.name} {...props.noStartLabelClass ? {} : {className: "start-label"}}>{props.startLabel}</label>) : "";
     const textInputAndButtonElements = <>
-      <ClearableReadonlyTextInput name={props.name} validate={props.validate !== undefined ? props.validate : isFileReadable}/>
-      <button type="button" onClick={queueOpenDialog}>Browse&#8230;</button>
+      <ClearableReadonlyTextInput name={props.name} validate={props.validate !== undefined ? props.validate : isFileReadable} notRequired={props.notRequired}/>
+      <button type="button" onClick={queueFileFolderDialog}>Browse&#8230;</button>
     </>
 
     if (props.errorMessageOnBottom) {
@@ -97,7 +110,7 @@ export function OpenFileTextInputWithButton<K extends AutoTTRecConfigFormStringA
         </div>
       }
     }
-  }, [props.name, props.startLabel, props.notInGrid, props.noStartLabelClass, props.errorMessageOnBottom, props.inline]);
+  }, [props.name, props.startLabel, props.validate, props.notInGrid, props.noStartLabelClass, props.errorMessageOnBottom, props.inline, props.notRequired]);
 
   return errorMessageElement_memoed;
 }

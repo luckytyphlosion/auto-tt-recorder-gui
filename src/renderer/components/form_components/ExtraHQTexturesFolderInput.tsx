@@ -9,21 +9,13 @@ import { ClearableReadonlyTextInput } from "../ClearableReadonlyTextInput";
 
 import { isFolderReadable } from "../../util-renderer"
 
-import { SimpleErrorMessage } from "../SimpleErrorMessage";
+import { OpenFileTextInputWithButton } from "../OpenFileTextInputWithButton";
 import { TriCheckbox } from "../TriCheckbox";
 
 export function ExtraHQTexturesFolderInput() {
-  const {register, setValue, getValues} = useFormContextAutoTT();
   const renderCounter = useRenderCounter(false, "ExtraHQTexturesFolderInput");
   const extraHQTexturesFolderEnable = useWatchAutoTT({name: "extra-hq-textures-folder-enable"});
   const isValueOrFILLMEIsValue = isValueOrFILLMEIsValueMaker();
-
-  async function queueOpenFolderDialog(event: React.MouseEvent<HTMLButtonElement>) {
-    let response = await window.api.openFolderDialog(getValues("extra-hq-textures-folder"), "extra-hq-textures");
-    if (response !== "") {
-      setValue("extra-hq-textures-folder", response, {shouldTouch: true});
-    }
-  }
 
   async function validateExtraHQTexturesFolder(value: string): Promise<ValidateResult> {
     if (extraHQTexturesFolderEnable === "<FILLME>") {
@@ -44,11 +36,7 @@ export function ExtraHQTexturesFolderInput() {
         <TriCheckbox name="extra-hq-textures-folder-enable" nameAsId={true} noErrorMessage={true}/>
         {
           isValueOrFILLMEIsValue(extraHQTexturesFolderEnable, true) ? <>
-            <ClearableReadonlyTextInput name="extra-hq-textures-folder" notRequired={true} validate={validateExtraHQTexturesFolder}/>
-            <button type="button" onClick={event => {
-              queueOpenFolderDialog(event);
-            }}>Browse&#8230;</button>
-            <SimpleErrorMessage name="extra-hq-textures-folder"/>
+            <OpenFileTextInputWithButton name="extra-hq-textures-folder" startLabel=" " dialogId="extra-hq-textures" dialogType="open-folder" fileFilters={[]} validate={validateExtraHQTexturesFolder} notInGrid={true} inline={true} notRequired={true}/>
           </> : ""
         }
 

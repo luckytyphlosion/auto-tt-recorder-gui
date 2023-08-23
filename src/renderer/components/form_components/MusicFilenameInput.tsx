@@ -23,9 +23,9 @@ export function MusicFilenameInput() {
       {name: "Music files", extensions: ["*"]}
     ]} validate={validateBackgroundMusicSourceAndCheckIsFileReadable} 
       notInGrid={true}
-      noStartLabelClass={true}
       errorMessageOnBottom={true}
       inline={true}
+      notRequired={true}
     />
   );
 }
