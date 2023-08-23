@@ -1,4 +1,4 @@
-import { IsFileWritableResult, IsFileWritableResultCode } from "../shared/shared-types";
+import { IsFileReadableResult, IsFileReadableResultCode, IsFileWritableResult, IsFileWritableResultCode } from "../shared/shared-types";
 import { getIndefiniteArticleForFileExtension } from "../shared/util-shared";
 
 async function isFileOrFolderReadable(filename: string, fileOrFolderStr: string): Promise<string | boolean> {
@@ -16,6 +16,33 @@ export async function isFileReadable(filename: string): Promise<string | boolean
 
 export async function isFolderReadable(filename: string): Promise<string | boolean> {
   return isFileOrFolderReadable(filename, "Folder");
+}
+
+const englishLongConjunctionListFormatter = new Intl.ListFormat("en", {style: "long", type: "disjunction"});
+
+export async function isFileReadableAndHasCorrectExtension(filename: string, expectedExtensionsMinusDot: string[]): Promise<boolean | string> {
+  let isFileReadableResult: IsFileReadableResult = await window.api.isFileReadableAndHasCorrectExtension_alsoGetExtension(filename, expectedExtensionsMinusDot);
+  if (isFileReadableResult.code === IsFileReadableResultCode.WRONG_EXTENSION) {
+    if (expectedExtensionsMinusDot.length === 0 || (expectedExtensionsMinusDot.length === 1 && expectedExtensionsMinusDot[0] === "*")) {
+      expectedExtensionsMinusDot = ["(this should not happen, please contact the developer)"];
+    }
+
+    let fileExtensionIndefiniteParticle = getIndefiniteArticleForFileExtension(isFileReadableResult.fileExtensionMinusDot);
+
+    if (expectedExtensionsMinusDot.length === 1) {
+      let expectedExtensionMinusDot = expectedExtensionsMinusDot[0];
+      let expectedFileExtensionIndefiniteParticle = getIndefiniteArticleForFileExtension(expectedExtensionMinusDot);
+      return `File should be ${expectedFileExtensionIndefiniteParticle} ${expectedExtensionMinusDot} but is ${fileExtensionIndefiniteParticle} ${isFileReadableResult.fileExtensionMinusDot}!`
+    } else {
+      return `File type should be one of ${englishLongConjunctionListFormatter.format(expectedExtensionsMinusDot)}, but is ${fileExtensionIndefiniteParticle} ${isFileReadableResult.fileExtensionMinusDot}!`;
+    }
+  } else if (isFileReadableResult.code === IsFileReadableResultCode.UNREADABLE) {
+    return "File does not exist (deleted or renamed outside the program) or cannot be read from.";
+  } else if (isFileReadableResult.code === IsFileReadableResultCode.SUCCESS) {
+    return true;
+  } else {
+    return "Impossible error occurred, please contact the developer!";
+  }
 }
 
 export async function isFileWritableAndHasCorrectExtension(filename: string, expectedExtensionMinusDot?: string): Promise<boolean | string> {

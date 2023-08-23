@@ -135,6 +135,7 @@ async function createWindow() {
   ipcMain.handle("save-file-dialog-and-write-text", gui2.saveFileDialogAndWriteText);
   ipcMain.handle("overwrite-text-file", gui2.overwriteTextFile);
   ipcMain.handle("is-file-readable", gui2.isFileReadable);
+  ipcMain.handle("is-file-readable-and-has-correct-extension", gui2.isFileReadableAndHasCorrectExtension_alsoGetExtension);
   ipcMain.handle("is-file-writable", gui2.isFileWritable_alsoGetExtension);
 
   ipcMain.handle("spawn-auto-tt-rec", autoTTRecBridge.spawnAutoTTRec);

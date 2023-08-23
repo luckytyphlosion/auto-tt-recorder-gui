@@ -2,7 +2,7 @@ import React, { useState, useMemo, useCallback } from "react";
 import { useFormContextAutoTT } from "../use-form-context-auto-tt";
 import { FileFilter } from "electron";
 import { SimpleErrorMessage } from "./SimpleErrorMessage";
-import { isFileReadable } from "../util-renderer"
+import { isFileReadable, isFileReadableAndHasCorrectExtension } from "../util-renderer"
 import { ValidationRule, Validate } from "react-hook-form";
 import { AutoTTRecConfigFormStringArgName, AutoTTRecConfigFormFields, AutoTTRecConfigFormStringArgs } from "../auto-tt-rec-form-field-types";
 import { DialogId } from "../../shared/shared-types";
@@ -10,6 +10,14 @@ import { DialogId } from "../../shared/shared-types";
 import { ClearableReadonlyTextInput } from "./ClearableReadonlyTextInput";
 
 import useRenderCounter from "../RenderCounter";
+
+function getFileFiltersFromPossibleFunction(fileFilters: FileFilter[] | (() => FileFilter[])): FileFilter[] {
+  if (typeof fileFilters === "function") {
+    return fileFilters();
+  } else {
+    return fileFilters;
+  }
+}
 
 export function OpenFileTextInputWithButton<K extends AutoTTRecConfigFormStringArgName>(props: {
   name: K,
@@ -32,14 +40,10 @@ export function OpenFileTextInputWithButton<K extends AutoTTRecConfigFormStringA
   const renderCounter = useRenderCounter(false, `${props.name}-FileInput`);
   const dialogType = props.dialogType !== undefined ? props.dialogType : "open-file";
 
-  const queueFileFolderDialog = useCallback(async function (event: React.MouseEvent<HTMLButtonElement>) {
+
+  async function queueFileFolderDialog(event: React.MouseEvent<HTMLButtonElement>) {
     let response: string = "";
-    let fileFilters: FileFilter[];
-    if (typeof props.fileFilters === "function") {
-      fileFilters = props.fileFilters();
-    } else {
-      fileFilters = props.fileFilters;
-    }
+    let fileFilters: FileFilter[] = getFileFiltersFromPossibleFunction(props.fileFilters);
 
     if (dialogType === "open-file") {
       response = await window.api.openFileDialog(fileFilters, getValues(props.name), props.dialogId);
@@ -53,14 +57,30 @@ export function OpenFileTextInputWithButton<K extends AutoTTRecConfigFormStringA
       // what type is response expected to be here?
       setValue(props.name, response as any, {shouldTouch: true});
     }
-  }, [props.name, props.dialogId, dialogType, props.fileFilters]);
+  }
+  // [props.name, props.dialogId, dialogType, props.fileFilters]
+
+  async function validateFile(filename: string) {
+    let fileFilters: FileFilter[] = getFileFiltersFromPossibleFunction(props.fileFilters);
+    let expectedExtensionsMinusDot = fileFilters.reduce((currentExpectedExtensionsMinusDot: string[], currentFileFilter: FileFilter) => {
+      currentExpectedExtensionsMinusDot.push(...currentFileFilter.extensions);
+      return currentExpectedExtensionsMinusDot;
+    }, []);
+    //console.log("expectedExtensionsMinusDot:", expectedExtensionsMinusDot);
+
+    return isFileReadableAndHasCorrectExtension(filename, expectedExtensionsMinusDot);
+  }
 
   const errorMessageElement_memoed = useMemo(() => {
     let errorMessageElement;
     const labelElement = props.startLabel !== " " ? (<label htmlFor={props.name} {...props.noStartLabelClass ? {} : {className: "start-label"}}>{props.startLabel}</label>) : "";
     const buttonText = props.dialogType !== "save-file" ? "Browse\u2026" : "Export as\u2026";
     const textInputAndButtonElements = <>
-      <ClearableReadonlyTextInput name={props.name} validate={props.validate !== undefined ? props.validate : isFileReadable} notRequired={props.notRequired}/>
+      <ClearableReadonlyTextInput
+        name={props.name}
+        validate={props.validate !== undefined ? props.validate : validateFile}
+        notRequired={props.notRequired}
+      />
       <button type="button" onClick={queueFileFolderDialog}>{buttonText}</button>
     </>
 

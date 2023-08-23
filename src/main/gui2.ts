@@ -1,7 +1,7 @@
 import { dialog, IpcMainInvokeEvent, FileFilter, OpenDialogOptions, SaveDialogOptions} from "electron";
 
 import { mainWindow } from "./electron";
-import { FilenameAndContents, StringOrError, DialogId, ExpectedExtensionAndErrorMessage, IsFileWritableResult, IsFileWritableResultCode } from "../shared/shared-types";
+import { FilenameAndContents, StringOrError, DialogId, ExpectedExtensionAndErrorMessage, IsFileReadableResult, IsFileReadableResultCode, IsFileWritableResult, IsFileWritableResultCode } from "../shared/shared-types";
 import fsPromises from "fs/promises";
 import fs from "fs";
 
@@ -237,6 +237,34 @@ async function fsAccessHelper(filename: string, mode: number): Promise<boolean> 
   } catch {
     return false;
   }
+}
+
+export async function isFileReadableAndHasCorrectExtension_alsoGetExtension(event: IpcMainInvokeEvent, filename: string, expectedExtensionsMinusDot: string[]): Promise<IsFileReadableResult> {
+  let filenameExt = path.extname(filename);
+  let result: IsFileReadableResult = {
+    code: IsFileReadableResultCode.SUCCESS,
+    fileExtensionMinusDot: filenameExt.charAt(0) === "." ? filenameExt.substring(1) : filenameExt
+  };
+
+  if (!(expectedExtensionsMinusDot.length === 0 || (expectedExtensionsMinusDot.length === 1 && expectedExtensionsMinusDot[0] === "*"))) {
+    const hasCorrectExtension: boolean = expectedExtensionsMinusDot.some((expectedExtensionMinusDot) => {
+      let expectedExtension = `.${expectedExtensionMinusDot}`;
+      //console.log("expectedExtension:", expectedExtension, ", filenameExt:", filenameExt);
+      return filenameExt === expectedExtension;
+    });
+    if (!hasCorrectExtension) {
+      result.code = IsFileReadableResultCode.WRONG_EXTENSION;
+      return result;
+    }
+  }
+
+  let isReadableAnswer = await fsAccessHelper(filename, fs.constants.R_OK);
+  if (isReadableAnswer) {
+    result.code = IsFileReadableResultCode.SUCCESS;
+  } else {
+    result.code = IsFileReadableResultCode.UNREADABLE;
+  }
+  return result;
 }
 
 export async function isFileReadable(event: IpcMainInvokeEvent, filename: string): Promise<boolean> {

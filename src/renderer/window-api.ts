@@ -1,7 +1,7 @@
 import { FileFilter, IpcRendererEvent } from "electron";
 import { AutoTTRecResponse } from "../shared/shared-types";
 import { AutoTTRecArgs } from "./auto-tt-rec-args-types";
-import { FilenameAndContents, ReadTemplateResult, ExpectedExtensionAndErrorMessage, DialogId, StringOrError, IsFileWritableResult, AutoTTRecConfig, LoadFormInputsType } from "../shared/shared-types";
+import { FilenameAndContents, ReadTemplateResult, ExpectedExtensionAndErrorMessage, DialogId, StringOrError, IsFileReadableResult, IsFileWritableResult, AutoTTRecConfig, LoadFormInputsType } from "../shared/shared-types";
 
 declare global {
   interface Window {
@@ -13,6 +13,7 @@ declare global {
       saveFileDialogAndWriteText: (fileFilters: FileFilter[], output: string, lastFilename: string | undefined, dialogId: DialogId) => Promise<string>;
       overwriteTextFile: (outputFilename: string, output: string) => Promise<void>;
       isFileReadable: (filename: string) => Promise<boolean>;
+      isFileReadableAndHasCorrectExtension_alsoGetExtension: (filename: string, expectedExtensionsMinusDot: string[]) => Promise<IsFileReadableResult>;
       isFileWritable_alsoGetExtension: (filename: string, expectedExtensionMinusDot?: string) => Promise<IsFileWritableResult>;
       // this is insecure as hell but making this secure would require every single constant and type from form/layout_components
       // separately from the component file

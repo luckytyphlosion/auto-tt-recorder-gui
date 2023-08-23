@@ -89,4 +89,15 @@ export interface IsFileWritableResult {
   fileExtensionMinusDot: string
 }
 
+export enum IsFileReadableResultCode {
+  SUCCESS = 0,
+  WRONG_EXTENSION = 1,
+  UNREADABLE = 2
+}
+
+export interface IsFileReadableResult {
+  code: IsFileReadableResultCode,
+  fileExtensionMinusDot: string
+}
+
 export type LoadFormInputsType = "load-form-inputs-select-last-recorded" | "load-form-inputs-select-last-template" | "load-form-inputs-select-default";

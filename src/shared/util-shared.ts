@@ -14,7 +14,13 @@ export function deleteFromSet<T>(values: Set<T>, x: any): boolean {
 const FILE_EXTENSION_FIRST_SYLLABLE_IS_PHONETIC_VOWEL_TABLE: {[key: string]: boolean} = {
   mp4: true,
   webm: false,
-  mkv: true
+  mkv: true,
+  rkg: true,
+  iso: true,
+  wbfs: false,
+  szs: true,
+  txt: false,
+  ini: true
 }
 
 export function getIndefiniteArticleForFileExtension(fileExtension: string): "a" | "an" | "a(n)" {
