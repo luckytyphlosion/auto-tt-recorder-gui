@@ -1,21 +1,10 @@
-import React, { useState } from "react";
-import useRenderCounter from "../../RenderCounter";
+import React from "react";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
-import { FileFilter } from "electron";
-import { SimpleErrorMessage } from "../SimpleErrorMessage";
+import { OpenFileTextInputWithButton } from "../OpenFileTextInputWithButton";
 import { isFileReadable } from "../../util-renderer"
 
-import { ClearableReadonlyTextInput } from "../ClearableReadonlyTextInput";
-
 export function MusicFilenameInput() {
-  const {register, setValue, getValues} = useFormContextAutoTT();
-
-  async function queueOpenDialog(event: React.MouseEvent<HTMLButtonElement>, fileFilters: FileFilter[]) {
-    let response = await window.api.openFileDialog(fileFilters, getValues("music-filename"), "music");
-    if (response !== "") {
-      setValue("music-filename", response, {shouldTouch: true});
-    }
-  }
+  const {getValues} = useFormContextAutoTT();
 
   async function validateBackgroundMusicSourceAndCheckIsFileReadable(value: string) {
     let backgroundMusicSource = getValues("background-music-source");
@@ -30,20 +19,13 @@ export function MusicFilenameInput() {
   }
 
   return (
-    <>
-      <label htmlFor="music-filename"> </label>
-      <ClearableReadonlyTextInput name="music-filename" notRequired={true} validate={validateBackgroundMusicSourceAndCheckIsFileReadable}/>
-      <button type="button" onClick={event => {
-        queueOpenDialog(event, [
-          {name: "Music files", extensions: ["*"]}
-        ]);
-      }}>Browse&#8230;</button>
-      <div className="grid-contents">
-        <div className="start-label"></div>
-        <div className="start-label-contents">
-          <SimpleErrorMessage name="music-filename"/>
-        </div>
-      </div>
-    </>
+    <OpenFileTextInputWithButton name="music-filename" startLabel=" " dialogId="music" fileFilters={[
+      {name: "Music files", extensions: ["*"]}
+    ]} validate={validateBackgroundMusicSourceAndCheckIsFileReadable} 
+      notInGrid={true}
+      noStartLabelClass={true}
+      errorMessageOnBottom={true}
+      inline={true}
+    />
   );
 }
