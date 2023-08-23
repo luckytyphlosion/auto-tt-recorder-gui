@@ -1,27 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { FileFilter } from "electron";
 
-import { useFormContextAutoTT, useWatchAutoTT } from "../../use-form-context-auto-tt";
-import { SimpleErrorMessage } from "../SimpleErrorMessage";
+import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
+import { OpenFileTextInputWithButton } from "../OpenFileTextInputWithButton";
 import { isFileWritableAndHasCorrectExtension } from "../../util-renderer"
 
 import { FormComplexity } from "../layout_components/FormComplexityLayout";
-import { ClearableReadonlyTextInput } from "../ClearableReadonlyTextInput";
 import { FieldsetOr } from "../FieldsetOr";
 
 import useRenderCounter from "../../RenderCounter";
 
 export function OutputVideoFilenameInput(props: {noTop10CategoryIsNoEncode: boolean}) {
-  const {register, setValue, getValues} = useFormContextAutoTT();
+  const {setValue, getValues} = useFormContextAutoTT();
   const [prevNoTop10CategoryIsNoEncode, setPrevNoTop10CategoryIsNoEncode] = useState(getValues("no-top-10-category") === "noencode");
   const renderCounter = useRenderCounter(false, "OutputVideoFilenameInput");
-
-  async function queueSaveDialog(event: React.MouseEvent<HTMLButtonElement>, fileFilters: FileFilter[]) {
-    let response = await window.api.saveFileDialog(fileFilters, getValues("output-video-filename"), "output-video");
-    if (response !== "") {
-      setValue("output-video-filename", response, {shouldTouch: true});
-    }
-  }
 
   function getAllowedOutputVideoFileFormat() {
     let outputVideoFileFormat;
@@ -61,26 +53,28 @@ export function OutputVideoFilenameInput(props: {noTop10CategoryIsNoEncode: bool
     }
   }, [props.noTop10CategoryIsNoEncode]);
 
+  function getOutputVideoFileFilters() {
+    let outputVideoFileFormat = getAllowedOutputVideoFileFormat();
+    let fileFilters: FileFilter[];
+    if (outputVideoFileFormat === "<FILLME>") {
+      fileFilters = [
+        {name: "All video files", extensions: ["mkv", "mp4", "webm"]}
+      ];
+    } else {
+      fileFilters = [
+        {name: `${outputVideoFileFormat} files`, extensions: [outputVideoFileFormat]}
+      ];
+    }
+    return fileFilters;
+  }
+
   return (
     <div>
       <FieldsetOr>
-        <legend>Output filename:</legend>
-        <ClearableReadonlyTextInput className="filename-input" name="output-video-filename" validate={validateOutputVideoFilename}/>
-        <button type="button" onClick={async (event) => {
-          let outputVideoFileFormat = getAllowedOutputVideoFileFormat();
-          let fileFilters: FileFilter[];
-          if (outputVideoFileFormat === "<FILLME>") {
-            fileFilters = [
-              {name: "All video files", extensions: ["mkv", "mp4", "webm"]}
-            ];
-          } else {
-            fileFilters = [
-              {name: `${outputVideoFileFormat} files`, extensions: [outputVideoFileFormat]}
-            ];
-          }
-          await queueSaveDialog(event, fileFilters);  
-        }}>Export as&#8230;</button>
-        <SimpleErrorMessage name="output-video-filename"/>
+        <legend>Output filename</legend>
+        <div className="like-input-group">
+          <OpenFileTextInputWithButton name="output-video-filename" startLabel="Output video filename: " dialogId="output-video" dialogType="save-file" fileFilters={getOutputVideoFileFilters} validate={validateOutputVideoFilename}/>
+        </div>
         {renderCounter}
       </FieldsetOr>
     </div>
