@@ -11,6 +11,10 @@ export function deleteFromSet<T>(values: Set<T>, x: any): boolean {
   return values.delete(x);
 }
 
+export function undefinedToNullStr(value: string | undefined): string {
+  return value !== undefined ? value : "";
+}
+
 const FILE_EXTENSION_FIRST_SYLLABLE_IS_PHONETIC_VOWEL_TABLE: {[key: string]: boolean} = {
   mp4: true,
   webm: false,

@@ -11,7 +11,7 @@ export function TextInput<K extends AutoTTRecConfigFormStringArgName>(props: {na
   const triggerAndRerender = useTriggerAndRerenderAutoTT(props.name);
   const textInputCounterRef = useRef(0);
   textInputCounterRef.current = textInputCounterRef.current + 1;
-  console.log(`TextInput-${props.name}: ${textInputCounterRef.current}`);
+  //console.log(`TextInput-${props.name}: ${textInputCounterRef.current}`);
   //console.log("formState.isSubmitted:", formState.isSubmitted);
   const renderCounter = useRenderCounter(false, `${props.name}-Input`);
 

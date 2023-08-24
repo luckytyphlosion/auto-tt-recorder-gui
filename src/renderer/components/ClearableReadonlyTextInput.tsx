@@ -1,13 +1,14 @@
 
 import React, { memo, useState, useEffect, useRef, createContext, useContext, useMemo } from 'react';
 import { Validate } from 'react-hook-form';
-import { useFormContextAutoTT } from "../use-form-context-auto-tt";
+import { useFormContextAutoTT, useTriggerAndRerenderAutoTT } from "../use-form-context-auto-tt";
 import { AutoTTRecConfigFormStringArgName, AutoTTRecConfigFormFields } from "../auto-tt-rec-form-field-types";
 
 import useRenderCounter from "../RenderCounter";
 
-export function ClearableReadonlyTextInput<K extends AutoTTRecConfigFormStringArgName>(props: {name: K, notRequired?: boolean, validate: Validate<string, AutoTTRecConfigFormFields>, setState?: (value: string) => void, className?: string}) {
+export function ClearableReadonlyTextInput<K extends AutoTTRecConfigFormStringArgName>(props: {name: K, notRequired?: boolean, validate: Validate<string, AutoTTRecConfigFormFields>, setState?: (value: string) => void, className?: string, parentRerenderSetState?: React.Dispatch<React.SetStateAction<number>>}) {
   const {register, setValue} = useFormContextAutoTT();
+  const triggerAndRerender = useTriggerAndRerenderAutoTT(props.name);
   const renderCounter = useRenderCounter(false, `ClearableReadonlyTextInput ${props.name}`);
 
   return (
@@ -17,11 +18,15 @@ export function ClearableReadonlyTextInput<K extends AutoTTRecConfigFormStringAr
         value: true,
         message: "This input is required."
       } : false, validate: props.validate})}
-      onContextMenu={(e: React.MouseEvent<HTMLInputElement>) => {
+      onContextMenu={async (e: React.MouseEvent<HTMLInputElement>) => {
         e.preventDefault();
         setValue<AutoTTRecConfigFormStringArgName>(props.name, "", {shouldTouch: true});
         if (props.setState !== undefined) {
           props.setState("");
+        }
+        await triggerAndRerender();
+        if (props.parentRerenderSetState !== undefined) {
+          props.parentRerenderSetState((oldValue) => (oldValue + 1));
         }
       }}
       ></input>

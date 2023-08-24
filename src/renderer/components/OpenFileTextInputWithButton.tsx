@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback } from "react";
-import { useFormContextAutoTT } from "../use-form-context-auto-tt";
+import { useFormContextAutoTT, useTriggerAndRerenderAutoTT, triggerAndRerenderAutoTT } from "../use-form-context-auto-tt";
 import { FileFilter } from "electron";
 import { SimpleErrorMessage } from "./SimpleErrorMessage";
 import { isFileReadable, isFileReadableAndHasCorrectExtension } from "../util-renderer"
@@ -36,11 +36,18 @@ export function OpenFileTextInputWithButton<K extends AutoTTRecConfigFormStringA
   // other flags
   notRequired?: boolean
 }) {
-  const {setValue, getValues} = useFormContextAutoTT();
+  const {setValue, getValues, formState, getFieldState} = useFormContextAutoTT();
+  const [rerenderCounter, setRerenderCounter] = useState(0);
+
+  const triggerAndRerender = useTriggerAndRerenderAutoTT(props.name);
   const renderCounter = useRenderCounter(false, `${props.name}-FileInput`);
   const dialogType = props.dialogType !== undefined ? props.dialogType : "open-file";
+  let errorMessage = getFieldState(props.name).error?.message;
+  if (errorMessage === undefined) {
+    errorMessage = "";
+  }
 
-
+  //console.log()
   async function queueFileFolderDialog(event: React.MouseEvent<HTMLButtonElement>) {
     let response: string = "";
     let fileFilters: FileFilter[] = getFileFiltersFromPossibleFunction(props.fileFilters);
@@ -56,22 +63,26 @@ export function OpenFileTextInputWithButton<K extends AutoTTRecConfigFormStringA
     if (response !== "") {
       // what type is response expected to be here?
       setValue(props.name, response as any, {shouldTouch: true});
+      console.log("queueFileFolderDialog triggerAndRerender");
+      await triggerAndRerender();
     }
   }
   // [props.name, props.dialogId, dialogType, props.fileFilters]
 
+  console.log(`${props.name}-FileInput formState:`, formState, ", getFieldState errorMessage:", errorMessage);
   async function validateFile(filename: string) {
     let fileFilters: FileFilter[] = getFileFiltersFromPossibleFunction(props.fileFilters);
     let expectedExtensionsMinusDot = fileFilters.reduce((currentExpectedExtensionsMinusDot: string[], currentFileFilter: FileFilter) => {
       currentExpectedExtensionsMinusDot.push(...currentFileFilter.extensions);
       return currentExpectedExtensionsMinusDot;
     }, []);
-    //console.log("expectedExtensionsMinusDot:", expectedExtensionsMinusDot);
+    console.log("expectedExtensionsMinusDot:", expectedExtensionsMinusDot);
 
     return isFileReadableAndHasCorrectExtension(filename, expectedExtensionsMinusDot);
   }
 
   const errorMessageElement_memoed = useMemo(() => {
+    console.log("rerendering memo'd component");
     let errorMessageElement;
     const labelElement = props.startLabel !== " " ? (<label htmlFor={props.name} {...props.noStartLabelClass ? {} : {className: "start-label"}}>{props.startLabel}</label>) : "";
     const buttonText = props.dialogType !== "save-file" ? "Browse\u2026" : "Export as\u2026";
@@ -80,6 +91,7 @@ export function OpenFileTextInputWithButton<K extends AutoTTRecConfigFormStringA
         name={props.name}
         validate={props.validate !== undefined ? props.validate : validateFile}
         notRequired={props.notRequired}
+        parentRerenderSetState={setRerenderCounter}
       />
       <button type="button" onClick={queueFileFolderDialog}>{buttonText}</button>
     </>
@@ -138,7 +150,7 @@ export function OpenFileTextInputWithButton<K extends AutoTTRecConfigFormStringA
         </div>
       }
     }
-  }, [props.name, props.startLabel, props.dialogType, props.validate, props.notInGrid, props.noStartLabelClass, props.errorMessageOnBottom, props.inline, props.notRequired]);
+  }, [props.name, props.startLabel, props.dialogType, props.validate, props.notInGrid, props.noStartLabelClass, props.errorMessageOnBottom, props.inline, props.notRequired, errorMessage, rerenderCounter]);
 
   return errorMessageElement_memoed;
 }
