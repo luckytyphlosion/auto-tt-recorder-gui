@@ -64,27 +64,24 @@ export function OpenFileTextInputWithButton<K extends AutoTTRecConfigFormStringA
     if (response !== "") {
       // what type is response expected to be here?
       setValue(props.name, response as any, {shouldTouch: true});
-      console.log("queueFileFolderDialog triggerAndRerender");
       await triggerAndRerender();
       setAsyncRerenderCounter((asyncRerenderCounter) => (asyncRerenderCounter + 1));
     }
   }
   // [props.name, props.dialogId, dialogType, props.fileFilters]
 
-  console.log(`${props.name}-FileInput formState:`, formState, ", getFieldState errorMessage:", errorMessage);
+  //console.log(`${props.name}-FileInput formState:`, formState, ", getFieldState errorMessage:", errorMessage);
   async function validateFile(filename: string) {
     let fileFilters: FileFilter[] = getFileFiltersFromPossibleFunction(props.fileFilters);
     let expectedExtensionsMinusDot = fileFilters.reduce((currentExpectedExtensionsMinusDot: string[], currentFileFilter: FileFilter) => {
       currentExpectedExtensionsMinusDot.push(...currentFileFilter.extensions);
       return currentExpectedExtensionsMinusDot;
     }, []);
-    console.log("expectedExtensionsMinusDot:", expectedExtensionsMinusDot);
 
     return isFileReadableAndHasCorrectExtension(filename, expectedExtensionsMinusDot);
   }
 
   const errorMessageElement_memoed = useMemo(() => {
-    console.log("rerendering memo'd component");
     let errorMessageElement;
     const labelElement = props.startLabel !== " " ? (<label htmlFor={props.name} {...props.noStartLabelClass ? {} : {className: "start-label"}}>{props.startLabel}</label>) : "";
     const buttonText = props.dialogType !== "save-file" ? "Browse\u2026" : "Export as\u2026";

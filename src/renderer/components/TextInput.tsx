@@ -7,18 +7,28 @@ import { ValidationRule, Validate } from "react-hook-form";
 import useRenderCounter from "../RenderCounter";
 
 export function TextInput<K extends AutoTTRecConfigFormStringArgName>(props: {name: K, startLabel: string, notRequired?: boolean, requiredMessage?: string, pattern?: ValidationRule<RegExp>, validate?: Validate<string, AutoTTRecConfigFormFields>}) {
-  const {register} = useFormContextAutoTT();
+  const {register, getFieldState} = useFormContextAutoTT();
   const triggerAndRerender = useTriggerAndRerenderAutoTT(props.name);
   const textInputCounterRef = useRef(0);
   textInputCounterRef.current = textInputCounterRef.current + 1;
   //console.log(`TextInput-${props.name}: ${textInputCounterRef.current}`);
   //console.log("formState.isSubmitted:", formState.isSubmitted);
-  const renderCounter = useRenderCounter(false, `${props.name}-Input`);
+  const renderCounter = useRenderCounter(false, `${props.name}-TextInput`);
+  const fieldState = getFieldState(props.name);
+  const inputTouchedOrInvalid = fieldState.isTouched || fieldState.invalid;
+
+  console.log(`${props.name}-TextInput inputTouchedOrInvalid:`, inputTouchedOrInvalid);
 
   async function onBlur(e: React.FocusEvent<HTMLInputElement>) {
     //console.log(e);
     await triggerAndRerender();
   }
+
+  useEffect(() => {
+    if (!inputTouchedOrInvalid) {
+      triggerAndRerender().then();
+    }
+  }, [inputTouchedOrInvalid]);
 
   return (
     <div className="grid-contents">
