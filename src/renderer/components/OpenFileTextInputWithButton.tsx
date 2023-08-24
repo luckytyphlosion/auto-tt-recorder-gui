@@ -38,6 +38,7 @@ export function OpenFileTextInputWithButton<K extends AutoTTRecConfigFormStringA
 }) {
   const {setValue, getValues, formState, getFieldState} = useFormContextAutoTT();
   const [rerenderCounter, setRerenderCounter] = useState(0);
+  const [asyncRerenderCounter, setAsyncRerenderCounter] = useState(0);
 
   const triggerAndRerender = useTriggerAndRerenderAutoTT(props.name);
   const renderCounter = useRenderCounter(false, `${props.name}-FileInput`);
@@ -65,6 +66,7 @@ export function OpenFileTextInputWithButton<K extends AutoTTRecConfigFormStringA
       setValue(props.name, response as any, {shouldTouch: true});
       console.log("queueFileFolderDialog triggerAndRerender");
       await triggerAndRerender();
+      setAsyncRerenderCounter((asyncRerenderCounter) => (asyncRerenderCounter + 1));
     }
   }
   // [props.name, props.dialogId, dialogType, props.fileFilters]
@@ -150,7 +152,7 @@ export function OpenFileTextInputWithButton<K extends AutoTTRecConfigFormStringA
         </div>
       }
     }
-  }, [props.name, props.startLabel, props.dialogType, props.validate, props.notInGrid, props.noStartLabelClass, props.errorMessageOnBottom, props.inline, props.notRequired, errorMessage, rerenderCounter]);
+  }, [props.name, props.startLabel, props.dialogType, props.validate, props.notInGrid, props.noStartLabelClass, props.errorMessageOnBottom, props.inline, props.notRequired, errorMessage, rerenderCounter, asyncRerenderCounter]);
 
   return errorMessageElement_memoed;
 }

@@ -90,11 +90,11 @@ const deepDiffMapper: any = function () {
   }
 }();
 
-export function SimpleErrorMessage(props: {name: AutoTTRecConfigFormFieldName}) {
+export function SimpleErrorMessage(props: {name: AutoTTRecConfigFormFieldName, errorMessageForForceUpdate?: string}) {
   const formContext = useFormContextAutoTT();
   const formState = formContext.formState;
 
-  console.log(`SimpleErrorMessage ${props.name}: `, formState.errors[props.name]?.message);
+  //console.log(`SimpleErrorMessage ${props.name}: `, formState.errors[props.name]?.message);
 
   return (<ErrorMessage2
     errors={formState.errors}
