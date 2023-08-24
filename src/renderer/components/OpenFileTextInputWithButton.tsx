@@ -1,5 +1,5 @@
-import React, { useState, useMemo, useCallback } from "react";
-import { useFormContextAutoTT, useTriggerAndRerenderAutoTT, triggerAndRerenderAutoTT } from "../use-form-context-auto-tt";
+import React, { useState, useMemo, useEffect } from "react";
+import { useFormContextAutoTT, useTriggerAndRerenderAutoTT } from "../use-form-context-auto-tt";
 import { FileFilter } from "electron";
 import { SimpleErrorMessage } from "./SimpleErrorMessage";
 import { isFileReadable, isFileReadableAndHasCorrectExtension } from "../util-renderer"
@@ -39,14 +39,22 @@ export function OpenFileTextInputWithButton<K extends AutoTTRecConfigFormStringA
   const {setValue, getValues, formState, getFieldState} = useFormContextAutoTT();
   const [rerenderCounter, setRerenderCounter] = useState(0);
   const [asyncRerenderCounter, setAsyncRerenderCounter] = useState(0);
+  const fieldState = getFieldState(props.name);
+  const inputTouchedOrInvalid = fieldState.isTouched || fieldState.invalid;
 
   const triggerAndRerender = useTriggerAndRerenderAutoTT(props.name);
   const renderCounter = useRenderCounter(false, `${props.name}-FileInput`);
   const dialogType = props.dialogType !== undefined ? props.dialogType : "open-file";
-  let errorMessage = getFieldState(props.name).error?.message;
+  let errorMessage = fieldState.error?.message;
   if (errorMessage === undefined) {
     errorMessage = "";
   }
+
+  useEffect(() => {
+    if (!inputTouchedOrInvalid) {
+      triggerAndRerender().then();
+    }
+  }, [inputTouchedOrInvalid]);
 
   //console.log()
   async function queueFileFolderDialog(event: React.MouseEvent<HTMLButtonElement>) {

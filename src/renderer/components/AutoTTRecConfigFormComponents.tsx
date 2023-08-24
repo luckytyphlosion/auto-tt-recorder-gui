@@ -38,7 +38,6 @@ export function AutoTTRecConfigFormComponents(props: {
     // so we have to submit the form on open so that error messages show
     // validate form on open just controls whether to show the errors
     props.formMethods.reset(undefined, {keepValues: true, keepErrors: props.initialValidateFormOnOpen, keepSubmitCount: true});
-    props.formMethods.trigger("chadsoft-ghost-page");
     //console.log("onErrorNoExport after reset");
   }, [props.initialValidateFormOnOpen]);
 
