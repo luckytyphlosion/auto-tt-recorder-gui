@@ -162,13 +162,13 @@ export function AutoTTRecConfigForm(
   // }, [doNotTriggerRendersDueToErrors]);
 
   //if (props.validateFormOnOpen) {
-    useEffect(() => {
-      // very unstable hack. figure out how to fix this
-      if (formState.submitCount === 2) {
-        console.log("in AutoTTRecConfigForm useEffect, formState.submitCount:", formState.submitCount);
-        setForceUpdateToggle((forceUpdateToggle) => (!forceUpdateToggle));        
-      }
-    }, [formState.submitCount]);  
+  useEffect(() => {
+    // very unstable hack. figure out how to fix this
+    if (formState.submitCount === 2) {
+      console.log("in AutoTTRecConfigForm useEffect, formState.submitCount:", formState.submitCount);
+      setForceUpdateToggle((forceUpdateToggle) => (!forceUpdateToggle));        
+    }
+  }, [formState.submitCount]);  
   //}
 
   async function onSubmit(formData: AutoTTRecConfigFormFields) {
