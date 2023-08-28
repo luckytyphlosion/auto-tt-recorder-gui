@@ -6,8 +6,10 @@ import { MusicVolumeInput } from "../../form_components/MusicVolumeInput";
 import { MusicPresentationInput } from "../../form_components/MusicPresentationInput";
 import { FormComplexity } from "../FormComplexityLayout";
 import { Timeline } from "../choice_layouts/NoTop10CategoryLayout";
-import { DeselectableDropdown } from "../../DeselectableDropdown";
+import { DeselectableDropdown, SetDropdownErrorState } from "../../DeselectableDropdown";
 import { makeReadonlyArraySet, ValidValues } from "../../../../shared/array-set";
+import { undefinedToNullStr } from "../../../../shared/util-shared";
+
 import { SimpleErrorMessage } from "../../SimpleErrorMessage";
 import { FieldsetOr } from "../../FieldsetOr";
 import { isFileReadable } from "../../../util-renderer";
@@ -18,10 +20,20 @@ export const BACKGROUND_MUSIC_SOURCES = makeReadonlyArraySet(["music-filename", 
 export type BackgroundMusicSource = ValidValues<typeof BACKGROUND_MUSIC_SOURCES>;
 
 export function BackgroundMusicSourceInputAndMusicLayout(props: {timeline: Timeline, formComplexity: FormComplexity}) {
-  const {register, getValues} = useFormContextAutoTT();
+  const {register, getValues, getFieldState} = useFormContextAutoTT();
   const backgroundMusicSource = useWatchAutoTT({name: "background-music-source"});
   const isValueOrFILLMEIsValue = isValueOrFILLMEIsValueMaker();
   const musicFilenameInputEnable = isValueOrFILLMEIsValue(backgroundMusicSource, "music-filename");
+  /*const [
+    nonMusicFilenameBackgroundMusicSourceLiveValidateErrorMessage,
+    setNonMusicFilenameBackgroundMusicSourceLiveValidateErrorMessage
+  ] = useState(undefinedToNullStr(getFieldState("background-music-source").error?.message));
+  const [
+    musicFilenameBackgroundMusicSourceLiveValidateErrorMessage,
+    setMusicFilenameBackgroundMusicSourceLiveValidateErrorMessage
+  ] = useState(undefinedToNullStr(getFieldState("music-filename").error?.message));*/
+
+  const [rerenderErrorMessageCounter, setRerenderErrorMessageCounter] = useState(0);
 
   const renderCounter = useRenderCounter(false, "BackgroundMusicSourceInputAndMusicLayout");
 
@@ -50,6 +62,20 @@ export function BackgroundMusicSourceInputAndMusicLayout(props: {timeline: Timel
     }
   }
 
+  async function liveValidateBackgroundMusicSourceInput(setDropdownErrorState: SetDropdownErrorState) {
+    let validateResult: string | boolean = await validateBackgroundMusicSourceAndCheckIsFileReadable("");
+    let validateResult_emptyStringIfTrue = validateResult === true ? "" : validateResult.toString();
+
+    let backgroundMusicSource = getValues("background-music-source");
+    if (isValueOrFILLMEIsValue(backgroundMusicSource, "music-filename")) {
+      setDropdownErrorState("music-filename", validateResult);
+    } else {
+      setDropdownErrorState("background-music-source", validateResult);
+      //setNonMusicFilenameBackgroundMusicSourceLiveValidateErrorMessage(validateResult_emptyStringIfTrue);
+    }
+    setRerenderErrorMessageCounter((rerenderErrorMessageCounter) => (rerenderErrorMessageCounter + 1));
+  }
+
   return (
     <div>
       <FieldsetOr>
@@ -57,14 +83,22 @@ export function BackgroundMusicSourceInputAndMusicLayout(props: {timeline: Timel
         <div className="like-input-group">
           <label className="start-label" htmlFor="background-music-source">Background Music: </label>
           <div className="start-label-contents">
-            <DeselectableDropdown name="background-music-source" noErrorMessage={true} customValidate={validateBackgroundMusicSourceAndCheckIsFileReadable}>
+            <DeselectableDropdown name="background-music-source" noErrorMessage={true} mixedErrorMessageInfo={
+              {
+                validate: validateBackgroundMusicSourceAndCheckIsFileReadable,
+                liveValidateCallback: liveValidateBackgroundMusicSourceInput
+              }
+            }>
               <option value="music-filename">Music filename</option>
               <option value="game-bgm">Game BGM</option>
               <option value="none">None</option>
             </DeselectableDropdown>
             {
               musicFilenameInputEnable ? 
-              <MusicFilenameInput validateBackgroundMusicSourceAndCheckIsFileReadable={validateBackgroundMusicSourceAndCheckIsFileReadable}/> : <SimpleErrorMessage name="background-music-source"/>
+              <MusicFilenameInput
+                validateBackgroundMusicSourceAndCheckIsFileReadable={validateBackgroundMusicSourceAndCheckIsFileReadable}
+                rerenderErrorMessageCounter={rerenderErrorMessageCounter}
+              /> : <SimpleErrorMessage name="background-music-source"/>
             }
           </div>
           {

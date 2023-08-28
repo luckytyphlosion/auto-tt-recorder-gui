@@ -34,7 +34,8 @@ export function OpenFileTextInputWithButton<K extends AutoTTRecConfigFormStringA
   errorMessageOnBottom?: boolean,
   inline?: boolean,
   // other flags
-  notRequired?: boolean
+  notRequired?: boolean,
+  rerenderErrorMessageCounter?: number
 }) {
   const {setValue, getValues, formState, getFieldState} = useFormContextAutoTT();
   const [rerenderCounter, setRerenderCounter] = useState(0);
@@ -157,7 +158,7 @@ export function OpenFileTextInputWithButton<K extends AutoTTRecConfigFormStringA
         </div>
       }
     }
-  }, [props.name, props.startLabel, props.dialogType, props.validate, props.notInGrid, props.noStartLabelClass, props.errorMessageOnBottom, props.inline, props.notRequired, errorMessage, rerenderCounter, asyncRerenderCounter]);
+  }, [props.name, props.startLabel, props.dialogType, props.validate, props.notInGrid, props.noStartLabelClass, props.errorMessageOnBottom, props.inline, props.notRequired, errorMessage, rerenderCounter, asyncRerenderCounter, props.rerenderErrorMessageCounter]);
 
   return errorMessageElement_memoed;
 }
