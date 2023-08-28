@@ -44,7 +44,7 @@ export function BackgroundMusicSourceInputAndMusicLayout(props: {timeline: Timel
     //let backgroundMusicSource = getValues("background-music-source");
     //console.log("validateBackgroundMusicSourceAndCheckIsFileReadable backgroundMusicSource:", backgroundMusicSource);
     let backgroundMusicSource = getValues("background-music-source");
-    console.log("validateBackgroundMusicSourceAndCheckIsFileReadable backgroundMusicSource:", backgroundMusicSource);
+    //console.log("validateBackgroundMusicSourceAndCheckIsFileReadable backgroundMusicSource:", backgroundMusicSource);
     if (backgroundMusicSource === "game-bgm" || backgroundMusicSource === "none") {
       return true;
     } else if (backgroundMusicSource === "<FILLME>") {

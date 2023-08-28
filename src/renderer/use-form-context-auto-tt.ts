@@ -31,10 +31,10 @@ export function useTriggerAndRerenderAutoTT<K extends keyof AutoTTRecConfigFormF
       //let newFieldErrors = formState2.errors[name];
       //console.log("newFieldErrors:", newFieldErrors);
       let fieldState = getFieldState(name);
-      console.log(`useTriggerAndRerender-${name} fieldState:`, fieldState);
+      //console.log(`useTriggerAndRerender-${name} fieldState:`, fieldState);
       let formStateErrorMessage = undefinedToNullStr(formState.errors[name]?.message);
       let newFieldErrorMessage = undefinedToNullStr(fieldState.error?.message); //formState2.errors[name]?.message;
-      console.log(`useTriggerAndRerender-${name} newFieldErrorMessage:`, newFieldErrorMessage, ", formStateErrorMessage:", formStateErrorMessage);
+      //console.log(`useTriggerAndRerender-${name} newFieldErrorMessage:`, newFieldErrorMessage, ", formStateErrorMessage:", formStateErrorMessage);
       setFieldErrorMessage(newFieldErrorMessage);
       // if (newFieldErrorMessage === "") {
       //   setNoErrorMessageTryAgainCounter((noErrorMessageTryAgainCounter) => (noErrorMessageTryAgainCounter + 1));
@@ -45,14 +45,14 @@ export function useTriggerAndRerenderAutoTT<K extends keyof AutoTTRecConfigFormF
 
 export async function triggerAndRerenderAutoTT(name: AutoTTRecConfigFormFieldName, trigger: UseFormTrigger<AutoTTRecConfigFormFields>, formState: FormState<AutoTTRecConfigFormFields>, setFieldErrorMessage: React.Dispatch<React.SetStateAction<string>>) {
   if (name !== undefined) {
-    console.log(`manual before trigger ${name} formState:`, formState);
+    //console.log(`manual before trigger ${name} formState:`, formState);
     await trigger(name, {shouldFocus: true});
-    console.log(`manual after trigger ${name} formState:`, formState);
+    //console.log(`manual after trigger ${name} formState:`, formState);
     let newFieldErrorMessage = formState.errors[name]?.message;
     if (newFieldErrorMessage === undefined) {
       newFieldErrorMessage = "";
     }
-    console.log("manual newFieldErrorMessage:", newFieldErrorMessage);
+    //console.log("manual newFieldErrorMessage:", newFieldErrorMessage);
     setFieldErrorMessage(newFieldErrorMessage);
   }
 }

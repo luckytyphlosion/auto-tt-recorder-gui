@@ -25,29 +25,20 @@ export function AutoTTRecConfigFormComponents(props: {
   initialValidateFormOnOpen: boolean
 }) {  
   const renderCounter = useRenderCounter(false, "AutoTTRecConfigFormComponents");
-  console.log("Rendering AutoTTRecConfigFormComponents. forceUpdate: ", props.forceUpdate);
-  //const [validateFormOnOpenForceUpdate, setValidateFormOnOpenForceUpdate] = useState(false);
+  //console.log("Rendering AutoTTRecConfigFormComponents. forceUpdate: ", props.forceUpdate);
 
-  const onErrorNoExport = useCallback(function (errors: Object) {
-    //console.log("onErrorNoExport props.formMethods:", props.formMethods);
-    // I tried figuring out why a form reset had to be done for error messages to show up
-    // before submitting the form
-    // but I was unable to
-    // so we have to submit the form on open so that error messages show
-    // validate form on open just controls whether to show the errors
-    props.formMethods.reset(undefined, {keepValues: true, keepErrors: props.initialValidateFormOnOpen, keepSubmitCount: true});
-    //console.log("onErrorNoExport after reset");
-  }, [props.initialValidateFormOnOpen]);
-
-  const initialValidateFormOnOpenHandleSubmit = useCallback(props.formMethods.handleSubmit(() => {}, onErrorNoExport), []);
-
-  useEffect(() => {
+  /*useEffect(() => {
     //console.log("AutoTTRecConfigFormComponents useEffect renderCount:", renderCount.current);
     if (props.formMethods.formState.submitCount === 0) {
+      // I tried figuring out why a form reset had to be done for error messages to show up
+      // before submitting the form
+      // but I was unable to
+      // so we have to submit the form on open so that error messages show
+      // validate form on open just controls whether to show the errors
       console.log("Do form submission at start:", props.formMethods.formState, ", submitCount:", props.formMethods.formState.submitCount);
-      initialValidateFormOnOpenHandleSubmit();
+      props.validateFormViaSubmitSync(props.initialValidateFormOnOpen);
     }
-  }, [props.initialValidateFormOnOpen]);
+  }, [props.initialValidateFormOnOpen]);*/
   
   return (
     <div className="auto-tt-rec-config-form">

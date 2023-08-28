@@ -35,7 +35,7 @@ export function AutoTTRecManager(props: {
   const [programStatusDetails, setProgramStatusDetails] = useState("");
   const [isAutoTTRecRunning, setAutoTTRecRunning] = useState(false);
 
-  //console.log("AutoTTRecManager programStatusDetails:", programStatusDetails);
+  console.log("AutoTTRecManager INITIAL_FORM_DATA:", props.INITIAL_FORM_DATA);
   const renderCounter = useRenderCounter(false, "AutoTTRecManager");
 
   const handleSendStdoutListener = useCallback(function (event: IpcRendererEvent, stdoutData: string) {

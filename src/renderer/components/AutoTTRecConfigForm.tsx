@@ -109,6 +109,11 @@ export function areAutoTTRecConfigFormPropsEqual(oldProps: AutoTTRecConfigFormPr
   }
 }
 
+enum InitialValidationStateNum {
+  UNVALIDATED = 0,
+  VALIDATED
+}
+
 export function AutoTTRecConfigForm(
   props: AutoTTRecConfigFormProps
 ) {  
@@ -123,16 +128,74 @@ export function AutoTTRecConfigForm(
   //console.trace();
   //console.log("props:", props);
 
-  console.log("formMethods:", formMethods);
   //const isoWbfsFileInput = <ISOWBFSFileInput/>;
   //const mainGhostFilenameInput = <MainGhostFilenameInput arg={1}/>;
   const [unrenderFormToggle, setUnrenderFormToggle] = useState(false);
   const [forceUpdateToggle, setForceUpdateToggle] = useState(false);
+  const [submitCountOnLastValidateSubmit, setSubmitCountOnLastValidateSubmit] = useState(-1);
+  const [validateFormViaSubmit_keepErrors, setValidateFormViaSubmit_keepErrors] = useState(false);
+  const [initialValidationStateNum, setInitialValidationStateNum] = useState<InitialValidationStateNum>(InitialValidationStateNum.UNVALIDATED);
+
   const renderCount = useRef(0);
   renderCount.current = renderCount.current + 1;
   //console.log("AutoTTRecConfigForm renderCount:", renderCount.current, ", forceUpdateToggle:", forceUpdateToggle);
 
   let formState = formMethods.formState;
+  console.log(`[${renderCount.current}] AutoTTRecConfigForm formMethods:`, formMethods, ", forceUpdateToggle:", forceUpdateToggle, ", formState.isSubmitSuccessful:", formState.isSubmitSuccessful);
+
+  const validateFormViaSubmitSync = useCallback(function (keepErrors: boolean, afterValidatedCallback: () => void) {
+    //function validateFormViaSubmitSync(keepErrors: boolean) {
+      function resetFormKeepErrors(errors: Object) {
+        console.log("resetFormKeepErrors formState.submitCount:", formState.submitCount);
+        //setSubmitCountOnLastValidateSubmit(formState.submitCount);
+        //setValidateFormViaSubmit_keepErrors(true);
+        formMethods.reset(undefined, {keepValues: true, keepErrors: true, keepSubmitCount: true});
+      }
+
+      function resetFormClearErrors(errors: Object) {
+        console.log("resetFormClearErrors formState.submitCount:", formState.submitCount);
+        //setSubmitCountOnLastValidateSubmit(formState.submitCount);
+        //setValidateFormViaSubmit_keepErrors(false);
+        formMethods.reset(undefined, {keepValues: true, keepErrors: false, keepSubmitCount: true});
+      }
+
+      async function validateFormViaSubmit(keepErrors: boolean) {
+        const handleSubmitForValidation = formMethods.handleSubmit(() => {}, keepErrors ? resetFormKeepErrors : resetFormClearErrors);
+        await handleSubmitForValidation();
+      }
+  
+      console.log("in validateFormViaSubmitSync: keepErrors: ", keepErrors);
+      validateFormViaSubmit(keepErrors).then(afterValidatedCallback);/*.then(() => {
+        setForceUpdateToggle((oldForceUpdateToggle) => {
+          console.log("in setForceUpdateToggle oldForceUpdateToggle:", oldForceUpdateToggle, "->", !oldForceUpdateToggle);
+          return !oldForceUpdateToggle;
+        });
+      });*/
+    //}
+  }, []);
+
+  useEffect(() => {
+    if (initialValidationStateNum === InitialValidationStateNum.UNVALIDATED) {
+      //console.log("form unvalidated getValues():", formMethods.getValues());
+      //console.log("initial useEffect props.validateFormOnOpen:", props.validateFormOnOpen);
+      validateFormViaSubmitSync(props.validateFormOnOpen, () => {
+        setInitialValidationStateNum(InitialValidationStateNum.VALIDATED);
+      });
+    } else if (initialValidationStateNum === InitialValidationStateNum.VALIDATED) {
+      setForceUpdateToggle((oldForceUpdateToggle) => {
+        console.log("in setForceUpdateToggle oldForceUpdateToggle:", oldForceUpdateToggle, "->", !oldForceUpdateToggle);
+        return !oldForceUpdateToggle;
+      });
+    }
+  }, [initialValidationStateNum]);
+
+  /*
+  useEffect(() => {
+    let submitCount = formState.submitCount;
+    console.log("submitCountOnLastValidateSubmit:", submitCountOnLastValidateSubmit, ", submitCount:", submitCount);
+  }, [submitCountOnLastValidateSubmit]);
+  */
+
   /*const getRunAutoTTRecOnSubmitCallback = () => {
     return formMethods.handleSubmit(onSubmit, onError);
   };*/
@@ -162,14 +225,26 @@ export function AutoTTRecConfigForm(
   // }, [doNotTriggerRendersDueToErrors]);
 
   //if (props.validateFormOnOpen) {
-  useEffect(() => {
+  /*useEffect(() => {
     // very unstable hack. figure out how to fix this
     if (formState.submitCount === 2) {
       console.log("in AutoTTRecConfigForm useEffect, formState.submitCount:", formState.submitCount);
-      setForceUpdateToggle((forceUpdateToggle) => (!forceUpdateToggle));        
+      setForceUpdateToggle((forceUpdateToggle) => (!forceUpdateToggle));
     }
-  }, [formState.submitCount]);  
+  }, [formState.submitCount]);*/
   //}
+
+  // I tried figuring out why a form reset had to be done
+  // for error messages to show up before submitting the form
+  // but I was unable to, so we have to submit the form on open
+  // so that error messages show.
+  
+
+
+  // const validateFormViaSubmit = useCallback(async function (keepErrors: boolean) {
+  //   const handleSubmitForValidation = formMethods.handleSubmit(() => {}, keepErrors ? resetFormKeepErrors : resetFormClearErrors);
+  //   await handleSubmitForValidation();
+  // }, []);
 
   async function onSubmit(formData: AutoTTRecConfigFormFields) {
     let lastRecordedTemplateFilename = await window.api.getLastRecordedTemplateFilename();
@@ -198,6 +273,25 @@ export function AutoTTRecConfigForm(
     //console.log("formState.touchedFields:", formState.touchedFields);
     formMethods.reset(undefined, {keepValues: true, keepErrors: true, keepSubmitCount: true});
   }, []);
+
+  //const autoTTRecConfigFormComponentsMemoElement = ;
+
+  /*useEffect(() => {
+    //console.log("AutoTTRecConfigFormComponents useEffect renderCount:", renderCount.current);
+    if (props.formMethods.formState.submitCount === 0) {
+      // I tried figuring out why a form reset had to be done for error messages to show up
+      // before submitting the form
+      // but I was unable to
+      // so we have to submit the form on open so that error messages show
+      // validate form on open just controls whether to show the errors
+      console.log("Do form submission at start:", formMethods.formState, ", submitCount:", props.formMethods.formState.submitCount);
+      props.validateFormViaSubmitSync(props.validateFormOnOpen);
+    }
+  }, [props.validateFormOnOpen]);*/
+
+  /*if (initialValidationStateNum === InitialValidationStateNum.UNVALIDATED) {
+    return <div></div>;
+  }*/
 
   return (
     <div>

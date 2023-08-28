@@ -18,7 +18,7 @@ export function ChadsoftCacheExpiryInput() {
     let errorMessage = "";
 
     if (matchObj !== null) {
-      console.log("ChadsoftCacheExpiryInput matchObj", matchObj);
+      //console.log("ChadsoftCacheExpiryInput matchObj", matchObj);
       let hours = Number(matchObj[1]);
       let minutes = Number(matchObj[2]);
       let seconds = Number(matchObj[3]);
