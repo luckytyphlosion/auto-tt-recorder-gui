@@ -99,8 +99,6 @@ export function DeselectableRadioButton<K extends AutoTTRecConfigFormChoiceArgNa
       <input type="radio" id={props.id} value={props.value} className={blockDisplay ? "long-radio-button-group__input" : undefined}
         {...register(context.name, {
           onChange: async (e: Event) => {
-            //let curValue = getValues(context.name);
-            //console.log(`${props.value}-DeselectableRadioButton curValue:`, curValue);
             if (props.onChange !== undefined) {
               if (e instanceof Event) {
                 props.onChange(e);
