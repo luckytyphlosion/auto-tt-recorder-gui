@@ -113,8 +113,7 @@ export function areAutoTTRecConfigFormPropsEqual(oldProps: AutoTTRecConfigFormPr
 
 enum ValidationSubmitState {
   NOT_VALIDATING = 0,
-  DO_RESET,
-  RENDER_AFTER_CLEAR_ERRORS,
+  DO_RESET
 }
 
 export function AutoTTRecConfigForm(
@@ -187,21 +186,8 @@ export function AutoTTRecConfigForm(
 
   useEffect(() => {
     if (initialValidationStateNum === ValidationSubmitState.DO_RESET) {
-
       formMethods.reset(undefined, {keepValues: true, keepErrors: validateFormViaSubmit_keepErrors, keepSubmitCount: true});
-      console.log("validateFormViaSubmit_keepErrors:", validateFormViaSubmit_keepErrors);
-      if (false) {
-        setInitialValidationStateNum(ValidationSubmitState.RENDER_AFTER_CLEAR_ERRORS);
-      } else {
-        setForceUpdateToggle((oldForceUpdateToggle) => {
-          //console.log("in setForceUpdateToggle oldForceUpdateToggle:", oldForceUpdateToggle, "->", !oldForceUpdateToggle);
-          return !oldForceUpdateToggle;
-        });
-        setInitialValidationStateNum(ValidationSubmitState.NOT_VALIDATING);
-      }
-    } else if (initialValidationStateNum === ValidationSubmitState.RENDER_AFTER_CLEAR_ERRORS) {
-      console.log("RENDER_AFTER_CLEAR_ERRORS formState:", formState);
-      formMethods.clearErrors();
+      //console.log("validateFormViaSubmit_keepErrors:", validateFormViaSubmit_keepErrors);
       setForceUpdateToggle((oldForceUpdateToggle) => {
         //console.log("in setForceUpdateToggle oldForceUpdateToggle:", oldForceUpdateToggle, "->", !oldForceUpdateToggle);
         return !oldForceUpdateToggle;

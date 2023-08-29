@@ -27,8 +27,6 @@ export function useTriggerAndRerenderAutoTT<K extends keyof AutoTTRecConfigFormF
     if (name !== undefined) {
       //console.log(`before trigger ${name} formState:`, formState);
       await trigger(name);
-      
-      
       //console.log("getFieldState:", );
       //let newFieldErrors = formState2.errors[name];
       //console.log("newFieldErrors:", newFieldErrors);
