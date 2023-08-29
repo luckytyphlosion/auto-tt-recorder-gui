@@ -109,9 +109,9 @@ export function areAutoTTRecConfigFormPropsEqual(oldProps: AutoTTRecConfigFormPr
   }
 }
 
-enum InitialValidationStateNum {
-  UNVALIDATED = 0,
-  VALIDATED
+enum ValidationSubmitState {
+  NOT_VALIDATING = 0,
+  DO_RESET
 }
 
 export function AutoTTRecConfigForm(
@@ -134,7 +134,7 @@ export function AutoTTRecConfigForm(
   const [forceUpdateToggle, setForceUpdateToggle] = useState(false);
   const [submitCountOnLastValidateSubmit, setSubmitCountOnLastValidateSubmit] = useState(-1);
   const [validateFormViaSubmit_keepErrors, setValidateFormViaSubmit_keepErrors] = useState(false);
-  const [initialValidationStateNum, setInitialValidationStateNum] = useState<InitialValidationStateNum>(InitialValidationStateNum.UNVALIDATED);
+  const [initialValidationStateNum, setInitialValidationStateNum] = useState<ValidationSubmitState>(ValidationSubmitState.NOT_VALIDATING);
 
   const renderCount = useRef(0);
   renderCount.current = renderCount.current + 1;
@@ -143,29 +143,32 @@ export function AutoTTRecConfigForm(
   let formState = formMethods.formState;
   console.log(`[${renderCount.current}] AutoTTRecConfigForm formMethods:`, formMethods, ", forceUpdateToggle:", forceUpdateToggle, ", formState.isSubmitSuccessful:", formState.isSubmitSuccessful);
 
-  const validateFormViaSubmitSync = useCallback(function (keepErrors: boolean, afterValidatedCallback: () => void) {
+  const validateFormViaSubmitSync = useCallback(function (keepErrors: boolean) {
     //function validateFormViaSubmitSync(keepErrors: boolean) {
-      function resetFormKeepErrors(errors: Object) {
-        console.log("resetFormKeepErrors formState.submitCount:", formState.submitCount);
-        //setSubmitCountOnLastValidateSubmit(formState.submitCount);
-        //setValidateFormViaSubmit_keepErrors(true);
-        formMethods.reset(undefined, {keepValues: true, keepErrors: true, keepSubmitCount: true});
-      }
+      // function resetFormKeepErrors(errors: Object) {
+      //   console.log("resetFormKeepErrors formState.submitCount:", formState.submitCount);
+      //   //setSubmitCountOnLastValidateSubmit(formState.submitCount);
+      //   //setValidateFormViaSubmit_keepErrors(true);
+      //   formMethods.reset(undefined, {keepValues: true, keepErrors: true, keepSubmitCount: true});
+      // }
 
-      function resetFormClearErrors(errors: Object) {
-        console.log("resetFormClearErrors formState.submitCount:", formState.submitCount);
-        //setSubmitCountOnLastValidateSubmit(formState.submitCount);
-        //setValidateFormViaSubmit_keepErrors(false);
-        formMethods.reset(undefined, {keepValues: true, keepErrors: false, keepSubmitCount: true});
-      }
+      // function resetFormClearErrors(errors: Object) {
+      //   console.log("resetFormClearErrors formState.submitCount:", formState.submitCount);
+      //   //setSubmitCountOnLastValidateSubmit(formState.submitCount);
+      //   //setValidateFormViaSubmit_keepErrors(false);
+      //   formMethods.reset(undefined, {keepValues: true, keepErrors: false, keepSubmitCount: true});
+      // }
 
       async function validateFormViaSubmit(keepErrors: boolean) {
-        const handleSubmitForValidation = formMethods.handleSubmit(() => {}, keepErrors ? resetFormKeepErrors : resetFormClearErrors);
+        const handleSubmitForValidation = formMethods.handleSubmit(() => {}, () => {});
         await handleSubmitForValidation();
       }
   
       console.log("in validateFormViaSubmitSync: keepErrors: ", keepErrors);
-      validateFormViaSubmit(keepErrors).then(afterValidatedCallback);/*.then(() => {
+      validateFormViaSubmit(keepErrors).then(() => {
+        setValidateFormViaSubmit_keepErrors(keepErrors);
+        setInitialValidationStateNum(ValidationSubmitState.DO_RESET);
+      });/*.then(() => {
         setForceUpdateToggle((oldForceUpdateToggle) => {
           console.log("in setForceUpdateToggle oldForceUpdateToggle:", oldForceUpdateToggle, "->", !oldForceUpdateToggle);
           return !oldForceUpdateToggle;
@@ -175,17 +178,18 @@ export function AutoTTRecConfigForm(
   }, []);
 
   useEffect(() => {
-    if (initialValidationStateNum === InitialValidationStateNum.UNVALIDATED) {
-      //console.log("form unvalidated getValues():", formMethods.getValues());
-      //console.log("initial useEffect props.validateFormOnOpen:", props.validateFormOnOpen);
-      validateFormViaSubmitSync(props.validateFormOnOpen, () => {
-        setInitialValidationStateNum(InitialValidationStateNum.VALIDATED);
-      });
-    } else if (initialValidationStateNum === InitialValidationStateNum.VALIDATED) {
+    validateFormViaSubmitSync(props.validateFormOnOpen);
+  }, []);
+
+  useEffect(() => {
+    if (initialValidationStateNum === ValidationSubmitState.DO_RESET) {
+      formMethods.reset(undefined, {keepValues: true, keepErrors: validateFormViaSubmit_keepErrors, keepSubmitCount: true});
+      
       setForceUpdateToggle((oldForceUpdateToggle) => {
         console.log("in setForceUpdateToggle oldForceUpdateToggle:", oldForceUpdateToggle, "->", !oldForceUpdateToggle);
         return !oldForceUpdateToggle;
       });
+      setInitialValidationStateNum(ValidationSubmitState.NOT_VALIDATING);
     }
   }, [initialValidationStateNum]);
 
@@ -289,7 +293,7 @@ export function AutoTTRecConfigForm(
     }
   }, [props.validateFormOnOpen]);*/
 
-  /*if (initialValidationStateNum === InitialValidationStateNum.UNVALIDATED) {
+  /*if (initialValidationStateNum === ValidationSubmitState.UNVALIDATED) {
     return <div></div>;
   }*/
 
