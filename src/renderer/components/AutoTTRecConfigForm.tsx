@@ -304,7 +304,7 @@ export function AutoTTRecConfigForm(
         <br/>
         <strong>Other program settings:</strong>
         <ValidateFormOnOpen disabled={props.isAutoTTRecRunning} initialValue={props.validateFormOnOpen}/>
-        <ExpandUnselectedChoiceInputs_Memo disabled={props.isAutoTTRecRunning} formMethods={formMethods}/>
+        <ExpandUnselectedChoiceInputs_Memo disabled={props.isAutoTTRecRunning} formMethods={formMethods} validateFormViaSubmitSync={validateFormViaSubmitSync}/>
   <br/>
         <ImportTemplate_Memo disabled={props.isAutoTTRecRunning} formMethods={formMethods} setUnrenderFormToggle={setUnrenderFormToggle} onError={onError}/>
         <ClearAllFields_Memo disabled={props.isAutoTTRecRunning} formMethods={formMethods} setUnrenderFormToggle={setUnrenderFormToggle}/>

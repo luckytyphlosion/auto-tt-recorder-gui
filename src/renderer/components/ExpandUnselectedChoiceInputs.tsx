@@ -6,8 +6,8 @@ import { ReadTemplateResult, ReadTemplateStatus, AutoTTRecConfig } from "../../s
 
 export function ExpandUnselectedChoiceInputs(props: {
   disabled: boolean,
-
   formMethods: UseFormReturn<AutoTTRecConfigFormFields, any, undefined>,
+  validateFormViaSubmitSync: (keepErrors: boolean) => void
 }) {
   const expandUnselectedChoiceInputs = useWatch({
     name: "expand-unselected-choice-inputs",
@@ -16,6 +16,7 @@ export function ExpandUnselectedChoiceInputs(props: {
 
   function updateExpandUnselectedChoiceInputs(event: React.ChangeEvent<HTMLInputElement>) {
     props.formMethods.setValue("expand-unselected-choice-inputs", event.target.checked);
+    props.validateFormViaSubmitSync(true);
   }
 
   useEffect(() => {
