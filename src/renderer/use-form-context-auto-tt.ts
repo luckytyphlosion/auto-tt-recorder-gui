@@ -2,6 +2,8 @@ import { useWatch, useFormContext, UseFormTrigger, FormState, useFormState } fro
 import { useState, useEffect } from "react";
 import { undefinedToNullStr } from "../shared/util-shared";
 
+import { globalValidateFormOnOpen } from "./components/AutoTTRecConfigForm";
+
 import { AutoTTRecConfigFormFields, AutoTTRecConfigFormFieldName, AutoTTRecConfigFormBooleanArgName, AutoTTRecConfigFormChoiceArgName } from "./auto-tt-rec-form-field-types";
 
 export function useFormContextAutoTT() {
@@ -10,7 +12,8 @@ export function useFormContextAutoTT() {
 
 export function useTriggerAndRerenderAutoTT<K extends keyof AutoTTRecConfigFormFields>(name: K) {
   const [fieldErrorMessage, setFieldErrorMessage] = useState<string>("");
-  const [noErrorMessageTryAgainCounter, setNoErrorMessageTryAgainCounter] = useState(0);
+  //const [noErrorMessageTryAgainCounter, setNoErrorMessageTryAgainCounter] = useState(0);
+  const [untouchedForceRerenderCounter, setUntouchedForcedRerenderCounter] = useState(0);
   //const formState2 = useFormState<AutoTTRecConfigFormFields>({name: name, exact: true});
   const {trigger, getFieldState, formState} = useFormContextAutoTT();
   //const formState2 = formState;
@@ -20,22 +23,31 @@ export function useTriggerAndRerenderAutoTT<K extends keyof AutoTTRecConfigFormF
   //   console.log("Form state errors trigger formState:", formState);
   // }, [noErrorMessageTryAgainCounter]);
 
-
-  return async function() { 
+  return async function(fromBlurOrChange: boolean) { 
     if (name !== undefined) {
-      //console.log(`before trigger ${name} formState:`, formState2);
+      //console.log(`before trigger ${name} formState:`, formState);
       await trigger(name);
-      //console.log(`after trigger ${name} formState:`, formState2);
-
+      
+      
       //console.log("getFieldState:", );
       //let newFieldErrors = formState2.errors[name];
       //console.log("newFieldErrors:", newFieldErrors);
       let fieldState = getFieldState(name);
-      //console.log(`useTriggerAndRerender-${name} fieldState:`, fieldState);
       let formStateErrorMessage = undefinedToNullStr(formState.errors[name]?.message);
       let newFieldErrorMessage = undefinedToNullStr(fieldState.error?.message); //formState2.errors[name]?.message;
-      //console.log(`useTriggerAndRerender-${name} newFieldErrorMessage:`, newFieldErrorMessage, ", formStateErrorMessage:", formStateErrorMessage);
+      if (name === "top-10-chadsoft" || name === "comparison-ghost-filename") {
+        console.log(`after trigger ${name} formState:`, formState);
+        console.log(`useTriggerAndRerender-${name} fieldState:`, fieldState);
+        console.log(`useTriggerAndRerender-${name} fieldErrorMessage:`, fieldErrorMessage, "newFieldErrorMessage:", newFieldErrorMessage, ", formStateErrorMessage:", formStateErrorMessage);
+      }
+      //if (globalValidateFormOnOpen || fieldState.isTouched) {
       setFieldErrorMessage(newFieldErrorMessage);
+      if (fromBlurOrChange && !globalValidateFormOnOpen) {
+        setUntouchedForcedRerenderCounter(1);
+      }
+      //}
+      //if (fieldState.isTouched) {
+      //}
       // if (newFieldErrorMessage === "") {
       //   setNoErrorMessageTryAgainCounter((noErrorMessageTryAgainCounter) => (noErrorMessageTryAgainCounter + 1));
       // }
@@ -43,19 +55,19 @@ export function useTriggerAndRerenderAutoTT<K extends keyof AutoTTRecConfigFormF
   }
 }
 
-export async function triggerAndRerenderAutoTT(name: AutoTTRecConfigFormFieldName, trigger: UseFormTrigger<AutoTTRecConfigFormFields>, formState: FormState<AutoTTRecConfigFormFields>, setFieldErrorMessage: React.Dispatch<React.SetStateAction<string>>) {
-  if (name !== undefined) {
-    //console.log(`manual before trigger ${name} formState:`, formState);
-    await trigger(name, {shouldFocus: true});
-    //console.log(`manual after trigger ${name} formState:`, formState);
-    let newFieldErrorMessage = formState.errors[name]?.message;
-    if (newFieldErrorMessage === undefined) {
-      newFieldErrorMessage = "";
-    }
-    //console.log("manual newFieldErrorMessage:", newFieldErrorMessage);
-    setFieldErrorMessage(newFieldErrorMessage);
-  }
-}
+// export async function triggerAndRerenderAutoTT(name: AutoTTRecConfigFormFieldName, trigger: UseFormTrigger<AutoTTRecConfigFormFields>, formState: FormState<AutoTTRecConfigFormFields>, setFieldErrorMessage: React.Dispatch<React.SetStateAction<string>>) {
+//   if (name !== undefined) {
+//     //console.log(`manual before trigger ${name} formState:`, formState);
+//     await trigger(name, {shouldFocus: true});
+//     //console.log(`manual after trigger ${name} formState:`, formState);
+//     let newFieldErrorMessage = formState.errors[name]?.message;
+//     if (newFieldErrorMessage === undefined) {
+//       newFieldErrorMessage = "";
+//     }
+//     //console.log("manual newFieldErrorMessage:", newFieldErrorMessage);
+//     setFieldErrorMessage(newFieldErrorMessage);
+//   }
+// }
 
 export function useWatchAutoTT<K extends keyof AutoTTRecConfigFormFields>(props: {name: K}) {
   const {control} = useFormContextAutoTT();

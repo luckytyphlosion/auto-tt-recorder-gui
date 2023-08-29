@@ -20,13 +20,13 @@ export function TextInput<K extends AutoTTRecConfigFormStringArgName>(props: {na
   //console.log(`${props.name}-TextInput inputTouchedOrInvalid:`, inputTouchedOrInvalid);
 
   async function onBlur(e: React.FocusEvent<HTMLInputElement>) {
-    //console.log(e);
-    await triggerAndRerender();
+    console.log(`TextInput-${props.name} onBlur inputTouchedOrInvalid:`, inputTouchedOrInvalid);
+    await triggerAndRerender(true);
   }
 
   useEffect(() => {
     if (!inputTouchedOrInvalid) {
-      triggerAndRerender().then();
+      triggerAndRerender(false).then();
     }
   }, [inputTouchedOrInvalid]);
 

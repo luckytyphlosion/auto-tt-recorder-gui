@@ -24,7 +24,7 @@ export function ClearableReadonlyTextInput<K extends AutoTTRecConfigFormStringAr
         if (props.setState !== undefined) {
           props.setState("");
         }
-        await triggerAndRerender();
+        await triggerAndRerender(true);
         if (props.parentRerenderSetState !== undefined) {
           props.parentRerenderSetState((oldValue) => (oldValue + 1));
         }

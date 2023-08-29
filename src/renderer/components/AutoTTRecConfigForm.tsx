@@ -72,6 +72,8 @@ const ExpandUnselectedChoiceInputs_Memo = memo(ExpandUnselectedChoiceInputs);
 const ClearAllFields_Memo = memo(ClearAllFields);
 const ImportTemplate_Memo = memo(ImportTemplate);
 
+export let globalValidateFormOnOpen: boolean;
+
 type Entries<T> = {
   [K in keyof T]: [K, T[K]];
 }[keyof T][];
@@ -111,12 +113,15 @@ export function areAutoTTRecConfigFormPropsEqual(oldProps: AutoTTRecConfigFormPr
 
 enum ValidationSubmitState {
   NOT_VALIDATING = 0,
-  DO_RESET
+  DO_RESET,
+  RENDER_AFTER_CLEAR_ERRORS,
 }
 
 export function AutoTTRecConfigForm(
   props: AutoTTRecConfigFormProps
-) {  
+) {
+  globalValidateFormOnOpen = props.validateFormOnOpen;
+
   const renderCounter = useRenderCounter(false, "AutoTTRecConfigForm");
   const formMethods = useForm<AutoTTRecConfigFormFields>({
     criteriaMode: "all",
@@ -132,7 +137,6 @@ export function AutoTTRecConfigForm(
   //const mainGhostFilenameInput = <MainGhostFilenameInput arg={1}/>;
   const [unrenderFormToggle, setUnrenderFormToggle] = useState(false);
   const [forceUpdateToggle, setForceUpdateToggle] = useState(false);
-  const [submitCountOnLastValidateSubmit, setSubmitCountOnLastValidateSubmit] = useState(-1);
   const [validateFormViaSubmit_keepErrors, setValidateFormViaSubmit_keepErrors] = useState(false);
   const [initialValidationStateNum, setInitialValidationStateNum] = useState<ValidationSubmitState>(ValidationSubmitState.NOT_VALIDATING);
 
@@ -183,10 +187,23 @@ export function AutoTTRecConfigForm(
 
   useEffect(() => {
     if (initialValidationStateNum === ValidationSubmitState.DO_RESET) {
+
       formMethods.reset(undefined, {keepValues: true, keepErrors: validateFormViaSubmit_keepErrors, keepSubmitCount: true});
-      
+      console.log("validateFormViaSubmit_keepErrors:", validateFormViaSubmit_keepErrors);
+      if (false) {
+        setInitialValidationStateNum(ValidationSubmitState.RENDER_AFTER_CLEAR_ERRORS);
+      } else {
+        setForceUpdateToggle((oldForceUpdateToggle) => {
+          //console.log("in setForceUpdateToggle oldForceUpdateToggle:", oldForceUpdateToggle, "->", !oldForceUpdateToggle);
+          return !oldForceUpdateToggle;
+        });
+        setInitialValidationStateNum(ValidationSubmitState.NOT_VALIDATING);
+      }
+    } else if (initialValidationStateNum === ValidationSubmitState.RENDER_AFTER_CLEAR_ERRORS) {
+      console.log("RENDER_AFTER_CLEAR_ERRORS formState:", formState);
+      formMethods.clearErrors();
       setForceUpdateToggle((oldForceUpdateToggle) => {
-        console.log("in setForceUpdateToggle oldForceUpdateToggle:", oldForceUpdateToggle, "->", !oldForceUpdateToggle);
+        //console.log("in setForceUpdateToggle oldForceUpdateToggle:", oldForceUpdateToggle, "->", !oldForceUpdateToggle);
         return !oldForceUpdateToggle;
       });
       setInitialValidationStateNum(ValidationSubmitState.NOT_VALIDATING);

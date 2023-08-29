@@ -53,7 +53,7 @@ export function OpenFileTextInputWithButton<K extends AutoTTRecConfigFormStringA
 
   useEffect(() => {
     if (!inputTouchedOrInvalid) {
-      triggerAndRerender().then();
+      triggerAndRerender(false).then();
     }
   }, [inputTouchedOrInvalid]);
 
@@ -73,7 +73,7 @@ export function OpenFileTextInputWithButton<K extends AutoTTRecConfigFormStringA
     if (response !== "") {
       // what type is response expected to be here?
       setValue(props.name, response as any, {shouldTouch: true});
-      await triggerAndRerender();
+      await triggerAndRerender(true);
       setAsyncRerenderCounter((asyncRerenderCounter) => (asyncRerenderCounter + 1));
     }
   }
