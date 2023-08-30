@@ -18,9 +18,31 @@ export function DeselectableDropdown<K extends AutoTTRecConfigFormChoiceArgName>
   },
   onChange?: ((event?: Event) => void) | (() => void), nameAsId?: boolean, children?: React.ReactNode}) {
   const {register, setValue, getValues, getFieldState, setError, clearErrors, trigger} = useFormContextAutoTT();
-  const renderCounter = useRenderCounter(false, `DeselectableDropdown ${props.name}`);
+  const renderCounter = useRenderCounter(false, `DeselectableDropdown ${props.name}`);  
   const [invalidForForceRerender, setInvalidForForceRerender] = useState(getFieldState(props.name).invalid);
   const [errorMessageForRerender, setErrorMessageForRerender] = useState<string | undefined>(getFieldState(props.name)?.error?.message);
+  const fieldState = getFieldState(props.name);
+  const inputTouchedOrInvalid = fieldState.isTouched || fieldState.invalid;
+  const chosenValidationCallback = props.mixedErrorMessageInfo !== undefined ? props.mixedErrorMessageInfo.validate : validateDeselectableDropdown;
+
+  useEffect(() => {
+    if (!inputTouchedOrInvalid) {
+      if (props.mixedErrorMessageInfo !== undefined) {
+        props.mixedErrorMessageInfo.liveValidateCallback(setDropdownErrorState).then();
+      } else {
+        let value = getValues(props.name);
+        let validateResult = validateDeselectableDropdown(value);
+        if (validateResult === true || validateResult === undefined) {
+          setInvalidForForceRerender(false);
+          clearErrors(props.name);
+        } else {
+          let errorMessage = validateResult.toString();
+          setInvalidForForceRerender(true);
+          setError(props.name, {type: "custom", message: errorMessage});
+        }
+      }
+    }
+  }, [inputTouchedOrInvalid]);
 
   function validateDeselectableDropdown(value: AutoTTRecConfigFormChoiceArgs[AutoTTRecConfigFormChoiceArgName]): ValidateResult {
     if (value === "<FILLME>") {
@@ -60,7 +82,7 @@ export function DeselectableDropdown<K extends AutoTTRecConfigFormChoiceArgName>
             setInvalidForForceRerender(false);  
           }
         },
-        validate: props.mixedErrorMessageInfo !== undefined ? props.mixedErrorMessageInfo.validate : validateDeselectableDropdown
+        validate: chosenValidationCallback
       })} onContextMenu={async (e: React.MouseEvent<HTMLSelectElement>) => {
         setValue<AutoTTRecConfigFormChoiceArgName>(props.name, "<FILLME>", {shouldTouch: true});
         if (props.mixedErrorMessageInfo !== undefined) {
