@@ -5,7 +5,7 @@ import useRenderCounter from "../../RenderCounter";
 
 import { AudioCodec } from "./AudioCodecAndBitrateInput";
 
-import { SimpleErrorMessage } from "../SimpleErrorMessage";
+import { SimpleErrorMessage } from "../reusable_components/SimpleErrorMessage";
 
 import { EncodeType } from "../layout_components/choice_layouts/EncodeSettingsLayout";
 import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../generic_components/DeselectableRadioButton";

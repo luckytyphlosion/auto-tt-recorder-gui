@@ -10,8 +10,8 @@ import { DeselectableDropdown, SetDropdownErrorState } from "../../generic_compo
 import { makeReadonlyArraySet, ValidValues } from "../../../../shared/array-set";
 import { undefinedToNullStr } from "../../../../shared/util-shared";
 
-import { SimpleErrorMessage } from "../../SimpleErrorMessage";
-import { FieldsetOr } from "../../FieldsetOr";
+import { SimpleErrorMessage } from "../../reusable_components/SimpleErrorMessage";
+import { FieldsetOr } from "../../reusable_components/FieldsetOr";
 import { isFileReadable } from "../../../util-renderer";
 
 import useRenderCounter from "../../../RenderCounter";

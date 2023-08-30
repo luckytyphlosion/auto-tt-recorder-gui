@@ -3,8 +3,8 @@ import React, { memo, useState, useEffect, useRef, createContext, useContext, us
 import { ValidateResult, Control, Controller, RefCallBack, UseFormSetValue, UseFormGetValues, useFormContext } from 'react-hook-form';
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { AutoTTRecConfigFormChoiceArgName, AutoTTRecConfigFormChoiceArgs, AutoTTRecConfigFormFieldName } from "../../auto-tt-rec-form-field-types";
-import { SimpleErrorMessage } from "../SimpleErrorMessage";
-import { EmptyGridRow } from "../EmptyGridRow";
+import { SimpleErrorMessage } from "../reusable_components/SimpleErrorMessage";
+import { EmptyGridRow } from "../reusable_components/EmptyGridRow";
 
 import useRenderCounter from "../../RenderCounter";
 

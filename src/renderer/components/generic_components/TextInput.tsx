@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useFormContextAutoTT, useTriggerAndRerenderAutoTT } from "../../use-form-context-auto-tt";
-import { SimpleErrorMessage } from "../SimpleErrorMessage";
+import { SimpleErrorMessage } from "../reusable_components/SimpleErrorMessage";
 import { AutoTTRecConfigFormStringArgName, AutoTTRecConfigFormFields } from "../../auto-tt-rec-form-field-types";
 import { ValidationRule, Validate } from "react-hook-form";
 

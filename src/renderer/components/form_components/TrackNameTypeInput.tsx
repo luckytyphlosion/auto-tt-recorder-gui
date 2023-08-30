@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useFormContextAutoTT, isValueOrFILLMEIsValueMaker } from "../../use-form-context-auto-tt";
-import { SimpleErrorMessage } from "../SimpleErrorMessage";
+import { SimpleErrorMessage } from "../reusable_components/SimpleErrorMessage";
 import { FormComplexity } from "../layout_components/FormComplexityLayout";
 import { TrackNameManualInput } from "./TrackNameManualInput";
 

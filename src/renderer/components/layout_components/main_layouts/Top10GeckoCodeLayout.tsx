@@ -42,7 +42,7 @@ import { PresentationSettingsLayout } from "../sub_layouts/PresentationSettingsL
 import { CRFValueInput } from "../../form_components/CRFValueInput";
 import { GhostAndSZSSourceLayout } from "../sub_layouts/GhostAndSZSSourceLayout";
 import { CustomizationSettingsLayout } from "../sub_layouts/CustomizationSettingsLayout";
-import { FieldsetOr } from "../../FieldsetOr";
+import { FieldsetOr } from "../../reusable_components/FieldsetOr";
 
 const TrackNameInput_Memo = memo(TrackNameTypeInput);
 

@@ -2,7 +2,7 @@ import React from "react";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import useRenderCounter from "../../RenderCounter";
 import { ValidateResult } from "react-hook-form";
-import { SimpleErrorMessage } from "../SimpleErrorMessage";
+import { SimpleErrorMessage } from "../reusable_components/SimpleErrorMessage";
 
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
 

@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { useFormContextAutoTT, useTriggerAndRerenderAutoTT } from "../../use-form-context-auto-tt";
 import { FileFilter } from "electron";
-import { SimpleErrorMessage } from "../SimpleErrorMessage";
+import { SimpleErrorMessage } from "../reusable_components/SimpleErrorMessage";
 import { isFileReadable, isFileReadableAndHasCorrectExtension } from "../../util-renderer"
 import { ValidationRule, Validate } from "react-hook-form";
 import { AutoTTRecConfigFormStringArgName, AutoTTRecConfigFormFields, AutoTTRecConfigFormStringArgs } from "../../auto-tt-rec-form-field-types";

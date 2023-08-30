@@ -1,9 +1,9 @@
 import React, { useRef, useEffect } from "react";
-import { useFormContextAutoTT, isValueOrFILLMEIsValueMaker } from "../use-form-context-auto-tt";
+import { useFormContextAutoTT, isValueOrFILLMEIsValueMaker } from "../../use-form-context-auto-tt";
 import { ErrorMessage } from "@hookform/error-message";
 import { ErrorMessage2 } from "./ErrorMessage2";
 
-import { AutoTTRecConfigFormFieldName, AutoTTRecConfigFormChoiceArgName, AutoTTRecConfigFormChoiceArgs, AutoTTRecConfigFormStringArgName } from "../auto-tt-rec-form-field-types";
+import { AutoTTRecConfigFormFieldName, AutoTTRecConfigFormChoiceArgName, AutoTTRecConfigFormChoiceArgs, AutoTTRecConfigFormStringArgName } from "../../auto-tt-rec-form-field-types";
 
 const deepDiffMapper: any = function () {
   return {

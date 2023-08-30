@@ -4,7 +4,7 @@ import { Controller, ValidateResult } from "react-hook-form";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { FileFilter } from "electron";
 import { FilenameAndContents } from "../../../shared/shared-types"
-import { SimpleErrorMessage } from "../SimpleErrorMessage";
+import { SimpleErrorMessage } from "../reusable_components/SimpleErrorMessage";
 import { EditorView } from "@codemirror/view";
 
 import { ClearableReadonlyTextInput } from "../generic_components/ClearableReadonlyTextInput";

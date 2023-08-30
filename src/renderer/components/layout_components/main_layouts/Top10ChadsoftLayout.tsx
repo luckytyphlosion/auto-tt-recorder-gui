@@ -42,8 +42,8 @@ import { ExtraSettingsLayout } from "../sub_layouts/ExtraSettingsLayout";
 import { PresentationSettingsLayout } from "../sub_layouts/PresentationSettingsLayout";
 import { Top10CensorsInput } from "../../form_components/Top10CensorsInput";
 import { CustomizationSettingsLayout } from "../sub_layouts/CustomizationSettingsLayout";
-import { FieldsetOr } from "../../FieldsetOr";
-import { EmptyGridRow } from "../../EmptyGridRow";
+import { FieldsetOr } from "../../reusable_components/FieldsetOr";
+import { EmptyGridRow } from "../../reusable_components/EmptyGridRow";
 
 import useRenderCounter from "../../../RenderCounter";
 

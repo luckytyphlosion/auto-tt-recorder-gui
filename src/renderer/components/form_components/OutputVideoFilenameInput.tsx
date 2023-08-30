@@ -6,7 +6,7 @@ import { OpenFileTextInputWithButton } from "../generic_components/OpenFileTextI
 import { isFileWritableAndHasCorrectExtension } from "../../util-renderer"
 
 import { FormComplexity } from "../layout_components/FormComplexityLayout";
-import { FieldsetOr } from "../FieldsetOr";
+import { FieldsetOr } from "../reusable_components/FieldsetOr";
 
 import useRenderCounter from "../../RenderCounter";
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { FieldsetOr } from "../FieldsetOr";
+import { FieldsetOr } from "../reusable_components/FieldsetOr";
 
 export function TimelineSpecificPresentationSettingsLayoutContainer(props: {children: React.ReactNode}) {
   return (

@@ -8,7 +8,7 @@ import { HQTexturesInput } from "../../form_components/HQTexturesInput";
 import { NoBackgroundBlurInput } from "../../form_components/NoBackgroundBlurInput";
 import { NoBloomInput } from "../../form_components/NoBloomInput";
 import { CRFValueInput } from "../../form_components/CRFValueInput";
-import { FieldsetOr } from "../../FieldsetOr";
+import { FieldsetOr } from "../../reusable_components/FieldsetOr";
 
 export function QualitySettingsLayout(props: {formComplexity: FormComplexity, isNoEncode: boolean}) {
   return <div>

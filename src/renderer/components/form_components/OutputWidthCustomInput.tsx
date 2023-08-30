@@ -3,7 +3,7 @@ import { useFormContextAutoTT, isValueOrFILLMEIsValueMaker } from "../../use-for
 import useRenderCounter from "../../RenderCounter";
 
 import { OutputWidthPreset } from "./OutputWidthInput";
-import { SimpleErrorMessage } from "../SimpleErrorMessage";
+import { SimpleErrorMessage } from "../reusable_components/SimpleErrorMessage";
 
 export function OutputWidthCustomInput(props: {outputWidthPreset: OutputWidthPreset}) {
   const {register, getValues} = useFormContextAutoTT();

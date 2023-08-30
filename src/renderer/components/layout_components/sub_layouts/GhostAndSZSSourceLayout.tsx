@@ -3,9 +3,9 @@ import React from "react";
 import { MainGhostSourceInput } from "../../form_components/MainGhostSourceInput";
 import { ComparisonGhostSourceInput } from "../../form_components/ComparisonGhostSourceInput";
 import { SZSSourceInput } from "../../form_components/SZSSourceInput";
-import { EmptyGridRow } from "../../EmptyGridRow";
+import { EmptyGridRow } from "../../reusable_components/EmptyGridRow";
 
-import { FieldsetOr } from "../../FieldsetOr";
+import { FieldsetOr } from "../../reusable_components/FieldsetOr";
 
 export function GhostAndSZSSourceLayout() {
   return (

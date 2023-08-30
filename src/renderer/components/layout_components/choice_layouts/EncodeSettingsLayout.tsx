@@ -6,7 +6,7 @@ import { FormComplexity } from "../FormComplexityLayout";
 import { makeReadonlyArraySet, ValidValues } from "../../../../shared/array-set";
 
 import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../../generic_components/DeselectableRadioButton";
-import { FieldsetOr } from "../../FieldsetOr";
+import { FieldsetOr } from "../../reusable_components/FieldsetOr";
 
 import useRenderCounter from "../../../RenderCounter";
 

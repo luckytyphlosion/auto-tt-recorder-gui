@@ -4,8 +4,8 @@ import { MusicFilenameInput } from "./MusicFilenameInput";
 import { Top10LocationRegionalInput } from "./Top10LocationRegionalInput";
 import { Top10LocationCountryInput } from "./Top10LocationCountryInput";
 import { DeselectableDropdown } from "../generic_components/DeselectableDropdown";
-import { SimpleErrorMessage } from "../SimpleErrorMessage";
-import { EmptyGridRow } from "../EmptyGridRow";
+import { SimpleErrorMessage } from "../reusable_components/SimpleErrorMessage";
+import { EmptyGridRow } from "../reusable_components/EmptyGridRow";
 
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
 

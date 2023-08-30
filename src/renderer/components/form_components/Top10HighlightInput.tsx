@@ -1,6 +1,6 @@
 import React from "react";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
-import { SimpleErrorMessage } from "../SimpleErrorMessage";
+import { SimpleErrorMessage } from "../reusable_components/SimpleErrorMessage";
 
 export function Top10HighlightInput() {
   const {register, formState} = useFormContextAutoTT();

@@ -8,7 +8,7 @@ import { KeepWindowInput } from "../../form_components/KeepWindowInput";
 import { ChadsoftReadCacheInputAndSettingsLayout } from "./ChadsoftReadCacheInputAndSettingsLayout";
 import { IgnoreAutoAddMissingFilesInput } from "../../form_components/IgnoreAutoAddMissingFilesInput";
 import { PurgeAutoAddInput } from "../../form_components/PurgeAutoAddInput";
-import { FieldsetOr } from "../../FieldsetOr";
+import { FieldsetOr } from "../../reusable_components/FieldsetOr";
 
 export function ExtraSettingsLayout(props: {formComplexity: FormComplexity}) {
   return (

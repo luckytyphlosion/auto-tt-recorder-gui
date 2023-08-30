@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useFormContextAutoTT, isValueOrFILLMEIsValueMaker } from "../../use-form-context-auto-tt";
-import { SimpleErrorMessage } from "../SimpleErrorMessage";
+import { SimpleErrorMessage } from "../reusable_components/SimpleErrorMessage";
 import { Top10TitleManualInput } from "./Top10TitleManualInput";
 
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";

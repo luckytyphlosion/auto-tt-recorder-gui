@@ -39,7 +39,7 @@ import { PresentationSettingsLayout } from "../sub_layouts/PresentationSettingsL
 import { FormComplexity } from "../FormComplexityLayout";
 import { GhostAndSZSSourceLayout } from "../sub_layouts/GhostAndSZSSourceLayout";
 import { CustomizationSettingsLayout } from "../sub_layouts/CustomizationSettingsLayout";
-import { FieldsetOr } from "../../FieldsetOr";
+import { FieldsetOr } from "../../reusable_components/FieldsetOr";
 
 import useRenderCounter from "../../../RenderCounter";
 

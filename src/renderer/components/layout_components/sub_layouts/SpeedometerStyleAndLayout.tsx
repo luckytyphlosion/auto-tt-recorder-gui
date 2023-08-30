@@ -5,7 +5,7 @@ import useRenderCounter from "../../../RenderCounter";
 import { SpeedometerMetricInput } from "../../form_components/SpeedometerMetricInput";
 import { SpeedometerDecimalPlacesInput } from "../../form_components/SpeedometerDecimalPlacesInput";
 import { makeReadonlyArraySet, ValidValues } from "../../../../shared/array-set";
-import { FieldsetOr } from "../../FieldsetOr";
+import { FieldsetOr } from "../../reusable_components/FieldsetOr";
 
 import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../../generic_components/DeselectableRadioButton";
 
