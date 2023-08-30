@@ -1,12 +1,12 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Control, Controller, RefCallBack, UseFormSetValue, UseFormGetValues } from 'react-hook-form';
-import { useFormContextAutoTT } from "../use-form-context-auto-tt";
-import { AutoTTRecConfigFormFields, AutoTTRecConfigFormBooleanArgs } from "../auto-tt-rec-form-field-types";
-import { SimpleErrorMessage } from "./SimpleErrorMessage";
-import { BooleanFILLME } from "../../shared/shared-types";
+import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
+import { AutoTTRecConfigFormFields, AutoTTRecConfigFormBooleanArgs } from "../../auto-tt-rec-form-field-types";
+import { SimpleErrorMessage } from "../SimpleErrorMessage";
+import { BooleanFILLME } from "../../../shared/shared-types";
 
-import useRenderCounter from "../RenderCounter";
+import useRenderCounter from "../../RenderCounter";
 
 type TriCheckboxUserOnChangeDecl = (newValue: BooleanFILLME) => void;
 

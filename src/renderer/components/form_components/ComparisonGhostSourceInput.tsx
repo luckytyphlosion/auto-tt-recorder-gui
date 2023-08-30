@@ -5,7 +5,7 @@ import useRenderCounter from "../../RenderCounter";
 import { ChadsoftComparisonGhostPageInput } from "./ChadsoftComparisonGhostPageInput";
 import { ComparisonGhostFilenameInput } from "./ComparisonGhostFilenameInput";
 
-import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../DeselectableRadioButton";
+import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../generic_components/DeselectableRadioButton";
 
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
 

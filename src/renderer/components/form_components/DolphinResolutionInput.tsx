@@ -5,7 +5,7 @@ import { OutputWidthInput } from "./OutputWidthInput";
 import { FormComplexity } from "../layout_components/FormComplexityLayout";
 import { HQTexturesInput } from "./HQTexturesInput";
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
-import { DeselectableDropdown } from "../DeselectableDropdown";
+import { DeselectableDropdown } from "../generic_components/DeselectableDropdown";
 
 export const DOLPHIN_RESOLUTIONS = makeReadonlyArraySet(["2160p", "1440p", "1080p", "720p", "480p"] as const);
 export type DolphinResolution = ValidValues<typeof DOLPHIN_RESOLUTIONS>;

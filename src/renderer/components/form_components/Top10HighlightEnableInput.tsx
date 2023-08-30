@@ -4,7 +4,7 @@ import { useFormContextAutoTT, useWatchAutoTT, isValueOrFILLMEIsValueMaker } fro
 
 import { Top10HighlightInput } from "./Top10HighlightInput";
 import { MainGhostSourceInput } from "./MainGhostSourceInput";
-import { TriCheckbox } from "../TriCheckbox";
+import { TriCheckbox } from "../generic_components/TriCheckbox";
 
 export function Top10HighlightEnableInput() {
   const top10HighlightEnable = useWatchAutoTT({name: "top-10-highlight-enable"});

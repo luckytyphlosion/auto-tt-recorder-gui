@@ -1,7 +1,7 @@
 
 import React from "react";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
-import { TriCheckbox } from "../TriCheckbox";
+import { TriCheckbox } from "../generic_components/TriCheckbox";
 
 export function NoBloomInput() {
   return (

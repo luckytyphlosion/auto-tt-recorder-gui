@@ -4,7 +4,7 @@ import { MusicFilenameInput } from "./MusicFilenameInput";
 import { Top10LocationRegion } from "./Top10LocationInput";
 
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
-import { DeselectableDropdown } from "../DeselectableDropdown";
+import { DeselectableDropdown } from "../generic_components/DeselectableDropdown";
 
 const REGIONAL_LOCATION_NAMES = [
   "Europe",

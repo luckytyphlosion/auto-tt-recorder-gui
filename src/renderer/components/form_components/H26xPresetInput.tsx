@@ -1,7 +1,7 @@
 import React from "react";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
-import { DeselectableDropdown } from "../DeselectableDropdown";
+import { DeselectableDropdown } from "../generic_components/DeselectableDropdown";
 
 import useRenderCounter from "../../RenderCounter";
 

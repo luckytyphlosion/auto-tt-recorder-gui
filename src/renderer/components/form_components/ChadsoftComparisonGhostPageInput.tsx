@@ -1,5 +1,5 @@
 import React from "react";
-import { TextInput } from "../TextInput";
+import { TextInput } from "../generic_components/TextInput";
 
 import { chadsoftGhostPageLinkRegex } from "../../../shared/shared-types";
 

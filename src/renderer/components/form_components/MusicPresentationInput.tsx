@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import useRenderCounter from "../../RenderCounter";
-import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../DeselectableRadioButton";
+import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../generic_components/DeselectableRadioButton";
 
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
 

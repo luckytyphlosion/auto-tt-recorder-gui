@@ -1,5 +1,5 @@
 import React from "react";
-import { OpenFileTextInputWithButton } from "../OpenFileTextInputWithButton";
+import { OpenFileTextInputWithButton } from "../generic_components/OpenFileTextInputWithButton";
 
 export function MusicFilenameInput(props: {
   validateBackgroundMusicSourceAndCheckIsFileReadable: (musicFilenameOrBackgroundMusicSource: string) => Promise<string | boolean>,

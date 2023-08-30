@@ -7,7 +7,7 @@ import { SpeedometerDecimalPlacesInput } from "../../form_components/Speedometer
 import { makeReadonlyArraySet, ValidValues } from "../../../../shared/array-set";
 import { FieldsetOr } from "../../FieldsetOr";
 
-import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../../DeselectableRadioButton";
+import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../../generic_components/DeselectableRadioButton";
 
 const SpeedometerMetricInput_Memo = memo(SpeedometerMetricInput);
 

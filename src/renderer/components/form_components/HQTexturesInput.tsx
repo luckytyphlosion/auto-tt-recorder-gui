@@ -5,7 +5,7 @@ import { useFormContextAutoTT, isValueOrFILLMEIsValueMaker } from "../../use-for
 import { ExtraHQTexturesFolderInput } from "./ExtraHQTexturesFolderInput";
 import { DolphinResolution } from "./DolphinResolutionInput";
 
-import { TriCheckbox } from "../TriCheckbox";
+import { TriCheckbox } from "../generic_components/TriCheckbox";
 import { BooleanFILLME } from "../../../shared/shared-types";
 
 import useRenderCounter from "../../RenderCounter";

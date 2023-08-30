@@ -8,7 +8,7 @@ import { SimpleErrorMessage } from "../SimpleErrorMessage";
 import { EditorView } from "@codemirror/view";
 import { isFileReadableAndHasCorrectExtension } from "../../util-renderer";
 
-import { ClearableReadonlyTextInput } from "../ClearableReadonlyTextInput";
+import { ClearableReadonlyTextInput } from "../generic_components/ClearableReadonlyTextInput";
 
 import CodeMirror from '@uiw/react-codemirror';
 

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import useRenderCounter from "../../RenderCounter";
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
-import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../DeselectableRadioButton";
+import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../generic_components/DeselectableRadioButton";
 
 export const SPEEDOMETER_DECIMAL_PLACES_NUMERIC = makeReadonlyArraySet([0, 1, 2] as const);
 export type SpeedometerDecimalPlacesNumeric = ValidValues<typeof SPEEDOMETER_DECIMAL_PLACES_NUMERIC>;

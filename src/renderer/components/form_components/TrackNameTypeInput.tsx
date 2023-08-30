@@ -6,7 +6,7 @@ import { TrackNameManualInput } from "./TrackNameManualInput";
 
 import useRenderCounter from "../../RenderCounter";
 
-import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../DeselectableRadioButton";
+import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../generic_components/DeselectableRadioButton";
 
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
 

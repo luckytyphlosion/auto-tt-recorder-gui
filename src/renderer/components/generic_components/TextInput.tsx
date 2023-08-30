@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useFormContextAutoTT, useTriggerAndRerenderAutoTT } from "../use-form-context-auto-tt";
-import { SimpleErrorMessage } from "./SimpleErrorMessage";
-import { AutoTTRecConfigFormStringArgName, AutoTTRecConfigFormFields } from "../auto-tt-rec-form-field-types";
+import { useFormContextAutoTT, useTriggerAndRerenderAutoTT } from "../../use-form-context-auto-tt";
+import { SimpleErrorMessage } from "../SimpleErrorMessage";
+import { AutoTTRecConfigFormStringArgName, AutoTTRecConfigFormFields } from "../../auto-tt-rec-form-field-types";
 import { ValidationRule, Validate } from "react-hook-form";
 
-import useRenderCounter from "../RenderCounter";
+import useRenderCounter from "../../RenderCounter";
 
 export function TextInput<K extends AutoTTRecConfigFormStringArgName>(props: {name: K, startLabel: string, notRequired?: boolean, requiredMessage?: string, pattern?: ValidationRule<RegExp>, validate?: Validate<string, AutoTTRecConfigFormFields>}) {
   const {register, getFieldState} = useFormContextAutoTT();

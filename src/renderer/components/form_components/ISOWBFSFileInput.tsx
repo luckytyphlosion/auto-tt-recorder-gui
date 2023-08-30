@@ -1,6 +1,6 @@
 import React from "react";
 
-import { OpenFileTextInputWithButton } from "../OpenFileTextInputWithButton";
+import { OpenFileTextInputWithButton } from "../generic_components/OpenFileTextInputWithButton";
 
 export function ISOWBFSFileInput() {
   return <OpenFileTextInputWithButton name="iso-filename" startLabel="ISO or WBFS: " dialogId="iso-wbfs" fileFilters={[

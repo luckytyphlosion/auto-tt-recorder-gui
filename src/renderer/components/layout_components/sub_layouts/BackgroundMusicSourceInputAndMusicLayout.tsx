@@ -6,7 +6,7 @@ import { MusicVolumeInput } from "../../form_components/MusicVolumeInput";
 import { MusicPresentationInput } from "../../form_components/MusicPresentationInput";
 import { FormComplexity } from "../FormComplexityLayout";
 import { Timeline } from "../choice_layouts/NoTop10CategoryLayout";
-import { DeselectableDropdown, SetDropdownErrorState } from "../../DeselectableDropdown";
+import { DeselectableDropdown, SetDropdownErrorState } from "../../generic_components/DeselectableDropdown";
 import { makeReadonlyArraySet, ValidValues } from "../../../../shared/array-set";
 import { undefinedToNullStr } from "../../../../shared/util-shared";
 

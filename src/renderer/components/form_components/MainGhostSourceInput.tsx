@@ -7,7 +7,7 @@ import { MainGhostFilenameInput } from "./MainGhostFilenameInput";
 
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
 
-import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../DeselectableRadioButton";
+import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../generic_components/DeselectableRadioButton";
 
 export const MAIN_GHOST_SOURCES = makeReadonlyArraySet(["chadsoft", "rkg"] as const);
 export type MainGhostSource = ValidValues<typeof MAIN_GHOST_SOURCES>;

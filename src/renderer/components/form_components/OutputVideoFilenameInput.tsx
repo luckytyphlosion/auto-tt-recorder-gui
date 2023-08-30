@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FileFilter } from "electron";
 
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
-import { OpenFileTextInputWithButton } from "../OpenFileTextInputWithButton";
+import { OpenFileTextInputWithButton } from "../generic_components/OpenFileTextInputWithButton";
 import { isFileWritableAndHasCorrectExtension } from "../../util-renderer"
 
 import { FormComplexity } from "../layout_components/FormComplexityLayout";

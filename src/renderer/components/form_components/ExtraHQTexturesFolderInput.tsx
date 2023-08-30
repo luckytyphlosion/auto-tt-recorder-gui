@@ -5,12 +5,12 @@ import { FileFilter } from "electron";
 
 import { UseFormRegister, UseFormSetValue, ValidateResult } from "react-hook-form";
 
-import { ClearableReadonlyTextInput } from "../ClearableReadonlyTextInput";
+import { ClearableReadonlyTextInput } from "../generic_components/ClearableReadonlyTextInput";
 
 import { isFolderReadable } from "../../util-renderer"
 
-import { OpenFileTextInputWithButton } from "../OpenFileTextInputWithButton";
-import { TriCheckbox } from "../TriCheckbox";
+import { OpenFileTextInputWithButton } from "../generic_components/OpenFileTextInputWithButton";
+import { TriCheckbox } from "../generic_components/TriCheckbox";
 
 export function ExtraHQTexturesFolderInput() {
   const renderCounter = useRenderCounter(false, "ExtraHQTexturesFolderInput");

@@ -1,15 +1,15 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { useFormContextAutoTT, useTriggerAndRerenderAutoTT } from "../use-form-context-auto-tt";
+import { useFormContextAutoTT, useTriggerAndRerenderAutoTT } from "../../use-form-context-auto-tt";
 import { FileFilter } from "electron";
-import { SimpleErrorMessage } from "./SimpleErrorMessage";
-import { isFileReadable, isFileReadableAndHasCorrectExtension } from "../util-renderer"
+import { SimpleErrorMessage } from "../SimpleErrorMessage";
+import { isFileReadable, isFileReadableAndHasCorrectExtension } from "../../util-renderer"
 import { ValidationRule, Validate } from "react-hook-form";
-import { AutoTTRecConfigFormStringArgName, AutoTTRecConfigFormFields, AutoTTRecConfigFormStringArgs } from "../auto-tt-rec-form-field-types";
-import { DialogId } from "../../shared/shared-types";
+import { AutoTTRecConfigFormStringArgName, AutoTTRecConfigFormFields, AutoTTRecConfigFormStringArgs } from "../../auto-tt-rec-form-field-types";
+import { DialogId } from "../../../shared/shared-types";
 
 import { ClearableReadonlyTextInput } from "./ClearableReadonlyTextInput";
 
-import useRenderCounter from "../RenderCounter";
+import useRenderCounter from "../../RenderCounter";
 
 function getFileFiltersFromPossibleFunction(fileFilters: FileFilter[] | (() => FileFilter[])): FileFilter[] {
   if (typeof fileFilters === "function") {

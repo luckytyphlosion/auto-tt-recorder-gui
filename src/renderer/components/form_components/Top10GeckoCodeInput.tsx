@@ -7,7 +7,7 @@ import { FilenameAndContents } from "../../../shared/shared-types"
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
 import { EditorView } from "@codemirror/view";
 
-import { ClearableReadonlyTextInput } from "../ClearableReadonlyTextInput";
+import { ClearableReadonlyTextInput } from "../generic_components/ClearableReadonlyTextInput";
 
 import { isFileReadableAndHasCorrectExtension } from "../../util-renderer";
 

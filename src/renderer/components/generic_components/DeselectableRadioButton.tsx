@@ -1,12 +1,12 @@
 
 import React, { memo, useState, useEffect, useRef, createContext, useContext, useMemo } from 'react';
 import { ValidateResult, Control, Controller, RefCallBack, UseFormSetValue, UseFormGetValues, useFormContext } from 'react-hook-form';
-import { useFormContextAutoTT } from "../use-form-context-auto-tt";
-import { AutoTTRecConfigFormChoiceArgName, AutoTTRecConfigFormChoiceArgs, AutoTTRecConfigFormFieldName } from "../auto-tt-rec-form-field-types";
-import { SimpleErrorMessage } from "./SimpleErrorMessage";
-import { EmptyGridRow } from "./EmptyGridRow";
+import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
+import { AutoTTRecConfigFormChoiceArgName, AutoTTRecConfigFormChoiceArgs, AutoTTRecConfigFormFieldName } from "../../auto-tt-rec-form-field-types";
+import { SimpleErrorMessage } from "../SimpleErrorMessage";
+import { EmptyGridRow } from "../EmptyGridRow";
 
-import useRenderCounter from "../RenderCounter";
+import useRenderCounter from "../../RenderCounter";
 
 interface DeselectableRadioButtonsGroupContextType {
   name: AutoTTRecConfigFormChoiceArgName,

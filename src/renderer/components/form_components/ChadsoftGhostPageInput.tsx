@@ -1,7 +1,7 @@
 import React from "react";
 
 import { chadsoftGhostPageLinkRegex } from "../../../shared/shared-types";
-import { TextInput } from "../TextInput";
+import { TextInput } from "../generic_components/TextInput";
 
 export function ChadsoftGhostPageInput() {
   return (

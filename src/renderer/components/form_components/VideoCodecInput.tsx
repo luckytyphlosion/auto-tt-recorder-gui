@@ -4,7 +4,7 @@ import { MusicFilenameInput } from "./MusicFilenameInput";
 import { OutputVideoFileFormatInput } from "./OutputVideoFileFormatInput";
 import { FormComplexity } from "../layout_components/FormComplexityLayout";
 import useRenderCounter from "../../RenderCounter";
-import { DeselectableDropdown } from "../DeselectableDropdown";
+import { DeselectableDropdown } from "../generic_components/DeselectableDropdown";
 
 import { EncodeType } from "../layout_components/choice_layouts/EncodeSettingsLayout";
 

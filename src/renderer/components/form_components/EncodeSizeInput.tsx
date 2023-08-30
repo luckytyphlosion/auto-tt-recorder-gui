@@ -6,7 +6,7 @@ import { SimpleErrorMessage } from "../SimpleErrorMessage";
 
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
 
-import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../DeselectableRadioButton";
+import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../generic_components/DeselectableRadioButton";
 
 export const ENCODE_SIZE_UNITS = makeReadonlyArraySet(["mib", "bytes"] as const);
 export type EncodeSizeUnit = ValidValues<typeof ENCODE_SIZE_UNITS>;

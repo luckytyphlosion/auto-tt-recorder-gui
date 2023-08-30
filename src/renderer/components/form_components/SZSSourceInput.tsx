@@ -8,7 +8,7 @@ import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
 export const SZS_SOURCES = makeReadonlyArraySet(["automatic", "fromfile"] as const);
 export type SZSSource = ValidValues<typeof SZS_SOURCES>;
 
-import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../DeselectableRadioButton";
+import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../generic_components/DeselectableRadioButton";
 
 export function SZSSourceInput() {
   const {getValues} = useFormContextAutoTT();

@@ -1,7 +1,7 @@
 import React from "react";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
-import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../DeselectableRadioButton";
+import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../generic_components/DeselectableRadioButton";
 
 export const INPUT_DISPLAYS = makeReadonlyArraySet(["auto", "gcn", "nunchuck", "none"] as const);
 export type InputDisplay = ValidValues<typeof INPUT_DISPLAYS>;

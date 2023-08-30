@@ -1,7 +1,7 @@
 
 
 import React from "react";
-import { TriCheckbox } from "../TriCheckbox";
+import { TriCheckbox } from "../generic_components/TriCheckbox";
 
 export function YoutubeSettingsInput(props: {addCRFReminderToLabel: boolean}) {
   return (

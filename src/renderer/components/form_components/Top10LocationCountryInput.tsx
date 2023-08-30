@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { isValueOrFILLMEIsValueMaker } from "../../use-form-context-auto-tt";
 import { Top10LocationRegion } from "./Top10LocationInput";
-import { DeselectableDropdown } from "../DeselectableDropdown";
+import { DeselectableDropdown } from "../generic_components/DeselectableDropdown";
 
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
 

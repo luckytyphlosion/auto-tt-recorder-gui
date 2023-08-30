@@ -9,7 +9,7 @@ import { NoEncodeLayout } from "../main_layouts/NoEncodeLayout";
 import { OutputVideoFilenameInput } from "../../form_components/OutputVideoFilenameInput";
 import { FormComplexity } from "../FormComplexityLayout";
 
-import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../../DeselectableRadioButton";
+import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../../generic_components/DeselectableRadioButton";
 
 import { makeReadonlyArraySet, ValidValues } from "../../../../shared/array-set";
 

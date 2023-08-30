@@ -1,10 +1,10 @@
 
 import React, { memo, useState, useEffect, useRef, createContext, useContext, useMemo } from 'react';
 import { Validate } from 'react-hook-form';
-import { useFormContextAutoTT, useTriggerAndRerenderAutoTT } from "../use-form-context-auto-tt";
-import { AutoTTRecConfigFormStringArgName, AutoTTRecConfigFormFields } from "../auto-tt-rec-form-field-types";
+import { useFormContextAutoTT, useTriggerAndRerenderAutoTT } from "../../use-form-context-auto-tt";
+import { AutoTTRecConfigFormStringArgName, AutoTTRecConfigFormFields } from "../../auto-tt-rec-form-field-types";
 
-import useRenderCounter from "../RenderCounter";
+import useRenderCounter from "../../RenderCounter";
 
 export function ClearableReadonlyTextInput<K extends AutoTTRecConfigFormStringArgName>(props: {name: K, notRequired?: boolean, validate: Validate<string, AutoTTRecConfigFormFields>, setState?: (value: string) => void, className?: string, parentRerenderSetState?: React.Dispatch<React.SetStateAction<number>>}) {
   const {register, setValue} = useFormContextAutoTT();

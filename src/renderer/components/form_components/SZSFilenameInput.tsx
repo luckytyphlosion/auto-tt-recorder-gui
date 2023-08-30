@@ -1,5 +1,5 @@
 import React from "react";
-import { OpenFileTextInputWithButton } from "../OpenFileTextInputWithButton";
+import { OpenFileTextInputWithButton } from "../generic_components/OpenFileTextInputWithButton";
 
 export function SZSFilenameInput() {
   return <OpenFileTextInputWithButton name="szs-filename" startLabel="SZS Filename: " dialogId="szs" fileFilters={[

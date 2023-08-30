@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useFormContextAutoTT, isValueOrFILLMEIsValueMaker } from "../../use-form-context-auto-tt";
 import { OutputWidthCustomInput } from "./OutputWidthCustomInput";
-import { DeselectableDropdown } from "../DeselectableDropdown";
+import { DeselectableDropdown } from "../generic_components/DeselectableDropdown";
 
 import { DolphinResolution } from "./DolphinResolutionInput";
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";

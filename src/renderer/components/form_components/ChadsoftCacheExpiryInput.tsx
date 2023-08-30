@@ -1,6 +1,6 @@
 import React from "react";
 import { ValidateResult } from "react-hook-form";
-import { TextInput } from "../TextInput";
+import { TextInput } from "../generic_components/TextInput";
 
 const durationRegex = /^(?:([0-9]+)h)?(?:([0-9]+)m)?(?:([0-9]+)s?)?(?<=.)$/;
 

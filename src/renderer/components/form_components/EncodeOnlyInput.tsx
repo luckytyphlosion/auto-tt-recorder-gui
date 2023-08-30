@@ -1,6 +1,6 @@
 
 import React from "react";
-import { TriCheckbox } from "../TriCheckbox";
+import { TriCheckbox } from "../generic_components/TriCheckbox";
 
 export function EncodeOnlyInput() {
   return (

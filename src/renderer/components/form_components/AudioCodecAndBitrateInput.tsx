@@ -4,7 +4,7 @@ import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { MusicFilenameInput } from "./MusicFilenameInput";
 import { Top10LocationRegionalInput } from "./Top10LocationRegionalInput";
 import { AudioBitrateInput } from "./AudioBitrateInput";
-import { DeselectableDropdown } from "../DeselectableDropdown";
+import { DeselectableDropdown } from "../generic_components/DeselectableDropdown";
 
 import useRenderCounter from "../../RenderCounter";
 

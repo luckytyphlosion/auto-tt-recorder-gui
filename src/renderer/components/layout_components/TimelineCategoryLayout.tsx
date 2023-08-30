@@ -10,7 +10,7 @@ import { FormComplexity } from "./FormComplexityLayout";
 
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
 
-import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../DeselectableRadioButton";
+import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../generic_components/DeselectableRadioButton";
 
 export const TIMELINE_CATEGORIES = makeReadonlyArraySet(["notop10", "top10chadsoft", "top10gecko"] as const);
 export type TimelineCategory = ValidValues<typeof TIMELINE_CATEGORIES>;

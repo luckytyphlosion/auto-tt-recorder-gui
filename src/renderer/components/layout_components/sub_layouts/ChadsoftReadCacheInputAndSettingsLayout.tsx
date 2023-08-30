@@ -5,7 +5,7 @@ import { useFormContextAutoTT, useWatchAutoTT, isValueOrFILLMEIsValueMaker } fro
 import { ChadsoftWriteCacheInput } from "../../form_components/ChadsoftWriteCacheInput";
 import { ChadsoftCacheExpiryInput } from "../../form_components/ChadsoftCacheExpiryInput";
 
-import { TriCheckbox } from "../../TriCheckbox";
+import { TriCheckbox } from "../../generic_components/TriCheckbox";
 
 export function ChadsoftReadCacheInputAndSettingsLayout() {
   const chadsoftReadCache = useWatchAutoTT({name: "chadsoft-read-cache"});

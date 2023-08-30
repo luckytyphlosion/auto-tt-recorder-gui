@@ -8,7 +8,7 @@ import { AudioCodec } from "./AudioCodecAndBitrateInput";
 import { SimpleErrorMessage } from "../SimpleErrorMessage";
 
 import { EncodeType } from "../layout_components/choice_layouts/EncodeSettingsLayout";
-import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../DeselectableRadioButton";
+import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../generic_components/DeselectableRadioButton";
 
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
 

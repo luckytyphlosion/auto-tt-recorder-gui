@@ -8,7 +8,7 @@ import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
 export const TOP_10_TITLE_TYPES = makeReadonlyArraySet(["auto", "manual"] as const);
 export type Top10TitleType = ValidValues<typeof TOP_10_TITLE_TYPES>;
 
-import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../DeselectableRadioButton";
+import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../generic_components/DeselectableRadioButton";
 
 export function Top10TitleInput() {
   const {getValues} = useFormContextAutoTT();

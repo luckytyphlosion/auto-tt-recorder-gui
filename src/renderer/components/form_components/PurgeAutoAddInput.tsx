@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import useRenderCounter from "../../RenderCounter";
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
-import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../DeselectableRadioButton";
+import { DeselectableRadioButton, DeselectableRadioButtonGroup } from "../generic_components/DeselectableRadioButton";
 
 export const PURGE_AUTO_ADD_VALUES = makeReadonlyArraySet(["never", "onerror", "always"] as const);
 export type PurgeAutoAdd = ValidValues<typeof PURGE_AUTO_ADD_VALUES>;
