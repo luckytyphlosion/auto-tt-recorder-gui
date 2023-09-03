@@ -1,12 +1,13 @@
 import React, { useState } from "react";
-import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
+import { useFormContextAutoTT, lateValidateNumberInputMaker } from "../../use-form-context-auto-tt";
 import useRenderCounter from "../../RenderCounter";
 import "../../styles/percent-input.css";
 import { SimpleErrorMessage } from "../reusable_components/SimpleErrorMessage";
 
 export function GameVolumeInput() {
   const {register, setValue, getValues} = useFormContextAutoTT();
-  const renderCounter = useRenderCounter(true);
+  const renderCounter = useRenderCounter(false, "GameVolumeInput");
+  const onBlur = lateValidateNumberInputMaker("game-volume-numberinput");
 
   function updateGameVolumeNumberInputFromSlider(event: Event) {
     setValue("game-volume-numberinput", getValues("game-volume-slider"), {shouldTouch: true});
@@ -22,7 +23,7 @@ export function GameVolumeInput() {
       <label className="start-label" htmlFor="game-volume-slider">Game volume: </label>
       <div className="start-label-contents">
         <input id="game-volume-slider" type="range" min={0} max={125} step={1} {...register("game-volume-slider", {
-          onChange: updateGameVolumeNumberInputFromSlider})
+          onChange: updateGameVolumeNumberInputFromSlider, onBlur: onBlur})
         }/>
         <span className="percent-input">
           <input type="number" style={{width: "4em"}}
@@ -33,7 +34,8 @@ export function GameVolumeInput() {
             min: {
               value: 0,
               message: "Game volume cannot be less than zero."
-            }, onChange: updateGameVolumeSliderFromNumberInput})}
+            }, onChange: updateGameVolumeSliderFromNumberInput,
+            onBlur: onBlur})}
           ></input>%
         </span>
         <SimpleErrorMessage name="game-volume-numberinput"/>
