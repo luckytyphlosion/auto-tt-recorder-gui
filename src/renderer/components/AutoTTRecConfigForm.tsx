@@ -138,6 +138,7 @@ export function AutoTTRecConfigForm(
   const [forceUpdateToggle, setForceUpdateToggle] = useState(false);
   const [validateFormViaSubmit_keepErrors, setValidateFormViaSubmit_keepErrors] = useState(false);
   const [initialValidationStateNum, setInitialValidationStateNum] = useState<ValidationSubmitState>(ValidationSubmitState.NOT_VALIDATING);
+  const [savedScrollYForValidateFormViaSubmit, setSavedScrollYForValidateFormViaSubmit] = useState<number | undefined>(undefined);
 
   const renderCount = useRef(0);
   renderCount.current = renderCount.current + 1;
@@ -146,7 +147,7 @@ export function AutoTTRecConfigForm(
   let formState = formMethods.formState;
   console.log(`[${renderCount.current}] AutoTTRecConfigForm formMethods:`, formMethods, ", forceUpdateToggle:", forceUpdateToggle, ", formState.isSubmitSuccessful:", formState.isSubmitSuccessful);
 
-  const validateFormViaSubmitSync = useCallback(function (keepErrors: boolean) {
+  const validateFormViaSubmitSync = useCallback(function (keepErrors: boolean, keepScroll?: boolean) {
     //function validateFormViaSubmitSync(keepErrors: boolean) {
       // function resetFormKeepErrors(errors: Object) {
       //   console.log("resetFormKeepErrors formState.submitCount:", formState.submitCount);
@@ -166,11 +167,16 @@ export function AutoTTRecConfigForm(
         const handleSubmitForValidation = formMethods.handleSubmit(() => {}, () => {});
         await handleSubmitForValidation();
       }
-  
+
+      const savedScrollY = window.scrollY;
+
       console.log("in validateFormViaSubmitSync: keepErrors: ", keepErrors);
       validateFormViaSubmit(keepErrors).then(() => {
         setValidateFormViaSubmit_keepErrors(keepErrors);
         setInitialValidationStateNum(ValidationSubmitState.DO_RESET);
+        if (keepScroll === true) {
+          setSavedScrollYForValidateFormViaSubmit(savedScrollY);
+        }
       });/*.then(() => {
         setForceUpdateToggle((oldForceUpdateToggle) => {
           console.log("in setForceUpdateToggle oldForceUpdateToggle:", oldForceUpdateToggle, "->", !oldForceUpdateToggle);
@@ -186,6 +192,9 @@ export function AutoTTRecConfigForm(
 
   useEffect(() => {
     if (initialValidationStateNum === ValidationSubmitState.DO_RESET) {
+      if (savedScrollYForValidateFormViaSubmit !== undefined) {
+        window.scroll({top: savedScrollYForValidateFormViaSubmit});
+      }
       formMethods.reset(undefined, {keepValues: true, keepErrors: validateFormViaSubmit_keepErrors, keepSubmitCount: true});
       //console.log("validateFormViaSubmit_keepErrors:", validateFormViaSubmit_keepErrors);
       setForceUpdateToggle((oldForceUpdateToggle) => {
