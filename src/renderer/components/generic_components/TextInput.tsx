@@ -20,7 +20,7 @@ export function TextInput<K extends AutoTTRecConfigFormStringArgName>(props: {na
   //console.log(`${props.name}-TextInput inputTouchedOrInvalid:`, inputTouchedOrInvalid);
 
   async function onBlur(e: React.FocusEvent<HTMLInputElement>) {
-    console.log(`TextInput-${props.name} onBlur inputTouchedOrInvalid:`, inputTouchedOrInvalid);
+    //console.log(`TextInput-${props.name} onBlur inputTouchedOrInvalid:`, inputTouchedOrInvalid);
     await triggerAndRerender(true);
   }
 

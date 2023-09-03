@@ -33,11 +33,11 @@ export function useTriggerAndRerenderAutoTT<K extends keyof AutoTTRecConfigFormF
       let fieldState = getFieldState(name);
       let formStateErrorMessage = undefinedToNullStr(formState.errors[name]?.message);
       let newFieldErrorMessage = undefinedToNullStr(fieldState.error?.message); //formState2.errors[name]?.message;
-      if (name === "top-10-chadsoft" || name === "comparison-ghost-filename") {
-        console.log(`after trigger ${name} formState:`, formState);
-        console.log(`useTriggerAndRerender-${name} fieldState:`, fieldState);
-        console.log(`useTriggerAndRerender-${name} fieldErrorMessage:`, fieldErrorMessage, "newFieldErrorMessage:", newFieldErrorMessage, ", formStateErrorMessage:", formStateErrorMessage);
-      }
+      // if (name === "top-10-chadsoft" || name === "comparison-ghost-filename") {
+      //   console.log(`after trigger ${name} formState:`, formState);
+      //   console.log(`useTriggerAndRerender-${name} fieldState:`, fieldState);
+      //   console.log(`useTriggerAndRerender-${name} fieldErrorMessage:`, fieldErrorMessage, "newFieldErrorMessage:", newFieldErrorMessage, ", formStateErrorMessage:", formStateErrorMessage);
+      // }
       //if (globalValidateFormOnOpen || fieldState.isTouched) {
       setFieldErrorMessage(newFieldErrorMessage);
       if (fromBlurOrChange && !globalValidateFormOnOpen) {

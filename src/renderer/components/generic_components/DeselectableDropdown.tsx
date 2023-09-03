@@ -53,7 +53,7 @@ export function DeselectableDropdown<K extends AutoTTRecConfigFormChoiceArgName>
   }
 
   function setDropdownErrorState(fieldNameForError: AutoTTRecConfigFormFieldName, validateResult: ValidateResult) {
-    console.log(`DeselectableDropdown-${props.name} setDropdownErrorState validateResult:`, validateResult);
+    //console.log(`DeselectableDropdown-${props.name} setDropdownErrorState validateResult:`, validateResult);
     if (validateResult === true || validateResult === undefined) {
       setErrorMessageForRerender(undefined);
       clearErrors(fieldNameForError);

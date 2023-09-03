@@ -18,7 +18,7 @@ export function HQTexturesInput(props: {isDolphinResolution480p: boolean, dolphi
   const [dolphinResolutionToggle, setDolphinResolutionToggle] = useState(props.dolphinResolutionToggle);
   const isValueOrFILLMEIsValue = isValueOrFILLMEIsValueMaker();
 
-  function updateHQTexturesEnabled(newValue: BooleanFILLME) {
+  async function updateHQTexturesEnabled(newValue: BooleanFILLME) {
     setHqTexturesEnabled(newValue);
   }
 

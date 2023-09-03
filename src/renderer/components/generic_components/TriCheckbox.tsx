@@ -8,7 +8,7 @@ import { BooleanFILLME } from "../../../shared/shared-types";
 
 import useRenderCounter from "../../RenderCounter";
 
-type TriCheckboxUserOnChangeDecl = (newValue: BooleanFILLME) => void;
+type TriCheckboxUserOnChangeDecl = (newValue: BooleanFILLME) => Promise<void>;
 
 interface CustomCheckboxProps {
   name: string;
@@ -46,13 +46,13 @@ function TriCheckboxInternal(props: {
       <input type="checkbox" id={props.id} ref={(inputRef) => {
         checkboxRef.current = inputRef;
         props.refCallback(inputRef);
-      }} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+      }} onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
         //console.log("e.target.checked:", e.target.checked);
         if (props.userOnChange !== undefined) {
-          props.userOnChange(e.target.checked);
+          await props.userOnChange(e.target.checked);
         }
         props.onChange(e);
-      }} onContextMenu={(e: React.MouseEvent<HTMLInputElement>) => {
+      }} onContextMenu={async (e: React.MouseEvent<HTMLInputElement>) => {
         let newValue: BooleanFILLME = false;
         if (checkboxRef !== null && checkboxRef.current !== null) {
           checkboxRef.current.indeterminate = !checkboxRef.current.indeterminate;
@@ -62,7 +62,7 @@ function TriCheckboxInternal(props: {
         }
 
         if (props.userOnChange !== undefined) {
-          props.userOnChange(newValue);
+          await props.userOnChange(newValue);
         }
         props.onChange(newValue);
         e.preventDefault();
