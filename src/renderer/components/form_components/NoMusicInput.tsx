@@ -8,7 +8,7 @@ export function NoMusicInput() {
   return (
     <div>
       <label htmlFor="no-music">Disable Game BGM: </label>
-      <TriCheckbox name="no-music"/>
+      <TriCheckbox name="no-music" nameAsId={true}/>
     </div>
   );
 }

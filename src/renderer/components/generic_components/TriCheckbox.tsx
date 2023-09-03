@@ -82,9 +82,40 @@ export function TriCheckbox<K extends keyof AutoTTRecConfigFormBooleanArgs>(
     nameAsId?: boolean
   }
 ) {
-  const {control, setValue, getValues} = useFormContextAutoTT();
-  const renderCounter = useRenderCounter(false, "TriCheckbox");
+  const {control, setValue, getValues, getFieldState, setError, clearErrors} = useFormContextAutoTT();
+  const renderCounter = useRenderCounter(false, `TriCheckbox-${props.name}`);
   //const checkboxRef = useRef<HTMLInputElement | null>(null);
+  const fieldState = getFieldState(props.name);
+  const [invalidForForceRerender, setInvalidForForceRerender] = useState(fieldState.invalid);
+  const inputTouchedOrInvalid = fieldState.isTouched || fieldState.invalid;
+
+  function validateTriCheckbox(value: BooleanFILLME) {
+    if (value === true || value === false) {
+      return true;
+    } else {
+      return "This input is required.";
+    }
+  }
+
+  function validateTriCheckboxAndSetErrorState(value: BooleanFILLME) {
+    const validateResult = validateTriCheckbox(value);
+    if (validateResult === true) {
+      clearErrors(props.name);
+      setInvalidForForceRerender(false);
+    } else {
+      setError(props.name, {type: "required", message: validateResult});
+      //console.log(`TriCheckbox-${props.name} required`);
+      setInvalidForForceRerender(true);
+    }
+  }
+
+  useEffect(() => {
+    if (!inputTouchedOrInvalid) {
+      const value = getValues(props.name);
+      validateTriCheckboxAndSetErrorState(value);
+      //console.log(`TriCheckbox-${props.name} isTouched:`, fieldState.isTouched, ", invalid:", fieldState.invalid, ", invalidForForceRerender:", invalidForForceRerender);
+    }
+  }, [inputTouchedOrInvalid]);
 
   //let [checked, setChecked] = useState<boolean | undefined>(getValues(props.name));
   //console.log(`TriCheckbox ${props.name}:`, getValues(props.name));
@@ -99,7 +130,16 @@ export function TriCheckbox<K extends keyof AutoTTRecConfigFormBooleanArgs>(
         <span>
         <TriCheckboxInternal
           value={value}
-          onChange={onChange}
+          onChange={(e: React.ChangeEvent<HTMLInputElement> | BooleanFILLME) => {
+            onChange(e);
+            let newValue: BooleanFILLME;
+            if (typeof e === "boolean" || e === "<FILLME>") {
+              newValue = e;
+            } else {
+              newValue = e.target.checked;
+            }
+            validateTriCheckboxAndSetErrorState(newValue);
+          }}
           userOnChange={props.onChange}
           refCallback={ref}
           id={props.nameAsId ? props.name : undefined}
@@ -108,14 +148,7 @@ export function TriCheckbox<K extends keyof AutoTTRecConfigFormBooleanArgs>(
         </span>
       )}
       rules={{
-        validate: (value) => {
-          //console.log(`TriCheckbox validate ${props.name} value:`, value, ", value2:", value2);
-          if (value === true || value === false) {
-            return true;
-          } else {
-            return "This input is required.";
-          }
-        }
+        validate: validateTriCheckbox
       }}
     />
     {

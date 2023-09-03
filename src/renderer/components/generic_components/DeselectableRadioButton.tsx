@@ -75,6 +75,7 @@ export function DeselectableRadioButtonGroup<K extends AutoTTRecConfigFormChoice
   //console.log(`DeselectableRadioButtonGroup-${props.name} isTouched:`, fieldState.isTouched, ", invalid:", fieldState.invalid, ", invalidForForceRerender:", invalidForForceRerender, ", error:", fieldState.error, ", counterRef.current:", counterRef.current);
 
   const renderCounter = useRenderCounter(true, `DeselectableRadioButtonGroup ${props.name}`);
+
   function validateDeselectableRadioButton(value: AutoTTRecConfigFormChoiceArgValue): string | true {
     //console.log(`DeselectableRadioButtonGroup-${props.name} validateDeselectableRadioButton value:`, value);
     if (value === "<FILLME>") {
