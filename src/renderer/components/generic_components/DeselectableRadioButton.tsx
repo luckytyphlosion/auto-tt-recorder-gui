@@ -2,7 +2,7 @@
 import React, { memo, useState, useEffect, useRef, createContext, useContext, useMemo } from 'react';
 import { ValidateResult, Control, Controller, RefCallBack, UseFormSetValue, UseFormGetValues, useFormContext } from 'react-hook-form';
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
-import { AutoTTRecConfigFormChoiceArgName, AutoTTRecConfigFormChoiceArgs, AutoTTRecConfigFormFieldName } from "../../auto-tt-rec-form-field-types";
+import { AutoTTRecConfigFormChoiceArgName, AutoTTRecConfigFormChoiceArgValue, AutoTTRecConfigFormChoiceArgs } from "../../auto-tt-rec-form-field-types";
 import { SimpleErrorMessage } from "../reusable_components/SimpleErrorMessage";
 import { EmptyGridRow } from "../reusable_components/EmptyGridRow";
 
@@ -73,7 +73,7 @@ export function DeselectableRadioButtonGroup<K extends AutoTTRecConfigFormChoice
   //console.log(`DeselectableRadioButtonGroup-${props.name} isTouched:`, fieldState.isTouched, ", invalid:", fieldState.invalid, ", invalidForForceRerender:", invalidForForceRerender, ", error:", fieldState.error, ", counterRef.current:", counterRef.current);
 
   const renderCounter = useRenderCounter(true, `DeselectableRadioButtonGroup ${props.name}`);
-  function validateDeselectableRadioButton(value: AutoTTRecConfigFormChoiceArgs[AutoTTRecConfigFormChoiceArgName]): string | true {
+  function validateDeselectableRadioButton(value: AutoTTRecConfigFormChoiceArgValue): string | true {
     //console.log(`DeselectableRadioButtonGroup-${props.name} validateDeselectableRadioButton value:`, value);
     if (value === "<FILLME>") {
       return inputRequiredMessage;

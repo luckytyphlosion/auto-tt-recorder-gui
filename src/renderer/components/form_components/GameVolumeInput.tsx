@@ -21,22 +21,23 @@ export function GameVolumeInput() {
     <div className="grid-contents">
       <label className="start-label" htmlFor="game-volume-slider">Game volume: </label>
       <div className="start-label-contents">
-      <input id="game-volume-slider" type="range" min={0} max={125} step={1} {...register("game-volume-slider", {
-        onChange: updateGameVolumeNumberInputFromSlider})}/>
-      <span className="percent-input">
-        <input type="number" style={{width: "4em"}}
-          {...register("game-volume-numberinput", {required: {
-            value: true,
-            message: "This input is required."
-          }, valueAsNumber: true,
-          min: {
-            value: 0,
-            message: "Game volume cannot be less than zero."
-          }, onChange: updateGameVolumeSliderFromNumberInput})}
-        ></input>%
-      </span>
-      <SimpleErrorMessage name="game-volume-numberinput"/>
-      {renderCounter}
+        <input id="game-volume-slider" type="range" min={0} max={125} step={1} {...register("game-volume-slider", {
+          onChange: updateGameVolumeNumberInputFromSlider})
+        }/>
+        <span className="percent-input">
+          <input type="number" style={{width: "4em"}}
+            {...register("game-volume-numberinput", {required: {
+              value: true,
+              message: "This input is required."
+            }, valueAsNumber: true,
+            min: {
+              value: 0,
+              message: "Game volume cannot be less than zero."
+            }, onChange: updateGameVolumeSliderFromNumberInput})}
+          ></input>%
+        </span>
+        <SimpleErrorMessage name="game-volume-numberinput"/>
+        {renderCounter}
       </div>
     </div>
   );

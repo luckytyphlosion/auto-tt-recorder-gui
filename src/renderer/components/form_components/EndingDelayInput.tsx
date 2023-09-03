@@ -1,9 +1,10 @@
 import React from "react";
-import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
+import { useFormContextAutoTT, lateValidateNumberInputMaker } from "../../use-form-context-auto-tt";
 import { SimpleErrorMessage } from "../reusable_components/SimpleErrorMessage";
 
 export function EndingDelayInput() {
   const {register} = useFormContextAutoTT();
+  const onBlur = lateValidateNumberInputMaker("ending-delay");
 
   return (
     <div className="grid-contents">
@@ -14,7 +15,8 @@ export function EndingDelayInput() {
             value: true,
             message: "This input is required."
           },
-          validate: (value) => (value >= 0) || "Ending delay must be positive or zero."
+          validate: (value) => (value >= 0) || "Ending delay must be positive or zero.",
+          onBlur: onBlur
           })}
         ></input>
         <SimpleErrorMessage name="ending-delay"/>

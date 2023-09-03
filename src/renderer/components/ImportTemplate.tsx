@@ -13,7 +13,7 @@ import { AutoTTRecConfigErrorsAndWarnings } from "../auto-tt-rec-errors-and-warn
 
 import { BooleanFILLME } from "../../shared/shared-types";
 
-import { ErrorWarningDisplay } from "./ErrorWarningDisplay";
+import { ErrorWarningDisplay } from "./reusable_components/ErrorWarningDisplay";
 import { YAMLParseErrorExplanation } from "./YAMLParseErrorExplanation";
 
 import "./form_components/styles/ExtraGeckoCodesInput.css";

@@ -229,6 +229,7 @@ export type AutoTTRecConfigFormChoiceArgs = Pick<AutoTTRecConfigFormFields, {
   [K in AutoTTRecConfigFormFieldName]-?: IsChoiceType<AutoTTRecConfigFormFields[K]> extends true ? K : never
 }[AutoTTRecConfigFormFieldName]>;
 export type AutoTTRecConfigFormChoiceArgName = keyof AutoTTRecConfigFormChoiceArgs;
+export type AutoTTRecConfigFormChoiceArgValue = AutoTTRecConfigFormChoiceArgs[AutoTTRecConfigFormChoiceArgName];
 export type AutoTTRecConfigFormSharedChoiceArgName = AutoTTRecConfigFormChoiceArgName & AutoTTRecArgName;
 
 // A type describing the field names of fields with a pathname type, but not checked that the types are actual string args

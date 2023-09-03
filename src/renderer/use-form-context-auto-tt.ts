@@ -53,6 +53,32 @@ export function useTriggerAndRerenderAutoTT<K extends keyof AutoTTRecConfigFormF
   }
 }
 
+export function lateValidateNumberInputMaker<K extends keyof AutoTTRecConfigFormFields>(name: K) {
+  const {getFieldState} = useFormContextAutoTT();
+  const triggerAndRerender = useTriggerAndRerenderAutoTT(name);
+  //const textInputCounterRef = useRef(0);
+  //textInputCounterRef.current = textInputCounterRef.current + 1;
+  //console.log(`TextInput-${props.name}: ${textInputCounterRef.current}`);
+  //console.log("formState.isSubmitted:", formState.isSubmitted);
+  const fieldState = getFieldState(name);
+  const inputTouchedOrInvalid = fieldState.isTouched || fieldState.invalid;
+
+  //console.log(`${props.name}-TextInput inputTouchedOrInvalid:`, inputTouchedOrInvalid);
+
+  const onBlur = async function (e: React.FocusEvent<HTMLInputElement>) {
+    console.log(`NumberInput-${name} onBlur inputTouchedOrInvalid:`, inputTouchedOrInvalid);
+    await triggerAndRerender(true);
+  }
+
+  useEffect(() => {
+    if (!inputTouchedOrInvalid) {
+      triggerAndRerender(false).then();
+    }
+  }, [inputTouchedOrInvalid]);
+
+  return onBlur;
+}
+
 // export async function triggerAndRerenderAutoTT(name: AutoTTRecConfigFormFieldName, trigger: UseFormTrigger<AutoTTRecConfigFormFields>, formState: FormState<AutoTTRecConfigFormFields>, setFieldErrorMessage: React.Dispatch<React.SetStateAction<string>>) {
 //   if (name !== undefined) {
 //     //console.log(`manual before trigger ${name} formState:`, formState);

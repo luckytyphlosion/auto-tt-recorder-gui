@@ -2,7 +2,7 @@
 import React, { memo, useState, useEffect, useRef, createContext, useContext, useMemo } from 'react';
 import { ValidateResult, Control, Controller, RefCallBack, UseFormSetValue, UseFormGetValues, useFormContext } from 'react-hook-form';
 import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
-import { AutoTTRecConfigFormChoiceArgName, AutoTTRecConfigFormChoiceArgs, AutoTTRecConfigFormFieldName } from "../../auto-tt-rec-form-field-types";
+import { AutoTTRecConfigFormChoiceArgName, AutoTTRecConfigFormChoiceArgValue, AutoTTRecConfigFormFieldName } from "../../auto-tt-rec-form-field-types";
 import { SimpleErrorMessage } from "../reusable_components/SimpleErrorMessage";
 
 import useRenderCounter from "../../RenderCounter";
@@ -13,7 +13,7 @@ export function DeselectableDropdown<K extends AutoTTRecConfigFormChoiceArgName>
   name: K,
   noErrorMessage?: boolean,
   mixedErrorMessageInfo?: {
-    validate: (value: AutoTTRecConfigFormChoiceArgs[AutoTTRecConfigFormChoiceArgName]) => Promise<ValidateResult>,
+    validate: (value: AutoTTRecConfigFormChoiceArgValue) => Promise<ValidateResult>,
     liveValidateCallback: (setDropdownErrorState: SetDropdownErrorState) => Promise<void>
   },
   onChange?: ((event?: Event) => void) | (() => void), nameAsId?: boolean, children?: React.ReactNode}) {
@@ -44,7 +44,7 @@ export function DeselectableDropdown<K extends AutoTTRecConfigFormChoiceArgName>
     }
   }, [inputTouchedOrInvalid]);
 
-  function validateDeselectableDropdown(value: AutoTTRecConfigFormChoiceArgs[AutoTTRecConfigFormChoiceArgName]): ValidateResult {
+  function validateDeselectableDropdown(value: AutoTTRecConfigFormChoiceArgValue): ValidateResult {
     if (value === "<FILLME>") {
       return "This input is required.";
     } else {
