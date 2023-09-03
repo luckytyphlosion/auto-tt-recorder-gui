@@ -58,7 +58,7 @@ import { ValidateFormOnOpen } from "./ValidateFormOnOpen";
 import { shallowCopy } from "../../shared/util-shared";
 import { LoadFormInputsType } from "../../shared/shared-types";
 
-import { DEFAULT_FORM_VALUES, AutoTTRecConfigFormFields, AutoTTRecConfigFormFieldsNoFILLME } from "../auto-tt-rec-form-field-types";
+import { DEFAULT_FORM_VALUES, AutoTTRecConfigFormFields, AutoTTRecConfigFormFieldName, AutoTTRecConfigFormFieldsNoFILLME } from "../auto-tt-rec-form-field-types";
 import { convertFormDataToAutoTTRecArgs } from "../auto-tt-rec-args-builder";
 import { getInitialFormData } from "../import-template-on-program-open";
 
@@ -137,6 +137,9 @@ export function AutoTTRecConfigForm(
   const [unrenderFormToggle, setUnrenderFormToggle] = useState(false);
   const [forceUpdateToggle, setForceUpdateToggle] = useState(false);
   const [validateFormViaSubmit_keepErrors, setValidateFormViaSubmit_keepErrors] = useState(false);
+  const [validateFormViaSubmit_inputNameToFocus, setValidateFormViaSubmit_inputNameToFocus] = useState<AutoTTRecConfigFormFieldName | undefined>(undefined);
+  const [inputNameToFocusToggle, setInputNameToFocusToggle] = useState<boolean | null>(null);
+
   const [initialValidationStateNum, setInitialValidationStateNum] = useState<ValidationSubmitState>(ValidationSubmitState.NOT_VALIDATING);
 
   const renderCount = useRef(0);
@@ -146,7 +149,7 @@ export function AutoTTRecConfigForm(
   let formState = formMethods.formState;
   console.log(`[${renderCount.current}] AutoTTRecConfigForm formMethods:`, formMethods, ", forceUpdateToggle:", forceUpdateToggle, ", formState.isSubmitSuccessful:", formState.isSubmitSuccessful);
 
-  const validateFormViaSubmitSync = useCallback(function (keepErrors: boolean) {
+  const validateFormViaSubmitSync = useCallback(function (keepErrors: boolean, inputNameToFocus?: AutoTTRecConfigFormFieldName) {
     //function validateFormViaSubmitSync(keepErrors: boolean) {
       // function resetFormKeepErrors(errors: Object) {
       //   console.log("resetFormKeepErrors formState.submitCount:", formState.submitCount);
@@ -163,13 +166,18 @@ export function AutoTTRecConfigForm(
       // }
 
       async function validateFormViaSubmit(keepErrors: boolean) {
-        const handleSubmitForValidation = formMethods.handleSubmit(() => {}, () => {});
+        const handleSubmitForValidation = formMethods.handleSubmit(() => {}, () => {
+          if (inputNameToFocus !== undefined) {
+            formMethods.setFocus(inputNameToFocus, {shouldSelect: true});
+          }
+        });
         await handleSubmitForValidation();
       }
   
       console.log("in validateFormViaSubmitSync: keepErrors: ", keepErrors);
       validateFormViaSubmit(keepErrors).then(() => {
         setValidateFormViaSubmit_keepErrors(keepErrors);
+        //setValidateFormViaSubmit_inputNameToFocus(inputNameToFocus);
         setInitialValidationStateNum(ValidationSubmitState.DO_RESET);
       });/*.then(() => {
         setForceUpdateToggle((oldForceUpdateToggle) => {
@@ -187,15 +195,26 @@ export function AutoTTRecConfigForm(
   useEffect(() => {
     if (initialValidationStateNum === ValidationSubmitState.DO_RESET) {
       formMethods.reset(undefined, {keepValues: true, keepErrors: validateFormViaSubmit_keepErrors, keepSubmitCount: true});
-      //console.log("validateFormViaSubmit_keepErrors:", validateFormViaSubmit_keepErrors);
-      setForceUpdateToggle((oldForceUpdateToggle) => {
-        //console.log("in setForceUpdateToggle oldForceUpdateToggle:", oldForceUpdateToggle, "->", !oldForceUpdateToggle);
-        return !oldForceUpdateToggle;
-      });
+      if (validateFormViaSubmit_inputNameToFocus !== undefined) {
+        setInputNameToFocusToggle((oldInputNameToFocusToggle) => (!oldInputNameToFocusToggle));
+      } else {
+        //console.log("validateFormViaSubmit_keepErrors:", validateFormViaSubmit_keepErrors);
+        setForceUpdateToggle((oldForceUpdateToggle) => {
+          //console.log("in setForceUpdateToggle oldForceUpdateToggle:", oldForceUpdateToggle, "->", !oldForceUpdateToggle);
+          return !oldForceUpdateToggle;
+        });
+      }
+
       setInitialValidationStateNum(ValidationSubmitState.NOT_VALIDATING);
     }
   }, [initialValidationStateNum]);
 
+  useEffect(() => {
+    if (inputNameToFocusToggle !== null && validateFormViaSubmit_inputNameToFocus !== undefined) {
+      formMethods.setFocus(validateFormViaSubmit_inputNameToFocus, {shouldSelect: true});
+      setForceUpdateToggle((oldForceUpdateToggle) => (!oldForceUpdateToggle));
+    }
+  }, [inputNameToFocusToggle]);
   /*
   useEffect(() => {
     let submitCount = formState.submitCount;

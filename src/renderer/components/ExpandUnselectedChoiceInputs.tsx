@@ -1,13 +1,13 @@
 
 import React, { useEffect } from "react";
 import { FormProvider, UseFormReturn, useWatch } from "react-hook-form";
-import { AutoTTRecConfigFormFields } from "../auto-tt-rec-form-field-types";
+import { AutoTTRecConfigFormFields, AutoTTRecConfigFormFieldName } from "../auto-tt-rec-form-field-types";
 import { ReadTemplateResult, ReadTemplateStatus, AutoTTRecConfig } from "../../shared/shared-types";
 
 export function ExpandUnselectedChoiceInputs(props: {
   disabled: boolean,
   formMethods: UseFormReturn<AutoTTRecConfigFormFields, any, undefined>,
-  validateFormViaSubmitSync: (keepErrors: boolean) => void
+  validateFormViaSubmitSync: (keepErrors: boolean, inputNameToFocus?: AutoTTRecConfigFormFieldName) => void
 }) {
   const expandUnselectedChoiceInputs = useWatch({
     name: "expand-unselected-choice-inputs",
@@ -16,7 +16,7 @@ export function ExpandUnselectedChoiceInputs(props: {
 
   function updateExpandUnselectedChoiceInputs(event: React.ChangeEvent<HTMLInputElement>) {
     props.formMethods.setValue("expand-unselected-choice-inputs", event.target.checked);
-    props.validateFormViaSubmitSync(true);
+    props.validateFormViaSubmitSync(true, "expand-unselected-choice-inputs");
   }
 
   useEffect(() => {
