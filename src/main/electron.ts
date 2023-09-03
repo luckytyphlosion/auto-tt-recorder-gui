@@ -174,6 +174,10 @@ async function createWindow() {
     details.preventDefault();
   });
 
+  mainWindow.webContents.setWindowOpenHandler(({url: string}) => {
+    return {action: "deny"};
+  });
+
   if (isDev) {
     mainWindow.webContents.openDevTools({ mode: 'detach' });
     console.log("opened dev tools");

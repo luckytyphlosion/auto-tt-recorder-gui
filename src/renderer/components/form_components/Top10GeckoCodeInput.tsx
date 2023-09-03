@@ -7,6 +7,8 @@ import { FilenameAndContents } from "../../../shared/shared-types"
 import { SimpleErrorMessage } from "../reusable_components/SimpleErrorMessage";
 import { EditorView } from "@codemirror/view";
 
+import { globalValidateFormOnOpen } from "../AutoTTRecConfigForm";
+
 import { ClearableReadonlyTextInput } from "../generic_components/ClearableReadonlyTextInput";
 
 import { isFileReadableAndHasCorrectExtension } from "../../util-renderer";
@@ -36,12 +38,14 @@ const top10RegionDependentGeckoCodes = new Set(["C260BFAC", "C26414CC", "C260B72
 
 // 
 export function Top10GeckoCodeInput(props: {isAutoTTRecRunning: boolean}) {
-  const {register, getValues, setValue, control, setError} = useFormContextAutoTT();
+  const {register, getValues, setValue, control, setError, clearErrors, getFieldState} = useFormContextAutoTT();
   const renderCounter = useRenderCounter(false, "Top10GeckoCodeInput");
   const [isModalOpen, setModalOpen] = useState(false);
   const [isGeckoCodeUnsaved, setGeckoCodeUnsaved] = useState(getValues("top-10-gecko-code-unsaved"));
   const [top10GeckoCodeFilename, setTop10GeckoCodeFilename] = useState(getValues("top-10-gecko-code-filename"));
   const [top10GeckoCodeInvalid, setTop10GeckoCodeInvalid] = useState(false);
+  const [top10GeckoCodeValidateResult, setTop10GeckoCodeValidateResult] = useState<ValidateResult>(undefined);
+  const [top10GeckoCodeForceRerenderCounter, setTop10GeckoCodeForceRerenderCounter] = useState(0);
 
   const [saveModalFrom, setSaveModalFrom] = useState(SaveModalFrom.CLOSING);
 
@@ -155,6 +159,22 @@ export function Top10GeckoCodeInput(props: {isAutoTTRecRunning: boolean}) {
     return success;
   }
 
+  function validateGeckoCodeContentsOnlyAndSetErrorState() {
+    let fieldState = getFieldState("top-10-gecko-code-filename");
+    let validateResult = geckoCodeValidator_contentsOnly();
+    console.log("queueSaveDialogAndWriteText fieldState:", fieldState, ", validateResult:", validateResult);
+    if (validateResult === true || validateResult === undefined) {
+      clearErrors("top-10-gecko-code-filename");
+    } else {
+      setError("top-10-gecko-code-filename", {type: "custom", message: validateResult.toString()});
+    }
+    setInvalidFromValidateResult(validateResult);
+    setTop10GeckoCodeValidateResult(validateResult);
+    if (!globalValidateFormOnOpen) {
+      setTop10GeckoCodeForceRerenderCounter(1);
+    }
+  }
+
   async function newOrOpenGeckoCodeFile(event: React.MouseEvent<HTMLButtonElement>) {
     if (saveModalFrom == SaveModalFrom.NEW) {
       clearGeckoCodeFields();
@@ -186,8 +206,67 @@ export function Top10GeckoCodeInput(props: {isAutoTTRecRunning: boolean}) {
     setSaveModalOpenAndFrom(false, SaveModalFrom.CLOSING);
   }
 
-  async function geckoCodeValidator(): Promise<ValidateResult> {
-    setTop10GeckoCodeInvalid(false);
+  function setInvalidFromValidateResult(validateResult: ValidateResult) {
+    setTop10GeckoCodeInvalid(validateResult !== true ? true : false);
+  }
+
+  function geckoCodeValidator_contentsOnly(): ValidateResult {
+    let top10GeckoCodeContents = getValues("top-10-gecko-code-contents");
+    if (top10GeckoCodeContents.trim() === "") {
+      return "Error: Provided input is empty!";
+    }
+
+    let lines = top10GeckoCodeContents.split("\n");
+    let foundTop10RegionDependentCodePortion = false;
+    let top10CodeErrorMsg: string = "";
+
+    for (const [index, untrimmedLine] of lines.entries()) {
+      let lineNum = index + 1;
+
+      const line = untrimmedLine.trim();
+      if (line === "") {
+        continue;
+      }
+      let isGeckoCodeValid = true;
+      let codelineSplit = line.split(/\s+/, 2);
+      if (codelineSplit.length !== 2) {
+        isGeckoCodeValid = false;
+      } else {
+        let [codelineFirstHalf, codelineSecondHalf] = codelineSplit;
+        codelineFirstHalf = codelineFirstHalf.trim();
+        codelineSecondHalf = codelineSecondHalf.trim();
+        
+        if (!/^[0-9A-Fa-f]{8}$/.test(codelineFirstHalf) || !/^[0-9A-Fa-f]{8}$/.test(codelineSecondHalf)) {
+          isGeckoCodeValid = false;
+        } else {
+          if (top10RegionDependentGeckoCodes.has(codelineFirstHalf.toUpperCase())) {
+            if (foundTop10RegionDependentCodePortion) {
+              top10CodeErrorMsg = "Error: Broken code provided! Please try creating it again.";
+              break;
+            }
+            foundTop10RegionDependentCodePortion = true;
+          }
+        }
+
+      }
+
+      if (!isGeckoCodeValid) {
+        top10CodeErrorMsg = `Error: Provided input is not a custom top 10 code (Bad line \"${line}\" at line ${lineNum}.)`;
+        break;
+      }
+    }
+
+    if (top10CodeErrorMsg !== "") {
+      return top10CodeErrorMsg;
+    } else if (!foundTop10RegionDependentCodePortion) {
+        return "Error: Provided gecko code is not a custom top 10 code.";
+    } else {
+      return true;
+    }
+  }
+
+  async function geckoCodeValidatorHelper(): Promise<ValidateResult> {
+    //setTop10GeckoCodeInvalid(false);
     if (isGeckoCodeUnsaved || top10GeckoCodeFilename === "") {
       return "Please save your gecko code first.";
     } else {
@@ -203,60 +282,18 @@ export function Top10GeckoCodeInput(props: {isAutoTTRecRunning: boolean}) {
         return isGeckoCodeFilenameReadableAndHasCorrectExtensionValidateResult;
       }
 
-      let top10GeckoCodeContents = getValues("top-10-gecko-code-contents");
-      let lines = top10GeckoCodeContents.split("\n");
-      let foundTop10Code = false;
-      let top10CodeErrorMsgOrSuccess: boolean | string = "";
-
-      for (const [index, untrimmedLine] of lines.entries()) {
-        let lineNum = index + 1;
-  
-        const line = untrimmedLine.trim();
-        if (line === "") {
-          continue;
-        }
-        let isGeckoCodeValid = true;
-        let codelineSplit = line.split(/\s+/, 2);
-        if (codelineSplit.length !== 2) {
-          isGeckoCodeValid = false;
-        } else {
-          let [codelineFirstHalf, codelineSecondHalf] = codelineSplit;
-          codelineFirstHalf = codelineFirstHalf.trim();
-          codelineSecondHalf = codelineSecondHalf.trim();
-          
-          if (!/^[0-9A-Fa-f]{8}$/.test(codelineFirstHalf) || !/^[0-9A-Fa-f]{8}$/.test(codelineSecondHalf)) {
-            isGeckoCodeValid = false;
-          } else {
-            if (top10RegionDependentGeckoCodes.has(codelineFirstHalf.toUpperCase())) {
-              if (foundTop10Code) {
-                top10CodeErrorMsgOrSuccess = "Broken code provided! Please try creating it again.";
-                break;
-              }
-              foundTop10Code = true;
-            }
-          }
-
-          if (!isGeckoCodeValid) {
-            top10CodeErrorMsgOrSuccess = `Error: bad line \"${line}\" at line ${lineNum}.`;
-            break;
-          }
-        }
-      }
-
-      if (top10CodeErrorMsgOrSuccess === "") {
-        if (foundTop10Code) {
-          top10CodeErrorMsgOrSuccess = true;
-        } else {
-          top10CodeErrorMsgOrSuccess = "Error: Provided gecko code is not a custom top 10 code.";
-        }
-      }
-
-      if (top10CodeErrorMsgOrSuccess !== true) {
-        setTop10GeckoCodeInvalid(true);
-      }
-      return top10CodeErrorMsgOrSuccess;
+      return geckoCodeValidator_contentsOnly();
     }
   }
+
+  async function geckoCodeValidator(): Promise<ValidateResult> {
+    const result = await geckoCodeValidatorHelper();
+    setInvalidFromValidateResult(result);
+    setTop10GeckoCodeValidateResult(result);
+    return result;
+  }
+
+  console.log("isGeckoCodeUnsaved:", isGeckoCodeUnsaved, ", top10GeckoCodeFilename:", top10GeckoCodeFilename, "top10GeckoCodeInvalid:", top10GeckoCodeInvalid, ", top10GeckoCodeValidateResult:", top10GeckoCodeValidateResult);
 
   return (
     <div>
@@ -290,14 +327,16 @@ export function Top10GeckoCodeInput(props: {isAutoTTRecRunning: boolean}) {
               }}>New</button>
 
 
-              <button type="button" onClick={event => {
-                openFile(event);
+              <button type="button" onClick={async (event) => {
+                await openFile(event);
+                validateGeckoCodeContentsOnlyAndSetErrorState();
               }}>Open&#8230;</button>
 
-              <button type="button" onClick={event => {
-                queueSaveDialogAndWriteText(event, [
+              <button type="button" onClick={async (event) => {
+                await queueSaveDialogAndWriteText(event, [
                   {name: "Text files", extensions: ["txt"]}
                 ]);
+                validateGeckoCodeContentsOnlyAndSetErrorState();
               }}>Save as&#8230;</button>
             </div>
             <div className="start-label"></div>
@@ -330,7 +369,10 @@ export function Top10GeckoCodeInput(props: {isAutoTTRecRunning: boolean}) {
                   updateGeckoCodeUnsaved(true);
                   onChange(event);
                 }}
-                onBlur={onBlur}
+                onBlur={(event: React.FocusEvent<HTMLDivElement, Element>) => {
+                  onBlur();
+                  validateGeckoCodeContentsOnlyAndSetErrorState();
+                }}
                 ref={ref}
               />
             )}
