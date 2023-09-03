@@ -1,5 +1,5 @@
 import React from "react";
-import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
+import { useFormContextAutoTT, lateValidateNumberInputMaker } from "../../use-form-context-auto-tt";
 import useRenderCounter from "../../RenderCounter";
 import { ValidateResult } from "react-hook-form";
 import { SimpleErrorMessage } from "../reusable_components/SimpleErrorMessage";
@@ -30,6 +30,7 @@ const MAX_ENCODE_SIZE_MIB = MAX_ENCODE_SIZE / MIB_BYTES_SIZE;
 
 export function EncodeSizeInput(props: {addSizeBasedReminderToLabel: boolean}) {
   const {register, setValue, getValues} = useFormContextAutoTT();
+  const onBlur = lateValidateNumberInputMaker("encode-size-displayed", "encode-size");
   const renderCounter = useRenderCounter(true);
 
   function updateEncodeSizeDisplayed(event?: Event) {
@@ -80,6 +81,7 @@ export function EncodeSizeInput(props: {addSizeBasedReminderToLabel: boolean}) {
 
     setValue("encode-size-displayed", encodeSizeDisplayed, {shouldTouch: true});
     updateEncodeSizeDisplayed(event);
+    onBlur();
   }
 
 
@@ -116,11 +118,11 @@ export function EncodeSizeInput(props: {addSizeBasedReminderToLabel: boolean}) {
               e.preventDefault();
             }
           }}
-            {...register("encode-size-displayed", {required: false, onChange: updateEncodeSizeDisplayed, valueAsNumber: true})}
+            {...register("encode-size-displayed", {required: false, onChange: updateEncodeSizeDisplayed, onBlur: onBlur, valueAsNumber: true})}
           ></input>
-          <DeselectableRadioButtonGroup name="encode-size-unit" noErrorMessage={true}>
-            <DeselectableRadioButton labelValue="MiB" id="encode-size-unit-mib" value="mib" onChange={updateEncodeSizeUnit}/>
-            <DeselectableRadioButton labelValue="bytes" id="encode-size-unit-bytes" value="bytes" onChange={updateEncodeSizeUnit}/>
+          <DeselectableRadioButtonGroup name="encode-size-unit" noErrorMessage={true} onChange={updateEncodeSizeUnit}>
+            <DeselectableRadioButton labelValue="MiB" id="encode-size-unit-mib" value="mib"/>
+            <DeselectableRadioButton labelValue="bytes" id="encode-size-unit-bytes" value="bytes"/>
           </DeselectableRadioButtonGroup>
           
           {renderCounter}
