@@ -35,7 +35,7 @@ export function AutoTTRecManager(props: {
   const [programStatusDetails, setProgramStatusDetails] = useState("");
   const [isAutoTTRecRunning, setAutoTTRecRunning] = useState(false);
 
-  console.log("AutoTTRecManager INITIAL_FORM_DATA:", props.INITIAL_FORM_DATA);
+  //console.log("AutoTTRecManager INITIAL_FORM_DATA:", props.INITIAL_FORM_DATA);
   const renderCounter = useRenderCounter(false, "AutoTTRecManager");
 
   const handleSendStdoutListener = useCallback(function (event: IpcRendererEvent, stdoutData: string) {
@@ -54,11 +54,12 @@ export function AutoTTRecManager(props: {
     setProgramStatusDetails((programStatusDetails) => appendAccountingForCarriage(programStatusDetails, stderrData));
   }, []);
 
-  const runAutoTTRec = useCallback(async function (autoTTRecArgs: AutoTTRecArgs, setForceUpdateToggle: React.Dispatch<React.SetStateAction<boolean>>) {
+  const runAutoTTRec = useCallback(async function (autoTTRecArgs: AutoTTRecArgs, setForceUpdateToggle: React.Dispatch<React.SetStateAction<boolean>>, resetForm: () => void) {
     const spawnSuccessful = await window.api.spawnAutoTTRec("data/barebones_personal_ghost_config.yml", autoTTRecArgs)
       .catch((err: Error) => {
         setProgramStatusHeader("Error");
         setProgramStatusDetails(err.message);
+        resetForm();
         setForceUpdateToggle((forceUpdateToggle) => (!forceUpdateToggle));
       });
 
@@ -72,9 +73,11 @@ export function AutoTTRecManager(props: {
 
       const autoTTRecResponse = await window.api.waitAutoTTRec();
       if (autoTTRecResponse.status === AutoTTRecResponseStatus.COMPLETED) {
+        resetForm();
         setAutoTTRecRunning(false);
         setProgramStatusHeader("Done!");
       } else if (autoTTRecResponse.status === AutoTTRecResponseStatus.ABORTED) {
+        resetForm();
         setAutoTTRecRunning(false);
         setProgramStatusHeader("Aborted");
       } else {
@@ -85,6 +88,7 @@ export function AutoTTRecManager(props: {
         } else {
           setProgramStatusHeader("Error");
         }
+        resetForm();
         setAutoTTRecRunning(false);
 
         setProgramStatusDetails((programStatusDetails) => (`${programStatusDetails}${autoTTRecResponse.error.message}`));

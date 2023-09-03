@@ -1046,6 +1046,9 @@ export class AutoTTRecConfigImporter {
     this.formData["expand-unselected-choice-inputs"] = false;
   }
 
+  private setIsSubmitting() {
+    this.formData["is-submitting"] = false;
+  }
   private validateFormDataNonPartial() {
     for (const argName of AUTO_TT_REC_CONFIG_FORM_FIELD_NAMES) {
       if (this.formData[argName] === undefined) {
@@ -1085,6 +1088,7 @@ export class AutoTTRecConfigImporter {
       this.importTrackNameAndSetTrackNameType();
       this.clearAudioBitrateAndCodecState();
       this.setExpandUnselectedChoiceInputs();
+      this.setIsSubmitting();
       this.validateFormDataNonPartial();
       this.hasImported = true;
     }

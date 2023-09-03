@@ -97,6 +97,7 @@ class AutoTTRecConfigFormFieldsSomeFILLMEClass {
   "input-display": InputDisplay = "auto"; // choice
   "input-display-dont-create": boolean = false; // checkbox
   "iso-filename": string = DEBUG_PREFILLED_DEFAULTS ? "C:\\Users\\User\\Documents\\RMCE 01\\RMCE01.iso" : "";
+  "is-submitting": boolean = false; // internal
   "keep-window": boolean = true; // checkbox
   "main-ghost-filename": string = ""; // arbitrary
   "main-ghost-source": MainGhostSource = "chadsoft"; // choice
@@ -295,6 +296,7 @@ export const MINIMAL_FORM_VALUES: AutoTTRecConfigFormMinimalFields = {
   "input-display": "<FILLME>",
   "input-display-dont-create": "<FILLME>",
   "iso-filename": "",
+  "is-submitting": false,
   "keep-window": "<FILLME>",
   "main-ghost-filename": "",
   "main-ghost-source": "<FILLME>",

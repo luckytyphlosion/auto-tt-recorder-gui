@@ -94,7 +94,7 @@ function createUnFILLMEFormData(formData: Readonly<AutoTTRecConfigFormFields>) {
 
 type AutoTTRecConfigFormProps = {
   whichUI: boolean,
-  onSubmitCallback: (autoTTRecArgs: AutoTTRecArgs, setSubmittedToggle: React.Dispatch<React.SetStateAction<boolean>>) => any,
+  onSubmitCallback: (autoTTRecArgs: AutoTTRecArgs, setSubmittedToggle: React.Dispatch<React.SetStateAction<boolean>>, resetForm: () => void) => any,
   onAbortCallback: (event: React.MouseEvent<HTMLButtonElement>) => void,
   isAutoTTRecRunning: boolean,
   initialLoadFormInputsType: LoadFormInputsType,
@@ -254,20 +254,24 @@ export function AutoTTRecConfigForm(
   // }, []);
 
   async function onSubmit(formData: AutoTTRecConfigFormFields) {
+    console.log("AutoTTRecConfigForm onSubmit");
     let lastRecordedTemplateFilename = await window.api.getLastRecordedTemplateFilename();
     await tryExportAutoTTRecConfigTemplate(formData, lastRecordedTemplateFilename);
+    console.log("formState: isSubmitSuccessful:", formState.isSubmitSuccessful, ", isSubmitted:", formState.isSubmitted, ", isSubmitting:", formState.isSubmitting);
 
-    console.log("onSubmit");
-    formMethods.reset(undefined, {keepValues: true, keepIsValid: true, keepSubmitCount: true});
-    console.log(formData);
+    formMethods.reset(undefined, {keepValues: true, keepIsValid: true, keepSubmitCount: true, keepIsSubmitted: true});
+    formMethods.setValue("is-submitting", true);
+    //console.log(formData);
     console.log("formState.dirtyFields:", formState.dirtyFields);
     console.log("formState.touchedFields:", formState.touchedFields);
     let unFILLMEformData = createUnFILLMEFormData(formData);
     let autoTTRecArgs = convertFormDataToAutoTTRecArgs(unFILLMEformData);
     console.log("autoTTRecArgs:", autoTTRecArgs);
-    console.log("formState.isSubmitSuccessful:", formState.isSubmitSuccessful);
-    console.log("formState.isSubmitted:", formState.isSubmitted);
-    await props.onSubmitCallback(autoTTRecArgs, setForceUpdateToggle);
+
+    await props.onSubmitCallback(autoTTRecArgs, setForceUpdateToggle, () => {
+      formMethods.reset(undefined, {keepValues: true, keepIsValid: true, keepSubmitCount: true});
+      formMethods.setValue("is-submitting", false);
+    });
   }
 
   const onError = useCallback(async function (errors: Object) {

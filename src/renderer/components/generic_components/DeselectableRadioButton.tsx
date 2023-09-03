@@ -139,26 +139,29 @@ export function DeselectableRadioButton<K extends AutoTTRecConfigFormChoiceArgNa
         })}
         {...!context.notDeselectable ? {
             onContextMenu: async (e: React.MouseEvent<HTMLInputElement>) => {
-              let curValue = getValues(context.name);
-              if (curValue === "<FILLME>") {
-                setValue<AutoTTRecConfigFormChoiceArgName>(context.name, props.value as V, {shouldTouch: true});
-                clearErrors(context.name);
-                context.setInvalidForForceRerender(false);
-              } else {
-                setValue<AutoTTRecConfigFormChoiceArgName>(context.name, "<FILLME>", {shouldTouch: true});
-                setError(context.name, {type: "required", message: context.inputRequiredMessage});
-                context.setInvalidForForceRerender(true);
-              }
-              if (chosenOnChange !== undefined) {
-                if (e instanceof Event) {
-                  chosenOnChange(e);
+              const isSubmitting = getValues("is-submitting");
+              //console.log(`DeselectableRadioButton ${context.name}-${props.value} isSubmitting:`, isSubmitting);
+              if (isSubmitting === false || isSubmitting === "<FILLME>") {
+                let curValue = getValues(context.name);
+                if (curValue === "<FILLME>") {
+                  setValue<AutoTTRecConfigFormChoiceArgName>(context.name, props.value as V, {shouldTouch: true});
+                  clearErrors(context.name);
+                  context.setInvalidForForceRerender(false);
                 } else {
-                  chosenOnChange();
+                  setValue<AutoTTRecConfigFormChoiceArgName>(context.name, "<FILLME>", {shouldTouch: true});
+                  setError(context.name, {type: "required", message: context.inputRequiredMessage});
+                  context.setInvalidForForceRerender(true);
+                }
+                if (chosenOnChange !== undefined) {
+                  if (e instanceof Event) {
+                    chosenOnChange(e);
+                  } else {
+                    chosenOnChange();
+                  }
                 }
               }
-              e.preventDefault();
 
-              //await triggerAndRerender();
+              e.preventDefault();
               return false;
             }
           } : {}
