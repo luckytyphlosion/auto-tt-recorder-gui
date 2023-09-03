@@ -84,21 +84,24 @@ export function DeselectableDropdown<K extends AutoTTRecConfigFormChoiceArgName>
         },
         validate: chosenValidationCallback
       })} onContextMenu={async (e: React.MouseEvent<HTMLSelectElement>) => {
-        setValue<AutoTTRecConfigFormChoiceArgName>(props.name, "<FILLME>", {shouldTouch: true});
-        if (props.mixedErrorMessageInfo !== undefined) {
-          await props.mixedErrorMessageInfo.liveValidateCallback(setDropdownErrorState);
-        } else {
-          setError(props.name, {type: "custom", message: "This input is required."});
-          setInvalidForForceRerender(true);
-        }
-        if (props.onChange !== undefined) {
-          if (e instanceof Event) {
-            props.onChange(e);
+        e.preventDefault();
+        const isSubmitting = getValues("is-submitting");
+        if (isSubmitting === false || isSubmitting === "<FILLME>") {
+          setValue<AutoTTRecConfigFormChoiceArgName>(props.name, "<FILLME>", {shouldTouch: true});
+          if (props.mixedErrorMessageInfo !== undefined) {
+            await props.mixedErrorMessageInfo.liveValidateCallback(setDropdownErrorState);
           } else {
-            props.onChange();
+            setError(props.name, {type: "custom", message: "This input is required."});
+            setInvalidForForceRerender(true);
+          }
+          if (props.onChange !== undefined) {
+            if (e instanceof Event) {
+              props.onChange(e);
+            } else {
+              props.onChange();
+            }
           }
         }
-        e.preventDefault();
       }}>
         {props.children}
         <option value="<FILLME>" disabled style={{display: "none"}}></option>

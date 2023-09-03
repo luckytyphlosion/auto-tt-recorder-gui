@@ -20,6 +20,7 @@ interface CustomCheckboxProps {
 function TriCheckboxInternal(props: {
   value: BooleanFILLME,
   refCallback: RefCallBack,
+  disableRightClickCallback: () => boolean,
   onChange: (...event: any[]) => void,
   userOnChange?: TriCheckboxUserOnChangeDecl,
   id?: string
@@ -53,6 +54,10 @@ function TriCheckboxInternal(props: {
         }
         props.onChange(e);
       }} onContextMenu={async (e: React.MouseEvent<HTMLInputElement>) => {
+        e.preventDefault();
+        if (props.disableRightClickCallback()) {
+          return false;
+        }
         let newValue: BooleanFILLME = false;
         if (checkboxRef !== null && checkboxRef.current !== null) {
           checkboxRef.current.indeterminate = !checkboxRef.current.indeterminate;
@@ -65,7 +70,6 @@ function TriCheckboxInternal(props: {
           await props.userOnChange(newValue);
         }
         props.onChange(newValue);
-        e.preventDefault();
         return false;
       }}
       />
@@ -139,6 +143,9 @@ export function TriCheckbox<K extends keyof AutoTTRecConfigFormBooleanArgs>(
               newValue = e.target.checked;
             }
             validateTriCheckboxAndSetErrorState(newValue);
+          }}
+          disableRightClickCallback={() => {
+            return getValues("is-submitting") === true;
           }}
           userOnChange={props.onChange}
           refCallback={ref}

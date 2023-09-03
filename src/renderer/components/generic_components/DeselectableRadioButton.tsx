@@ -139,6 +139,7 @@ export function DeselectableRadioButton<K extends AutoTTRecConfigFormChoiceArgNa
         })}
         {...!context.notDeselectable ? {
             onContextMenu: async (e: React.MouseEvent<HTMLInputElement>) => {
+              e.preventDefault();
               const isSubmitting = getValues("is-submitting");
               //console.log(`DeselectableRadioButton ${context.name}-${props.value} isSubmitting:`, isSubmitting);
               if (isSubmitting === false || isSubmitting === "<FILLME>") {
@@ -161,7 +162,7 @@ export function DeselectableRadioButton<K extends AutoTTRecConfigFormChoiceArgNa
                 }
               }
 
-              e.preventDefault();
+              
               return false;
             }
           } : {}

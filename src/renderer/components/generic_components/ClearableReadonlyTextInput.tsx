@@ -7,7 +7,7 @@ import { AutoTTRecConfigFormStringArgName, AutoTTRecConfigFormFields } from "../
 import useRenderCounter from "../../RenderCounter";
 
 export function ClearableReadonlyTextInput<K extends AutoTTRecConfigFormStringArgName>(props: {name: K, notRequired?: boolean, validate: Validate<string, AutoTTRecConfigFormFields>, setState?: (value: string) => void, className?: string, parentRerenderSetState?: React.Dispatch<React.SetStateAction<number>>}) {
-  const {register, setValue} = useFormContextAutoTT();
+  const {register, setValue, getValues} = useFormContextAutoTT();
   const triggerAndRerender = useTriggerAndRerenderAutoTT(props.name);
   const renderCounter = useRenderCounter(false, `ClearableReadonlyTextInput ${props.name}`);
 
@@ -20,13 +20,16 @@ export function ClearableReadonlyTextInput<K extends AutoTTRecConfigFormStringAr
       } : false, validate: props.validate})}
       onContextMenu={async (e: React.MouseEvent<HTMLInputElement>) => {
         e.preventDefault();
-        setValue<AutoTTRecConfigFormStringArgName>(props.name, "", {shouldTouch: true});
-        if (props.setState !== undefined) {
-          props.setState("");
-        }
-        await triggerAndRerender(true);
-        if (props.parentRerenderSetState !== undefined) {
-          props.parentRerenderSetState((oldValue) => (oldValue + 1));
+        const isSubmitting = getValues("is-submitting");
+        if (isSubmitting === false || isSubmitting === "<FILLME>") {
+          setValue<AutoTTRecConfigFormStringArgName>(props.name, "", {shouldTouch: true});
+          if (props.setState !== undefined) {
+            props.setState("");
+          }
+          await triggerAndRerender(true);
+          if (props.parentRerenderSetState !== undefined) {
+            props.parentRerenderSetState((oldValue) => (oldValue + 1));
+          }
         }
       }}
       ></input>
