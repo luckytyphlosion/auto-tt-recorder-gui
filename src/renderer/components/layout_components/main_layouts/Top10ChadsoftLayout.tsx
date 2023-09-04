@@ -110,7 +110,7 @@ export function Top10ChadsoftLayout(props: {isAutoTTRecRunning: boolean, formCom
         : ""
       }
       <QualitySettingsLayout formComplexity={props.formComplexity} isNoEncode={false}/>
-      <ExtraSettingsLayout formComplexity={props.formComplexity}/>
+      <ExtraSettingsLayout formComplexity={props.formComplexity} isNoEncode={false}/>
       {renderCounter}
       <OutputVideoFilenameInput noTop10CategoryIsNoEncode={false}/>
 

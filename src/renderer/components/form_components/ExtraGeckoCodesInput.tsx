@@ -255,10 +255,7 @@ export function ExtraGeckoCodesInput(props: {isAutoTTRecRunning: boolean}) {
             </div>
           </div>
           {
-            (isGeckoCodeUnsaved || extraGeckoCodesFilename === "") ?
-              <div className="start-label">
-                <SimpleErrorMessage name="extra-gecko-codes-filename"/>
-              </div>
+            (isGeckoCodeUnsaved || extraGeckoCodesFilename === "") ? <SimpleErrorMessage name="extra-gecko-codes-filename" marginBlockDisplay={true}/>
             : ""
           }
         </div>

@@ -76,7 +76,7 @@ export function MarioKartChannelLayout(props: {isAutoTTRecRunning: boolean, form
         : ""
       }
       <QualitySettingsLayout formComplexity={props.formComplexity} isNoEncode={false}/>
-      <ExtraSettingsLayout formComplexity={props.formComplexity}/>
+      <ExtraSettingsLayout formComplexity={props.formComplexity} isNoEncode={false}/>
 
       {renderCounter}
     </div>

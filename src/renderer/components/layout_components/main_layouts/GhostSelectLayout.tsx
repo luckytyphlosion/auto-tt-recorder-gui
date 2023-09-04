@@ -70,7 +70,7 @@ export function GhostSelectLayout(props: {isAutoTTRecRunning: boolean, formCompl
         : ""
       }
       <QualitySettingsLayout formComplexity={props.formComplexity} isNoEncode={false}/>
-      <ExtraSettingsLayout formComplexity={props.formComplexity}/>
+      <ExtraSettingsLayout formComplexity={props.formComplexity} isNoEncode={false}/>
       {renderCounter}
 
     </div>

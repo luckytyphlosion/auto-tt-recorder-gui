@@ -20,8 +20,8 @@ export function CRFValueInput(props: {addCRFReminderToLabel: boolean}) {
         <SimpleErrorMessage name="crf-value"/>
       </div>
       <div className="start-label"></div>
-      <div className="start-label-contents" style={{marginBottom: "1em"}}>
-        Lower is better but file size becomes larger
+      <div className="start-label-contents">
+        <p className="form-input-notes">Lower is better but file size becomes larger</p>
       </div>
     </div>
   );

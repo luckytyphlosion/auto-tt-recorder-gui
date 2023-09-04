@@ -35,10 +35,26 @@
     flex-flow: row wrap;
   }
 
+  .grid-sub-contents {
+    display: contents;
+  }
+
   .start-label {
     text-align: left;
     padding-right: 5px;
     width: fit-content;
+  }
+
+  .grid-sub-contents > .start-label {
+    display: inline;
+  }
+
+  .grid-sub-contents > .start-label-contents {
+    display: inline;
+  }
+
+  .grid-sub-contents .error-message__text-contents {
+    display: inline;
   }
 
   .start-label-contents {

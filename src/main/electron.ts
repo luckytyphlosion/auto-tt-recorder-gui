@@ -117,7 +117,7 @@ async function createWindow() {
   console.log("dolphinPathForwardSlashes:", dolphinPathForwardSlashes);
 
   mainWindow = new BrowserWindow({
-    width: 800,
+    width: 868,
     height: 600,
     webPreferences: {
       nodeIntegration: false,

@@ -29,7 +29,7 @@ export function MainGhostSourceInput() {
       <label className="start-label">Record from: </label>        
       <div className="start-label-contents">
         <DeselectableRadioButtonGroup name="main-ghost-source" blockDisplay={false} errorBelow={true}>
-        <DeselectableRadioButton labelValue="Chadsoft link: " id="main-ghost-source-chadsoft" value="chadsoft" onChange={updateMainGhostSource}/>
+          <DeselectableRadioButton labelValue="Chadsoft link: " id="main-ghost-source-chadsoft" value="chadsoft" onChange={updateMainGhostSource}/>
           <DeselectableRadioButton labelValue="RKG: " id="main-ghost-source-rkg" value="rkg" onChange={updateMainGhostSource}/>
         </DeselectableRadioButtonGroup>
         {renderCounter}

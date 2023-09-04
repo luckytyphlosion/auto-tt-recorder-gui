@@ -16,7 +16,7 @@ import { Top10ChadsoftInput } from "../../form_components/Top10ChadsoftInput";
 import { Top10TitleInput } from "../../form_components/Top10TitleInput";
 import { PixelFormatInput } from "../../form_components/PixelFormatInput";
 import { EncodeSettingsLayout } from "../choice_layouts/EncodeSettingsLayout";
-import { BackgroundMusicSourceInputAndMusicLayout } from "../sub_layouts/BackgroundMusicSourceInputAndMusicLayout";
+import { ExtraSettingsLayout } from "../sub_layouts/ExtraSettingsLayout";
 import { GameVolumeInput } from "../../form_components/GameVolumeInput";
 import { Top10LocationInput } from "../../form_components/Top10LocationInput";
 import { InputDisplayInput } from "../../form_components/InputDisplayInput";
@@ -51,15 +51,15 @@ export function NoEncodeLayout(props: {isAutoTTRecRunning: boolean}) {
       <GhostAndSZSSourceLayout/>
       <FieldsetOr>
         <legend>Music</legend>
-        <NoMusicInput/>
+        <div className="like-input-group">
+          <NoMusicInput/>
+        </div>
       </FieldsetOr>
       <CustomizationSettingsLayout isAutoTTRecRunning={props.isAutoTTRecRunning}/>
       <SpeedometerStyleAndLayout/>
       <PresentationSettingsLayout formComplexity={FormComplexity.ALL} enableFadeInAtStart={false}/>
       <QualitySettingsLayout formComplexity={FormComplexity.ALL} isNoEncode={true}/>
-      <h3>Extra settings (ignore if not sure)</h3>
-      <UseFFV1Input/>
-      <KeepWindowInput/>
+      <ExtraSettingsLayout formComplexity={FormComplexity.ALL} isNoEncode={true}/>
       {renderCounter}
 
     </div>

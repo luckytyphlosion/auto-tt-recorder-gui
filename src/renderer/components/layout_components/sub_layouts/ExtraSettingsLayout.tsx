@@ -10,7 +10,7 @@ import { IgnoreAutoAddMissingFilesInput } from "../../form_components/IgnoreAuto
 import { PurgeAutoAddInput } from "../../form_components/PurgeAutoAddInput";
 import { FieldsetOr } from "../../reusable_components/FieldsetOr";
 
-export function ExtraSettingsLayout(props: {formComplexity: FormComplexity}) {
+export function ExtraSettingsLayout(props: {formComplexity: FormComplexity, isNoEncode: boolean}) {
   return (
     <>
       {
@@ -20,15 +20,22 @@ export function ExtraSettingsLayout(props: {formComplexity: FormComplexity}) {
             <div className="like-input-group">
               <IgnoreAutoAddMissingFilesInput/>
               {
-                props.formComplexity === FormComplexity.ALL ?
-                  <>
-                    <PurgeAutoAddInput/>
-                    <UseFFV1Input/>
-                    <EncodeOnlyInput/>
-                    <InputDisplayDontCreateInput/>
-                    <KeepWindowInput/>
-                    <ChadsoftReadCacheInputAndSettingsLayout/>
-                  </> : ""
+                props.formComplexity === FormComplexity.ALL ? <>
+                  <PurgeAutoAddInput/>
+                  <UseFFV1Input/>
+                  <EncodeOnlyInput/>
+                </> : ""
+              }
+              {
+                props.formComplexity === FormComplexity.ALL && !props.isNoEncode ? <>
+                  <InputDisplayDontCreateInput/>
+                </> : ""
+              }
+              {
+                props.formComplexity === FormComplexity.ALL ? <>
+                  <KeepWindowInput/>
+                  <ChadsoftReadCacheInputAndSettingsLayout/>
+                </> : ""
               }
             </div>
           </FieldsetOr> : ""

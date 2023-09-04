@@ -63,7 +63,7 @@ export function GhostOnlyLayout(props: {isAutoTTRecRunning: boolean, formComplex
         : ""
       }
       <QualitySettingsLayout formComplexity={props.formComplexity} isNoEncode={false}/>
-      <ExtraSettingsLayout formComplexity={props.formComplexity}/>
+      <ExtraSettingsLayout formComplexity={props.formComplexity} isNoEncode={false}/>
       {renderCounter}
 
     </div>

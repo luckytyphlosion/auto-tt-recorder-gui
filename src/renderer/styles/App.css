@@ -9,6 +9,10 @@ label {
 	font-size: 11pt;
 }
 
+code {
+	font-family: "Courier New", monospace;
+}
+
 legend {
 	font-size: 11pt;
 	font-weight: 500;
@@ -56,4 +60,42 @@ legend {
 
 .option-label {
 	font-weight: bold;
+}
+
+.error-message__text-contents {
+	font-size: 11pt;
+	font-weight: 400;
+	background-color: yellow;
+}
+
+.error-message__text-contents__margin-block-display {
+	display: block;
+	margin-top: 0px;
+	margin-bottom: 0.75em;
+	width: fit-content;
+}
+
+.error-message__text-contents__no-margin-block-display {
+	display: inline;
+}
+
+.form-input-notes {
+	font-size: 11pt;
+	margin-top: 0px;
+	margin-bottom: 1em;
+	font-style: italic;
+}
+
+.form-input-notes--start-label {
+	font-size: 11pt;
+	font-style: italic;
+}
+
+.form-input-notes__normal {
+	font-style: normal;
+}
+
+.markdown-inline-code {
+	font-size: 11pt;
+	background-color: whitesmoke;
 }

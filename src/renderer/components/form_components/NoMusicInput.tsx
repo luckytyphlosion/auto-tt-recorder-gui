@@ -1,14 +1,14 @@
 
 import React from "react";
-import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { TriCheckbox } from "../generic_components/TriCheckbox";
 
 export function NoMusicInput() {
-  const {register} = useFormContextAutoTT();
   return (
-    <div>
-      <label htmlFor="no-music">Disable Game BGM: </label>
-      <TriCheckbox name="no-music" nameAsId={true}/>
+    <div className="grid-contents">
+      <label className="start-label" htmlFor="no-music">Disable Game BGM: </label>
+      <div className="start-label-contents">
+        <TriCheckbox name="no-music" nameAsId={true}/>
+      </div>
     </div>
   );
 }

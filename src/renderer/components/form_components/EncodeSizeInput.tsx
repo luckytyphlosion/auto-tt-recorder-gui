@@ -106,7 +106,7 @@ export function EncodeSizeInput(props: {addSizeBasedReminderToLabel: boolean}) {
   return (
     <div className="grid-contents">
       <div className="grid-contents">
-        <label className="start-label" htmlFor="encode-size-displayed">Output video size{props.addSizeBasedReminderToLabel ? " (For size-based)" : ""}:</label>
+        <label className="start-label" htmlFor="encode-size-displayed">Output video size:</label>
         <div className="start-label-contents">
           <input type="hidden" {...register("encode-size", {required: {
               value: true,
@@ -129,7 +129,7 @@ export function EncodeSizeInput(props: {addSizeBasedReminderToLabel: boolean}) {
         </div>
       </div>
       <div className="grid-contents">
-        <div className="start-label"></div>
+        <label className="start-label form-input-notes--start-label">{props.addSizeBasedReminderToLabel ? "(For size-based)" : ""}</label>
         <div className="start-label-contents">
           <SimpleErrorMessage name="encode-size"/>
         </div>

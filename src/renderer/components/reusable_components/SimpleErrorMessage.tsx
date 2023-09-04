@@ -90,27 +90,34 @@ const deepDiffMapper: any = function () {
   }
 }();
 
-export function SimpleErrorMessage(props: {name: AutoTTRecConfigFormFieldName, errorMessageForForceUpdate?: string, marginBlockDisplay?: boolean}) {
+export function SimpleErrorMessage(props: {
+  name: AutoTTRecConfigFormFieldName,
+  errorMessageForForceUpdate?: string,
+  marginBlockDisplay?: boolean,
+  dynamicGridDisplay?: boolean
+}) {
   const formContext = useFormContextAutoTT();
   const formState = formContext.formState;
 
   //console.log(`SimpleErrorMessage ${props.name}: `, formState.errors[props.name]?.message);
-  const errorMessageStyle = props.marginBlockDisplay === true ? {
-    backgroundColor: "yellow",
-    display: "block",
-    marginTop: "0px",
-    marginBottom: "0.75em",
-    width: "fit-content"
-  } : {
-    backgroundColor: "yellow",
-    display: "inline"
-  };
+  const errorMessageAdditionalCSSClass = props.marginBlockDisplay === true ? "error-message__text-contents__margin-block-display" : "error-message__text-contents__no-margin-block-display";
 
-  return (<ErrorMessage2
+  const errorMessageElement = <ErrorMessage2
     errors={formState.errors}
     name={props.name}
-    render={({ message }) => <p style={errorMessageStyle}>{message}</p>}
-  />);
+    render={({ message }) => <p className={`error-message__text-contents ${errorMessageAdditionalCSSClass}`}>{message}</p>}
+  />;
+
+  if (props.marginBlockDisplay === true) {
+    return (
+      <div className="grid-sub-contents">
+        <div className="start-label"></div>
+        <div className="start-label-contents">{errorMessageElement}</div>
+      </div>
+    );
+  } else {
+    return errorMessageElement;
+  }
 }
 
 // names first take higher priority

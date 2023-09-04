@@ -104,16 +104,18 @@ export function OpenFileTextInputWithButton<K extends AutoTTRecConfigFormStringA
       <button type="button" onClick={queueFileFolderDialog}>{buttonText}</button>
     </>
 
-    if (props.errorMessageOnBottom) {
-      errorMessageElement = <div className="grid-contents">
-        <div className="start-label"></div>
-        <div className="start-label-contents">
-          <SimpleErrorMessage name={props.name}/>
-        </div>
-      </div>
-    } else {
-      errorMessageElement = <SimpleErrorMessage name={props.name}/>;
-    }
+    errorMessageElement = <SimpleErrorMessage name={props.name} marginBlockDisplay={props.errorMessageOnBottom}/>;
+
+    // if (props.errorMessageOnBottom) {
+    //   errorMessageElement = <div className="grid-contents">
+    //     <div className="start-label"></div>
+    //     <div className="start-label-contents">
+    //       <SimpleErrorMessage name={props.name}/>
+    //     </div>
+    //   </div>
+    // } else {
+    //   errorMessageElement = <SimpleErrorMessage name={props.name}/>;
+    // }
   
     let resultElementExceptSurroundingNonVoidElement: JSX.Element;
     if (props.notInGrid) {
