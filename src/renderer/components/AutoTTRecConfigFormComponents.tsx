@@ -22,7 +22,8 @@ export function AutoTTRecConfigFormComponents(props: {
   forceUpdate: boolean,
   unrenderFormToggle: boolean,
   isAutoTTRecRunning: boolean,
-  initialValidateFormOnOpen: boolean
+  initialValidateFormOnOpen: boolean,
+  validateAndDisplayFormErrorsViaSubmitSync: () => void
 }) {  
   const renderCounter = useRenderCounter(false, "AutoTTRecConfigFormComponents");
   //console.log("Rendering AutoTTRecConfigFormComponents. forceUpdate: ", props.forceUpdate);
@@ -46,7 +47,7 @@ export function AutoTTRecConfigFormComponents(props: {
         <input type="hidden" {...props.formMethods.register("expand-unselected-choice-inputs")}/>
         <input type="hidden" {...props.formMethods.register("is-submitting")}/>
         <ISOWBFSFileInput_Memo/>
-        <FormComplexityLayout_Memo isAutoTTRecRunning={props.isAutoTTRecRunning} unrenderFormToggle={props.unrenderFormToggle}/>
+        <FormComplexityLayout_Memo isAutoTTRecRunning={props.isAutoTTRecRunning} unrenderFormToggle={props.unrenderFormToggle} validateAndDisplayFormErrorsViaSubmitSync={props.validateAndDisplayFormErrorsViaSubmitSync}/>
         {renderCounter}
       </FormProvider>
     </div>

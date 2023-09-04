@@ -186,6 +186,10 @@ export function AutoTTRecConfigForm(
     //}
   }, []);
 
+  const validateAndDisplayFormErrorsViaSubmitSync = useCallback(() => {
+    validateFormViaSubmitSync(true, true);
+  }, [validateFormViaSubmitSync]);
+
   useEffect(() => {
     validateFormViaSubmitSync(props.validateFormOnOpen);
   }, []);
@@ -320,12 +324,12 @@ export function AutoTTRecConfigForm(
         <br/>
         <strong>Other program settings:</strong>
         <ValidateFormOnOpen disabled={props.isAutoTTRecRunning} initialValue={props.validateFormOnOpen}/>
-        <ExpandUnselectedChoiceInputs_Memo disabled={props.isAutoTTRecRunning} formMethods={formMethods} validateFormViaSubmitSync={validateFormViaSubmitSync}/>
+        <ExpandUnselectedChoiceInputs_Memo disabled={props.isAutoTTRecRunning} formMethods={formMethods} validateAndDisplayFormErrorsViaSubmitSync={validateAndDisplayFormErrorsViaSubmitSync}/>
   <br/>
         <ImportTemplate_Memo disabled={props.isAutoTTRecRunning} formMethods={formMethods} setUnrenderFormToggle={setUnrenderFormToggle} onError={onError}/>
         <ClearAllFields_Memo disabled={props.isAutoTTRecRunning} formMethods={formMethods} setUnrenderFormToggle={setUnrenderFormToggle}/>
         <fieldset disabled={props.isAutoTTRecRunning}>
-          <AutoTTRecConfigFormComponents_Memo formMethods={formMethods} forceUpdate={forceUpdateToggle} unrenderFormToggle={unrenderFormToggle} isAutoTTRecRunning={props.isAutoTTRecRunning} initialValidateFormOnOpen={props.validateFormOnOpen}/>
+          <AutoTTRecConfigFormComponents_Memo formMethods={formMethods} forceUpdate={forceUpdateToggle} unrenderFormToggle={unrenderFormToggle} isAutoTTRecRunning={props.isAutoTTRecRunning} initialValidateFormOnOpen={props.validateFormOnOpen} validateAndDisplayFormErrorsViaSubmitSync={validateAndDisplayFormErrorsViaSubmitSync}/>
         </fieldset>
         <AutoTTRecSubmitAbortButtons_Memo isAutoTTRecRunning={props.isAutoTTRecRunning} onAbortCallback={props.onAbortCallback} setRunAutoTTRecOnSubmitCallback={(() => {}) as any}/>
       </form>

@@ -20,14 +20,19 @@ export const TIMELINES = makeReadonlyArraySet([...NO_TOP_10_CATEGORIES.arr, "top
 export type Timeline = ValidValues<typeof TIMELINES>;
 
 const OutputVideoFilenameInput_Memo = memo(OutputVideoFilenameInput);
-export function NoTop10CategoryLayout(props: {isAutoTTRecRunning: boolean, formComplexity: FormComplexity, noTop10Category: NoTop10Category}) {
+export function NoTop10CategoryLayout(props: {
+  isAutoTTRecRunning: boolean,
+  formComplexity: FormComplexity,
+  noTop10Category: NoTop10Category,
+  validateAndDisplayFormErrorsViaSubmitSync: () => void
+}) {
   const {register, getValues} = useFormContextAutoTT();
   const renderCounter = useRenderCounter(false, "NoTop10CategoryLayout");
 
   //console.log("noTop10Category:", props.noTop10Category, `, getValues("no-top-10-category"):`, getValues("no-top-10-category"));
   return (
     <div>
-      <DeselectableRadioButtonGroup name="no-top-10-category" notDeselectable={true}>
+      <DeselectableRadioButtonGroup name="no-top-10-category" notDeselectable={true} onChange={props.validateAndDisplayFormErrorsViaSubmitSync}>
         <DeselectableRadioButton labelValue="Mario Kart Channel: " id="no-top-10-category-mkchannel" value="mkchannel"/>
         <DeselectableRadioButton labelValue="Time Trial Ghost Select: " id="no-top-10-category-ghostselect" value="ghostselect"/>
         <DeselectableRadioButton labelValue="Race Only: " id="no-top-10-category-ghostonly" value="ghostonly"/>
