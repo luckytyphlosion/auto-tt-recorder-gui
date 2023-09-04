@@ -8,7 +8,7 @@ export function EndingDelayInput() {
 
   return (
     <div className="grid-contents">
-      <label className="start-label" htmlFor="ending-delay">Ending video delay (in frames):</label>
+      <label className="start-label" htmlFor="ending-delay">Ending video delay:</label>
       <div className="start-label-contents">
         <input type="number" id="ending-delay"
           {...register("ending-delay", {valueAsNumber: true, required: {
@@ -19,6 +19,7 @@ export function EndingDelayInput() {
           onBlur: onBlur
           })}
         ></input>
+        <span id="ending-delay__in-frames"> frames</span>
         <SimpleErrorMessage name="ending-delay"/>
       </div>
     </div>

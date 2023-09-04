@@ -1,12 +1,29 @@
+/*BlinkMacSystemFont,-apple-system,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",Helvetica,Arial,sans-serif;*/
+
+body {
+	font-family: BlinkMacSystemFont,-apple-system,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+	/*font-family: "Arial", sans-serif;*/
+}
+
+label {
+	font-size: 11pt;
+}
+
+legend {
+	font-size: 11pt;
+	font-weight: 500;
+}
+
+#ending-delay__in-frames {
+	font-size: 11pt;
+}
 
 .title-header {
-	font-family: Arial, sans-serif;
 	font-size: 14pt;
 	font-weight: bold;
 }
 	
 .auto-tt-rec-notes {
-	font-family: Arial, sans-serif;
 	font-size: 11pt;
 }
 

@@ -45,8 +45,11 @@ export function TextInput<K extends AutoTTRecConfigFormStringArgName>(props: {na
             validate: props.validate
           })}
         />
-        <SimpleErrorMessage name={props.name}/>
         {renderCounter}
+      </div>
+      <div className="start-label"></div>
+      <div className="start-label-contents">
+        <SimpleErrorMessage name={props.name} marginBlockDisplay={true}/>
       </div>
     </div>
   );

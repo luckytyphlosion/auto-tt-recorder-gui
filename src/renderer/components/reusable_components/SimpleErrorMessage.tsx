@@ -90,16 +90,26 @@ const deepDiffMapper: any = function () {
   }
 }();
 
-export function SimpleErrorMessage(props: {name: AutoTTRecConfigFormFieldName, errorMessageForForceUpdate?: string}) {
+export function SimpleErrorMessage(props: {name: AutoTTRecConfigFormFieldName, errorMessageForForceUpdate?: string, marginBlockDisplay?: boolean}) {
   const formContext = useFormContextAutoTT();
   const formState = formContext.formState;
 
   //console.log(`SimpleErrorMessage ${props.name}: `, formState.errors[props.name]?.message);
+  const errorMessageStyle = props.marginBlockDisplay === true ? {
+    backgroundColor: "yellow",
+    display: "block",
+    marginTop: "0px",
+    marginBottom: "0.75em",
+    width: "fit-content"
+  } : {
+    backgroundColor: "yellow",
+    display: "inline"
+  };
 
   return (<ErrorMessage2
     errors={formState.errors}
     name={props.name}
-    render={({ message }) => <p style={{display: "inline", backgroundColor: "yellow"}}>{message}</p>}
+    render={({ message }) => <p style={errorMessageStyle}>{message}</p>}
   />);
 }
 

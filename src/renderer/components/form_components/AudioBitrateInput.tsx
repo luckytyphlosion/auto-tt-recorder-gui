@@ -156,7 +156,10 @@ export function AudioBitrateInput(props: {encodeType: EncodeType, audioCodec: Au
           <DeselectableRadioButton labelValue="kbps" id="audio-bitrate-unit-kbps" value="kbps"/>
           <DeselectableRadioButton labelValue="bps" id="audio-bitrate-unit-bps" value="bps"/>
         </DeselectableRadioButtonGroup>
-        <SimpleErrorMessage name="audio-bitrate"/>
+      </div>
+      <div className="start-label"></div>
+      <div className="start-label-contents">
+        <SimpleErrorMessage name="audio-bitrate" marginBlockDisplay={true}/>
       </div>
       {renderCounter}
     </div>
