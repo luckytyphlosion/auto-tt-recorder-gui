@@ -1,6 +1,6 @@
 import React from "react";
 import { TextInput } from "../generic_components/TextInput";
-import { FormInputNotesInlineCode } from "../reusable_components/FormInputNotesInlineCode";
+import { FormInputNotesInlineCode } from "../reusable_components/FormInputNotesAutoTTRecArgName";
 
 export function Top10CensorsInput() {
   return (

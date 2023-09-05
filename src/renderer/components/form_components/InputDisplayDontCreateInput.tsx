@@ -1,7 +1,7 @@
 
 import React from "react";
 import { TriCheckbox } from "../generic_components/TriCheckbox";
-import { FormInputNotesInlineCode } from "../reusable_components/FormInputNotesInlineCode";
+import { FormInputNotesInlineCode } from "../reusable_components/FormInputNotesAutoTTRecArgName";
 
 export function InputDisplayDontCreateInput() {
   return (
