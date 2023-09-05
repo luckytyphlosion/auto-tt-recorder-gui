@@ -1,4 +1,4 @@
-@font-face {
+/*@font-face {
 	font-family: "Inter";
 	src: local("Inter"), url("../fonts/inter/Inter-Regular.otf") format("opentype");
 }
@@ -13,7 +13,7 @@
 	src: local("Open Sans"), url("../fonts/open_sans/OpenSans_SemiCondensed-Regular.ttf") format("truetype");
   font-weight: normal;
   font-stretch: semi-condensed;
-}
+}*/
 
 /*
 @font-face {
