@@ -8,8 +8,10 @@
 }
 
 /* width: 185px; */
+/* max width: "Ignore missing auto-add files: " at 192.04px */
+
 .start-label {
-  width: 243px;
+  width: 210px;
 	text-align: right;
 }
 
