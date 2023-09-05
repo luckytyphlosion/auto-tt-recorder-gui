@@ -51,7 +51,7 @@ export function OutputVideoFileFormatInput(props: {videoCodec: VideoCodec, formC
 
   return (
     <div className="grid-contents">
-      <label className="start-label" htmlFor="output-video-file-format">Video format{props.addSizeBasedReminderToLabel ? " (For size-based)" : ""}: </label>
+      <label className="start-label" htmlFor="output-video-file-format">Video format: </label>
       <div className="start-label-contents">
         <DeselectableDropdown name="output-video-file-format" nameAsId={true} onChange={props.formComplexity === FormComplexity.ADVANCED ? updateVideoCodecForAdvancedForm : () => {}}>
           {
@@ -72,6 +72,11 @@ export function OutputVideoFileFormatInput(props: {videoCodec: VideoCodec, formC
         </DeselectableDropdown>
         {renderCounter}
       </div>
+      {props.addSizeBasedReminderToLabel ? <>
+        <label className="start-label form-input-notes--start-label">(For size-based)</label>
+        <div className="start-label-contents">
+        </div>
+      </> : ""}
     </div>
   );
 }

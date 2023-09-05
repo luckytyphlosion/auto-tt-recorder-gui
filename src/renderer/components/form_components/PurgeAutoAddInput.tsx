@@ -13,7 +13,7 @@ export function PurgeAutoAddInput() {
 
   return (
     <div className="grid-contents">
-      <label className="start-label">Purge auto add directory: </label>
+      <label className="start-label">Purge auto-add directory: </label>
       <div className="start-label-contents">
         <DeselectableRadioButtonGroup name="purge-auto-add">
           <DeselectableRadioButton labelValue="On WBZ patch error: " id="purge-auto-add-onerror" value="onerror"/>

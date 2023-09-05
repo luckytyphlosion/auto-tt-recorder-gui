@@ -298,7 +298,7 @@ export function Top10GeckoCodeInput(props: {isAutoTTRecRunning: boolean}) {
   return (
     <div>
       <div>
-        {/*<h4>Top 10 Gecko code (create using <a href="https://tt-rec.com/customtop10">https://tt-rec.com/customtop10</a>)</h4>*/}
+        {/*<h4>Top 10 Gecko Code (create using <a href="https://tt-rec.com/customtop10">https://tt-rec.com/customtop10</a>)</h4>*/}
         <input type="hidden" {...register("top-10-gecko-code-unsaved")}/>
         <Modal
           overlayClassName="top-10-gecko-code-save-modal"
@@ -352,7 +352,7 @@ export function Top10GeckoCodeInput(props: {isAutoTTRecRunning: boolean}) {
       </div>
       <div className="like-input-group">
         <div className="grid-contents">
-        <label className="start-label">Gecko code contents{isGeckoCodeUnsaved ? " (Unsaved)" : ""}:<br/><strong>Create using:<br/><a href="https://tt-rec.com/customtop10">https://tt-rec.com/customtop10</a></strong></label>
+        <label className="start-label">Gecko Code Contents{isGeckoCodeUnsaved ? " (Unsaved)" : ""}:<br/><strong>Create using:<br/><a href="https://tt-rec.com/customtop10">tt-rec.com/customtop10</a></strong></label>
         <div className="start-label-contents">
           <Controller
             render={({
