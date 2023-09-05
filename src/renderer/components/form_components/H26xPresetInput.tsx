@@ -13,9 +13,11 @@ export function H26xPresetInput(props: {addCRFReminderToLabel: boolean}) {
 
   return (
     <div className="grid-contents">
-      <label className="start-label" htmlFor="h26x-preset">Encode speed: </label>
+      <label className="start-label" htmlFor="h26x-preset" style={{lineHeight: 1.43}}>Encode speed: <br/>{props.addCRFReminderToLabel ? <span className="form-input-notes--start-label">(For CRF)</span> : ""}</label>
       <div className="start-label-contents">
-        <DeselectableDropdown name="h26x-preset" nameAsId={true} noErrorMessage={true}>
+        <DeselectableDropdown name="h26x-preset" nameAsId={true} errorBelow={true}
+          formInputNotesContents={<>Faster option &#8594; larger filesize.<br/>Ultrafast/superfast have slightly less quality.</>}
+        >
           <option value="ultrafast">ultrafast</option>
           <option value="superfast">superfast</option>
           <option value="veryfast">veryfast</option>
@@ -27,11 +29,6 @@ export function H26xPresetInput(props: {addCRFReminderToLabel: boolean}) {
           <option value="veryslow">veryslow</option>
           <option value="placebo">placebo</option>
         </DeselectableDropdown>
-      </div>
-      <label className="start-label form-input-notes--start-label">{props.addCRFReminderToLabel ? "(For CRF)" : ""}</label>
-      <div className="start-label-contents">
-        <p className="form-input-notes">Faster option &#8594; larger filesize.<br/>Ultrafast/superfast have slightly less quality.</p>
-        <SimpleErrorMessage name="h26x-preset" marginBlockDisplay={true} negativeTopMargin={true}/>
       </div>
       {renderCounter}
     </div>

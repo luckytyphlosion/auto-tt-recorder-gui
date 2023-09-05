@@ -6,7 +6,17 @@ import { ValidationRule, Validate } from "react-hook-form";
 
 import useRenderCounter from "../../RenderCounter";
 
-export function TextInput<K extends AutoTTRecConfigFormStringArgName>(props: {name: K, startLabel: string, notRequired?: boolean, requiredMessage?: string, pattern?: ValidationRule<RegExp>, validate?: Validate<string, AutoTTRecConfigFormFields>}) {
+export function TextInput<K extends AutoTTRecConfigFormStringArgName>(props: {
+  name: K,
+  startLabel: string,
+  notRequired?: boolean,
+  requiredMessage?: string,
+  pattern?: ValidationRule<RegExp>,
+  validate?: Validate<string, AutoTTRecConfigFormFields>,
+  placeholder?: string,
+  //formInputNotesStartLabel?: React.ReactNode,
+  formInputNotesContents?: React.ReactNode
+}) {
   const {register, getFieldState} = useFormContextAutoTT();
   const triggerAndRerender = useTriggerAndRerenderAutoTT(props.name);
   const textInputCounterRef = useRef(0);
@@ -34,7 +44,7 @@ export function TextInput<K extends AutoTTRecConfigFormStringArgName>(props: {na
     <div className="grid-contents">
       <label className="start-label" htmlFor={props.name}>{props.startLabel}</label>
       <div className="start-label-contents">
-        <input type="text" id={props.name}
+        <input type="text" id={props.name} placeholder={props.placeholder}
           {...register(props.name, {
             required: props.notRequired ? false : {
               value: true,
@@ -49,8 +59,10 @@ export function TextInput<K extends AutoTTRecConfigFormStringArgName>(props: {na
       </div>
       <div className="start-label"></div>
       <div className="start-label-contents">
-        <SimpleErrorMessage name={props.name} marginBlockDisplay={true}/>
+        {props.formInputNotesContents !== undefined ? <p className="form-input-notes">{props.formInputNotesContents}</p> : ""}
+        <SimpleErrorMessage name={props.name} marginBlockDisplay={true} negativeTopMargin={props.formInputNotesContents !== undefined}/>
       </div>
+
     </div>
   );
 }

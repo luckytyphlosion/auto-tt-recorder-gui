@@ -19,6 +19,8 @@ export function DeselectableDropdown<K extends AutoTTRecConfigFormChoiceArgName>
   onChange?: ((event?: Event) => void) | (() => void),
   nameAsId?: boolean,
   errorBelow?: boolean,
+  /*formInputNotesStartLabel?: React.ReactNode,*/
+  formInputNotesContents?: React.ReactNode,
   children?: React.ReactNode
 }) {
   const {register, setValue, getValues, getFieldState, setError, clearErrors, trigger} = useFormContextAutoTT();
@@ -111,7 +113,10 @@ export function DeselectableDropdown<K extends AutoTTRecConfigFormChoiceArgName>
         <option value="<FILLME>" disabled style={{display: "none"}}></option>
       </select>
       {
-        props.noErrorMessage ? "" : <SimpleErrorMessage name={props.name} marginBlockDisplay={props.errorBelow}/>
+        /*formInputNotesStartLabel={props.formInputNotesStartLabel}*/
+      }
+      {
+        props.noErrorMessage ? "" : <SimpleErrorMessage name={props.name} marginBlockDisplay={props.errorBelow} formInputNotesContents={props.formInputNotesContents} negativeTopMargin={props.formInputNotesContents !== undefined}/>
       }
       {renderCounter}
     </>

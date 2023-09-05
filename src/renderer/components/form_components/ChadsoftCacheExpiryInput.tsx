@@ -2,6 +2,7 @@ import React from "react";
 import { ValidateResult } from "react-hook-form";
 import { TextInput } from "../generic_components/TextInput";
 import { FormInputNotesAutoTTRecArgName } from "../reusable_components/FormInputNotesAutoTTRecArgName";
+import { SimpleErrorMessage } from "../reusable_components/SimpleErrorMessage";
 
 const durationRegex = /^(?:([0-9]+)h)?(?:([0-9]+)m)?(?:([0-9]+)s?)?(?<=.)$/;
 
@@ -42,13 +43,12 @@ export function ChadsoftCacheExpiryInput() {
 
   return (
     <>
-      <TextInput name="chadsoft-cache-expiry" startLabel="Purge cache files after: " validate={validateChadsoftCacheExpiry}/>
-      <div className="grid-contents">
-        <div className="start-label"></div>
-        <div className="start-label-contents">
-          <p className="form-input-notes">E.g. if the duration is 24h, removes a downloaded Chadsoft file 24 hours after downloaded <FormInputNotesAutoTTRecArgName>chadsoft-cache-expiry</FormInputNotesAutoTTRecArgName>.</p>
-        </div>
-      </div>
+      <TextInput
+        name="chadsoft-cache-expiry" startLabel="Purge cache files after: "
+        validate={validateChadsoftCacheExpiry} formInputNotesContents={
+          <>E.g. if the duration is 24h, removes a downloaded Chadsoft file 24 hours after downloaded <FormInputNotesAutoTTRecArgName>chadsoft-cache-expiry</FormInputNotesAutoTTRecArgName>.</>
+        }
+      />
     </>
     
   );

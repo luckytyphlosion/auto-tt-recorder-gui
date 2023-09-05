@@ -93,7 +93,9 @@ const deepDiffMapper: any = function () {
 export function SimpleErrorMessage(props: {
   name: AutoTTRecConfigFormFieldName,
   marginBlockDisplay?: boolean,
-  negativeTopMargin?: boolean
+  negativeTopMargin?: boolean,
+  //formInputNotesStartLabel?: React.ReactNode,
+  formInputNotesContents?: React.ReactNode
 }) {
   const formContext = useFormContextAutoTT();
   const formState = formContext.formState;
@@ -102,7 +104,7 @@ export function SimpleErrorMessage(props: {
   let errorMessageAdditionalCSSClass = props.marginBlockDisplay === true ? "error-message__text-contents__margin-block-display" : "error-message__text-contents__no-margin-block-display";
 
   if (props.negativeTopMargin) {
-    errorMessageAdditionalCSSClass = `${errorMessageAdditionalCSSClass} error-message__text-contents--negative-top-margin`;
+    errorMessageAdditionalCSSClass += " error-message__text-contents--negative-top-margin";
   }
 
   const errorMessageElement = <ErrorMessage2
@@ -111,11 +113,24 @@ export function SimpleErrorMessage(props: {
     render={({ message }) => <p className={`error-message__text-contents ${errorMessageAdditionalCSSClass}`}>{message}</p>}
   />;
 
+  let startLabelCSSClasses = "start-label";
+  // if (props.formInputNotesStartLabel !== undefined) {
+  //   startLabelCSSClasses += " form-input-notes--start-label";
+  // }
+
   if (props.marginBlockDisplay === true) {
     return (
       <div className="grid-sub-contents">
-        <div className="start-label"></div>
-        <div className="start-label-contents">{errorMessageElement}</div>
+        <label className={startLabelCSSClasses}>{/*props.formInputNotesStartLabel*/}</label>
+        <div className="start-label-contents">
+          {props.formInputNotesContents !== undefined ? 
+            <>
+              <p className="form-input-notes">{props.formInputNotesContents}</p>
+              {errorMessageElement}
+            </>
+          : errorMessageElement
+          }
+        </div>
       </div>
     );
   } else {
