@@ -27,7 +27,6 @@ export function Top10TitleInput() {
           <DeselectableRadioButton labelValue="Autogenerate:" id="top-10-title-type-auto" value="auto" onChange={updateTop10TitleType}/>
           <DeselectableRadioButton labelValue="Supply manually:" id="top-10-title-type-manual" value="manual" onChange={updateTop10TitleType}/>
         </DeselectableRadioButtonGroup>
-        <SimpleErrorMessage name="top-10-title-type"/>
       </div>
       {
         isValueOrFILLMEIsValue(top10TitleType, "manual") ? <Top10TitleManualInput/> : ""

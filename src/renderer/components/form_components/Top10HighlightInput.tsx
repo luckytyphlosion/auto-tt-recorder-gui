@@ -8,7 +8,7 @@ export function Top10HighlightInput() {
 
   return (
     <div className="grid-contents">
-      <label className="start-label" htmlFor="top-10-highlight">Which entry to highlight and record? </label>
+      <label className="start-label" htmlFor="top-10-highlight">Entry to highlight and record: </label>
       <div className="start-label-contents">
         <input type="number" id="top-10-highlight"
           {...register("top-10-highlight", {

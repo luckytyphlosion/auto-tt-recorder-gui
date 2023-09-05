@@ -12,7 +12,7 @@ export function Top10HighlightEnableInput() {
 
   return (
     <div className="grid-contents">
-      <label className="start-label" htmlFor="top-10-highlight-enable">Highlight Entry in Top 10 Leaderboard: </label>
+      <label className="start-label" htmlFor="top-10-highlight-enable">Highlight Top 10 Entry: </label>
       <div className="start-label-contents">
         <TriCheckbox name="top-10-highlight-enable" nameAsId={true}/>
       </div>
