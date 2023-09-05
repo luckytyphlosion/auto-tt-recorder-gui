@@ -15,7 +15,7 @@ export function Top10GeckoCodeLocationInput() {
     <div className="grid-contents">
       <label className="start-label" htmlFor="top-10-gecko-code-location-region">Region: </label>
       <div className="start-label-contents">
-        <DeselectableRadioButtonGroup name="top-10-gecko-code-location-region">
+        <DeselectableRadioButtonGroup name="top-10-gecko-code-location-region" errorBelow={true}>
           <DeselectableRadioButton labelValue="Worldwide:" id="top-10-gecko-code-location-region-ww" value="worldwide"/>
           <DeselectableRadioButton labelValue="Regional (No globe):" id="stop-10-gecko-code-location-region-regional" value="regional"/>
         </DeselectableRadioButtonGroup>
