@@ -188,7 +188,7 @@ export function ExtraGeckoCodesInput(props: {isAutoTTRecRunning: boolean}) {
     if (isGeckoCodeUnsaved || extraGeckoCodesFilename === "") {
       return "Please save your gecko code first.";
     } else if (getValues("extra-gecko-codes-contents").length === 0) {
-      return "Gecko code file can't be empty!";
+      return "Gecko Code file can't be empty!";
     } else {
       let geckoCodeFilename = getValues("extra-gecko-codes-filename");
 
