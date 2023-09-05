@@ -1,7 +1,7 @@
 
 import React from "react";
 import { TriCheckbox } from "../generic_components/TriCheckbox";
-import { FormInputNotesInlineCode } from "../reusable_components/FormInputNotesAutoTTRecArgName";
+import { FormInputNotesAutoTTRecArgName } from "../reusable_components/FormInputNotesAutoTTRecArgName";
 
 export function EncodeOnlyInput() {
   return (
@@ -12,7 +12,7 @@ export function EncodeOnlyInput() {
       </div>
       <div className="start-label"></div>
       <div className="start-label-contents">
-        <p className="form-input-notes">Assumes framedumps already exist <FormInputNotesInlineCode>encode-only</FormInputNotesInlineCode>.<br/>For super advanced users only.</p>
+        <p className="form-input-notes">Assumes framedumps already exist <FormInputNotesAutoTTRecArgName>encode-only</FormInputNotesAutoTTRecArgName>.<br/>For super advanced users only.</p>
       </div>
 
     </div>

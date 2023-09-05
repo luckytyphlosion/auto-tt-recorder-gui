@@ -1,7 +1,7 @@
 
 import React from "react";
 import { TriCheckbox } from "../generic_components/TriCheckbox";
-import { FormInputNotesInlineCode } from "../reusable_components/FormInputNotesAutoTTRecArgName";
+import { FormInputNotesAutoTTRecArgName } from "../reusable_components/FormInputNotesAutoTTRecArgName";
 
 export function ChadsoftWriteCacheInput() {
   return (
@@ -12,7 +12,7 @@ export function ChadsoftWriteCacheInput() {
       </div>
       <label className="start-label"></label>
       <div className="start-label-contents">
-        <p className="form-input-notes">Cache downloaded Chadsoft files for re-use <FormInputNotesInlineCode>chadsoft-write-cache</FormInputNotesInlineCode>.</p>
+        <p className="form-input-notes">Cache downloaded Chadsoft files for re-use <FormInputNotesAutoTTRecArgName>chadsoft-write-cache</FormInputNotesAutoTTRecArgName>.</p>
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 
 import React from "react";
 import { TriCheckbox } from "../generic_components/TriCheckbox";
-import { FormInputNotesInlineCode } from "../reusable_components/FormInputNotesAutoTTRecArgName";
+import { FormInputNotesAutoTTRecArgName } from "../reusable_components/FormInputNotesAutoTTRecArgName";
 
 export function InputDisplayDontCreateInput() {
   return (
@@ -12,7 +12,7 @@ export function InputDisplayDontCreateInput() {
       </div>
       <div className="start-label"></div>
       <div className="start-label-contents">
-        <p className="form-input-notes">Assumes input display file already exists <FormInputNotesInlineCode>input-display-dont-create</FormInputNotesInlineCode>.<br/>For super advanced users only.</p>
+        <p className="form-input-notes">Assumes input display file already exists <FormInputNotesAutoTTRecArgName>input-display-dont-create</FormInputNotesAutoTTRecArgName>.<br/>For super advanced users only.</p>
       </div>
     </div>
   );

@@ -6,7 +6,7 @@ import { ChadsoftWriteCacheInput } from "../../form_components/ChadsoftWriteCach
 import { ChadsoftCacheExpiryInput } from "../../form_components/ChadsoftCacheExpiryInput";
 
 import { TriCheckbox } from "../../generic_components/TriCheckbox";
-import { FormInputNotesInlineCode } from "../../reusable_components/FormInputNotesAutoTTRecArgName";
+import { FormInputNotesAutoTTRecArgName } from "../../reusable_components/FormInputNotesAutoTTRecArgName";
 
 export function ChadsoftReadCacheInputAndSettingsLayout() {
   const chadsoftReadCache = useWatchAutoTT({name: "chadsoft-read-cache"});
@@ -21,7 +21,7 @@ export function ChadsoftReadCacheInputAndSettingsLayout() {
         </div>
         <label className="start-label"></label>
         <div className="start-label-contents">
-          <p className="form-input-notes">Use cached Chadsoft files to avoid re-downloading them <FormInputNotesInlineCode>chadsoft-read-cache</FormInputNotesInlineCode>.</p>
+          <p className="form-input-notes">Use cached Chadsoft files to avoid re-downloading them <FormInputNotesAutoTTRecArgName>chadsoft-read-cache</FormInputNotesAutoTTRecArgName>.</p>
         </div>
       </div>
       <ChadsoftWriteCacheInput/>
