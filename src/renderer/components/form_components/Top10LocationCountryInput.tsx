@@ -297,7 +297,7 @@ export function Top10LocationCountryInput(props: {top10LocationRegion: Top10Loca
     <div className="grid-contents">
       <label className="start-label" htmlFor="top-10-location-country-location">Country Location: </label>
       <div className="start-label-contents">
-        <DeselectableDropdown name="top-10-location-country-location">
+        <DeselectableDropdown name="top-10-location-country-location" nameAsId={true} errorBelow={true}>
           {COUNTRY_LOCATIONS_NO_FILLME.map((countryLocation) => (
             <option value={countryLocation} key={countryLocation}>{countryLocation}</option>
           ))}

@@ -38,8 +38,11 @@ export function GameVolumeInput() {
             onBlur: onBlur})}
           ></input>%
         </span>
-        <SimpleErrorMessage name="game-volume-numberinput"/>
         {renderCounter}
+      </div>
+      <div className="start-label"></div>
+      <div className="start-label-contents">
+        <SimpleErrorMessage name="game-volume-numberinput" marginBlockDisplay={true}/>
       </div>
     </div>
   );

@@ -23,7 +23,7 @@ export function Top10TitleInput() {
     <div className="grid-contents">
       <label className="start-label" htmlFor="top-10-title">Top 10 Title: </label>
       <div className="start-label-contents">
-        <DeselectableRadioButtonGroup name="top-10-title-type">
+        <DeselectableRadioButtonGroup name="top-10-title-type" errorBelow={true}>
           <DeselectableRadioButton labelValue="Autogenerate:" id="top-10-title-type-auto" value="auto" onChange={updateTop10TitleType}/>
           <DeselectableRadioButton labelValue="Supply manually:" id="top-10-title-type-manual" value="manual" onChange={updateTop10TitleType}/>
         </DeselectableRadioButtonGroup>

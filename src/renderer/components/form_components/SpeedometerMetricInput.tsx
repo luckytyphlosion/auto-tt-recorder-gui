@@ -15,7 +15,7 @@ export function SpeedometerMetricInput() {
     <div className="grid-contents">
       <label className="start-label">SOM metric: </label>
       <div className="start-label-contents">
-        <DeselectableRadioButtonGroup name="speedometer-metric" blockDisplay={false}>
+        <DeselectableRadioButtonGroup name="speedometer-metric" blockDisplay={false} errorBelow={true}>
           <DeselectableRadioButton labelValue="Engine" id="speedometer-metric-engine" value="engine"/>
           <DeselectableRadioButton labelValue="XZ" id="speedometer-metric-xz" value="xz"/>
           <DeselectableRadioButton labelValue="XYZ" id="speedometer-metric-xyz" value="xyz"/>

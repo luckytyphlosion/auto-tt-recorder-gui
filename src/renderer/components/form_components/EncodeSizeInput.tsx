@@ -131,7 +131,7 @@ export function EncodeSizeInput(props: {addSizeBasedReminderToLabel: boolean}) {
       <div className="grid-contents">
         <label className="start-label form-input-notes--start-label">{props.addSizeBasedReminderToLabel ? "(For size-based)" : ""}</label>
         <div className="start-label-contents">
-          <SimpleErrorMessage name="encode-size"/>
+          <SimpleErrorMessage name="encode-size" marginBlockDisplay={true}/>
         </div>
       </div>
     </div>

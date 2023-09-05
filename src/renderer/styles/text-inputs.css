@@ -2,3 +2,11 @@
   max-width: 50em;
   width: 100%;
 }
+
+#top-10-highlight {
+  width: 5em;
+}
+
+#top-10-location-region, #top-10-location-regional-location, #top-10-location-country-location {
+  width: 108px;
+}

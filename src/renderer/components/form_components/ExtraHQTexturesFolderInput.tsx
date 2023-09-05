@@ -63,7 +63,7 @@ export function ExtraHQTexturesFolderInput() {
         <TriCheckbox name="extra-hq-textures-folder-enable" nameAsId={true} noErrorMessage={extraHQTexturesFolderEnableOrFILLME} onChange={onExtraHQTexturesFolderEnableChange}/>
         {
           extraHQTexturesFolderEnableOrFILLME ? <>
-            <OpenFileTextInputWithButton name="extra-hq-textures-folder" startLabel=" " dialogId="extra-hq-textures" dialogType="open-folder" fileFilters={[]} validate={validateExtraHQTexturesFolder} notInGrid={true} inline={true} notRequired={true} rerenderErrorMessageCounter={rerenderErrorMessageCounter}/>
+            <OpenFileTextInputWithButton name="extra-hq-textures-folder" startLabel=" " dialogId="extra-hq-textures" dialogType="open-folder" fileFilters={[]} validate={validateExtraHQTexturesFolder} notInGrid={true} inline={true} notRequired={true} rerenderErrorMessageCounter={rerenderErrorMessageCounter} errorMessageOnBottom={true}/>
           </> : ""
         }
 

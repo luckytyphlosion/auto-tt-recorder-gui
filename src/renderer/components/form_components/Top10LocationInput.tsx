@@ -15,17 +15,11 @@ export type Top10LocationRegion = ValidValues<typeof TOP_10_LOCATION_REGIONS>;
 export function Top10LocationInput() {
   const {getValues, formState} = useFormContextAutoTT();
   const [top10LocationRegion, setTop10LocationRegion] = useState(getValues("top-10-location-region"));
-  const [showErrorMessage, setShowErrorMessage] = useState(true);
+  //const [showErrorMessage, setShowErrorMessage] = useState(true);
   const isValueOrFILLMEIsValue = isValueOrFILLMEIsValueMaker();
 
   function updateTop10LocationRegion(event?: Event) {
-    let top10LocationRegionHasError = (formState.errors["top-10-location-region"] !== undefined);
     let newTop10LocationRegion = getValues("top-10-location-region");
-    if (top10LocationRegionHasError && newTop10LocationRegion !== "<FILLME>") {
-      setShowErrorMessage(false);
-    } else {
-      setShowErrorMessage(true);
-    }
     setTop10LocationRegion(newTop10LocationRegion);
   }
 
@@ -33,14 +27,11 @@ export function Top10LocationInput() {
     <div className="grid-contents">
       <label className="start-label" htmlFor="top-10-location-region">Region: </label>
       <div className="start-label-contents">
-        <DeselectableDropdown name="top-10-location-region" noErrorMessage={true} onChange={updateTop10LocationRegion}>
+        <DeselectableDropdown name="top-10-location-region" nameAsId={true} errorBelow={true} onChange={updateTop10LocationRegion}>
           <option value="worldwide">Worldwide</option>
           <option value="regional">Regional</option>
           <option value="country">Country</option>
         </DeselectableDropdown>
-        {
-          showErrorMessage ? <SimpleErrorMessage name="top-10-location-region"/> : ""
-        }
       </div>
       {
         isValueOrFILLMEIsValue(top10LocationRegion, "regional") ? <Top10LocationRegionalInput top10LocationRegion={top10LocationRegion}/> : ""

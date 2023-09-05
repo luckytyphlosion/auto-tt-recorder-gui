@@ -26,8 +26,11 @@ export function OutputWidthCustomInput(props: {outputWidthPreset: OutputWidthPre
             onBlur: onBlur
           })}
         ></input>
-        <SimpleErrorMessage name="output-width-custom"/>
         {renderCounter}
+      </div>
+      <div className="start-label"></div>
+      <div className="start-label-contents">
+        <SimpleErrorMessage name="output-width-custom" marginBlockDisplay={true}/>
       </div>
     </div>
   );

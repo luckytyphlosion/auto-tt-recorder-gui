@@ -28,7 +28,7 @@ export function AudioCodecAndBitrateInput(props: {encodeType: EncodeType}) {
     <div className="grid-contents">
       <label className="start-label" htmlFor="audio-codec">Audio codec: </label>
       <div className="start-label-contents">
-        <DeselectableDropdown name="audio-codec" nameAsId={true} onChange={updateAudioCodec}>
+        <DeselectableDropdown name="audio-codec" nameAsId={true} onChange={updateAudioCodec} errorBelow={true}>
           <option value="libopus">libopus</option>
           <option value="aac">aac</option>
         </DeselectableDropdown>

@@ -12,7 +12,7 @@ export function InputDisplayInput() {
     <div className="grid-contents">
       <label className="start-label">Input Display: </label>
       <div className="start-label-contents">
-        <DeselectableRadioButtonGroup name="input-display" blockDisplay={true}>
+        <DeselectableRadioButtonGroup name="input-display" blockDisplay={true} errorBelow={true}>
           <DeselectableRadioButton labelValue="Auto detect (recommended)" id="input-display-gcn-classic" value="auto"/>
           <DeselectableRadioButton labelValue="GCN/Classic" id="input-display-gcn-classic" value="gcn"/>
           <DeselectableRadioButton labelValue="Nunchuck" id="input-display-nunchuck" value="nunchuck"/>

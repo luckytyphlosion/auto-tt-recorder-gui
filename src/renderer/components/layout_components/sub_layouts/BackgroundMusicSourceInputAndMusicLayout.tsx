@@ -53,7 +53,7 @@ export function BackgroundMusicSourceInputAndMusicLayout(props: {timeline: Timel
       let musicFilename = getValues("music-filename");
       console.log("validateBackgroundMusicSourceAndCheckIsFileReadable musicFilename:", musicFilename);
       if (musicFilename === "") {
-        return "This input is required.";
+        return "Music filename is required.";
       } else {
         return await isFileReadable(musicFilename);
       }
@@ -83,7 +83,7 @@ export function BackgroundMusicSourceInputAndMusicLayout(props: {timeline: Timel
         <div className="like-input-group">
           <label className="start-label" htmlFor="background-music-source">Background Music: </label>
           <div className="start-label-contents">
-            <DeselectableDropdown name="background-music-source" noErrorMessage={true} mixedErrorMessageInfo={
+            <DeselectableDropdown name="background-music-source" nameAsId={true} noErrorMessage={true} mixedErrorMessageInfo={
               {
                 validate: validateBackgroundMusicSourceAndCheckIsFileReadable,
                 liveValidateCallback: liveValidateBackgroundMusicSourceInput
@@ -98,7 +98,7 @@ export function BackgroundMusicSourceInputAndMusicLayout(props: {timeline: Timel
               <MusicFilenameInput
                 validateBackgroundMusicSourceAndCheckIsFileReadable={validateBackgroundMusicSourceAndCheckIsFileReadable}
                 rerenderErrorMessageCounter={rerenderErrorMessageCounter}
-              /> : <SimpleErrorMessage name="background-music-source"/>
+              /> : <SimpleErrorMessage name="background-music-source" marginBlockDisplay={true}/>
             }
           </div>
           {

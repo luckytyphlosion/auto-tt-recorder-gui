@@ -24,7 +24,7 @@ export function SZSSourceInput() {
     <div className="grid-contents">
       <label className="start-label">Track SZS: </label>
       <div className="start-label-contents">
-        <DeselectableRadioButtonGroup name="szs-source" blockDisplay={true}>
+        <DeselectableRadioButtonGroup name="szs-source" blockDisplay={true} errorBelow={true}>
           <DeselectableRadioButton labelValue="Auto-download OR vanilla track:" id="szs-source-automatic" value="automatic" onChange={updateSZSSource}/>
           <DeselectableRadioButton labelValue="Supply from SZS:" id="szs-source-from-file" value="fromfile" onChange={updateSZSSource}/>
         </DeselectableRadioButtonGroup>

@@ -43,7 +43,7 @@ export function Top10LocationRegionalInput(props: {top10LocationRegion: Top10Loc
     <div className="grid-contents">
       <label className="start-label" htmlFor="top-10-location-regional-location">Regional Location: </label>
       <div className="start-label-contents">
-        <DeselectableDropdown name="top-10-location-regional-location">
+        <DeselectableDropdown name="top-10-location-regional-location" nameAsId={true} errorBelow={true}>
           {REGIONAL_LOCATION_NAMES.map((regionalLocation) => (
             <option value={regionalLocation} key={regionalLocation}>{regionalLocation}</option>
           ))}

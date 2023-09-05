@@ -12,7 +12,7 @@ export function YoutubeSettingsInput(props: {addCRFReminderToLabel: boolean}) {
       </div>
       <label className="start-label form-input-notes--start-label">{props.addCRFReminderToLabel ? "(For CRF) " : ""}</label>
       <div className="start-label-contents">
-        <p className="form-input-notes">Enables recommended encoding settings for YouTube.</p>
+        <p className="form-input-notes">Enables <a href="https://support.google.com/youtube/answer/1722171?hl=en#zippy=%2Cvideo-codec-h">recommended encoding settings for YouTube</a>.</p>
       </div>
     </div>
   );

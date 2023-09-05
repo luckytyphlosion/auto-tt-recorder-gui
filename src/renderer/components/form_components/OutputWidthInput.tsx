@@ -42,7 +42,7 @@ export function OutputWidthInput(props: {dolphinResolution: DolphinResolution, d
     <div className="grid-contents">
       <label className="start-label" htmlFor="output-width-preset">Output video width: </label>
       <div>
-        <DeselectableDropdown name="output-width-preset" onChange={updateOutputWidthPreset}>
+        <DeselectableDropdown name="output-width-preset" nameAsId={true} onChange={updateOutputWidthPreset} errorBelow={true}>
           <option value="none">Don't rescale</option>
           <option value="3840">3840 (2160p/4k)</option>
           <option value="2560">2560 (1440p/2k)</option>

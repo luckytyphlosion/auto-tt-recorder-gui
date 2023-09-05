@@ -28,7 +28,7 @@ export function VideoCodecInput(props: {encodeType: EncodeType, formComplexity: 
     <div className="grid-contents">
       <label className="start-label" htmlFor="video-codec">Video codec: </label>
       <div className="start-label-contents">
-        <DeselectableDropdown name="video-codec" nameAsId={true}>
+        <DeselectableDropdown name="video-codec" nameAsId={true} errorBelow={true}>
           <option value="libx264">libx264</option>
           {isValueOrFILLMEIsValue(props.encodeType, "crf") ? <option value="libx265">libx265</option> : ""}
           {isValueOrFILLMEIsValue(props.encodeType, "size") ? <option value="libvpx-vp9">libvpx-vp9</option> : ""}

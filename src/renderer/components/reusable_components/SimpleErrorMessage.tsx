@@ -92,15 +92,18 @@ const deepDiffMapper: any = function () {
 
 export function SimpleErrorMessage(props: {
   name: AutoTTRecConfigFormFieldName,
-  errorMessageForForceUpdate?: string,
   marginBlockDisplay?: boolean,
-  dynamicGridDisplay?: boolean
+  negativeTopMargin?: boolean
 }) {
   const formContext = useFormContextAutoTT();
   const formState = formContext.formState;
 
   //console.log(`SimpleErrorMessage ${props.name}: `, formState.errors[props.name]?.message);
-  const errorMessageAdditionalCSSClass = props.marginBlockDisplay === true ? "error-message__text-contents__margin-block-display" : "error-message__text-contents__no-margin-block-display";
+  let errorMessageAdditionalCSSClass = props.marginBlockDisplay === true ? "error-message__text-contents__margin-block-display" : "error-message__text-contents__no-margin-block-display";
+
+  if (props.negativeTopMargin) {
+    errorMessageAdditionalCSSClass = `${errorMessageAdditionalCSSClass} error-message__text-contents--negative-top-margin`;
+  }
 
   const errorMessageElement = <ErrorMessage2
     errors={formState.errors}

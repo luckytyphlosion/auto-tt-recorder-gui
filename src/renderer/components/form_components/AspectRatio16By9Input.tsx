@@ -15,7 +15,7 @@ export function AspectRatio16By9Input() {
     <div className="grid-contents">
       <label className="start-label">Adjust aspect ratio to 16:9: </label>
       <div className="start-label-contents">
-        <DeselectableRadioButtonGroup name="aspect-ratio-16-by-9">
+        <DeselectableRadioButtonGroup name="aspect-ratio-16-by-9" errorBelow={true}>
           <DeselectableRadioButton labelValue="Auto (recommended): " id="aspect-ratio-16-by-9-auto" value="auto"/>
           <DeselectableRadioButton labelValue="Yes: " id="aspect-ratio-16-by-9-true" value="true"/>
           <DeselectableRadioButton labelValue="No: " id="aspect-ratio-16-by-9-false" value="false"/>

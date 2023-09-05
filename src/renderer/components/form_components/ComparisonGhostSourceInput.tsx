@@ -27,7 +27,7 @@ export function ComparisonGhostSourceInput() {
     <div className="grid-contents">
       <label className="start-label">Comparison ghost source: </label>
       <div className="start-label-contents">
-        <DeselectableRadioButtonGroup name="comparison-ghost-source">
+        <DeselectableRadioButtonGroup name="comparison-ghost-source" errorBelow={true}>
           <DeselectableRadioButton labelValue="Chadsoft link:" id="comparison-ghost-source-chadsoft" value="chadsoft" onChange={updateComparisonGhostSource}/>
           <DeselectableRadioButton labelValue="RKG:" id="comparison-ghost-source-rkg" value="rkg" onChange={updateComparisonGhostSource}/>
           <DeselectableRadioButton labelValue="None:" id="comparison-ghost-source-none" value="none" onChange={updateComparisonGhostSource}/>

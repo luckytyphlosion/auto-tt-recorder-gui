@@ -33,8 +33,8 @@ export function EncodeSettingsLayout(props: {formComplexity: FormComplexity}) {
           <div className="grid-contents">
           <label className="start-label">Encode type: </label>
           <div className="start-label-contents">
-            <DeselectableRadioButtonGroup name="encode-type">
-            <DeselectableRadioButton labelValue="CRF (For YouTube or offline): " id="encode-type-crf" value="crf" onChange={updateEncodeType}/>
+            <DeselectableRadioButtonGroup name="encode-type" errorBelow={true}>
+              <DeselectableRadioButton labelValue="CRF (For YouTube or offline): " id="encode-type-crf" value="crf" onChange={updateEncodeType}/>
               <DeselectableRadioButton labelValue="Size based (for Discord uploads): " id="encode-type-size" value="size" onChange={updateEncodeType}/>
             </DeselectableRadioButtonGroup>
             {renderCounter}

@@ -4,5 +4,5 @@ import { OpenFileTextInputWithButton } from "../generic_components/OpenFileTextI
 export function SZSFilenameInput() {
   return <OpenFileTextInputWithButton name="szs-filename" startLabel="SZS Filename: " dialogId="szs" fileFilters={[
     {name: "SZS files", extensions: ["szs"]}
-  ]}/>
+  ]} errorMessageOnBottom={true}/>
 }

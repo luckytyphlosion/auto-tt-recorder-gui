@@ -38,8 +38,11 @@ export function MusicVolumeInput() {
             onBlur: onBlur})}
           ></input>%
         </span>
-        <SimpleErrorMessage name="music-volume-numberinput"/>
         {renderCounter}
+      </div>
+      <div className="start-label"></div>
+      <div className="start-label-contents">
+        <SimpleErrorMessage name="music-volume-numberinput" marginBlockDisplay={true}/>
       </div>
     </div>
   );

@@ -38,7 +38,7 @@ export function DolphinResolutionInput(props: {enableOutputWidth: boolean, formC
     <div className="grid-contents">
       <label className="start-label" htmlFor="dolphin-resolution">Dolphin resolution: </label>
       <div className="start-label-contents">
-        <DeselectableDropdown name="dolphin-resolution" nameAsId={true} onChange={updateDolphinResolution}>
+        <DeselectableDropdown name="dolphin-resolution" nameAsId={true} onChange={updateDolphinResolution} errorBelow={true}>
           <option value="2160p">2160p (4K)</option>
           <option value="1440p">1440p (2K)</option>
           <option value="1080p">1080p</option>

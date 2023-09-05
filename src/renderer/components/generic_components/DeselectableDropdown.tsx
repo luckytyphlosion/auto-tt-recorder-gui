@@ -16,7 +16,11 @@ export function DeselectableDropdown<K extends AutoTTRecConfigFormChoiceArgName>
     validate: (value: AutoTTRecConfigFormChoiceArgValue) => Promise<ValidateResult>,
     liveValidateCallback: (setDropdownErrorState: SetDropdownErrorState) => Promise<void>
   },
-  onChange?: ((event?: Event) => void) | (() => void), nameAsId?: boolean, children?: React.ReactNode}) {
+  onChange?: ((event?: Event) => void) | (() => void),
+  nameAsId?: boolean,
+  errorBelow?: boolean,
+  children?: React.ReactNode
+}) {
   const {register, setValue, getValues, getFieldState, setError, clearErrors, trigger} = useFormContextAutoTT();
   const renderCounter = useRenderCounter(false, `DeselectableDropdown ${props.name}`);  
   const [invalidForForceRerender, setInvalidForForceRerender] = useState(getFieldState(props.name).invalid);
@@ -107,7 +111,7 @@ export function DeselectableDropdown<K extends AutoTTRecConfigFormChoiceArgName>
         <option value="<FILLME>" disabled style={{display: "none"}}></option>
       </select>
       {
-        props.noErrorMessage ? "" : <SimpleErrorMessage name={props.name}/>
+        props.noErrorMessage ? "" : <SimpleErrorMessage name={props.name} marginBlockDisplay={props.errorBelow}/>
       }
       {renderCounter}
     </>

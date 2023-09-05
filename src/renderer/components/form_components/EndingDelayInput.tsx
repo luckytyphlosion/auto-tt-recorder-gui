@@ -10,7 +10,7 @@ export function EndingDelayInput() {
     <div className="grid-contents">
       <label className="start-label" htmlFor="ending-delay">Ending video delay:</label>
       <div className="start-label-contents">
-        <input type="number" id="ending-delay"
+        <input type="number" id="ending-delay" placeholder="600"
           {...register("ending-delay", {valueAsNumber: true, required: {
             value: true,
             message: "This input is required."
@@ -20,7 +20,10 @@ export function EndingDelayInput() {
           })}
         ></input>
         <span id="ending-delay__in-frames"> frames</span>
-        <SimpleErrorMessage name="ending-delay"/>
+      </div>
+      <div className="start-label"></div>
+      <div className="start-label-contents">
+        <SimpleErrorMessage name="ending-delay" marginBlockDisplay={true}/>
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 import React from "react";
-import { useFormContextAutoTT } from "../../use-form-context-auto-tt";
 import { makeReadonlyArraySet, ValidValues } from "../../../shared/array-set";
 import { DeselectableDropdown } from "../generic_components/DeselectableDropdown";
+import { SimpleErrorMessage } from "../reusable_components/SimpleErrorMessage";
 
 import useRenderCounter from "../../RenderCounter";
 
@@ -15,7 +15,7 @@ export function H26xPresetInput(props: {addCRFReminderToLabel: boolean}) {
     <div className="grid-contents">
       <label className="start-label" htmlFor="h26x-preset">Encode speed: </label>
       <div className="start-label-contents">
-        <DeselectableDropdown name="h26x-preset" nameAsId={true}>
+        <DeselectableDropdown name="h26x-preset" nameAsId={true} noErrorMessage={true}>
           <option value="ultrafast">ultrafast</option>
           <option value="superfast">superfast</option>
           <option value="veryfast">veryfast</option>
@@ -31,6 +31,7 @@ export function H26xPresetInput(props: {addCRFReminderToLabel: boolean}) {
       <label className="start-label form-input-notes--start-label">{props.addCRFReminderToLabel ? "(For CRF)" : ""}</label>
       <div className="start-label-contents">
         <p className="form-input-notes">Faster option &#8594; larger filesize.<br/>Ultrafast/superfast have slightly less quality.</p>
+        <SimpleErrorMessage name="h26x-preset" marginBlockDisplay={true} negativeTopMargin={true}/>
       </div>
       {renderCounter}
     </div>

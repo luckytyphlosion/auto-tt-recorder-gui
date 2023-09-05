@@ -53,7 +53,7 @@ export function OutputVideoFileFormatInput(props: {videoCodec: VideoCodec, formC
     <div className="grid-contents">
       <label className="start-label" htmlFor="output-video-file-format">Video format: </label>
       <div className="start-label-contents">
-        <DeselectableDropdown name="output-video-file-format" nameAsId={true} onChange={props.formComplexity === FormComplexity.ADVANCED ? updateVideoCodecForAdvancedForm : () => {}}>
+        <DeselectableDropdown name="output-video-file-format" nameAsId={true} onChange={props.formComplexity === FormComplexity.ADVANCED ? updateVideoCodecForAdvancedForm : () => {}} errorBelow={true}>
           {
             props.formComplexity === FormComplexity.ALL ? 
             (

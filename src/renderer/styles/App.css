@@ -13,6 +13,14 @@ code {
 	font-family: "Courier New", monospace;
 }
 
+input[type="text"] {
+	font-family: BlinkMacSystemFont,-apple-system,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+select {
+	font-family: BlinkMacSystemFont,-apple-system,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
 legend {
 	font-size: 11pt;
 	font-weight: 500;
@@ -66,6 +74,10 @@ legend {
 	font-size: 11pt;
 	font-weight: 400;
 	background-color: yellow;
+}
+
+.error-message__text-contents__margin-block-display.error-message__text-contents--negative-top-margin {
+	margin-top: -0.9em;
 }
 
 .error-message__text-contents__margin-block-display {

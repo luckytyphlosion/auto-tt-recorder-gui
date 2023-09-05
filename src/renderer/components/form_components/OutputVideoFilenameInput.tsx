@@ -73,7 +73,7 @@ export function OutputVideoFilenameInput(props: {noTop10CategoryIsNoEncode: bool
       <FieldsetOr>
         <legend>Output filename</legend>
         <div className="like-input-group">
-          <OpenFileTextInputWithButton name="output-video-filename" startLabel="Output video filename: " dialogId="output-video" dialogType="save-file" fileFilters={getOutputVideoFileFilters} validate={validateOutputVideoFilename}/>
+          <OpenFileTextInputWithButton name="output-video-filename" startLabel="Output video filename: " dialogId="output-video" dialogType="save-file" fileFilters={getOutputVideoFileFilters} validate={validateOutputVideoFilename} errorMessageOnBottom={true}/>
         </div>
         {renderCounter}
       </FieldsetOr>
