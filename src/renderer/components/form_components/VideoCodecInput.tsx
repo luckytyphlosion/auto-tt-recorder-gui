@@ -24,14 +24,27 @@ export function VideoCodecInput(props: {encodeType: EncodeType, formComplexity: 
     setValue("video-codec", "libx264", {shouldTouch: true});
   }
 
+  const encodeTypeCRF = isValueOrFILLMEIsValue(props.encodeType, "crf");
+  const encodeTypeSize = isValueOrFILLMEIsValue(props.encodeType, "size");
+
+  let libx265NotesElement, libvpxVp9NotesElement;
+
+  libx265NotesElement = encodeTypeCRF ? <><strong>libx265</strong> is ~25% smaller than libx264 but encodes 5-8x longer.<br/></> : "";
+  libvpxVp9NotesElement = encodeTypeSize ? <><strong>libvpx-vp9</strong> has higher quality than libx264 but encodes 10x slower.<br/></> : "";
+
   return (
     <div className="grid-contents">
       <label className="start-label" htmlFor="video-codec">Video codec: </label>
       <div className="start-label-contents">
-        <DeselectableDropdown name="video-codec" nameAsId={true} errorBelow={true}>
+        <DeselectableDropdown name="video-codec" nameAsId={true} errorBelow={true} formInputNotesContents={
+          <>
+            {libx265NotesElement}
+            {libvpxVp9NotesElement}
+          </>
+        }>
           <option value="libx264">libx264</option>
-          {isValueOrFILLMEIsValue(props.encodeType, "crf") ? <option value="libx265">libx265</option> : ""}
-          {isValueOrFILLMEIsValue(props.encodeType, "size") ? <option value="libvpx-vp9">libvpx-vp9</option> : ""}
+          {encodeTypeCRF ? <option value="libx265">libx265</option> : ""}
+          {encodeTypeSize ? <option value="libvpx-vp9">libvpx-vp9</option> : ""}
         </DeselectableDropdown>
         {renderCounter}
       </div>

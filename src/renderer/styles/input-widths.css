@@ -14,22 +14,39 @@
   width: 100%;
 }
 
+/* North America */
+#top-10-location-region, #top-10-location-regional-location, #top-10-location-country-location {
+  width: 108px;
+}
+
 /* Bowser's Termination Station */
 #track-name {
   max-width: 14em;
   width: 100%;
 }
 
+/* 777.7 */
 #game-volume-numberinput, #music-volume-numberinput {
   width: 4.5em;
+}
+
+/* 9999 */
+#ending-delay {
+  width: 4em;
+}
+
+/* libvpx-vp9 */
+#video-codec {
+  width: 86px;
+}
+
+/* webm */
+#output-video-file-format {
+  width: 60px;
 }
 
 /* Video recorded by https://bit.ly/AutoTTRecorderGUI */
 #ending-message {
   max-width: 24em;
   width: 100%;
-}
-
-#top-10-location-region, #top-10-location-regional-location, #top-10-location-country-location {
-  width: 108px;
 }
