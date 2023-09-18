@@ -1,10 +1,33 @@
-#chadsoft-ghost-page {
-  max-width: 50em;
-  width: fit-content;
+/* https://www.chadsoft.co.uk/time-trials/rkgd/CC/CC/CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC.html */
+#chadsoft-ghost-page, #chadsoft-comparison-ghost-page {
+  max-width: 47em;
+  width: 100%;
 }
 
 #top-10-highlight {
   width: 5em;
+}
+
+/* someone pls beat this bad time */
+#mk-channel-ghost-description {
+  max-width: 15em;
+  width: 100%;
+}
+
+/* Bowser's Termination Station */
+#track-name {
+  max-width: 14em;
+  width: 100%;
+}
+
+#game-volume-numberinput, #music-volume-numberinput {
+  width: 4.5em;
+}
+
+/* Video recorded by https://bit.ly/AutoTTRecorderGUI */
+#ending-message {
+  max-width: 24em;
+  width: 100%;
 }
 
 #top-10-location-region, #top-10-location-regional-location, #top-10-location-country-location {

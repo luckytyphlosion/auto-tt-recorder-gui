@@ -26,7 +26,7 @@ export function MusicVolumeInput() {
         <input type="range" min={0} max={125} step={1} {...register("music-volume-slider", {
           onChange: updateMusicVolumeNumberInputFromSlider, onBlur: onBlur})}/>
         <span className="percent-input">
-          <input type="number" style={{width: "4em"}}
+          <input type="number" id="music-volume-numberinput" step="any" placeholder="100"
             {...register("music-volume-numberinput", {required: {
               value: true,
               message: "This input is required."

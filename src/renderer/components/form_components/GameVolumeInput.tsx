@@ -26,7 +26,7 @@ export function GameVolumeInput() {
           onChange: updateGameVolumeNumberInputFromSlider, onBlur: onBlur})
         }/>
         <span className="percent-input">
-          <input type="number" style={{width: "4em"}}
+          <input type="number" id="game-volume-numberinput" step="any" placeholder="100"
             {...register("game-volume-numberinput", {required: {
               value: true,
               message: "This input is required."

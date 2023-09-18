@@ -1,10 +1,9 @@
 
 .like-input-group {
 	display: grid;
-	grid-template-columns: auto auto;
+	grid-template-columns: 210px 1fr;
 	row-gap: 2px;
   column-gap: 5px;
-  width: fit-content;
 }
 
 /* width: 185px; */
@@ -18,7 +17,7 @@
 /* width: fit-content; */
 
 .start-label-contents {
-  
+  width: 100%;
 }
 
 .grid-contents {
