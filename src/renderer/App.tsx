@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from "react";
 import "./styles/font.css";
-import "./styles/App.css";
+import "./styles/global.css";
 import "./styles/input-alignment.css";
 import "./styles/text-inputs.css";
 

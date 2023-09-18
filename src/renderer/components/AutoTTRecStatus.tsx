@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../styles/AutoTTRecStatus.css";
+import "../styles/components/AutoTTRecStatus.css";
 
 import useRenderCounter from "../RenderCounter";
 

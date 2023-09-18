@@ -17,7 +17,7 @@ import CodeMirror from '@uiw/react-codemirror';
 
 import Modal from "react-modal";
 
-import "./styles/Top10GeckoCodeInput.css";
+import "../../styles/components/Top10GeckoCodeInput.css";
 
 enum SaveModalFrom {
   CLOSING,

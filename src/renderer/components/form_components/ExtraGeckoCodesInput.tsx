@@ -14,7 +14,7 @@ import CodeMirror from '@uiw/react-codemirror';
 
 import Modal from "react-modal";
 
-import "./styles/ExtraGeckoCodesInput.css";
+import "../../styles/components/ExtraGeckoCodesInput.css";
 
 enum SaveModalFrom {
   CLOSING,

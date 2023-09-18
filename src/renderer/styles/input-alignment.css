@@ -1,5 +1,5 @@
 
-.like-input-group{
+.like-input-group {
 	display: grid;
 	grid-template-columns: auto auto;
 	row-gap: 2px;
@@ -15,8 +15,10 @@
 	text-align: right;
 }
 
+/* width: fit-content; */
+
 .start-label-contents {
-  width: fit-content;
+  
 }
 
 .grid-contents {

@@ -1,8 +1,6 @@
 import React, { memo, useState, useCallback, useEffect, useRef } from "react";
 
-
-
-import "../styles/AutoTTRecConfigFormComponents.css";
+import "../styles/components/AutoTTRecConfigFormComponents.css";
 
 import { useFormContextAutoTT } from "../use-form-context-auto-tt";
 

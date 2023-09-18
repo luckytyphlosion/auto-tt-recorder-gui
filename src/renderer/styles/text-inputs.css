@@ -1,6 +1,6 @@
 #chadsoft-ghost-page {
   max-width: 50em;
-  width: 100%;
+  width: fit-content;
 }
 
 #top-10-highlight {

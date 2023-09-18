@@ -16,8 +16,8 @@ import { BooleanFILLME } from "../../shared/shared-types";
 import { ErrorWarningDisplay } from "./reusable_components/ErrorWarningDisplay";
 import { YAMLParseErrorExplanation } from "./YAMLParseErrorExplanation";
 
-import "./form_components/styles/ExtraGeckoCodesInput.css";
-import "../styles/ImportTemplate.css";
+import "../styles/components/ExtraGeckoCodesInput.css";
+import "../styles/components/ImportTemplate.css";
 
 export function ImportTemplate(props: {
   formMethods: UseFormReturn<AutoTTRecConfigFormFields, any, undefined>,
