@@ -12,7 +12,7 @@ export function CRFValueInput(props: {addCRFReminderToLabel: boolean}) {
     <div className="grid-contents">
       <label className="start-label" htmlFor="crf-value">Quality:</label>
       <div className="start-label-contents">
-        <input type="number" id="start-label" placeholder="15"
+        <input type="number" id="crf-value" placeholder="15"
           {...register("crf-value", {
             valueAsNumber: true,
             required: {
@@ -27,7 +27,7 @@ export function CRFValueInput(props: {addCRFReminderToLabel: boolean}) {
       </div>
       <label className="start-label form-input-notes--start-label">{props.addCRFReminderToLabel ? " (For CRF)" : ""}</label>
       <div className="start-label-contents">
-        <p className="form-input-notes">Lower is better but file size becomes larger</p>
+        <p className="form-input-notes">Lower is better but file size becomes larger.<br/>Enter 15 if unsure.</p>
         <SimpleErrorMessage name="crf-value" marginBlockDisplay={true} negativeTopMargin={true}/>
       </div>
     </div>

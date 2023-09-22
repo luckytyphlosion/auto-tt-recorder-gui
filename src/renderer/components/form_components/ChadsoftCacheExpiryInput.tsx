@@ -47,7 +47,7 @@ export function ChadsoftCacheExpiryInput() {
         name="chadsoft-cache-expiry" startLabel="Purge cache files after: "
         validate={validateChadsoftCacheExpiry} formInputNotesContents={
           <>E.g. if the duration is 24h, removes a downloaded Chadsoft file 24 hours after downloaded <FormInputNotesAutoTTRecArgName>chadsoft-cache-expiry</FormInputNotesAutoTTRecArgName>.</>
-        }
+        } placeholder="24h"
       />
     </>
     

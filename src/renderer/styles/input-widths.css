@@ -35,6 +35,12 @@
   width: 4em;
 }
 
+/* Video recorded by https://bit.ly/AutoTTRecorderGUI */
+#ending-message {
+  max-width: 24em;
+  width: 100%;
+}
+
 /* libvpx-vp9 */
 #video-codec {
   width: 86px;
@@ -45,8 +51,35 @@
   width: 60px;
 }
 
-/* Video recorded by https://bit.ly/AutoTTRecorderGUI */
-#ending-message {
-  max-width: 24em;
+/* 45 */
+#crf-value {
+  width: 5em;
+}
+
+/* 524288000 */
+#encode-size-displayed {
+  max-width: 8em;
+  width: 100%;
+}
+
+#audio-bitrate-displayed {
+  max-width: 6.5em;
+  width: 100%;
+}
+
+#pixel-format {
+  max-width: 6.5em;
+  width: 100%;
+}
+
+/* 3840 */
+#output-width-custom {
+  max-width: 5em;
+  width: 100%;
+}
+
+/* 168h34m56s */
+#chadsoft-cache-expiry {
+  max-width: 6.5em;
   width: 100%;
 }
