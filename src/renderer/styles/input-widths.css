@@ -4,6 +4,12 @@
   width: 100%;
 }
 
+/* https://www.chadsoft.co.uk/time-trials/leaderboard/0C/CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC/06.html */
+#top-10-chadsoft {
+  max-width: 53em;
+  width: 100%;
+}
+
 #top-10-highlight {
   width: 5em;
 }
@@ -81,5 +87,18 @@
 /* 168h34m56s */
 #chadsoft-cache-expiry {
   max-width: 6.5em;
+  width: 100%;
+}
+
+/* WonderWonderWonderWonderWonderWonderWWWW */
+/* actually goes a bit over */
+#top-10-title {
+  max-width: 24em;
+  width: 100%;
+}
+
+/* arbitrarily chosen to be same length as top-10-chadsoft */
+#top-10-censors {
+  max-width: 53em;
   width: 100%;
 }
