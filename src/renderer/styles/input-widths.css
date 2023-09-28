@@ -4,6 +4,13 @@
   width: 100%;
 }
 
+/* https://www.chadsoft.co.uk/time-trials/leaderboard/0C/CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC/06.html */
+/* actually should be 53em but want to stay consistent with ghost-page widths */
+#top-10-chadsoft {
+  max-width: 47em;
+  width: 100%;
+}
+
 .file-input-container {
   display: flex;
   flex-flow: row wrap;
@@ -13,25 +20,24 @@
 .file-input-container--main-ghost-filename,
 .file-input-container--comparison-ghost-filename,
 .file-input-container--szs-filename,
-.file-input-container--music-filename {
+.file-input-container--music-filename,
+.file-input-container--top-10-gecko-code-filename,
+.file-input-container--extra-gecko-codes-filename,
+.file-input-container--extra-hq-textures-folder,
+.file-input-container--output-video-filename {
   max-width: 47em;
 }
 
 /* same size as chadsoft-ghost-page and chadsoft-comparison-ghost-page */
 #main-ghost-filename,
 #comparison-ghost-filename,
-#szs-filename {
+#szs-filename,
+#music-filename,
+#top-10-gecko-code-filename,
+#extra-gecko-codes-filename,
+#extra-hq-textures-folder,
+#output-video-filename {
   flex: 1 0 fit-content;
-}
-
-#music-filename {
-  flex-grow: 1;
-}
-
-/* https://www.chadsoft.co.uk/time-trials/leaderboard/0C/CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC/06.html */
-#top-10-chadsoft {
-  max-width: 53em;
-  width: 100%;
 }
 
 #top-10-highlight {
@@ -46,7 +52,7 @@
 
 /* North America */
 #top-10-location-region, #top-10-location-regional-location, #top-10-location-country-location {
-  width: 108px;
+  min-width: 8.5em;
 }
 
 /* Bowser's Termination Station */
@@ -121,8 +127,8 @@
   width: 100%;
 }
 
-/* arbitrarily chosen to be same length as top-10-chadsoft */
+/* arbitrarily chosen to be same length as chadsoft-ghost-page/top-10-chadsoft/etc. */
 #top-10-censors {
-  max-width: 53em;
+  max-width: 47em;
   width: 100%;
 }

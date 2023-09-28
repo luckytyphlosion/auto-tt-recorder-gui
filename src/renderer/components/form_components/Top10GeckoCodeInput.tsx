@@ -321,23 +321,26 @@ export function Top10GeckoCodeInput(props: {isAutoTTRecRunning: boolean}) {
           <div className="grid-contents">
             <label className="start-label" htmlFor="top-10-gecko-code-filename">Top 10 Gecko Code Filename:</label>
             <div className="start-label-contents">
-              <ClearableReadonlyTextInput name="top-10-gecko-code-filename" notRequired={true} validate={geckoCodeValidator} setState={updateTop10GeckoCodeFilenameAfterRightClick}/>
-              <button type="button" onClick={event => {
-                createNewFile(event);
-              }}>New</button>
+              <div className="file-input-container file-input-container--top-10-gecko-code-filename">
+
+                <ClearableReadonlyTextInput name="top-10-gecko-code-filename" notRequired={true} validate={geckoCodeValidator} setState={updateTop10GeckoCodeFilenameAfterRightClick}/>
+                <button type="button" onClick={event => {
+                  createNewFile(event);
+                }}>New</button>
 
 
-              <button type="button" onClick={async (event) => {
-                await openFile(event);
-                validateGeckoCodeContentsOnlyAndSetErrorState();
-              }}>Open&#8230;</button>
+                <button type="button" onClick={async (event) => {
+                  await openFile(event);
+                  validateGeckoCodeContentsOnlyAndSetErrorState();
+                }}>Open&#8230;</button>
 
-              <button type="button" onClick={async (event) => {
-                await queueSaveDialogAndWriteText(event, [
-                  {name: "Text files", extensions: ["txt"]}
-                ]);
-                validateGeckoCodeContentsOnlyAndSetErrorState();
-              }}>Save as&#8230;</button>
+                <button type="button" onClick={async (event) => {
+                  await queueSaveDialogAndWriteText(event, [
+                    {name: "Text files", extensions: ["txt"]}
+                  ]);
+                  validateGeckoCodeContentsOnlyAndSetErrorState();
+                }}>Save as&#8230;</button>
+              </div>
             </div>
             <div className="start-label"></div>
             <div className="start-label-contents">

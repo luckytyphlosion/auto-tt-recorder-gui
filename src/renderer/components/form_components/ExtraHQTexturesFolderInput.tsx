@@ -60,13 +60,14 @@ export function ExtraHQTexturesFolderInput() {
     <div className="grid-contents">
       <label className="start-label" htmlFor="extra-hq-textures-folder-enable">Add extra HQ Textures? </label>
       <div className="start-label-contents">
-        <TriCheckbox name="extra-hq-textures-folder-enable" nameAsId={true} noErrorMessage={extraHQTexturesFolderEnableOrFILLME} onChange={onExtraHQTexturesFolderEnableChange}/>
-        {
-          extraHQTexturesFolderEnableOrFILLME ? <>
-            <OpenFileTextInputWithButton name="extra-hq-textures-folder" startLabel=" " dialogId="extra-hq-textures" dialogType="open-folder" fileFilters={[]} validate={validateExtraHQTexturesFolder} notInGrid={true} inline={true} notRequired={true} rerenderErrorMessageCounter={rerenderErrorMessageCounter} errorMessageOnBottom={true}/>
-          </> : ""
-        }
-
+        <div className="file-input-container file-input-container--extra-hq-textures-folder">
+          <TriCheckbox name="extra-hq-textures-folder-enable" nameAsId={true} noErrorMessage={extraHQTexturesFolderEnableOrFILLME} onChange={onExtraHQTexturesFolderEnableChange}/>
+          {
+            extraHQTexturesFolderEnableOrFILLME ? <>
+              <OpenFileTextInputWithButton name="extra-hq-textures-folder" startLabel=" " dialogId="extra-hq-textures" dialogType="open-folder" fileFilters={[]} validate={validateExtraHQTexturesFolder} notInGrid={true} inline={true} notRequired={true} rerenderErrorMessageCounter={rerenderErrorMessageCounter} errorMessageOnBottom={true}/>
+            </> : ""
+          }
+        </div>
         {renderCounter}
       </div>
     </div>

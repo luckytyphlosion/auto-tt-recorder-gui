@@ -236,22 +236,24 @@ export function ExtraGeckoCodesInput(props: {isAutoTTRecRunning: boolean}) {
           <div className="grid-contents">
             <label className="start-label" htmlFor="extra-gecko-codes-filename">Gecko codes filename:</label>
             <div className="start-label-contents">
-              <ClearableReadonlyTextInput name="extra-gecko-codes-filename" notRequired={true} validate={geckoCodeValidator} setState={updateExtraGeckoCodesFilenameAfterRightClick}/>
+              <div className="file-input-container file-input-container--extra-gecko-codes-filename">
+                <ClearableReadonlyTextInput name="extra-gecko-codes-filename" notRequired={true} validate={geckoCodeValidator} setState={updateExtraGeckoCodesFilenameAfterRightClick}/>
 
-              <button type="button" onClick={event => {
-                createNewFile(event);
-              }}>New</button>
+                <button type="button" onClick={event => {
+                  createNewFile(event);
+                }}>New</button>
 
 
-              <button type="button" onClick={event => {
-                openFile(event);
-              }}>Open&#8230;</button>
+                <button type="button" onClick={event => {
+                  openFile(event);
+                }}>Open&#8230;</button>
 
-              <button type="button" onClick={event => {
-              queueSaveDialogAndWriteText(event, [
-                {name: "ini files", extensions: ["ini"]}
-              ]);
-              }}>Save as&#8230;</button>
+                <button type="button" onClick={event => {
+                queueSaveDialogAndWriteText(event, [
+                  {name: "ini files", extensions: ["ini"]}
+                ]);
+                }}>Save as&#8230;</button>
+              </div>
             </div>
           </div>
           {
