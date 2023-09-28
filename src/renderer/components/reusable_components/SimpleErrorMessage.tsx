@@ -94,6 +94,7 @@ export function SimpleErrorMessage(props: {
   name: AutoTTRecConfigFormFieldName,
   marginBlockDisplay?: boolean,
   negativeTopMargin?: boolean,
+  noStartLabelClass?: boolean,
   //formInputNotesStartLabel?: React.ReactNode,
   formInputNotesContents?: React.ReactNode
 }) {
@@ -113,10 +114,10 @@ export function SimpleErrorMessage(props: {
     render={({ message }) => <p className={`error-message__text-contents ${errorMessageAdditionalCSSClass}`}>{message}</p>}
   />;
 
-  let startLabelCSSClasses = "start-label";
-  // if (props.formInputNotesStartLabel !== undefined) {
-  //   startLabelCSSClasses += " form-input-notes--start-label";
-  // }
+  let startLabelCSSClasses = "";
+  if (!props.noStartLabelClass) {
+    startLabelCSSClasses += "start-label"
+  }
 
   if (props.marginBlockDisplay === true) {
     return (

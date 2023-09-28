@@ -4,6 +4,30 @@
   width: 100%;
 }
 
+.file-input-container {
+  display: flex;
+  flex-flow: row wrap;
+  font-size: 10pt;
+}
+
+.file-input-container--main-ghost-filename,
+.file-input-container--comparison-ghost-filename,
+.file-input-container--szs-filename,
+.file-input-container--music-filename {
+  max-width: 47em;
+}
+
+/* same size as chadsoft-ghost-page and chadsoft-comparison-ghost-page */
+#main-ghost-filename,
+#comparison-ghost-filename,
+#szs-filename {
+  flex: 1 0 fit-content;
+}
+
+#music-filename {
+  flex-grow: 1;
+}
+
 /* https://www.chadsoft.co.uk/time-trials/leaderboard/0C/CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC/06.html */
 #top-10-chadsoft {
   max-width: 53em;

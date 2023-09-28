@@ -13,7 +13,7 @@ export function ClearableReadonlyTextInput<K extends AutoTTRecConfigFormStringAr
 
   return (
     <>
-      <input type="text" readOnly className={props.className}
+      <input type="text" id={props.name} readOnly className={props.className}
       {...register(props.name, {required: !props.notRequired ? {
         value: true,
         message: "This input is required."

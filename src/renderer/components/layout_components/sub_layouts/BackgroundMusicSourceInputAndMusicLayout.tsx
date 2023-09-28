@@ -83,23 +83,25 @@ export function BackgroundMusicSourceInputAndMusicLayout(props: {timeline: Timel
         <div className="like-input-group">
           <label className="start-label" htmlFor="background-music-source">Background Music: </label>
           <div className="start-label-contents">
-            <DeselectableDropdown name="background-music-source" nameAsId={true} noErrorMessage={true} mixedErrorMessageInfo={
+            <div className="file-input-container file-input-container--music-filename">
+              <DeselectableDropdown name="background-music-source" nameAsId={true} noErrorMessage={true} mixedErrorMessageInfo={
+                {
+                  validate: validateBackgroundMusicSourceAndCheckIsFileReadable,
+                  liveValidateCallback: liveValidateBackgroundMusicSourceInput
+                }
+              }>
+                <option value="music-filename">Music filename</option>
+                <option value="game-bgm">Game BGM</option>
+                <option value="none">None</option>
+              </DeselectableDropdown>
               {
-                validate: validateBackgroundMusicSourceAndCheckIsFileReadable,
-                liveValidateCallback: liveValidateBackgroundMusicSourceInput
+                musicFilenameInputEnable ? 
+                <MusicFilenameInput
+                  validateBackgroundMusicSourceAndCheckIsFileReadable={validateBackgroundMusicSourceAndCheckIsFileReadable}
+                  rerenderErrorMessageCounter={rerenderErrorMessageCounter}
+                /> : <SimpleErrorMessage name="background-music-source" marginBlockDisplay={true}/>
               }
-            }>
-              <option value="music-filename">Music filename</option>
-              <option value="game-bgm">Game BGM</option>
-              <option value="none">None</option>
-            </DeselectableDropdown>
-            {
-              musicFilenameInputEnable ? 
-              <MusicFilenameInput
-                validateBackgroundMusicSourceAndCheckIsFileReadable={validateBackgroundMusicSourceAndCheckIsFileReadable}
-                rerenderErrorMessageCounter={rerenderErrorMessageCounter}
-              /> : <SimpleErrorMessage name="background-music-source" marginBlockDisplay={true}/>
-            }
+            </div>
           </div>
           {
               enableMusicPresentationInput && props.formComplexity > FormComplexity.SIMPLE ?

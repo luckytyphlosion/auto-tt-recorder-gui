@@ -101,10 +101,22 @@ export function OpenFileTextInputWithButton<K extends AutoTTRecConfigFormStringA
         notRequired={props.notRequired}
         parentRerenderSetState={setRerenderCounter}
       />
-      <button type="button" onClick={queueFileFolderDialog}>{buttonText}</button>
+      <button type="button" id={`${props.name}__button`} onClick={queueFileFolderDialog}>{buttonText}</button>
     </>
+    let containedTextInputAndButtonElements;
+    let noStartLabelClass: boolean;
 
-    errorMessageElement = <SimpleErrorMessage name={props.name} marginBlockDisplay={props.errorMessageOnBottom}/>;
+    if (props.notInGrid || props.inline) {
+      containedTextInputAndButtonElements = textInputAndButtonElements;
+      noStartLabelClass = true;
+    } else {
+      containedTextInputAndButtonElements = <div className={`file-input-container file-input-container--${props.name}`}>
+        {textInputAndButtonElements}
+      </div>
+      noStartLabelClass = false;
+    }
+
+    errorMessageElement = <SimpleErrorMessage name={props.name} marginBlockDisplay={props.errorMessageOnBottom} noStartLabelClass={noStartLabelClass}/>;
 
     // if (props.errorMessageOnBottom) {
     //   errorMessageElement = <div className="grid-contents">
@@ -121,7 +133,7 @@ export function OpenFileTextInputWithButton<K extends AutoTTRecConfigFormStringA
     if (props.notInGrid) {
       resultElementExceptSurroundingNonVoidElement = <>
         {labelElement}
-        {textInputAndButtonElements}
+        {containedTextInputAndButtonElements}
         {errorMessageElement}
         {renderCounter}
       </>;
@@ -130,7 +142,7 @@ export function OpenFileTextInputWithButton<K extends AutoTTRecConfigFormStringA
         resultElementExceptSurroundingNonVoidElement = <>
           {labelElement}
           <div className="start-label-contents">
-            {textInputAndButtonElements}
+            {containedTextInputAndButtonElements}
             {renderCounter}
           </div>
           {errorMessageElement}
@@ -139,7 +151,7 @@ export function OpenFileTextInputWithButton<K extends AutoTTRecConfigFormStringA
         resultElementExceptSurroundingNonVoidElement = <>
           {labelElement}
           <div className="start-label-contents">
-            {textInputAndButtonElements}
+            {containedTextInputAndButtonElements}
             {errorMessageElement}
             {renderCounter}
           </div>        
